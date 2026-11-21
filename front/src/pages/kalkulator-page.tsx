@@ -3,6 +3,8 @@ import { useMutation } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { ParentalPlanCard } from '@/components/parental-plan'
+import type { RateVariant } from '@/components/parental-plan'
 import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
 import { Badge } from '@/components/ui/badge'
@@ -11,8 +13,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form } from '@/components/ui/form'
 import { api } from '@/lib/api'
 import { benefitList, buildInterview } from '@/lib/benefit-interview'
-import type { Assessment, BenefitCode, SimulationResponse } from '@/lib/benefit-interview'
-import { interviewDefaults, interviewSchema } from '@/lib/interview-form'
+import type { Assessment, BenefitCode, ParentalPlan, ParentalPool, SimulationResponse } from '@/lib/benefit-interview'
+import { asBoolean, interviewDefaults, interviewSchema, parseNumber } from '@/lib/interview-form'
 import type { InterviewValues } from '@/lib/interview-form'
 import { getInterviewSteps } from '@/lib/interview-steps'
 
@@ -34,15 +36,111 @@ const sicknessPeriodLabels: Record<string, string> = {
 
 const statusesWithPayment = new Set<Assessment['status']>(['granted', 'partially_granted'])
 
-async function simulate(values: InterviewValues) {
-  const { request, paternityRequest, supplemental, expected, returnDate } = buildInterview(values)
-  const responses = await Promise.all([
+async function simulate({ values, plan }: { values: InterviewValues; plan: ParentalPlan }) {
+  const { request, paternityRequest, supplemental, expected, returnDate } = buildInterview(values, plan)
+  const flatRequest = {
+    ...request,
+    family: {
+      ...request.family,
+      averaged_rate_application: undefined,
+      averaged_rate_applicant: undefined,
+      averaged_rate_full_period: undefined,
+      averaged_shared_transfer_confirmed: undefined,
+    },
+  }
+
+  const [main, flat] = await Promise.all([
     api.post<SimulationResponse>('/benefits/simulate', request),
-    ...(paternityRequest ? [api.post<SimulationResponse>('/benefits/simulate', paternityRequest)] : []),
+    plan.averagedRate
+      ? api.post<SimulationResponse>('/benefits/simulate', flatRequest)
+      : Promise.resolve(null),
   ])
-  const results = responses.flatMap(({ data }) => data.assessments)
-  const assessments = new Map([...supplemental, ...results].map((item) => [item.benefit, item]))
-  return { assessments, expected, returnDate, separatePaternity: !!paternityRequest }
+  const paternity = paternityRequest
+    ? (await api.post<SimulationResponse>('/benefits/simulate', paternityRequest)).data
+    : undefined
+
+  const results = [main.data, ...(paternity ? [paternity] : [])].flatMap((item) => item.assessments)
+  const all = [...supplemental, ...results]
+  const assessments = new Map(all.map((item) => [item.benefit, item]))
+  const parental = all.filter((item) => item.benefit === 'rodzicielski')
+  if (parental.length > 1) assessments.set('rodzicielski', mergeParental(parental))
+
+  return {
+    assessments,
+    expected,
+    returnDate,
+    separatePaternity: !!paternityRequest,
+    pool: main.data.parental_pool ?? null,
+    averaged: parentalTotals(main.data),
+    flat: parentalTotals(flat?.data ?? main.data),
+  }
+}
+
+/** Rodzicielski rozlicza się osobno dla każdego rodzica, a lista pokazuje jedno świadczenie. */
+function mergeParental(parental: Assessment[]): Assessment {
+  const active = parental.filter((item) => statusesWithPayment.has(item.status))
+  const gross = parental.every((item) => item.gross_grosze != null)
+    ? parental.reduce((sum, item) => sum + (item.gross_grosze ?? 0), 0)
+    : null
+  return {
+    benefit: 'rodzicielski',
+    status: active.length === parental.length ? 'granted' : active.length ? 'partially_granted' : parental[0].status,
+    reason: 'Urlop dzielicie między siebie. Wymiar i kwota każdego rodzica są w karcie podziału urlopu.',
+    days: parental.reduce((sum, item) => sum + (item.days ?? 0), 0),
+    denied_days: parental.reduce((sum, item) => sum + (item.denied_days ?? 0), 0),
+    gross_grosze: gross,
+    periods: [],
+  }
+}
+
+/** Wymiar i kwota zasiłku za urlop rodzicielski, w jednym wariancie stawki. */
+function parentalTotals(response: SimulationResponse): RateVariant {
+  const parental = response.assessments.filter((item) => item.benefit === 'rodzicielski')
+  const byParent: RateVariant['byParent'] = {}
+  for (const item of parental) {
+    if (!item.person) continue
+    byParent[item.person] = {
+      days: item.days ?? 0,
+      gross: item.gross_grosze ?? null,
+      status: item.status,
+      reason: item.reason,
+    }
+  }
+  return {
+    days: parental.reduce((sum, item) => sum + (item.days ?? 0), 0),
+    gross: parental.reduce((sum, item) => sum + (item.gross_grosze ?? 0), 0),
+    byParent,
+  }
+}
+
+/**
+ * Plan urlopu dla wysłanych odpowiedzi. Wspólną pulę dzielimy tylko wtedy,
+ * gdy znamy jej wymiar i wiemy, kim jest drugi rodzic.
+ */
+function buildPlan(
+  share: number,
+  source: InterviewValues,
+  pool: ParentalPool | null,
+): ParentalPlan {
+  const base: ParentalPlan = { averagedRate: true }
+  if (!pool || source.partnerEmployment === 'unknown') return base
+  if (source.workingOnLeave && source.employment === 'employee') return base
+  const exclusive = pool.exclusive_days_per_parent
+  const shared = Math.max(0, pool.total_days - exclusive * 2)
+  const days = Math.min(Math.max(share, 0), shared)
+  const basis = parseNumber(source.partnerBasis)
+  return {
+    averagedRate: true,
+    parentalDays: {
+      first_parent: exclusive + shared - days,
+      second_parent: exclusive + days,
+    },
+    partner: {
+      employment: source.partnerEmployment,
+      sickness_insured: asBoolean(source.partnerInsured),
+      monthly_basis_grosze: basis === undefined ? undefined : Math.round(basis * 100),
+    },
+  }
 }
 
 function BenefitCard({ assessment }: { assessment: Assessment }) {
@@ -110,17 +208,28 @@ export function KalkulatorPage() {
   const resultHeading = useRef<HTMLHeadingElement>(null)
   const stepHeading = useRef<HTMLHeadingElement>(null)
   const focusNextStep = useRef(false)
+  const scrolledFor = useRef<InterviewValues | null>(null)
   const [stepId, setStepId] = useState('role')
+  const [sent, setSent] = useState('')
+  const [submitted, setSubmitted] = useState<InterviewValues | null>(null)
+  const [secondShareDays, setSecondShareDays] = useState(0)
   const form = useForm<InterviewValues>({
     resolver: zodResolver(interviewSchema),
     defaultValues: interviewDefaults,
   })
   const values = useWatch({ control: form.control, compute: (answers) => answers })
   const simulation = useMutation({ mutationFn: simulate })
+  const { mutate } = simulation
   const steps = getInterviewSteps(values)
   const stepIndex = Math.max(0, steps.findIndex(({ id }) => id === stepId))
   const step = steps[stepIndex]
   const nextStep = steps[stepIndex + 1]
+
+  const pool = simulation.data?.pool ?? null
+  const sharedTotal = pool ? Math.max(0, pool.total_days - 2 * pool.exclusive_days_per_parent) : 0
+  const secondShare = Math.min(secondShareDays, sharedTotal)
+  const workingOnLeave = !!values.workingOnLeave && values.employment === 'employee'
+  const respondent = values.role === 'father' ? 'second_parent' : 'first_parent'
 
   function goToStep(id: string) {
     focusNextStep.current = true
@@ -129,13 +238,22 @@ export function KalkulatorPage() {
 
   function editAnswers() {
     goToStep(steps[0].id)
+    setSubmitted(null)
+    setSecondShareDays(0)
     simulation.reset()
+  }
+
+  function submitAnswers(data: InterviewValues) {
+    setSent('')
+    setSubmitted(data)
+    setSecondShareDays(0)
+    mutate({ values: data, plan: buildPlan(0, data, pool) })
   }
 
   async function advance(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!nextStep) {
-      await form.handleSubmit((data) => simulation.mutate(data), (errors) => {
+      await form.handleSubmit(submitAnswers, (errors) => {
         const invalidStep = steps.find(({ fields }) => fields.some((field) => errors[field]))
         if (invalidStep && invalidStep.id !== step.id) goToStep(invalidStep.id)
       })(event)
@@ -152,12 +270,26 @@ export function KalkulatorPage() {
     }
   }, [stepId, simulation.isSuccess])
 
+  // Przewijamy do wyniku raz na wysłanie wywiadu, nie po każdym ruchu suwaka.
   useEffect(() => {
-    if (simulation.data) {
-      resultHeading.current?.focus({ preventScroll: true })
-      resultHeading.current?.scrollIntoView({ block: 'start' })
-    }
-  }, [simulation.data])
+    if (!simulation.data || !submitted || scrolledFor.current === submitted) return
+    scrolledFor.current = submitted
+    resultHeading.current?.focus({ preventScroll: true })
+    resultHeading.current?.scrollIntoView({ block: 'start' })
+  }, [simulation.data, submitted])
+
+  // Każda zmiana suwaka przelicza wynik, ale dopiero po krótkiej pauzie w przeciąganiu.
+  useEffect(() => {
+    if (!submitted) return
+    const plan = buildPlan(secondShareDays, submitted, pool)
+    const signature = JSON.stringify(plan)
+    if (signature === sent) return
+    const timer = setTimeout(() => {
+      setSent(signature)
+      mutate({ values: submitted, plan })
+    }, 200)
+    return () => clearTimeout(timer)
+  }, [submitted, secondShareDays, pool, sent, mutate])
 
   return (
     <PageContainer className="py-12 sm:py-16">
@@ -250,6 +382,23 @@ export function KalkulatorPage() {
               Edytuj odpowiedzi
             </Button>
           </div>
+
+          {simulation.data.pool && simulation.data.pool.total_days > 0 && (
+            <ParentalPlanCard
+              pool={simulation.data.pool}
+              respondent={respondent}
+              secondShareDays={secondShare}
+              onSecondShareChange={setSecondShareDays}
+              averaged={simulation.data.averaged}
+              flat={simulation.data.flat}
+              zaZyciem={values.zaZyciem}
+              workingOnLeave={workingOnLeave}
+              partnerKnown={values.partnerEmployment !== 'unknown'}
+              extendedDays={simulation.data.averaged.byParent[respondent]?.days}
+              busy={simulation.isPending}
+            />
+          )}
+
           <div className="grid gap-4 md:grid-cols-2">
             {(Object.keys(benefitList) as BenefitCode[]).map((benefit) => (
               <BenefitCard key={benefit} assessment={simulation.data.assessments.get(benefit) ?? {

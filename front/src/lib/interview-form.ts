@@ -33,6 +33,10 @@ const fields = z.object({
   extendedToBirth: z.boolean(),
   replacementEmployment: answer,
 
+  partnerEmployment: z.enum(['unknown', 'employee', 'contractor', 'self_employed', 'other']),
+  partnerInsured: answer,
+  partnerBasis: z.string(),
+
   takingOver: answer,
   takeoverDate: z.string(),
   returnDate: z.string(),
@@ -92,6 +96,7 @@ export const interviewSchema = fields.superRefine((values, ctx) => {
   date(['eventDate'], values.eventDate, true)
   number('childCount', 1, 12, true)
   number('basis', 0, 10_000_000, false, false)
+  number('partnerBasis', 0, 10_000_000, false, false)
   const children = activeChildren(values)
   const placement = isPlacement(values)
   const hospital = values.hospitalization === 'yes'
@@ -178,6 +183,7 @@ export const interviewDefaults: InterviewValues = {
   employmentEnded: false, employmentEndDate: '', endedDuringPregnancy: 'unknown',
   endReason: 'unknown', extendedToBirth: false, replacementEmployment: 'unknown',
   takingOver: 'unknown', takeoverDate: '', returnDate: '', workingOnLeave: false,
+  partnerEmployment: 'unknown', partnerInsured: 'unknown', partnerBasis: '',
   workPercent: '', contractedPercent: '100', parentalDays: '',
   sickness: 'unknown', sickStart: '', sickEnd: '', insuredDays: '', sicknessDaysUsed: '',
   waitingExempt: 'unknown', sickInsured: 'unknown', birthYear: '', employerPaidFirst: '', employerPaidSecond: '',

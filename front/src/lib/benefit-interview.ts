@@ -47,15 +47,41 @@ type Status = 'granted' | 'denied' | 'partially_granted' | 'missing_data' | 'not
 
 export interface Assessment {
   benefit: BenefitCode
+  person?: Parent
   status: Status
   reason: string
   days?: number
   denied_days?: number
+  base_days_used?: number | null
   gross_grosze?: number | null
-  periods?: { kind: string; start: string; end: string; days: number }[]
+  periods?: { kind: string; start: string; end: string; days: number; rate_percent?: number }[]
+}
+export interface ParentalPool {
+  total_days: number
+  exclusive_days_per_parent: number
+  remaining_shared_days: number
+  remaining_days_by_parent: Record<Parent, number>
 }
 export interface SimulationResponse {
   assessments: Assessment[]
+  parental_pool?: ParentalPool | null
+}
+
+/** Ustawienia planu urlopu, które użytkownik zmienia na ekranie kalkulatora. */
+export interface ParentalPlan {
+  /** Wyższa stawka 81,5%, gdy wniosek trafi do 21 dni po porodzie. */
+  averagedRate?: boolean
+  /** Dni urlopu rodzicielskiego obojga rodziców, gdy dzielicie wspólną pulę. */
+  parentalDays?: Partial<Record<Parent, number>>
+  /** Dane rodzica, którym nie jest osoba wypełniająca wywiad. */
+  partner?: PartnerInput
+}
+
+/** Ręcznie wpisane dane drugiego rodzica. */
+export interface PartnerInput {
+  employment?: 'employee' | 'contractor' | 'self_employed' | 'other'
+  sickness_insured?: boolean
+  monthly_basis_grosze?: number
 }
 
 interface FamilyClaim {
@@ -81,7 +107,7 @@ function employerHistory(values: InterviewValues) {
   }
 }
 
-export function buildInterview(values: InterviewValues) {
+export function buildInterview(values: InterviewValues, plan: ParentalPlan = {}) {
   const mother = values.role === 'mother'
   const father = values.role === 'father'
   const placement = isPlacement(values)
@@ -105,8 +131,17 @@ export function buildInterview(values: InterviewValues) {
   }
   const expected = !placement && values.birthStage === 'expected'
   const parent: Parent = father ? 'second_parent' : 'first_parent'
+  const otherParent: Parent = father ? 'first_parent' : 'second_parent'
+  const partner = plan.partner
+  const partnerPerson = partner ? {
+    employment: partner.employment,
+    sickness_insured: partner.sickness_insured,
+    monthly_basis_grosze: partner.monthly_basis_grosze,
+  } : undefined
   const maternity = !father || values.takingOver === 'yes'
   const paternity = father || (adoption && values.adoptiveFather === 'yes')
+  const respondentDays = plan.parentalDays?.[parent]
+  const partnerDays = plan.parentalDays?.[otherParent]
   const claims: FamilyClaim[] = [
     ...(maternity ? [{ benefit: 'macierzynski' as const, person: parent }] : []),
     { benefit: 'uzupelniajacy', person: parent },
@@ -116,8 +151,13 @@ export function buildInterview(values: InterviewValues) {
         start: values.returnDate,
         days: parseNumber(values.parentalDays),
         work_percent: parseNumber(values.workPercent),
-      } : {}),
+        // Przy tym samym wymiarze pracy w całym okresie wydłużenie liczy się z tej samej stawki.
+        extension_work_percent: parseNumber(values.workPercent),
+      } : respondentDays !== undefined ? { days: respondentDays } : {}),
     },
+    ...(partnerDays !== undefined
+      ? [{ benefit: 'rodzicielski' as const, person: otherParent, days: partnerDays }]
+      : []),
   ]
 
   const request = {
@@ -125,13 +165,22 @@ export function buildInterview(values: InterviewValues) {
       event: adoption ? 'adoption' : placement ? 'foster_care' : 'birth',
       event_date: expected ? undefined : values.eventDate,
       expected_birth_date: expected ? values.eventDate : undefined,
-      first_parent: father ? {} : person,
-      second_parent: father ? person : undefined,
+      first_parent: father ? (partnerPerson ?? {}) : person,
+      second_parent: father ? person : partnerPerson,
       adoption_proceeding: adoption ? asBoolean(values.placementConfirmed) : undefined,
       non_professional_foster_care: values.role === 'foster' ? asBoolean(values.placementConfirmed) : undefined,
       maternity_transfer: father && maternity ? values.takeoverDate : undefined,
       transfer_care_confirmed: father && maternity ? true : undefined,
       za_zyciem: values.zaZyciem,
+      ...(plan.averagedRate && values.eventDate
+        ? {
+            averaged_rate_application: values.eventDate,
+            // Wniosek o 81,5% składa ten rodzic, który urodził albo przyjął dziecko.
+            averaged_rate_applicant: 'first_parent' as const,
+            averaged_rate_full_period: true,
+            averaged_shared_transfer_confirmed: plan.parentalDays ? true : undefined,
+          }
+        : {}),
       pregnancy_weeks_at_birth: values.hospitalization === 'yes' ? parseNumber(values.pregnancyWeeks) : undefined,
       children: activeChildren(values).map(({ birthDate, schoolDeferred, weight, stays }) => ({
         birth_date: placement ? birthDate : undefined,
@@ -216,6 +265,9 @@ export function buildInterview(values: InterviewValues) {
       ...request.family,
       maternity_transfer: undefined,
       transfer_care_confirmed: undefined,
+      averaged_rate_application: undefined,
+      averaged_rate_full_period: undefined,
+      averaged_shared_transfer_confirmed: undefined,
       adoption_order_date: adoption ? values.adoptionOrderDate : undefined,
       paternity_eligible_parent: parent,
       claims: [{ benefit: 'ojcowski', person: parent }],
@@ -227,6 +279,7 @@ export function buildInterview(values: InterviewValues) {
     paternityRequest,
     supplemental,
     expected,
+    parent,
     returnDate: workingOnLeave ? undefined : values.returnDate || undefined,
   }
 }

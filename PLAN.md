@@ -41,7 +41,7 @@ ich kopiować ani rozpowszechniać.
 - [ ] Krok 3. Silnik uprawnień i kalkulatory
 - [x] Krok 4. Wejście i logowanie
 - [x] Krok 5. Wywiad i ustalanie uprawnień
-- [ ] Krok 6. Kalkulator na ekranie
+- [x] Krok 6. Kalkulator na ekranie
 - [ ] Krok 7. Dokumenty, terminy i miejsce złożenia
 - [ ] Krok 8. Symulacje ZUS
 - [ ] Krok 9. Ryzyka i ostrzeżenia
@@ -207,6 +207,17 @@ Jeden zintegrowany kalkulator z wyborem opcji, zgodnie z rekomendacją z briefu.
 Gotowe, gdy każdy wariant z kroku 3 da się ustawić z ekranu.
 
 Brief, pkt 3 b, c, d, e oraz rekomendacja zintegrowanego kalkulatora.
+
+Zrobione 21.11. Ekran `/kalkulator` jest jednym kalkulatorem: wywiad, karta podziału urlopu
+i lista świadczeń. Karta pokazuje cały wymiar (41 albo 43 tygodnie, z „Za życiem” 65 albo 67),
+pasek z dziewięcioma nieprzenoszalnymi tygodniami każdego rodzica i suwak, który dzieli tylko
+wspólną pulę. Po każdej zmianie wynik idzie do `POST /benefits/simulate`, więc kwoty obojga
+rodziców, porównanie 81,5% i 70% oraz różnica między wariantami liczą się na backendzie, a front
+nie powtarza reguł. Do podziału potrzebne są dane drugiego rodzica, więc formularz ma dla niego
+osobną kartę; bez niej suwak zostaje wyłączony, a karta mówi, czego brakuje. Przy łączeniu pracy
+z urlopem karta pokazuje wydłużenie i limit 82 albo 86 tygodni, a przy „Za życiem” 130 albo 134.
+Limitu backend nie wymusza: przy 50% pracy na całym wymiarze wydłużenie samo dochodzi do 82
+tygodni, więc karta podaje go jako ograniczenie ustawowe, a nie jako wyliczoną wartość.
 
 ## Krok 7. Dokumenty, terminy i miejsce złożenia
 

@@ -254,6 +254,28 @@ export function ReturnFields({ values }: { values: InterviewValues }) {
   )
 }
 
+export function PartnerFields({ values }: { values: InterviewValues }) {
+  const mother = values.role === 'father'
+  return (
+    <>
+      <div className={fieldsGrid}>
+        <Field name="partnerEmployment" label={mother ? 'Rodzaj zatrudnienia matki' : 'Rodzaj zatrudnienia drugiego rodzica'} choices={[
+          ['unknown', 'Nie wiem / wybierz'], ['employee', 'Umowa o pracę'],
+          ['contractor', 'Umowa zlecenia'], ['self_employed', 'Działalność gospodarcza'],
+          ['other', 'Inna sytuacja'],
+        ]} />
+        <YesNo name="partnerInsured" label="Czy ma ubezpieczenie chorobowe?" />
+        <Field name="partnerBasis" label="Miesięczna podstawa wymiaru w zł" inputMode="decimal"
+          hint="Zostaw puste, jeśli jej nie znasz." />
+      </div>
+      <p className="text-sm text-muted-foreground">
+        Te dane są potrzebne do podziału urlopu rodzicielskiego. Bez nich kalkulator policzy tylko
+        Twoją część, a drugą pokaże jako wymiar bez kwoty.
+      </p>
+    </>
+  )
+}
+
 export function PregnancyQuestions() {
   return (
     <>

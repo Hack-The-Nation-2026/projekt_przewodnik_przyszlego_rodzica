@@ -5,6 +5,7 @@ import {
   EmploymentEndFields,
   EmploymentFields,
   FamilyEventFields,
+  PartnerFields,
   PregnancyQuestions,
   RehabilitationFields,
   RehabilitationPaymentFields,
@@ -70,6 +71,12 @@ export function getInterviewSteps(values: InterviewValues): InterviewStep[] {
       Fields: EmploymentEndFields,
     })
   }
+  steps.push({
+    id: 'partner', title: 'Drugi rodzic',
+    description: 'Uzupełnij jego dane, jeśli chcecie podzielić urlop rodzicielski.',
+    fields: ['partnerEmployment', 'partnerInsured', 'partnerBasis'],
+    Fields: PartnerFields,
+  })
   steps.push({
     id: 'return', title: 'Powrót do pracy',
     description: 'Jeśli masz już plan powrotu, możesz go uwzględnić w symulacji.',
