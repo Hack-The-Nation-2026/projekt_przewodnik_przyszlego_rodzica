@@ -98,11 +98,16 @@ export function HomePage() {
   return (
     <>
       <section aria-labelledby="start-title" className="relative isolate overflow-hidden bg-foreground">
-        <img
-          src="/rodzice-kolyska.jpg"
-          alt="Rodzice leżą wieczorem na łóżku obok kołyski z dzieckiem."
-          className="absolute inset-0 size-full object-cover object-[40%_60%] sm:object-[50%_45%]"
-        />
+        <picture>
+          {/* Na telefonie kadr jest ciaśniejszy i wyśrodkowany na rodzinie, bo szeroki
+              kadr ze zdjęcia obcinałby rodziców albo kołyskę. */}
+          <source media="(min-width: 640px)" srcSet="/rodzice-kolyska.jpg" />
+          <img
+            src="/rodzice-kolyska-mobile.jpg"
+            alt="Rodzice leżą wieczorem na łóżku obok kołyski z dzieckiem."
+            className="absolute inset-0 size-full object-cover object-[50%_50%] sm:object-[50%_45%]"
+          />
+        </picture>
         <div aria-hidden className="home-hero-shade absolute inset-0" />
         <Container className="relative flex min-h-[30rem] items-center py-14 sm:min-h-[36rem] sm:py-16 lg:min-h-[44rem]">
           <div className="w-full max-w-[39rem] text-primary-foreground [--ring:var(--primary-foreground)]">

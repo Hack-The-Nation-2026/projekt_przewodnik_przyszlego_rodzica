@@ -572,8 +572,6 @@ export function ZusPage() {
         title="Symulacja ZUS"
         description="Dane, które ZUS widzi na Twoim koncie, i wnioski, które można złożyć bez wizyty w urzędzie. Wszystko jest udawane, ale kroki są prawdziwe."
         crumb="Symulacja ZUS"
-        backTo="/wejscie"
-        backLabel="Wróć do wejścia"
       />
 
       <div className="mt-6 flex items-start gap-3 rounded-lg border border-gold/60 bg-gold/10 p-4 text-sm">

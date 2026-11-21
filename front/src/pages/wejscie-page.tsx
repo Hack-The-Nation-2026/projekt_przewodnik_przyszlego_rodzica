@@ -253,8 +253,6 @@ export function WejsciePage() {
             : 'Wybierz, jak chcesz zacząć. mObywatel wypełnia dane za ciebie, a ręczne wpisanie wystarczy, żeby policzyć świadczenia.'
         }
         crumb="Wejście"
-        backTo="/"
-        backLabel="Wróć na stronę startową"
       />
 
       <div className="mt-8">{citizen ? <SessionCard /> : <MethodChooser />}</div>

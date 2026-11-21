@@ -404,8 +404,6 @@ export function KalkulatorPage() {
         title="Kalkulator zasiłków"
         description="Odpowiedz na pytania i sprawdź, jakie świadczenia mogą Ci przysługiwać, przez ile dni i w jakiej kwocie."
         crumb="Kalkulator"
-        backTo="/wejscie"
-        backLabel="Wróć do wejścia"
       />
 
       {import.meta.env.DEV && !result && (
