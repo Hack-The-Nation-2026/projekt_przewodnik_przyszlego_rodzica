@@ -36,12 +36,16 @@ function LogoMark({ className }: { className?: string }) {
 function Wordmark() {
   return (
     <Link to="/" className="flex items-center gap-2.5" aria-label="Strona główna">
-      <span className="flex size-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
+      <span className="flex size-9 items-center justify-center rounded-md bg-primary-foreground text-primary">
         <LogoMark />
       </span>
       <span className="flex flex-col leading-none">
-        <span className="font-display text-lg font-semibold text-primary">Przewodnik Rodzica</span>
-        <span className="mt-0.5 text-[11px] text-muted-foreground">zasiłki i uprawnienia w ZUS</span>
+        <span className="font-display text-lg font-semibold text-primary-foreground">
+          Przewodnik Rodzica
+        </span>
+        <span className="mt-0.5 text-[11px] text-primary-foreground/80">
+          co ci przysługuje i jak to załatwić
+        </span>
       </span>
     </Link>
   )
@@ -78,7 +82,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 shrink-0">
-      <div className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      <div className="border-b border-primary-foreground/15 bg-primary text-primary-foreground shadow-sm">
         <Container className="grid h-16 grid-cols-[auto_1fr_auto] items-center gap-4">
           <Wordmark />
 
@@ -91,7 +95,9 @@ export function SiteHeader() {
                 className={({ isActive }) =>
                   cn(
                     'rounded-md px-3 py-2 text-sm font-medium transition-colors',
-                    isActive ? 'text-primary' : 'text-foreground/80 hover:bg-accent hover:text-primary',
+                    isActive
+                      ? 'bg-primary-foreground/15 text-primary-foreground'
+                      : 'text-primary-foreground/85 hover:bg-primary-foreground/10 hover:text-primary-foreground',
                   )
                 }
               >
@@ -103,10 +109,15 @@ export function SiteHeader() {
           <div className="flex items-center justify-self-end gap-2">
             {citizen ? (
               <div className="hidden items-center gap-2 sm:flex">
-                <span className="text-sm text-muted-foreground">
+                <span className="text-sm text-primary-foreground/80">
                   {citizen.first_name} {citizen.last_name}
                 </span>
-                <Button variant="outline" size="sm" onClick={signOut}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground"
+                  onClick={signOut}
+                >
                   Wyloguj
                 </Button>
               </div>
@@ -124,7 +135,7 @@ export function SiteHeader() {
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden"
+              className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground lg:hidden"
               aria-label={open ? 'Zamknij menu' : 'Otwórz menu'}
               aria-expanded={open}
               onClick={() => setOpen((value) => !value)}
@@ -135,7 +146,7 @@ export function SiteHeader() {
         </Container>
 
         {open && (
-          <nav className="border-t border-border bg-background lg:hidden" aria-label="Nawigacja mobilna">
+          <nav className="border-t border-primary-foreground/15 bg-primary lg:hidden" aria-label="Nawigacja mobilna">
             <Container className="flex flex-col py-2">
               {NAV.map((item) => (
                 <NavLink
@@ -146,7 +157,9 @@ export function SiteHeader() {
                   className={({ isActive }) =>
                     cn(
                       'rounded-md px-3 py-2.5 text-sm font-medium',
-                      isActive ? 'text-primary' : 'text-foreground/80 hover:bg-accent',
+                      isActive
+                        ? 'bg-primary-foreground/15 text-primary-foreground'
+                        : 'text-primary-foreground/85 hover:bg-primary-foreground/10',
                     )
                   }
                 >

@@ -51,7 +51,8 @@ front/src/
 
 ## Kolory
 
-Paleta nawiązuje do identyfikacji ZUS. Zielony `#007834` jest kolorem głównym, a bursztynowy
+Paleta nawiązuje do identyfikacji ZUS. Zielony `#007834` jest kolorem głównym i niesie pasek
+nagłówka, na którym stoją nazwa serwisu z podpisem i białe linki menu. Bursztynowy
 `#e8a33d` zostaje w zestawie jako drugie wezwanie do działania. Biel i czerwień `#d22630` należą
 do przycisku logowania przez mObywatela: orzeł jest białym plikiem `public/orzel.png`, a czerwień
 wchodzi jako tło elementu, dzięki czemu kafel trzyma ostry kształt. Wszystkie tokeny są
