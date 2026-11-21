@@ -67,7 +67,7 @@ export function HomePage() {
       const goingDown = event.deltaY > 0
       const fits = section.offsetHeight <= window.innerHeight - padding + 4
 
-      // Sekcja mieszcząca się w oknie oddaje kółko od razu; wyższa od okna najpierw
+      // Sekcja mieszcząca się w oknie oddaje kółko od razu. Wyższa od okna najpierw
       // przewija się do końca, a dopiero potem dostawia sąsiednią.
       const ready = goingDown
         ? fits

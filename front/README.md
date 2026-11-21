@@ -61,17 +61,16 @@ Nagłówki i tekst dzielą jeden krój, IBM Plex Sans.
 
 ## Znak
 
-Logo to kiełek: dwa liście na łodydze, czyli życie i wzrost. Jeden biały kształt na zielonym
+Logo to kiełek, dwa liście na łodydze, czyli życie i wzrost. Jeden biały kształt na zielonym
 kaflu, bez drugiego koloru. Łodyga jest szeroka u płasko ściętej stopy i z lekko wklęsłymi
-bokami zwęża się ku liściom, więc wygląda jak młody pęd wschodzący z ziemi, a nie jak patyk.
-Ten sam rysunek stoi w `public/favicon.svg` i w nagłówku,
-w `src/components/layout/site-header.tsx`.
+bokami zwęża się ku liściom, więc wygląda jak młody pęd wschodzący z ziemi. Ten sam rysunek
+stoi w `public/favicon.svg` i w nagłówku, w `src/components/layout/site-header.tsx`.
 
 ## Układ i skala
 
-Strona główna to jeden przewijany przepływ: hero ze zdjęciem, potem „Jak to działa”, lista
-świadczeń i blok wsparcia. Każda podstrona przewija się tak samo, a stopka zamyka dokument.
-Wspólny kontener ma `max-w-7xl`, żeby treść wypełniała szeroki ekran.
+Strona główna przewija się jako jeden dokument. Hero ze zdjęciem, potem Jak to działa, lista
+świadczeń, blok wsparcia i wspólna stopka. Każda podstrona działa tak samo. Kontener ma
+`max-w-7xl`, żeby treść wypełniała szeroki ekran.
 
 Przewijanie idzie sekcjami. Jedno kółko dostawia sąsiednią sekcję pod nagłówek, a sekcja
 wyższa od okna przewija się w środku normalnie, więc długa treść na telefonie nie utyka.
