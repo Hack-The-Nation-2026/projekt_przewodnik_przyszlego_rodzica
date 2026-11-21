@@ -40,7 +40,7 @@ ich kopiować ani rozpowszechniać.
 - [ ] Krok 2. Model danych i API
 - [ ] Krok 3. Silnik uprawnień i kalkulatory
 - [x] Krok 4. Wejście i logowanie
-- [ ] Krok 5. Wywiad i ustalanie uprawnień
+- [x] Krok 5. Wywiad i ustalanie uprawnień
 - [ ] Krok 6. Kalkulator na ekranie
 - [ ] Krok 7. Dokumenty, terminy i miejsce złożenia
 - [ ] Krok 8. Symulacje ZUS
