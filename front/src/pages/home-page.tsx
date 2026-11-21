@@ -120,17 +120,17 @@ export function HomePage() {
                 >
                   {index + 1}
                 </span>
-                <div className="overflow-hidden rounded-lg border border-border sm:grid sm:grid-cols-[2fr_3fr]">
-                  <div className="relative aspect-[2/1] sm:aspect-auto sm:min-h-44 lg:min-h-52">
-                    <img
-                      src={step.image}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                      className="absolute inset-0 size-full object-cover"
-                    />
-                  </div>
-                  <div className="self-center p-4 sm:p-6 lg:p-8">
+                <div className="flex min-w-0 flex-col gap-3 rounded-lg border border-border p-4 sm:flex-row sm:items-center sm:gap-6 sm:px-6">
+                  <img
+                    src={step.image}
+                    alt=""
+                    width={480}
+                    height={360}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-auto w-24 shrink-0 sm:w-32 lg:w-36"
+                  />
+                  <div className="min-w-0">
                     <h3 className="text-lg font-semibold text-navy sm:text-xl">{step.title}</h3>
                     <p className="mt-2 text-muted-foreground">{step.body}</p>
                   </div>
