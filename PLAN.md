@@ -49,7 +49,7 @@ ich kopiować ani rozpowszechniać.
 - [x] Krok 11. Panel administracyjny
 - [x] Krok 12. Wygląd i responsywność
 - [ ] Krok 13. Testy na sprawach i upload wniosków
-- [ ] Krok 14. Funkcje z AI
+- [ ] Krok 14. Asystent z AI
 - [ ] Krok 15. Materiały do oddania
 - [ ] Krok 16. Weryfikacja przed oddaniem
 
@@ -400,19 +400,29 @@ Brief, pkt 4 oraz pkt 6.
 
 Krok zostaje nieodhaczony, bo kryterium mówi o sprawie z `PRZYKLADY/`.
 
-## Krok 14. Funkcje z AI
+## Krok 14. Asystent z AI
 
-Brief dopuszcza AI w aplikacji i w procesie twórczym, ale każe wskazać zakres użycia.
+Zakres jest wąski i taki ma zostać. Model tylko kieruje, nic nie liczy i nie dotyka danych.
+Szerszy pomysł, czyli odczyt wniosków i wywiad prowadzony rozmową, odpadł, bo wymagałby
+wysyłania materiałów ZUS na zewnątrz, a brief tego zabrania.
 
-- Wywiad prowadzony rozmową, zamiast formularza.
-- Odczyt danych z wgranego wniosku.
-- Wyjaśnienie wyniku, dlaczego wyszło 70% a nie 81,5%.
-- Wyszukiwarka po Poradniku i przepisach.
-- Spisać w opisie, które funkcje korzystają z AI. Jeśli żadna, napisać to wprost.
+- Asystent nawigacyjny. Po pytaniu użytkownika wskazuje właściwą podstronę serwisu albo odsyła
+  do ZUS, MRPiPS lub PIP.
+- Nie podaje kwot, tygodni ani terminów. Mówi, gdzie to sprawdzić, i daje link.
+- Nie przetwarza danych osobowych i nie czyta materiałów ZUS. Rozmowa dotyczy tylko tego, czego
+  użytkownik szuka.
+- Działa bez klucza API. Tryb demo z gotowymi odpowiedziami na najczęstsze pytania, żeby juror
+  mógł kliknąć i zobaczyć działanie.
+- Zwykła nawigacja zostaje. Asystent to skrót dla kogoś, kto nie wie, od czego zacząć, a nie
+  jedyna droga.
+- Asystent załatwia też przekierowania do zus.pl, gov.pl/web/rodzina i pip.gov.pl, których brief
+  wymaga osobno.
+- W opisie projektu napisać, że to nawigacja, a nie doradca prawny. Kwoty liczy silnik reguł.
 
-Gotowe, gdy każda funkcja z AI jest wypisana w opisie projektu.
+Gotowe, gdy asystent działa bez klucza, prowadzi do właściwej podstrony i żadna jego odpowiedź
+nie zawiera wyliczonej kwoty.
 
-Brief, pkt 4 oraz pkt 9.
+Brief, pkt 4, pkt 9 oraz lista symulacji w pkt 3.
 
 ## Krok 15. Materiały do oddania
 
