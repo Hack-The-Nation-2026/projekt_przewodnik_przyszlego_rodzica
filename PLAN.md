@@ -67,13 +67,15 @@ z czego liczyć.
 - Limit wydłużenia urlopu rodzicielskiego przy łączeniu z pracą, 82 albo 86 tygodni, a przy
   zaświadczeniu "Za życiem" 130 albo 134.
 - Urlop ojcowski, 14 dni, do 12. miesiąca życia dziecka.
-- Wysokości zasiłku, 100% podstawy za macierzyński, uzupełniający, ojcowski oraz za świadczenie
-  rehabilitacyjne i zasiłek chorobowy w ciąży, 70% za urlop rodzicielski, a 81,5% przy wniosku
-  złożonym do 21 dni po porodzie. Wyjątkiem jest dziewięć tygodni nieprzenoszalnych drugiego
-  rodzica, za które zawsze przysługuje 70%.
+- Wysokości zasiłku, 100% podstawy za macierzyński, uzupełniający, ojcowski i za zasiłek
+  chorobowy w ciąży, 70% za urlop rodzicielski, a 81,5% przy wniosku złożonym do 21 dni po
+  porodzie. Wyjątkiem jest dziewięć tygodni nieprzenoszalnych drugiego rodzica, za które zawsze
+  przysługuje 70%.
+- Przy łączeniu urlopu rodzicielskiego z pracą zasiłek macierzyński zmniejsza się proporcjonalnie
+  do wymiaru czasu pracy.
 - Świadczenie rehabilitacyjne po wyczerpaniu zasiłku chorobowego, gdy leczenie rokuje odzyskanie
   zdolności do pracy, nie dłużej niż 12 miesięcy, w wysokości 90% podstawy za pierwsze trzy
-  miesiące i 75% za pozostałe.
+  miesiące i 75% za pozostałe, a 100%, gdy niezdolność przypada w okresie ciąży.
 - Zasiłek w wysokości zasiłku macierzyńskiego po ustaniu zatrudnienia, gdy umowa wygasła wskutek
   śmierci pracodawcy albo rozwiązano ją w ciąży z powodu upadłości lub likwidacji i nie zapewniono
   innego zatrudnienia. Wypłacany do dnia porodu.
@@ -153,7 +155,8 @@ Brief, pkt 3, lista symulacji.
 Użytkownik odpowiada na kilka pytań i od razu widzi, co mu przysługuje, a czego nie.
 
 - Pytania o rolę, rodzaj umowy, datę porodu, datę ustania stosunku pracy, liczbę dzieci,
-  zaświadczenie "Za życiem" i planowany powrót do pracy.
+  zaświadczenie "Za życiem", planowany powrót do pracy oraz wymiar czasu pracy przy łączeniu
+  urlopu z pracą, maksymalnie pół etatu.
 - Lista świadczeń obejmująca zasiłek chorobowy w ciąży, świadczenie rehabilitacyjne, zasiłek
   w wysokości zasiłku macierzyńskiego, macierzyński, uzupełniający, rodzicielski i ojcowski,
   każde z wymiarem, kwotą i podstawą prawną.
