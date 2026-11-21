@@ -30,6 +30,7 @@ QUESTIONS = [
     ("Jak zalogować się przez mObywatel?", "mobywatel"),
     ("Chcę zobaczyć gotową sprawę", "sprawy"),
     ("Do kogo zwrócić się poza serwisem?", "instytucje"),
+    ("Czym jest ZUS?", "czym_jest_zus"),
 ]
 
 DIGIT = re.compile(r"\d")
@@ -65,6 +66,25 @@ def test_answers_never_carry_numbers():
     for question, _ in QUESTIONS:
         body = client.post("/api/assistant/ask", json={"question": question}).json()
         assert not DIGIT.search(body["answer"])
+
+
+def test_every_answer_offers_the_next_questions():
+    """Pod odpowiedzią stoją następne pytania, więc rozmowa nie kończy się na jednym zdaniu."""
+    for question, _ in QUESTIONS:
+        body = client.post("/api/assistant/ask", json={"question": question}).json()
+        suggestions = body["suggestions"]
+        assert len(suggestions) >= 3, question
+        ids = {row["id"] for row in suggestions}
+        assert body["topic"] not in ids, question
+        assert all(row["question"].strip() for row in suggestions)
+
+
+def test_definition_question_gets_an_answer_not_just_institutions():
+    body = client.post("/api/assistant/ask", json={"question": "czym jest zus"}).json()
+    assert body["topic"] == "czym_jest_zus"
+    assert "Zakład Ubezpieczeń Społecznych" in body["answer"]
+    assert any(link["kind"] == "page" for link in body["links"])
+    assert body["suggestions"]
 
 
 def test_unknown_question_points_at_the_official_sites():
@@ -132,85 +152,39 @@ def test_ranking_ignores_case_and_diacritics():
 
 from app.core.config import Settings, get_settings  # noqa: E402
 from app.services import assistant_llm  # noqa: E402
+from app.services.assistant_service import BY_ID  # noqa: E402
 
-GOOD_JSON = (
-    '{"topic": "wniosek", "answer": "Sprawdź strony pod odpowiedzią, formularz i załączniki '
-    'są opisane krok po kroku."}'
-)
+GOOD_JSON = '{"topic": "wniosek"}'
 
 
-def test_model_sentence_keeps_links_from_the_catalog(monkeypatch):
+def test_model_picks_the_topic_and_the_catalog_writes_the_answer(monkeypatch):
     monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: GOOD_JSON)
     settings = Settings(assistant_api_key="t")
     answer = assistant_llm.answer_with_model("gdzie złożyć wniosek", settings)
     assert answer is not None
     assert answer.mode == "model"
     assert answer.topic == "wniosek"
+    assert answer.answer == BY_ID["wniosek"].answer
     assert answer.links[0].href == "/dokumenty"
 
 
-def test_model_answer_with_a_number_is_rejected(monkeypatch):
-    payload = (
-        '{"topic": "kwota", "answer": "Zasiłek wynosi 100 procent podstawy, sprawdź kalkulator."}'
-    )
+def test_model_cannot_slip_its_own_sentence_into_the_answer(monkeypatch):
+    # Model nie pisze odpowiedzi, więc jego zdanie nie ma prawa dotrzeć do użytkownika.
+    payload = '{"topic": "kwota", "answer": "Sprawdź sekcję Uprawnienia i kwotę 100 zł."}'
     monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: payload)
-    assert assistant_llm.answer_with_model("ile dostanę", Settings(assistant_api_key="t")) is None
-
-
-def test_model_answer_with_a_currency_word_is_rejected(monkeypatch):
-    payload = '{"topic": "kwota", "answer": "Kwotę w złotych policzy kalkulator na tej stronie."}'
-    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: payload)
-    assert assistant_llm.answer_with_model("ile dostanę", Settings(assistant_api_key="t")) is None
-
-
-def test_model_answer_with_an_invented_section_is_rejected(monkeypatch):
-    # Model nie zna serwisu i wymyślił sekcję "Uprawnienia", której nie ma.
-    payload = (
-        '{"topic": "swiadczenia", "answer": "Sprawdź sekcję Uprawnienia, gdzie znajdziesz '
-        'kalkulator i wywiad oraz listę świadczeń."}'
-    )
-    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: payload)
-    answer = assistant_llm.answer_with_model("co mi przysługuje", Settings(assistant_api_key="t"))
-    assert answer is None
-
-
-def test_model_answer_naming_an_institution_is_rejected(monkeypatch):
-    # Nawet prawdziwa nazwa jest tu zbędna, bo instytucje są w linkach z katalogu.
-    payload = '{"topic": "wniosek", "answer": "Sprawdź dokumenty, potem zanieś wniosek do ZUS."}'
-    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: payload)
-    answer = assistant_llm.answer_with_model(
-        "gdzie złożyć wniosek", Settings(assistant_api_key="t")
-    )
-    assert answer is None
-
-
-def test_route_falls_back_to_the_catalog_when_the_model_invents_a_page(monkeypatch):
-    payload = (
-        '{"topic": "swiadczenia", "answer": "Sprawdź sekcję Uprawnienia, tam jest lista '
-        'świadczeń."}'
-    )
-    app.dependency_overrides[get_settings] = lambda: Settings(assistant_api_key="t")
-    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: payload)
-    try:
-        body = client.post("/api/assistant/ask", json={"question": "co mi przysługuje"}).json()
-    finally:
-        app.dependency_overrides.clear()
-    assert body["mode"] == "catalog"
-    assert body["topic"] == "swiadczenia"
-    assert "sekcję" not in body["answer"]
-    assert "wywiad oraz listę" not in body["answer"]
-
-
-def test_model_unknown_topic_goes_to_the_institutions(monkeypatch):
-    payload = (
-        '{"topic": "cos-nowego", "answer": "Zajrzyj na strony instytucji, tam szukaj '
-        'odpowiedzi na to pytanie."}'
-    )
-    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: payload)
-    answer = assistant_llm.answer_with_model("dziwne pytanie", Settings(assistant_api_key="t"))
+    answer = assistant_llm.answer_with_model("ile dostanę", Settings(assistant_api_key="t"))
     assert answer is not None
-    assert answer.topic is None
-    assert {link.kind for link in answer.links} == {"external"}
+    assert answer.answer == BY_ID["kwota"].answer
+    assert "100" not in answer.answer
+    assert "Uprawnienia" not in answer.answer
+
+
+def test_model_with_an_unknown_topic_falls_back_to_the_catalog(monkeypatch):
+    payload = '{"topic": "cos-nowego"}'
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: payload)
+    assert (
+        assistant_llm.answer_with_model("dziwne pytanie", Settings(assistant_api_key="t")) is None
+    )
 
 
 def test_broken_json_falls_back_to_the_catalog(monkeypatch):
@@ -227,6 +201,7 @@ def test_route_answers_with_the_model_when_a_key_is_set(monkeypatch):
         app.dependency_overrides.clear()
     assert body["mode"] == "model"
     assert body["topic"] == "wniosek"
+    assert body["answer"] == BY_ID["wniosek"].answer
 
 
 def test_route_keeps_working_when_the_model_fails(monkeypatch):

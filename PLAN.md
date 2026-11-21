@@ -429,13 +429,17 @@ działa jako panel w prawym dolnym rogu.
 
 ### Co jest
 
-- Katalog dziewiętnastu tematów w `back/app/services/assistant_service.py`. Każdy ma gotowe pytanie,
+- Katalog dwudziestu tematów w `back/app/services/assistant_service.py`. Każdy ma gotowe pytanie,
   odpowiedź nawigacyjną i linki, czyli podstronę serwisu albo stronę ZUS, ministerstwa rodziny
-  i PIP.
+  i PIP. Jest też temat na samo "czym jest ZUS?", bo bez niego takie pytanie kończyło się listą
+  instytucji zamiast odpowiedzi.
 - Dopasowanie jest deterministyczne i działa bez klucza API. Pytanie jest normalizowane (małe
   litery, bez ogonków), a temat wygrywa na frazach i rdzeniach słów, więc "łączyć pracę" i
-  "laczyc prace" trafiają w to samo. Nieznane pytanie dostaje odesłania do trzech instytucji
-  i podpowiedzi, a nie wymyśloną odpowiedź.
+  "laczyc prace" trafiają w to samo. Nieznane pytanie dostaje odpowiedź o tym, co prowadzi ZUS,
+  ministerstwo rodziny i inspekcja pracy, plus ich adresy, a nie wymyśloną odpowiedź.
+- Pod każdą odpowiedzią stoją trzy następne pytania do kliknięcia. Najpierw te bliskie pytaniu,
+  potem te, które prowadzą do tej samej strony co wybrany temat, więc pod "czym jest ZUS?" są
+  sprawa w ZUS, zaległości i zwolnienie lekarskie.
 - Asystent siedzi w prawym dolnym rogu jako przycisk, nie jako osobna podstrona. Po chwili
   pokazuje się raz na sesję zaproszenie ("Masz pytanie? Napisz..."), a kliknięcie otwiera panel
   z rozmową, podpowiedziami i kartami linków. Escape i krzyżyk zamykają panel.
@@ -445,15 +449,13 @@ działa jako panel w prawym dolnym rogu.
 - Asystent nie podaje kwot, tygodni ani terminów. `back/tests/test_assistant.py` sprawdza, że
   w żadnej odpowiedzi, pytaniu ani etykiecie linku nie ma cyfry, oraz że każda podstrona, do której
   odsyła, ma trasę w `front/src/App.tsx`.
-- Z kluczem `ASSISTANT_API_KEY` zdanie układa model językowy (`deepseek/deepseek-v4.1-flash`
-  przez OpenRouter). Model wybiera temat z katalogu, a linki i tak bierzemy z katalogu, więc trasa
-  zostaje deterministyczna. Odpowiedź modelu przechodzi ten sam filtr co demo: cyfra albo słowo
-  o walucie ją odrzuca i wtedy odpowiada katalog. Drugi filtr pilnuje nazw. Model nie zna serwisu
-  i wymyślał nieistniejące sekcje, na przykład "sekcję Uprawnienia", więc wielka litera wolno mu
-  tylko w pierwszym słowie zdania i tylko z krótkiej listy czasowników, takich jak "Sprawdź" albo
-  "Zajrzyj". Nazwa w środku zdania odrzuca odpowiedź i wtedy też odpowiada katalog, w którym nazwy
-  stron są prawdziwe. Gdy model nie odpowie w dwanaście sekund albo dostawca padnie, strona działa
-  dalej, tylko z katalogu.
+- Z kluczem `ASSISTANT_API_KEY` model językowy (`deepseek/deepseek-v4.1-flash` przez OpenRouter)
+  wybiera tylko temat z katalogu i nic więcej nie pisze. Zdanie, linki i następne pytania zawsze
+  pochodzą z katalogu. Wcześniej model układał własne zdanie i wymyślał nieistniejące sekcje
+  ("sekcja Uprawnienia"), a po zaostrzeniu filtrów odpisywał ogólnikiem. Skoro treść bierze się
+  z katalogu, nie ma czego halucynować, a odpowiedź i tak jest konkretna. Gdy model wskaże temat,
+  którego nie ma, nie odpowie w dwanaście sekund albo dostawca padnie, odpowiada dopasowanie
+  deterministyczne.
 - Do modelu idzie wyłącznie treść pytania i lista tematów. Nie wysyłamy danych osobowych ani
   materiałów ZUS. Bez klucza nic nie wychodzi poza serwer i cała aplikacja działa offline.
   Panel mówi wprost, że wskazuje stronę, a nie podaje kwot ani terminów, bo te liczy kalkulator.

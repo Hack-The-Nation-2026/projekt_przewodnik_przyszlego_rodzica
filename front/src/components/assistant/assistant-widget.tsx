@@ -91,7 +91,7 @@ function AssistantTurn({
         </ul>
         {answer.suggestions.length > 0 && (
           <div className="mt-2.5 space-y-1.5">
-            <p className="text-xs text-muted-foreground">Może chodziło o</p>
+            <p className="text-xs text-muted-foreground">Możesz też zapytać o</p>
             <div className="flex flex-wrap gap-1.5">
               {answer.suggestions.map((topic) => (
                 <SuggestionChip key={topic.id} topic={topic} onPick={onPick} />
@@ -113,7 +113,8 @@ export function AssistantWidget() {
   const [question, setQuestion] = useState('')
   const launcher = useRef<HTMLButtonElement>(null)
   const input = useRef<HTMLInputElement>(null)
-  const anchor = useRef<HTMLDivElement>(null)
+  const body = useRef<HTMLDivElement>(null)
+  const lastAnswer = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (sessionStorage.getItem(TEASER_STORAGE_KEY)) return
@@ -134,9 +135,23 @@ export function AssistantWidget() {
   }, [open])
 
   useEffect(() => {
-    if (!open || turns.length === 0) return
-    anchor.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
-  }, [turns.length, ask.isPending, open])
+    const container = body.current
+    if (!open || !container) return
+    // Pytanie i "Szukam strony…" mają być widoczne od razu, a po odpowiedzi panel
+    // pokazuje jej początek, bo linki i podpowiedzi i tak są dłuższe niż okno.
+    if (ask.isPending) {
+      container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' })
+      return
+    }
+    const answer = lastAnswer.current
+    if (!answer) return
+    const top =
+      container.scrollTop +
+      answer.getBoundingClientRect().top -
+      container.getBoundingClientRect().top -
+      8
+    container.scrollTo({ top, behavior: 'smooth' })
+  }, [open, ask.isPending, turns.length])
 
   function dismissTeaser() {
     setTeaser(false)
@@ -162,6 +177,7 @@ export function AssistantWidget() {
   }
 
   const suggestions = (topics.data ?? []).slice(0, 4)
+  const lastAnswerId = turns.findLast((turn) => turn.role === 'assistant')?.id
 
   return (
     <div
@@ -205,7 +221,11 @@ export function AssistantWidget() {
               </div>
             </header>
 
-            <div className="flex-1 space-y-5 overflow-y-auto px-3 py-4" aria-live="polite">
+            <div
+              ref={body}
+              className="flex-1 space-y-5 overflow-y-auto px-3 py-4"
+              aria-live="polite"
+            >
               {turns.length === 0 && (
                 <div>
                   <div className="flex items-center gap-2.5">
@@ -242,7 +262,9 @@ export function AssistantWidget() {
                     {turn.text}
                   </p>
                 ) : (
-                  <AssistantTurn key={turn.id} answer={turn.answer} onPick={send} />
+                  <div key={turn.id} ref={turn.id === lastAnswerId ? lastAnswer : undefined}>
+                    <AssistantTurn answer={turn.answer} onPick={send} />
+                  </div>
                 ),
               )}
 
@@ -258,7 +280,6 @@ export function AssistantWidget() {
                 </p>
               )}
 
-              <div ref={anchor} />
             </div>
 
             <form

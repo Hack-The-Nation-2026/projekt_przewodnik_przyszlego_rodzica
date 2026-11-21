@@ -1,87 +1,40 @@
-"""Model językowy, który układa zdanie asystenta.
+"""Model językowy, który wybiera temat z katalogu.
 
 Model dostaje tylko pytanie użytkownika i listę tematów naszego katalogu. Nie wysyłamy
-materiałów ZUS, danych osobowych ani niczego z wniosków. Model nie liczy i nie wybiera
-linków: wskazuje temat, a linki bierzemy z katalogu, więc trasa i tak jest sprawdzona
-testem. Odpowiedź przechodzi ten sam filtr co tryb demo, więc kwota nie wycieknie,
-a drugi filtr odrzuca wymyślone nazwy stron i instytucji.
+materiałów ZUS, danych osobowych ani niczego z wniosków. Model nie pisze odpowiedzi:
+wskazuje temat, a zdanie, linki i następne pytania bierzemy z katalogu. Dzięki temu nie
+może wymyślić strony, której w serwisie nie ma, ani podać kwoty, której nie liczy kalkulator.
 """
 
 import json
 import logging
-import re
 
 import httpx
 
 from app.core.config import Settings
 from app.schemas.assistant import AssistantAnswer
-from app.services.assistant_service import (
-    BY_ID,
-    INSTITUTION_LINKS,
-    TOPICS,
-    ranked_topics,
-)
+from app.services.assistant_service import BY_ID, TOPICS, build_answer
 
 logger = logging.getLogger(__name__)
-
-DIGITS = re.compile(r"\d")
-# Całe słowa, bo "zł" siedzi też w "złożyć" i "złożenia".
-CURRENCY = re.compile(r"\b(pln|zł|zl|złotych|zlotych)\b", re.IGNORECASE)
-MIN_ANSWER = 25
-MAX_ANSWER = 420
-
-# Model nie zna serwisu i wymyślał nazwy sekcji, na przykład "sekcję Uprawnienia".
-# Zdanie musi się więc obyć bez nazw własnych. Wielka litera wolno tylko w słowie
-# otwierającym zdanie, i tylko z tej listy, bo nazwy stron i instytucji są w linkach
-# pod odpowiedzią, a te pochodzą z katalogu.
-OPENERS = frozenset(
-    {
-        "sprawdź",
-        "zajrzyj",
-        "zobacz",
-        "wybierz",
-        "najprościej",
-        "otwórz",
-        "wejdź",
-        "zapoznaj",
-        "przejrzyj",
-        "przeczytaj",
-        "skorzystaj",
-        "ustal",
-    }
-)
-UPPERCASE = re.compile(r"[A-ZĄĆĘŁŃÓŚŹŻ]")
-SENTENCE_END = ".!?…"
 
 SYSTEM_PROMPT = """Jesteś asystentem nawigacyjnym w serwisie "Skrzydła Rodzica" o zasiłkach \
 dla rodziców w Polsce.
 
-Twoje zadanie to powiedzieć, że odpowiedź jest na stronach pod linkami.
+Dostajesz pytanie użytkownika i listę tematów, które serwis obsługuje. Wybierz temat, który \
+najlepiej pasuje do pytania, nawet jeśli ktoś napisał je innymi słowami.
 
 Zasady:
-- Nie podawaj żadnych liczb: kwot, tygodni, dni, terminów ani dat.
-- Nie interpretuj przepisów i nie oceniaj, czy ktoś ma prawo do świadczenia.
-- Nie pytaj o dane osobowe, PESEL ani o dokumenty.
-- Nie znasz serwisu, więc nie nazywaj żadnej strony, sekcji, zakładki ani instytucji i nie
-  opisuj, co na nich jest. Nie wymyślaj nazw. Nazwy są w linkach pod odpowiedzią.
-- Napisz jedno krótkie zdanie po polsku, bez list i bez punktów. Zacznij je od słowa
-  "Sprawdź" albo "Zajrzyj". Wielkich liter używaj tylko w tym pierwszym słowie.
-- Wybierz jeden temat z listy i podaj jego id. Jeśli żaden nie pasuje, podaj null.
-
-Przykład dobrego zdania: "Sprawdź strony pod odpowiedzią, tam krok po kroku przejdziesz przez \
-wniosek."
+- Podaj id jednego tematu i nic więcej.
+- Nie odpowiadaj na pytanie, nie przepisuj go i nie dodawaj własnych zdań.
+- Jeśli żaden temat nie pasuje, podaj null.
 
 Zwróć wyłącznie JSON w formacie:
-{"topic": "<id tematu albo null>", "answer": "<jedno zdanie po polsku>"}"""
+{"topic": "<id tematu albo null>"}"""
 
 
 def _catalog_hint() -> str:
-    """Lista tematów z krótkim opisem, dokąd prowadzą. Bez tego model zgaduje strony."""
-    lines = []
-    for topic in TOPICS:
-        where = ", ".join(link.label for link in topic.links)
-        lines.append(f"- {topic.id}: {topic.question} (prowadzi do: {where})")
-    return "\n".join(lines)
+    """Lista tematów z pytaniem, po którym model rozpozna temat."""
+    return "\n".join(f"- {topic.id}: {topic.question}" for topic in TOPICS)
 
 
 def _request(question: str, settings: Settings) -> str:
@@ -102,7 +55,7 @@ def _request(question: str, settings: Settings) -> str:
                 },
             ],
             "response_format": {"type": "json_object"},
-            "temperature": 0.2,
+            "temperature": 0.1,
             "max_tokens": 1500,
         },
         timeout=httpx.Timeout(settings.assistant_timeout_seconds, connect=5.0),
@@ -112,74 +65,27 @@ def _request(question: str, settings: Settings) -> str:
     return content
 
 
-def _parse(content: str) -> tuple[str | None, str]:
-    """Wyciąga temat i zdanie z odpowiedzi modelu. Model czasem opakowuje JSON w blok kodu."""
+def _parse_topic(content: str) -> str | None:
+    """Wyciąga id tematu. Model czasem opakowuje JSON w blok kodu."""
     text = content.strip()
     if text.startswith("```"):
         text = text.split("\n", 1)[-1]
         text = text.rsplit("```", 1)[0]
     data = json.loads(text)
     topic = data.get("topic")
-    answer = (data.get("answer") or "").strip()
-    return (topic if isinstance(topic, str) else None), answer
-
-
-def _words(text: str) -> list[tuple[int, str]]:
-    """Słowa razem z pozycją, bo wielka litera na początku zdania jest w porządku."""
-    return [(match.start(), match.group()) for match in re.finditer(r"\S+", text)]
-
-
-def _opens_sentence(text: str, start: int) -> bool:
-    before = text[:start].rstrip()
-    return not before or before[-1] in SENTENCE_END
-
-
-def _has_invented_name(answer: str) -> bool:
-    """Każda wielka litera poza otwarciem zdania to nazwa, a nazw model nie wymyśla.
-
-    Nazwę w środku zdania widać po wielkiej literze, bo zwykłe słowo pisze się małą.
-    Na otwarciu zdania nie da się jej odróżnić od zwykłego słowa, dlatego pierwsze słowo
-    musi pochodzić z krótkiej listy czasowników, od których zaczyna się wskazówka.
-    """
-    for start, word in _words(answer):
-        if not UPPERCASE.search(word):
-            continue
-        if _opens_sentence(answer, start) and word.lower() in OPENERS:
-            continue
-        return True
-    return False
-
-
-def _is_safe(answer: str) -> bool:
-    """Kwoty i terminy zostają w silniku reguł, więc liczba w zdaniu dyskwalifikuje odpowiedź."""
-    if not MIN_ANSWER <= len(answer) <= MAX_ANSWER:
-        return False
-    if DIGITS.search(answer) or CURRENCY.search(answer):
-        return False
-    return not _has_invented_name(answer)
+    return topic if isinstance(topic, str) else None
 
 
 def answer_with_model(question: str, settings: Settings) -> AssistantAnswer | None:
-    """Pyta model. Zwraca None, gdy odpowiedź jest nieużywalna, a wtedy woła się katalog."""
+    """Pyta model o temat. Zwraca None, gdy model nic nie wskaże, a wtedy woła się katalog."""
     content = _request(question, settings)
     try:
-        topic_id, text = _parse(content)
+        topic_id = _parse_topic(content)
     except (json.JSONDecodeError, ValueError):
         logger.warning("Asystent: model nie zwrócił JSON-a")
         return None
 
-    if not _is_safe(text):
-        logger.warning("Asystent: odpowiedź modelu odrzucona przez filtr treści")
-        return None
-
     topic = BY_ID.get(topic_id) if topic_id else None
-    matches = ranked_topics(question)
-    alternatives = [entry.public() for entry, _score in matches[1:4]]
-
-    return AssistantAnswer(
-        topic=topic.id if topic else None,
-        answer=text,
-        links=list(topic.links) if topic else list(INSTITUTION_LINKS),
-        suggestions=alternatives,
-        mode="model",
-    )
+    if topic is None:
+        return None
+    return build_answer(topic, question, mode="model")

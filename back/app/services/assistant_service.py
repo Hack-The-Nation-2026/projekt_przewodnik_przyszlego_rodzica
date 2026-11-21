@@ -14,6 +14,7 @@ ten sam przy każdym uruchomieniu.
 import re
 import unicodedata
 from dataclasses import dataclass
+from typing import Literal
 
 from app.schemas.assistant import AssistantAnswer, AssistantLink, AssistantTopic
 
@@ -23,6 +24,8 @@ from app.schemas.assistant import AssistantAnswer, AssistantLink, AssistantTopic
 PHRASE_WEIGHT = 3
 STEM_WEIGHT = 1
 MIN_SCORE = 1
+
+Mode = Literal["catalog", "model"]
 
 ZUS = AssistantLink(
     label="Strona ZUS",
@@ -324,6 +327,39 @@ TOPICS: tuple[Topic, ...] = (
         stems=("ezus", "pue"),
     ),
     Topic(
+        id="czym_jest_zus",
+        question="Czym jest ZUS?",
+        answer=(
+            "ZUS, czyli Zakład Ubezpieczeń Społecznych, prowadzi sprawy ubezpieczeń społecznych: "
+            "składki, zwolnienia lekarskie i zasiłki. Kto wypłaca świadczenie, zależy od rodzaju "
+            "umowy, a w serwisie zobaczysz, jak wygląda twoje ubezpieczenie."
+        ),
+        links=(
+            AssistantLink(
+                label="Symulacja ZUS",
+                href="/zus",
+                kind="page",
+                description="Ubezpieczenie, składki i zaległości na wybrany dzień.",
+            ),
+            AssistantLink(
+                label="eZUS",
+                href="https://www.zus.pl/ezus",
+                kind="external",
+                description="Oficjalne konto i stan sprawy w ZUS.",
+            ),
+        ),
+        phrases=(
+            "czym jest zus",
+            "co to jest zus",
+            "co to za zus",
+            "czym sie zajmuje zus",
+            "do czego sluzy zus",
+            "co robi zus",
+            "co oznacza zus",
+            "czym jest zaklad ubezpieczen",
+        ),
+    ),
+    Topic(
         id="oboje_rodzice",
         question="Jak to wygląda, gdy korzystają oboje rodzice?",
         answer=(
@@ -569,8 +605,9 @@ TOPICS: tuple[Topic, ...] = (
 )
 
 FALLBACK_ANSWER = (
-    "Nie mam gotowej odpowiedzi na to pytanie. Zajrzyj do listy świadczeń albo do kalkulatora, "
-    "a w sprawach urzędowych pomogą strony poniżej."
+    "Nie mam gotowej odpowiedzi na to pytanie. W serwisie sprawdzisz świadczenia, dokumenty "
+    "i wyliczenie, a w sprawach urzędowych pomogą instytucje poniżej: sprawy zasiłkowe prowadzi "
+    "ZUS, przepisy o urlopach ministerstwo rodziny, a praw pracowniczych pilnuje inspekcja pracy."
 )
 
 BY_ID = {topic.id: topic for topic in TOPICS}
@@ -623,22 +660,53 @@ def public_topics() -> list[AssistantTopic]:
     return [topic.public() for topic in TOPICS]
 
 
-def ask(question: str) -> AssistantAnswer:
-    """Odpowiada nawigacją. Nieznane pytanie dostaje odesłania, a nie zgadywanie."""
-    matches = ranked_topics(question)
-    if not matches or matches[0][1] < MIN_SCORE:
-        return AssistantAnswer(
-            topic=None,
-            answer=FALLBACK_ANSWER,
-            links=list(INSTITUTION_LINKS),
-            suggestions=[topic.public() for topic in TOPICS[:4]],
-        )
+def suggestions_for(question: str, chosen: str | None, limit: int = 3) -> list[AssistantTopic]:
+    """Następne pytania pod odpowiedzią.
 
-    topic, best = matches[0]
-    alternatives = [entry for entry, score in matches[1:] if score == best][:3]
+    Najpierw te, które pasują do samego pytania, potem te, które prowadzą do tej samej
+    strony co wybrany temat, a na końcu reszta katalogu. Dzięki temu podpowiedzi trzymają
+    się tematu rozmowy, a nie zawsze tych samych trzech pytań.
+    """
+    picked = [topic for topic, _score in ranked_topics(question) if topic.id != chosen]
+
+    chosen_topic = BY_ID.get(chosen) if chosen else None
+    if chosen_topic is not None:
+        chosen_pages = {link.href for link in chosen_topic.links}
+        for topic in TOPICS:
+            if len(picked) >= limit:
+                break
+            if topic.id == chosen or topic in picked:
+                continue
+            if any(link.href in chosen_pages for link in topic.links):
+                picked.append(topic)
+
+    for topic in TOPICS:
+        if len(picked) >= limit:
+            break
+        if topic.id != chosen and topic not in picked:
+            picked.append(topic)
+    return [topic.public() for topic in picked[:limit]]
+
+
+def build_answer(topic: Topic, question: str, mode: Mode = "catalog") -> AssistantAnswer:
+    """Jedno miejsce, w którym powstaje odpowiedź, dla katalogu i dla modelu."""
     return AssistantAnswer(
         topic=topic.id,
         answer=topic.answer,
         links=list(topic.links),
-        suggestions=[entry.public() for entry in alternatives],
+        suggestions=suggestions_for(question, topic.id),
+        mode=mode,
     )
+
+
+def ask(question: str) -> AssistantAnswer:
+    """Odpowiada nawigacją. Nieznane pytanie dostaje odesłania, a nie zgadywanie."""
+    matches = ranked_topics(question)
+    if not matches:
+        return AssistantAnswer(
+            topic=None,
+            answer=FALLBACK_ANSWER,
+            links=list(INSTITUTION_LINKS),
+            suggestions=suggestions_for(question, None, 4),
+        )
+    return build_answer(matches[0][0], question)
