@@ -29,10 +29,10 @@ function Wordmark() {
         <LogoMark />
       </span>
       <span className="flex min-w-0 flex-col leading-none">
-        <span className="truncate font-display text-base font-semibold text-primary-foreground sm:text-lg">
+        <span className="truncate font-display text-base font-semibold leading-none text-primary-foreground sm:text-lg sm:leading-none">
           Przewodnik Rodzica
         </span>
-        <span className="mt-0.5 hidden truncate text-[11px] text-primary-foreground/80 sm:block">
+        <span className="mt-0.5 hidden truncate text-[11px] leading-none text-primary-foreground/80 sm:block">
           co ci przysługuje i jak to załatwić
         </span>
       </span>
@@ -71,11 +71,11 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 shrink-0">
       <div className="border-b border-primary-foreground/15 bg-primary text-primary-foreground shadow-sm">
-        <Container className="flex h-16 items-center gap-4">
+        <Container className="flex h-16 items-center gap-4 lg:gap-8">
           <Wordmark />
 
           <nav
-            className="hidden flex-1 items-center justify-center gap-1 lg:flex"
+            className="hidden flex-1 items-center justify-center gap-1 lg:flex lg:px-4"
             aria-label="Nawigacja główna"
           >
             {NAV.map((item) => (
