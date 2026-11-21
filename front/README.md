@@ -88,6 +88,20 @@ Zdjęcie zajmuje całą szerokość sekcji, a na nim stoi kwadracik z nagłówki
 Od lewej przykrywa zdjęcie przyciemnienie, żeby kwadracik miał na nim kontrast. Ten sam układ
 działa na telefonie, tylko kwadracik zwęża się do szerokości ekranu.
 
+## Wejście i logowanie
+
+Trasa `/wejscie` to pierwszy ekran dla kogoś, kto nie jest jeszcze zalogowany. Stoi tam wybór
+metody: karta z mObywatelem i obok formularz ręcznego wpisania danych. Zadanie wymaga tylko
+mObywatela, więc pod nimi widać listę pozostałych metod jako wyłączone pozycje.
+
+Po wejściu którąkolwiek drogą ten sam ekran pokazuje kartę `Twoje dane`. Widać w niej źródło
+danych, imię i nazwisko, zamaskowany PESEL, opis sprawy i status, a obok przycisk `Przejdź dalej`
+prowadzący do kalkulatora. Wpisanie danych bez logowania idzie przez `POST /auth/manual`
+i tworzy profil bez sprawy w ZUS, więc status mówi wprost, że danych z ZUS nie ma.
+
+Ekran jest osiągalny z przycisku w hero, z nagłówka po zalogowaniu i z kolumny `Przewodnik`
+w stopce.
+
 ## Logowanie przez mObywatel
 
 Prawdziwego mObywatela nie da się uruchomić na hackathonie, bo wymaga zarejestrowanego klienta

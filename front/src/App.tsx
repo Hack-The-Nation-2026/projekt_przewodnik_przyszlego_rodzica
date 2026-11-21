@@ -5,6 +5,7 @@ import { KalkulatorPage } from '@/pages/kalkulator-page'
 import { MobywatelPage } from '@/pages/mobywatel-page'
 import { NotFoundPage } from '@/pages/not-found-page'
 import { PlaceholderPage } from '@/pages/placeholder-page'
+import { WejsciePage } from '@/pages/wejscie-page'
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
 
       <Route element={<RootLayout />}>
         <Route index element={<HomePage />} />
+        <Route path="wejscie" element={<WejsciePage />} />
         <Route
           path="swiadczenia"
           element={
