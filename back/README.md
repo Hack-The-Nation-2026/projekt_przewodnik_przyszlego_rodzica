@@ -1,4 +1,4 @@
-# Backend — Zasiłkowy Przewodnik Przyszłego Rodzica
+# Backend: Przewodnik Przyszłego Rodzica
 
 REST API w FastAPI z katalogiem świadczeń i symulacją uprawnień dla rodziców.
 
@@ -106,3 +106,21 @@ przyjmuje też numer PESEL. Hasło do wszystkich kont demonstracyjnych to `demo1
 
 Listę kont zwraca `GET /api/auth/mobywatel/demo-accounts`, żeby frontend miał z czego zrobić
 podpowiedź przy demie. Endpoint odpowiada 404, gdy `ENVIRONMENT=prod`.
+
+## Wejście bez logowania
+
+`POST /api/auth/manual` przyjmuje imię, nazwisko, 11-cyfrowy PESEL i opcjonalny opis sytuacji,
+a oddaje ten sam kształt `Citizen` co mObywatel. Profil dostaje kod `WPISANE-RECZNIE`, status
+`brak danych z ZUS` i `source` równy `manual`, więc frontend odróżnia dane z konta od wpisanych
+z ręki. Sumy kontrolnej PESEL nie liczymy, bo demo nie ma blokować osoby z numerem przykładowym.
+
+```json
+{
+  "first_name": "Katarzyna",
+  "last_name": "N.",
+  "pesel": "44051401359",
+  "case_label": "Ciąża, jeden poród"
+}
+```
+
+Pole `source` na `Citizen` mówi, którą drogą dane przyszły: `mobywatel` albo `manual`.

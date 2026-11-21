@@ -42,6 +42,7 @@
 
   /* Biel i czerwień godła, do przycisku mObywatela w nagłówku. */
   --pl-red: #d22630;
+  --pl-red-soft: #fbeaec; /* kryjące tło podświetlenia, żeby zieleń nagłówka nie prześwitywała */
 }
 
 @theme inline {
@@ -70,6 +71,7 @@
   --color-gold-foreground: var(--gold-foreground);
   --color-navy: var(--navy);
   --color-pl-red: var(--pl-red);
+  --color-pl-red-soft: var(--pl-red-soft);
 
   /* Ekran mObywatela ma własną, celowo obcą paletę: użytkownik ma poczuć, że
      wyszedł z naszego serwisu do serwisu rządowego. */

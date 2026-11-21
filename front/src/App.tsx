@@ -5,6 +5,7 @@ import { KalkulatorPage } from '@/pages/kalkulator-page'
 import { MobywatelPage } from '@/pages/mobywatel-page'
 import { NotFoundPage } from '@/pages/not-found-page'
 import { PlaceholderPage } from '@/pages/placeholder-page'
+import { WejsciePage } from '@/pages/wejscie-page'
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
 
       <Route element={<RootLayout />}>
         <Route index element={<HomePage />} />
+        <Route path="wejscie" element={<WejsciePage />} />
         <Route
           path="swiadczenia"
           element={
@@ -29,6 +31,7 @@ export default function App() {
           element={
             <PlaceholderPage
               title="Dokumenty i wnioski"
+              crumb="Dokumenty"
               description="Lista dokumentów, terminy i informacja, gdzie je złożyć: u pracodawcy albo w ZUS."
             />
           }
@@ -38,6 +41,7 @@ export default function App() {
           element={
             <PlaceholderPage
               title="Wsparcie w trudnych sytuacjach"
+              crumb="Wsparcie"
               description="Miejsca i organizacje, które pomagają po stracie dziecka, przy wcześniaku i w ciężkiej chorobie."
             />
           }

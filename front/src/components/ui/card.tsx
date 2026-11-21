@@ -2,7 +2,11 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 
 function Card({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div className={cn('rounded-lg border bg-card text-card-foreground', className)} {...props} />
+  // Karta bez obramowania i cienia: odcina się od tła jednolitym, szarym
+  // wypełnieniem ze standardowej palety Tailwinda.
+  return (
+    <div className={cn('rounded-lg bg-neutral-100 text-card-foreground', className)} {...props} />
+  )
 }
 
 function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {

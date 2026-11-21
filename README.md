@@ -1,4 +1,4 @@
-# Zasiłkowy Przewodnik Przyszłego Rodzica
+# Przewodnik Przyszłego Rodzica
 
 Projekt na hackathon **HackNation 2026**, wyzwanie **ZUS**. Celem jest narzędzie, które w prosty
 sposób pokazuje rodzicom, jakie świadczenia i urlopy im przysługują, ile wyniosą i jak je uzyskać.

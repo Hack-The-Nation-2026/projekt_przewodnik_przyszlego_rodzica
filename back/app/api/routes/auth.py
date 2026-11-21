@@ -1,4 +1,4 @@
-"""Symulowane logowanie przez mObywatel.
+"""Wejście do aplikacji: symulowane logowanie przez mObywatel i ręczne wpisanie danych.
 
 Frontend wychodzi na osobną stronę i wraca tutaj z danymi obywatela, tak jak
 w prawdziwym przepływie z login.gov.pl.
@@ -6,8 +6,8 @@ w prawdziwym przepływie z login.gov.pl.
 from fastapi import APIRouter, HTTPException, status
 
 from app.core.config import get_settings
-from app.schemas.auth import Citizen, DemoAccount, MobywatelLogin
-from app.services import mobywatel_service
+from app.schemas.auth import Citizen, DemoAccount, ManualEntry, MobywatelLogin
+from app.services import manual_profile, mobywatel_service
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -21,6 +21,12 @@ def mobywatel_login(payload: MobywatelLogin) -> Citizen:
             detail="Nieprawidłowy login lub hasło.",
         )
     return citizen
+
+
+@router.post("/manual", response_model=Citizen)
+def manual_login(payload: ManualEntry) -> Citizen:
+    """Wejście bez logowania: profil powstaje z danych wpisanych w formularzu."""
+    return manual_profile.build_citizen(payload)
 
 
 @router.get("/mobywatel/demo-accounts", response_model=list[DemoAccount])
