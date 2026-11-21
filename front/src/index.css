@@ -41,8 +41,8 @@
   --navy: #1d2b3a;
 
   /* Czerwień godła i jej ciemniejszy odcień na stan kursora. */
-  --pl-red: #d22630;
-  --pl-red-dark: #b01d26;
+  --pl-red: #e01e2b;
+  --pl-red-dark: #bf1620;
 }
 
 @theme inline {
