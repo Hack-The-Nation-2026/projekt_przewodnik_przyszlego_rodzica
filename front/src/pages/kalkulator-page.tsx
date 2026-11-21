@@ -53,6 +53,14 @@ const benefitStatuses = {
   not_applicable: { label: 'Nie dotyczy', icon: Minus, color: 'border-slate-500 bg-slate-500 text-white' },
 } satisfies Record<Assessment['status'], { label: string; icon: typeof Check; color: string }>
 
+const benefitStatusOrder = {
+  granted: 0,
+  partially_granted: 1,
+  missing_data: 2,
+  denied: 3,
+  not_applicable: 4,
+} satisfies Record<Assessment['status'], number>
+
 const sicknessPeriodLabels: Record<string, string> = {
   zasilek_chorobowy: 'Zasiłek chorobowy',
   wynagrodzenie_chorobowe: 'Wynagrodzenie chorobowe od pracodawcy',
@@ -320,6 +328,13 @@ export function KalkulatorPage() {
   const step = steps[stepIndex]
   const nextStep = steps[stepIndex + 1]
 
+  const resultCards = result
+    ? (Object.keys(benefitList) as BenefitCode[])
+        .map<Assessment>((benefit) => result.assessments.get(benefit) ?? {
+          benefit, status: 'missing_data', reason: 'Dla tego świadczenia brakuje wyniku symulacji.',
+        })
+        .sort((a, b) => benefitStatusOrder[a.status] - benefitStatusOrder[b.status])
+    : []
   const pool = result?.pool ?? null
   const sharedTotal = pool ? Math.max(0, pool.total_days - 2 * pool.exclusive_days_per_parent) : 0
   const secondShare = Math.min(secondShareDays, sharedTotal)
@@ -534,12 +549,10 @@ export function KalkulatorPage() {
             Kwoty podajemy brutto, za cały okres.
           </p>
           <div className="grid gap-3 md:grid-cols-2">
-            {(Object.keys(benefitList) as BenefitCode[]).map((benefit) => (
+            {resultCards.map((assessment) => (
               <BenefitCard
-                key={benefit}
-                assessment={result.assessments.get(benefit) ?? {
-                  benefit, status: 'missing_data', reason: 'Dla tego świadczenia brakuje wyniku symulacji.',
-                }}
+                key={assessment.benefit}
+                assessment={assessment}
                 onShowDocuments={showDocuments}
               />
             ))}
