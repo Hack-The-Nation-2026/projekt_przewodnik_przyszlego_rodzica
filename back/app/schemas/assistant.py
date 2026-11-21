@@ -21,10 +21,21 @@ class AssistantTopic(BaseModel):
     question: str
 
 
+class AssistantTurn(BaseModel):
+    """Wcześniejsze pytanie i temat, który asystent wtedy wskazał."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    question: str = Field(min_length=2, max_length=300)
+    topic: str | None = None
+
+
 class AssistantQuestion(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     question: str = Field(min_length=2, max_length=300)
+    # Ostatnie pytania z rozmowy, żeby dopytanie typu "a co z dokumentami?" miało kontekst.
+    history: list[AssistantTurn] = Field(default_factory=list, max_length=6)
 
 
 class AssistantAnswer(BaseModel):

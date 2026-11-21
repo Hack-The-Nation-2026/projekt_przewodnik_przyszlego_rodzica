@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api'
-import type { AssistantAnswer, AssistantTopic } from '@/types/api'
+import type { AssistantAnswer, AssistantTopic, AssistantTurn } from '@/types/api'
 
 /** Pytania startowe pokazywane pod pustą rozmową. */
 export function useAssistantTopics() {
@@ -14,11 +14,16 @@ export function useAssistantTopics() {
   })
 }
 
-/** Jedno pytanie do asystenta. Serwer nic nie zapisuje, więc nie ma historii do czyszczenia. */
+/**
+ * Pytanie do asystenta razem z ostatnimi pytaniami z rozmowy.
+ *
+ * Historia jedzie z przeglądarki przy każdym pytaniu, więc dopytanie typu
+ * "a co z dokumentami?" ma kontekst. Serwer jej nie zapisuje.
+ */
 export function useAskAssistant() {
   return useMutation({
-    mutationFn: async (question: string) => {
-      const { data } = await api.post<AssistantAnswer>('/assistant/ask', { question })
+    mutationFn: async (input: { question: string; history: AssistantTurn[] }) => {
+      const { data } = await api.post<AssistantAnswer>('/assistant/ask', input)
       return data
     },
   })

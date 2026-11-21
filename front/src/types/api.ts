@@ -255,6 +255,12 @@ export interface AssistantTopic {
   question: string
 }
 
+/** Wcześniejsze pytanie i temat, który asystent wtedy wskazał. */
+export interface AssistantTurn {
+  question: string
+  topic: string | null
+}
+
 /** Odpowiedź asystenta: co powiedzieć i gdzie odesłać. Kwot nie ma. */
 export interface AssistantAnswer {
   topic: string | null

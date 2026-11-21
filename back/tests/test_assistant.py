@@ -31,6 +31,7 @@ QUESTIONS = [
     ("Chcę zobaczyć gotową sprawę", "sprawy"),
     ("Do kogo zwrócić się poza serwisem?", "instytucje"),
     ("Czym jest ZUS?", "czym_jest_zus"),
+    ("Ile płacę składek?", "skladki"),
 ]
 
 DIGIT = re.compile(r"\d")
@@ -66,6 +67,22 @@ def test_answers_never_carry_numbers():
     for question, _ in QUESTIONS:
         body = client.post("/api/assistant/ask", json={"question": question}).json()
         assert not DIGIT.search(body["answer"])
+
+
+def test_question_outside_the_catalog_points_at_the_sources():
+    """Pytanie spoza zakresu nie kończy rozmowy, tylko mówi, gdzie sprawdzić."""
+    body = client.post("/api/assistant/ask", json={"question": "ile mogę mieć dzieci"}).json()
+    assert body["topic"] is None
+    assert "źródł" in body["answer"]
+    assert not body["answer"].startswith("Nie mam")
+    hrefs = {link["href"] for link in body["links"]}
+    assert "/swiadczenia" in hrefs
+    assert {
+        "https://www.zus.pl",
+        "https://www.gov.pl/web/rodzina",
+        "https://www.pip.gov.pl",
+    } <= hrefs
+    assert body["suggestions"]
 
 
 def test_every_answer_offers_the_next_questions():
@@ -131,6 +148,53 @@ def test_internal_links_exist_on_the_site():
             assert path in declared, path
 
 
+def test_follow_up_question_reads_the_whole_conversation():
+    """“a co z dokumentami?” ma sens tylko razem z poprzednim pytaniem."""
+    history = [{"question": "gdzie złożyć wniosek o zasiłek macierzyński", "topic": "wniosek"}]
+    body = client.post(
+        "/api/assistant/ask",
+        json={"question": "a co z dokumentami?", "history": history},
+    ).json()
+    assert body["topic"] == "dokumenty", body["answer"]
+
+
+def test_full_question_does_not_need_the_history():
+    history = [{"question": "jakie dokumenty muszę złożyć", "topic": "dokumenty"}]
+    body = client.post(
+        "/api/assistant/ask",
+        json={"question": "ile dostanę zasiłku?", "history": history},
+    ).json()
+    assert body["topic"] == "kwota"
+
+
+def test_follow_up_without_a_keyword_offers_the_thread_as_suggestions():
+    # Słów nie ma, więc asystent nie zgaduje tematu, ale podpowiada ten z rozmowy.
+    history = [{"question": "jakie dokumenty muszę złożyć", "topic": "dokumenty"}]
+    body = client.post(
+        "/api/assistant/ask",
+        json={"question": "a co dalej z tym zrobić", "history": history},
+    ).json()
+    assert body["suggestions"][0]["id"] == "dokumenty"
+    assert body["links"]
+
+
+def test_history_is_capped_and_checked():
+    too_long = [{"question": f"pytanie numer {index}"} for index in range(7)]
+    assert (
+        client.post(
+            "/api/assistant/ask", json={"question": "cokolwiek", "history": too_long}
+        ).status_code
+        == 422
+    )
+    personal = [{"question": "gdzie złożyć wniosek", "pesel": "1"}]
+    assert (
+        client.post(
+            "/api/assistant/ask", json={"question": "cokolwiek", "history": personal}
+        ).status_code
+        == 422
+    )
+
+
 def test_empty_question_is_rejected_by_validation():
     assert client.post("/api/assistant/ask", json={"question": "a"}).status_code == 422
     assert client.post("/api/assistant/ask", json={}).status_code == 422
@@ -158,9 +222,9 @@ GOOD_JSON = '{"topic": "wniosek"}'
 
 
 def test_model_picks_the_topic_and_the_catalog_writes_the_answer(monkeypatch):
-    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: GOOD_JSON)
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, history, settings: GOOD_JSON)
     settings = Settings(assistant_api_key="t")
-    answer = assistant_llm.answer_with_model("gdzie złożyć wniosek", settings)
+    answer = assistant_llm.answer_with_model("gdzie złożyć wniosek", [], settings)
     assert answer is not None
     assert answer.mode == "model"
     assert answer.topic == "wniosek"
@@ -171,8 +235,8 @@ def test_model_picks_the_topic_and_the_catalog_writes_the_answer(monkeypatch):
 def test_model_cannot_slip_its_own_sentence_into_the_answer(monkeypatch):
     # Model nie pisze odpowiedzi, więc jego zdanie nie ma prawa dotrzeć do użytkownika.
     payload = '{"topic": "kwota", "answer": "Sprawdź sekcję Uprawnienia i kwotę 100 zł."}'
-    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: payload)
-    answer = assistant_llm.answer_with_model("ile dostanę", Settings(assistant_api_key="t"))
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, history, settings: payload)
+    answer = assistant_llm.answer_with_model("ile dostanę", [], Settings(assistant_api_key="t"))
     assert answer is not None
     assert answer.answer == BY_ID["kwota"].answer
     assert "100" not in answer.answer
@@ -181,20 +245,21 @@ def test_model_cannot_slip_its_own_sentence_into_the_answer(monkeypatch):
 
 def test_model_with_an_unknown_topic_falls_back_to_the_catalog(monkeypatch):
     payload = '{"topic": "cos-nowego"}'
-    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: payload)
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, history, settings: payload)
     assert (
-        assistant_llm.answer_with_model("dziwne pytanie", Settings(assistant_api_key="t")) is None
+        assistant_llm.answer_with_model("dziwne pytanie", [], Settings(assistant_api_key="t"))
+        is None
     )
 
 
 def test_broken_json_falls_back_to_the_catalog(monkeypatch):
-    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: "nie json")
-    assert assistant_llm.answer_with_model("cokolwiek", Settings(assistant_api_key="t")) is None
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, history, settings: "nie json")
+    assert assistant_llm.answer_with_model("cokolwiek", [], Settings(assistant_api_key="t")) is None
 
 
 def test_route_answers_with_the_model_when_a_key_is_set(monkeypatch):
     app.dependency_overrides[get_settings] = lambda: Settings(assistant_api_key="t")
-    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: GOOD_JSON)
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, history, settings: GOOD_JSON)
     try:
         body = client.post("/api/assistant/ask", json={"question": "gdzie złożyć wniosek"}).json()
     finally:
@@ -205,7 +270,7 @@ def test_route_answers_with_the_model_when_a_key_is_set(monkeypatch):
 
 
 def test_route_keeps_working_when_the_model_fails(monkeypatch):
-    def boom(question, settings):
+    def boom(question, history, settings):
         raise RuntimeError("dostawca padł")
 
     app.dependency_overrides[get_settings] = lambda: Settings(assistant_api_key="t")
@@ -220,7 +285,7 @@ def test_route_keeps_working_when_the_model_fails(monkeypatch):
 
 
 def test_route_without_a_key_never_touches_the_network(monkeypatch):
-    def unexpected(question, settings):
+    def unexpected(question, history, settings):
         raise AssertionError("bez klucza nie ma prawa być wywołania modelu")
 
     monkeypatch.setattr(assistant_llm, "_request", unexpected)

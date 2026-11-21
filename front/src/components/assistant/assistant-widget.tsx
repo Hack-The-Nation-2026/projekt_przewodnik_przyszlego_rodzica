@@ -5,15 +5,30 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useAskAssistant, useAssistantTopics } from '@/hooks/use-assistant'
 import { cn } from '@/lib/utils'
-import type { AssistantAnswer, AssistantLink, AssistantTopic } from '@/types/api'
+import type { AssistantAnswer, AssistantLink, AssistantTopic, AssistantTurn } from '@/types/api'
 
 type Turn =
   | { id: number; role: 'user'; text: string }
   | { id: number; role: 'assistant'; answer: AssistantAnswer }
 
+// Ile ostatnich pytań jedzie z każdym zapytaniem, żeby asystent pamiętał rozmowę.
+const HISTORY_TURNS = 4
 // Zaproszenie do rozmowy pokazujemy raz na sesję, po chwili od wejścia.
 const TEASER_DELAY_MS = 6000
 const TEASER_STORAGE_KEY = 'asystent-zaproszenie'
+
+/** Pary pytanie-odpowiedź z rozmowy, w formie, którą rozumie serwer. */
+function buildHistory(turns: Turn[]): AssistantTurn[] {
+  const history: AssistantTurn[] = []
+  for (const turn of turns) {
+    if (turn.role === 'user') {
+      history.push({ question: turn.text, topic: null })
+    } else if (history.length > 0) {
+      history[history.length - 1].topic = turn.answer.topic
+    }
+  }
+  return history.slice(-HISTORY_TURNS)
+}
 
 function SuggestionChip({
   topic,
@@ -169,11 +184,14 @@ export function AssistantWidget() {
     const id = Date.now()
     setTurns((previous) => [...previous, { id, role: 'user', text: trimmed }])
     setQuestion('')
-    ask.mutate(trimmed, {
-      onSuccess: (answer) => {
-        setTurns((previous) => [...previous, { id: id + 1, role: 'assistant', answer }])
+    ask.mutate(
+      { question: trimmed, history: buildHistory(turns) },
+      {
+        onSuccess: (answer) => {
+          setTurns((previous) => [...previous, { id: id + 1, role: 'assistant', answer }])
+        },
       },
-    })
+    )
   }
 
   const suggestions = (topics.data ?? []).slice(0, 4)
@@ -235,8 +253,8 @@ export function AssistantWidget() {
                     <p className="text-sm font-medium">Od czego chcesz zacząć?</p>
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    Wskażę stronę, na której znajdziesz odpowiedź. Kwot i terminów nie podaję,
-                    te liczy kalkulator.
+                    Wskażę stronę, na której znajdziesz odpowiedź. Kwoty i terminy zostawiam
+                    kalkulatorowi.
                   </p>
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     {topics.isPending

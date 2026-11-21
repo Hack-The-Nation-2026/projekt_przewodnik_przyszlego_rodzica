@@ -429,14 +429,20 @@ działa jako panel w prawym dolnym rogu.
 
 ### Co jest
 
-- Katalog dwudziestu tematów w `back/app/services/assistant_service.py`. Każdy ma gotowe pytanie,
-  odpowiedź nawigacyjną i linki, czyli podstronę serwisu albo stronę ZUS, ministerstwa rodziny
-  i PIP. Jest też temat na samo "czym jest ZUS?", bo bez niego takie pytanie kończyło się listą
-  instytucji zamiast odpowiedzi.
+- Katalog dwudziestu jeden tematów w `back/app/services/assistant_service.py`. Każdy ma gotowe
+  pytanie, odpowiedź nawigacyjną i linki, czyli podstronę serwisu albo stronę ZUS, ministerstwa
+  rodziny i PIP. Jest temat na samo "czym jest ZUS?" i osobny na "ile płacę składek", bo bez nich
+  takie pytania kończyły się listą instytucji zamiast odpowiedzi.
 - Dopasowanie jest deterministyczne i działa bez klucza API. Pytanie jest normalizowane (małe
   litery, bez ogonków), a temat wygrywa na frazach i rdzeniach słów, więc "łączyć pracę" i
-  "laczyc prace" trafiają w to samo. Nieznane pytanie dostaje odpowiedź o tym, co prowadzi ZUS,
-  ministerstwo rodziny i inspekcja pracy, plus ich adresy, a nie wymyśloną odpowiedź.
+  "laczyc prace" trafiają w to samo. Pytanie spoza katalogu dostaje wprost powiedziane, że nie
+  jest zgadywane, plus cztery adresy: naszą listę świadczeń i trzy oficjalne źródła, czyli ZUS,
+  ministerstwo rodziny i inspekcję pracy.
+- Rozmowa ma kontekst. Przeglądarka dołącza do każdego pytania cztery poprzednie razem z tematami,
+  które asystent wtedy wskazał, więc "a co z dokumentami?" odpowiada o dokumentach, a nie od nowa
+  o wniosku. Kontekst rozstrzyga tylko wtedy, gdy samo pytanie ma jeden słaby trop, i nigdy nie
+  przenosi na temat, na który pytanie nie wskazuje. Serwer historii nie zapisuje, wszystko jest
+  w pamięci karty.
 - Pod każdą odpowiedzią stoją trzy następne pytania do kliknięcia. Najpierw te bliskie pytaniu,
   potem te, które prowadzą do tej samej strony co wybrany temat, więc pod "czym jest ZUS?" są
   sprawa w ZUS, zaległości i zwolnienie lekarskie.
@@ -456,9 +462,10 @@ działa jako panel w prawym dolnym rogu.
   z katalogu, nie ma czego halucynować, a odpowiedź i tak jest konkretna. Gdy model wskaże temat,
   którego nie ma, nie odpowie w dwanaście sekund albo dostawca padnie, odpowiada dopasowanie
   deterministyczne.
-- Do modelu idzie wyłącznie treść pytania i lista tematów. Nie wysyłamy danych osobowych ani
-  materiałów ZUS. Bez klucza nic nie wychodzi poza serwer i cała aplikacja działa offline.
-  Panel mówi wprost, że wskazuje stronę, a nie podaje kwot ani terminów, bo te liczy kalkulator.
+- Do modelu idzie wyłącznie treść pytania, poprzednie pytania z rozmowy i lista tematów.
+  Nie wysyłamy danych osobowych ani materiałów ZUS. Bez klucza nic nie wychodzi poza serwer
+  i cała aplikacja działa offline. Panel mówi wprost, że wskazuje stronę, a nie podaje kwot
+  ani terminów, bo te liczy kalkulator.
 
 ## Krok 15. Materiały do oddania
 

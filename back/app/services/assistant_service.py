@@ -8,15 +8,18 @@ i terminy zostają w silniku reguł, więc żadna odpowiedź ich nie podaje.
 Dopasowanie jest deterministyczne: normalizujemy pytanie (bez wielkich liter
 i ogonków), a potem liczymy trafienia w rdzenie słów i całe frazy przypisane
 do tematu. Dzięki temu demo działa bez klucza API i bez sieci, a wynik jest
-ten sam przy każdym uruchomieniu.
+ten sam przy każdym uruchomieniu. Dopytanie, na przykład "a co z dokumentami?",
+czytamy razem z poprzednimi pytaniami, które przysyła przeglądarka. Serwer
+historii nie zapisuje.
 """
 
 import re
 import unicodedata
+from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Literal
 
-from app.schemas.assistant import AssistantAnswer, AssistantLink, AssistantTopic
+from app.schemas.assistant import AssistantAnswer, AssistantLink, AssistantTopic, AssistantTurn
 
 # Ile waży trafienie. Fraza jest precyzyjniejsza niż pojedynczy rdzeń, więc
 # wygrywa z nim, a pojedyncze słowo wystarcza tylko wtedy, gdy żaden inny temat
@@ -24,6 +27,10 @@ from app.schemas.assistant import AssistantAnswer, AssistantLink, AssistantTopic
 PHRASE_WEIGHT = 3
 STEM_WEIGHT = 1
 MIN_SCORE = 1
+# Jeden rdzeń to jeszcze za mało, żeby zaufać tematowi bez patrzenia na kontekst.
+WEAK_SCORE = 1
+# Ile poprzednich pytań bierzemy pod uwagę. Dalsze i tak niewiele wnoszą.
+CONTEXT_TURNS = 3
 
 Mode = Literal["catalog", "model"]
 
@@ -48,6 +55,15 @@ PIP = AssistantLink(
 
 # Gdy pytanie nie pasuje do żadnego tematu, zostają trzy oficjalne adresy.
 INSTITUTION_LINKS: tuple[AssistantLink, ...] = (ZUS, FAMILY, PIP)
+
+BENEFITS_PAGE = AssistantLink(
+    label="Lista świadczeń",
+    href="/swiadczenia",
+    kind="page",
+    description="Co obejmuje serwis i gdzie szukać szczegółów.",
+)
+# Pytanie spoza katalogu: najpierw nasza lista, a pod nią trzy oficjalne źródła.
+FALLBACK_LINKS: tuple[AssistantLink, ...] = (BENEFITS_PAGE, *INSTITUTION_LINKS)
 
 
 @dataclass(frozen=True)
@@ -129,6 +145,40 @@ TOPICS: tuple[Topic, ...] = (
             "ile za",
         ),
         stems=("kwot", "wylicz", "wysokosc", "pieniadz"),
+    ),
+    Topic(
+        id="skladki",
+        question="Ile płacę składek?",
+        answer=(
+            "Składki zależą od podstawy wymiaru, więc kwoty nie podam od ręki. W kalkulatorze "
+            "wpiszesz swoje dane i zobaczysz wyliczenie, a symulacja ZUS pokaże składki "
+            "i ubezpieczenie na wybrany dzień."
+        ),
+        links=(
+            AssistantLink(
+                label="Kalkulator",
+                href="/kalkulator",
+                kind="page",
+                description="Wyliczenie zasiłku z twoich danych.",
+            ),
+            AssistantLink(
+                label="Symulacja ZUS",
+                href="/zus",
+                kind="page",
+                description="Ubezpieczenie, składki i zaległości na wybrany dzień.",
+            ),
+        ),
+        phrases=(
+            "ile place",
+            "ile placimy",
+            "ile wynosza skladki",
+            "jakie skladki",
+            "ile skladek",
+            "ile odprowadzam",
+            "skladki na zus",
+            "ile kosztuje zus",
+        ),
+        stems=("skladk", "odprowadz"),
     ),
     Topic(
         id="swiadczenia",
@@ -290,7 +340,7 @@ TOPICS: tuple[Topic, ...] = (
             "kto wyplaci",
             "kto wyplaca",
             "pracodawca czy zus",
-            "kto placi zasilk",
+            "kto placi zasil",
             "kto prowadzi spraw",
             "od pracodawcy",
         ),
@@ -605,9 +655,9 @@ TOPICS: tuple[Topic, ...] = (
 )
 
 FALLBACK_ANSWER = (
-    "Nie mam gotowej odpowiedzi na to pytanie. W serwisie sprawdzisz świadczenia, dokumenty "
-    "i wyliczenie, a w sprawach urzędowych pomogą instytucje poniżej: sprawy zasiłkowe prowadzi "
-    "ZUS, przepisy o urlopach ministerstwo rodziny, a praw pracowniczych pilnuje inspekcja pracy."
+    "Tego pytania nie obejmuje katalog serwisu, więc nie chcę zgadywać. Sprawdź u źródła, "
+    "strony są poniżej: sprawy zasiłkowe prowadzi ZUS, przepisy o urlopach ministerstwo rodziny, "
+    "a praw pracowniczych pilnuje inspekcja pracy."
 )
 
 BY_ID = {topic.id: topic for topic in TOPICS}
@@ -660,6 +710,11 @@ def public_topics() -> list[AssistantTopic]:
     return [topic.public() for topic in TOPICS]
 
 
+def _context_text(history: Sequence[AssistantTurn]) -> str:
+    """Poprzednie pytania jako jeden tekst, żeby dopytanie miało do czego nawiązać."""
+    return " ".join(turn.question for turn in history[-CONTEXT_TURNS:])
+
+
 def suggestions_for(question: str, chosen: str | None, limit: int = 3) -> list[AssistantTopic]:
     """Następne pytania pod odpowiedzią.
 
@@ -688,25 +743,55 @@ def suggestions_for(question: str, chosen: str | None, limit: int = 3) -> list[A
     return [topic.public() for topic in picked[:limit]]
 
 
-def build_answer(topic: Topic, question: str, mode: Mode = "catalog") -> AssistantAnswer:
+def build_answer(
+    topic: Topic,
+    question: str,
+    history: Sequence[AssistantTurn] = (),
+    mode: Mode = "catalog",
+) -> AssistantAnswer:
     """Jedno miejsce, w którym powstaje odpowiedź, dla katalogu i dla modelu."""
+    context = _context_text(history)
+    asked = f"{context} {question}".strip()
     return AssistantAnswer(
         topic=topic.id,
         answer=topic.answer,
         links=list(topic.links),
-        suggestions=suggestions_for(question, topic.id),
+        suggestions=suggestions_for(asked, topic.id),
         mode=mode,
     )
 
 
-def ask(question: str) -> AssistantAnswer:
+def _from_context(
+    question: str,
+    matches: list[tuple[Topic, int]],
+    history: Sequence[AssistantTurn],
+) -> Topic | None:
+    """Dopytanie z jednym słowem kluczowym: kontekst rozstrzyga, ale tylko wśród tematów,
+    na które wskazuje samo pytanie. Dzięki temu "a co z dokumentami?" nie wraca do wniosku."""
+    context = _context_text(history)
+    if not context:
+        return None
+    context_scores = {topic.id: score for topic, score in ranked_topics(context)}
+    best = max(matches, key=lambda pair: (context_scores.get(pair[0].id, 0), pair[1]))
+    return best[0]
+
+
+def ask(
+    question: str,
+    history: Sequence[AssistantTurn] = (),
+) -> AssistantAnswer:
     """Odpowiada nawigacją. Nieznane pytanie dostaje odesłania, a nie zgadywanie."""
     matches = ranked_topics(question)
     if not matches:
         return AssistantAnswer(
             topic=None,
             answer=FALLBACK_ANSWER,
-            links=list(INSTITUTION_LINKS),
-            suggestions=suggestions_for(question, None, 4),
+            links=list(FALLBACK_LINKS),
+            suggestions=suggestions_for(f"{_context_text(history)} {question}", None, 4),
         )
-    return build_answer(matches[0][0], question)
+
+    if matches[0][1] <= WEAK_SCORE:
+        resolved = _from_context(question, matches, history)
+        if resolved is not None:
+            return build_answer(resolved, question, history)
+    return build_answer(matches[0][0], question, history)
