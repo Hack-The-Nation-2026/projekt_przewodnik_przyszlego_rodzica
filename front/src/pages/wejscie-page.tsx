@@ -83,17 +83,7 @@ function SessionCard() {
   return (
     <Card>
       <CardHeader>
-        <div className="flex flex-wrap items-center gap-2">
-          <CardTitle>Twoje dane</CardTitle>
-          <Badge
-            variant="outline"
-            className={cn(
-              fromMobywatel ? 'border-primary/30 text-primary' : 'text-muted-foreground',
-            )}
-          >
-            {fromMobywatel ? 'Dane z mObywatela' : 'Dane wpisane ręcznie'}
-          </Badge>
-        </div>
+        <CardTitle>Twoje dane</CardTitle>
         <CardDescription>
           {fromMobywatel
             ? 'Te dane przyszły z twojego konta. Możesz iść dalej.'
@@ -151,7 +141,7 @@ function MethodChooser() {
   return (
     <div className="space-y-8">
       <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
-        <Card className="flex flex-col border-primary/30">
+        <Card className="flex flex-col">
           <CardHeader>
             <div className="flex flex-wrap items-center gap-2">
               <CardTitle>Zaloguj przez mObywatel</CardTitle>
