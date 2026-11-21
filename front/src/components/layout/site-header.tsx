@@ -75,7 +75,7 @@ export function SiteHeader() {
           <Wordmark />
 
           <nav
-            className="hidden flex-1 items-center justify-center gap-0.5 min-[90rem]:flex min-[90rem]:px-2"
+            className="hidden flex-1 items-center justify-center gap-0.5 xl:flex xl:px-2"
             aria-label="Nawigacja główna"
           >
             {NAV.map((item) => (
@@ -114,7 +114,7 @@ export function SiteHeader() {
             <Button
               variant="ghost"
               size="icon"
-              className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground min-[90rem]:hidden"
+              className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground xl:hidden"
               aria-label={open ? 'Zamknij menu' : 'Otwórz menu'}
               aria-expanded={open}
               onClick={() => setOpen((value) => !value)}
@@ -125,7 +125,7 @@ export function SiteHeader() {
         </Container>
 
         {open && (
-          <nav className="border-t border-primary-foreground/15 bg-primary min-[90rem]:hidden" aria-label="Nawigacja mobilna">
+          <nav className="border-t border-primary-foreground/15 bg-primary xl:hidden" aria-label="Nawigacja mobilna">
             <Container className="flex flex-col py-2">
               {NAV.map((item) => (
                 <NavLink

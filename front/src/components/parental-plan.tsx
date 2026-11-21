@@ -4,7 +4,7 @@ import { Slider } from '@/components/ui/slider'
 import type { ParentalPool } from '@/lib/benefit-interview'
 import { cn } from '@/lib/utils'
 
-const currency = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' })
+const currency = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN', useGrouping: 'always' })
 
 type Parent = 'first_parent' | 'second_parent'
 
@@ -111,7 +111,7 @@ export function ParentalPlanCard({
             <div className="relative pt-6">
               <span
                 className="pointer-events-none absolute top-0 -translate-x-1/2 rounded-full bg-navy px-2 py-0.5 text-xs font-semibold whitespace-nowrap text-white"
-                style={{ left: `${sharedWeeks ? (weeks(secondShare) / sharedWeeks) * 100 : 0}%` }}
+                style={{ left: `clamp(2.5rem, ${sharedWeeks ? (weeks(secondShare) / sharedWeeks) * 100 : 0}%, calc(100% - 2.5rem))` }}
                 aria-hidden="true"
               >
                 {weeks(secondShare)} tyg.
@@ -165,9 +165,9 @@ export function ParentalPlanCard({
                   <div className={dot} style={{ width: `${(exclusive / days) * 100}%` }} />
                   <div className={cn(dot, 'opacity-40')} style={{ width: `${(shared / days) * 100}%` }} />
                 </div>
-                <div className={cn('mt-1.5 text-sm sm:whitespace-nowrap', end && 'sm:text-right')}>
-                  <span className="text-base font-semibold">{weeks(days)} tyg.</span>
-                  <span className="text-muted-foreground">, {money(result?.gross, !!result)}</span>
+                <div className={cn('mt-1.5 text-sm', end && 'sm:text-right')}>
+                  <span className="block text-base font-semibold">{weeks(days)} tyg.</span>
+                  <span className="block text-muted-foreground">{money(result?.gross, !!result)}</span>
                 </div>
                 {result && !granted && (
                   <p className="mt-1 text-xs text-muted-foreground">{result.reason}</p>

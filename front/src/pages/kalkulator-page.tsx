@@ -23,7 +23,7 @@ import { cn } from '@/lib/utils'
 
 const BenefitDocuments = lazy(() => import('@/components/benefit-documents'))
 
-const currency = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' })
+const currency = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN', useGrouping: 'always' })
 const date = new Intl.DateTimeFormat('pl-PL', { dateStyle: 'medium', timeZone: 'UTC' })
 
 /** Przykładowe odpowiedzi dla przycisku deweloperskiego. */
