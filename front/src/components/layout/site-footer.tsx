@@ -25,7 +25,7 @@ const COLUMNS = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-20 bg-green-deep text-primary-foreground">
+    <footer className="mt-20 bg-primary text-primary-foreground">
       <Container className="grid gap-10 py-12 md:grid-cols-[1.5fr_1fr_1fr]">
         <div>
           <p className="font-display text-lg font-semibold">Zasiłkowy Przewodnik Przyszłego Rodzica</p>

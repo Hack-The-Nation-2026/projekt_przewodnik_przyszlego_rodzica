@@ -38,7 +38,6 @@
   --gold-dark: #cf8a1f;
   --gold-foreground: #3a2a06;
   --navy: #1d2b3a;
-  --green-deep: #00431f;
   --green-ink: #00531f;
 
   /* Biel i czerwień godła, do przycisku mObywatela w nagłówku. */
@@ -70,7 +69,6 @@
   --color-gold-dark: var(--gold-dark);
   --color-gold-foreground: var(--gold-foreground);
   --color-navy: var(--navy);
-  --color-green-deep: var(--green-deep);
   --color-green-ink: var(--green-ink);
   --color-pl-red: var(--pl-red);
 
