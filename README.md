@@ -1,29 +1,53 @@
 # Skrzydła Rodzica
 
-Projekt na hackathon **HackNation 2026**, wyzwanie **ZUS**. Celem jest narzędzie, które w prosty
-sposób pokazuje rodzicom, jakie świadczenia i urlopy im przysługują, ile wyniosą i jak je uzyskać.
+Przewodnik po zasiłkach dla przyszłych rodziców. Projekt na HackNation 2026, wyzwanie **ZUS**.
+Rodzic odpowiada na kilka pytań i widzi, co mu przysługuje, przez ile dni i w jakiej kwocie,
+a potem dostaje dokumenty, terminy i miejsce złożenia wniosku.
 
-To na razie szkielet: struktura repo, działający frontend ze stroną startową i
-nagłówkiem oraz backend z pierwszymi endpointami. Reguły liczenia zasiłków są spisane w
-`RULES.md`, a kod, który je policzy, dojdzie w kolejnych krokach z `PLAN.md`.
+## Co jest w środku
 
-## Struktura
+- **Kalkulator** (`/kalkulator`): zasiłek chorobowy w ciąży, macierzyński dla obojga rodziców,
+  uzupełniający urlop przy wcześniaku, łączenie pracy z urlopem, adopcja i rodzina zastępcza.
+  Kwoty liczy silnik reguł z `RULES.md`, nie model językowy.
+- **Podział urlopu** na jednym ekranie: wspólna pula, po dziewięć nieprzenoszalnych tygodni dla
+  każdego rodzica i osobny wynik dla obojga.
+- **Dokumenty i wnioski** (`/dokumenty`): formularz, załączniki, termin i miejsce złożenia dla
+  każdego świadczenia. Do tego szkic wniosku do pobrania.
+- **Sprawy** (`/sprawy`): dziesięć scenariuszy demonstracyjnych i własny wniosek w formacie JSON.
+  Strona pokazuje weryfikację ubezpieczenia, wyliczenie i porównanie z oczekiwanym wynikiem.
+- **Symulacja ZUS** (`/zus`): ubezpieczenie, zadłużenie, e-ZLA, PUE/eZUS i wniosek o odpis aktu
+  urodzenia. Wszystko lokalnie, bez połączenia z systemami ZUS.
+- **Wsparcie** (`/wsparcie`): organizacje i zasady dla sytuacji po stracie dziecka, przy wcześniaku,
+  poronieniu i ciężkiej chorobie.
+- **Panel administracyjny** (`/panel`): stopy, wymiary urlopów i przełączniki funkcji.
+- **Asystent**: panel w prawym dolnym rogu. Model językowy wybiera tylko temat z katalogu,
+  a treść, linki i podpowiedzi pochodzą z katalogu.
 
-```
-zadanie-rodzice/
-├── back/     # FastAPI, REST API
-├── front/    # Vite, React, Tailwind i shadcn/ui
-├── RULES.md  # reguły zasiłków z odesłaniami do przepisów
-├── PLAN.md   # kroki realizacji
-└── OPIS/     # materiały ZUS (lokalnie, nie trafiają do repozytorium)
-```
+## Sztuczna inteligencja
 
-Folder `OPIS/` jest w `.gitignore`. Materiały ZUS wolno wykorzystać tylko na potrzeby wydarzenia,
-bez kopiowania i rozpowszechniania.
+Jedyna funkcja oparta na modelu językowym to asystent nawigacyjny. Dostaje pytanie i listę
+tematów, zwraca wyłącznie identyfikator tematu. Odpowiedź, linki i następne pytania są zapisane
+w katalogu w `back/app/services/assistant_service.py`, więc asystent nie może wymyślić kwoty,
+terminu ani podstrony. Bez klucza `ASSISTANT_API_KEY` asystent działa na dopasowaniu słów i cała
+aplikacja działa offline. Do modelu nie trafiają dane osobowe ani materiały ZUS.
+
+## Dane demonstracyjne
+
+Regulamin zadania nie pozwala publikować dokumentów ZUS, więc sprawy w `/sprawy` są odtworzone
+na wymyślonych danych, a oczekiwany wynik każdej z nich jest zapisany w
+`back/app/data/demo-cases.json`. To pokazuje spięcie strony z kalkulatorem, a nie odwzorowanie
+prawdziwych decyzji. Poprawność reguł pilnuje `back/tests/test_rules.py`.
+
+## Stack
+
+- Backend: Python, FastAPI, pydantic, uvicorn.
+- Frontend: Vite, React 19, TypeScript, Tailwind v4, komponenty w stylu shadcn/ui,
+  TanStack Query, react-hook-form i zod, zustand, react-router-dom.
+- Integracja: REST API pod `/api`.
 
 ## Szybki start
 
-Backend (środowisko `.venv` jest już gotowe z zależnościami):
+Backend:
 
 ```bash
 cd back
@@ -43,19 +67,23 @@ npm run dev
 
 Frontend działa na http://localhost:5173, API na http://localhost:8000 (dokumentacja pod `/docs`).
 
-## Co już działa
+## Testy
 
-- Logowanie przez symulowanego mObywatela. Przycisk w nagłówku wychodzi na stronę `/mobywatel`,
-  a po zalogowaniu wracamy tam, gdzie przerwaliśmy, i widzimy dane zależne od konta.
-- Nagłówek z nawigacją, nazwą zalogowanej osoby i wylogowaniem (stan trzyma zustand).
-- Strona startowa: sekcja powitalna, kroki, lista świadczeń pobrana z API i skróty.
-- Backend: `/api/health` i `/api/benefits`, CORS pod adres frontendu.
-- Formularz w kalkulatorze z walidacją zod jako wzorzec dla kolejnych ekranów.
+```bash
+cd back && ./.venv/bin/python -m pytest -q
+cd front && npm run build && npm run lint
+```
 
-## Stack
+## Struktura
 
-- Backend: Python, FastAPI, uvicorn, pydantic i pydantic-settings.
-- Frontend: Vite, React 19, TypeScript, Tailwind v4, komponenty shadcn/ui, TanStack Query,
-  axios, zod i yup, react-hook-form, zustand, react-router-dom.
+```
+zadanie-rodzice/
+├── back/        # FastAPI i silnik reguł
+├── front/       # React, Vite, Tailwind
+├── RULES.md     # reguły zasiłków z odesłaniem do przepisów
+├── PLAN.md      # kroki realizacji i stan prac
+└── OPIS/        # materiały ZUS (lokalnie, poza repozytorium)
+```
 
-Szczegóły w `back/README.md` i `front/README.md`.
+`OPIS/` i `PRZYKLADY/` są w `.gitignore`. Materiały ZUS wolno wykorzystać tylko na potrzeby
+wydarzenia, bez kopiowania i rozpowszechniania.
