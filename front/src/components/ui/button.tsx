@@ -11,7 +11,7 @@ const buttonVariants = cva(
         gold: 'bg-gold text-gold-foreground hover:bg-gold-dark',
         /* Biel i czerwień godła, odwrócone: czerwone tło, biały napis. */
         mobywatel: 'bg-pl-red text-white shadow-sm hover:bg-pl-red-dark',
-        mobywatelHeader: 'border-2 border-[#9d595d] bg-white text-pl-red shadow-sm hover:bg-red-50 hover:text-pl-red-dark',
+        mobywatelHeader: 'border-3 border-slate-200 bg-white text-pl-red shadow-sm hover:bg-red-50 hover:text-pl-red-dark',
         outline:
           'border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
