@@ -18,18 +18,18 @@ export const benefitList = {
   },
   w_wysokosci_macierzynskiego: {
     name: 'Zasiłek w wysokości zasiłku macierzyńskiego',
-    what: 'Zasiłek dla osoby, której umowa o pracę skończyła się w ciąży. Płacony jak macierzyński.',
+    what: 'Świadczenie wypłacane przed porodem w określonych przypadkach ustania zatrudnienia w trakcie ciąży.',
     sources: [{ title: 'Ustawa zasiłkowa, art. 30 ust. 3', url: SOCIAL_INSURANCE }],
   },
   macierzynski: {
     name: 'Zasiłek macierzyński',
-    what: 'Pieniądze za urlop macierzyński, czyli pierwsze tygodnie po urodzeniu dziecka.',
+    what: 'Świadczenie za okres urlopu macierzyńskiego lub urlopu na jego warunkach po przyjęciu dziecka na wychowanie.',
     sources: [{ title: 'Ustawa zasiłkowa, art. 29–31', url: SOCIAL_INSURANCE },
       { title: 'Kodeks pracy, art. 180 i 183', url: LABOUR_CODE }],
   },
   uzupelniajacy: {
     name: 'Zasiłek za uzupełniający urlop macierzyński',
-    what: 'Dodatkowy urlop, gdy dziecko urodziło się przedwcześnie albo było w szpitalu po urodzeniu.',
+    what: 'Świadczenie za dodatkowy urlop w określonych przypadkach wcześniactwa lub pobytu dziecka w szpitalu.',
     sources: [{ title: 'Ustawa zasiłkowa, art. 29a i 31', url: SOCIAL_INSURANCE },
       { title: 'Kodeks pracy, art. 180² i 183', url: LABOUR_CODE }],
   },

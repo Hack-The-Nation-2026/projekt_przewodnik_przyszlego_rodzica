@@ -127,11 +127,12 @@ function DateHints({ benefit, options, context }: { benefit: BenefitCode; option
 }
 
 export default function BenefitDocuments({
-  benefit, onBenefitChange, context, onClose, plain = false,
+  benefit, onBenefitChange, context, initialRole, onClose, plain = false,
 }: {
   benefit: BenefitCode
   onBenefitChange?: (benefit: BenefitCode) => void
   context?: DocumentContext
+  initialRole?: Extract<Role, 'adoption' | 'foster'>
   onClose?: () => void
   /** Wersja bez szarej karty i paddingu, żeby treść leżała w białym oknie dialogowym. */
   plain?: boolean
@@ -141,21 +142,19 @@ export default function BenefitDocuments({
   const draftTrigger = useRef<HTMLButtonElement>(null)
   const focusStep = useRef(false)
   const [step, setStep] = useState<Step>(onBenefitChange ? 'benefit' : 'documents')
-  const [role, setRole] = useState<Role>(context?.role ?? 'mother')
+  const [role, setRole] = useState<Role>(context?.role ?? initialRole ?? 'mother')
   const [employment, setEmployment] = useState<Employment>(context?.employment ?? 'unknown')
   const [payerSize, setPayerSize] = useState<PayerSize>('unknown')
   const [coverageOverride, setCoverageOverride] = useState<{ benefit: BenefitCode; value: Coverage }>()
   const [maternityCase, setMaternityCase] = useState<MaternityCase>(context?.role === 'father' ? 'takeover' : 'standard')
-  const [mode, setMode] = useState<'benefit' | 'leave' | null>(null)
+  const [draftOpen, setDraftOpen] = useState(false)
   const scenario = role === context?.role ? context : undefined
   const coverage = coverageOverride?.benefit === benefit ? coverageOverride.value : coverageFromContext(benefit, scenario)
   const options = { role, employment, payerSize, coverage, maternityCase }
   const guide = getDocumentGuide(benefit, options, scenario)
   const route = routeFor(benefit, options)
-  const useLeave = mode === 'leave' && guide.leave
   const period = isFamilyBenefit(benefit) && (scenario?.forecast || (benefit === 'macierzynski' && maternityCase === 'before_birth'))
     ? undefined : scenario?.periods[benefit]
-  const rateAvailable = (benefit === 'macierzynski' || benefit === 'rodzicielski') && role !== 'father'
   const showPayerOptions = benefit !== 'w_wysokosci_macierzynskiego'
   const payerSizeApplies = employment !== 'self_employed' && coverage !== 'ended'
   const showFamilyRole = isFamilyBenefit(benefit)
@@ -167,7 +166,7 @@ export default function BenefitDocuments({
   ]
 
   function goToStep(next: Step) {
-    setMode(null)
+    setDraftOpen(false)
     focusStep.current = true
     setStep(next)
   }
@@ -180,19 +179,14 @@ export default function BenefitDocuments({
   }, [step])
 
   useEffect(() => {
-    if (!mode) return
+    if (!draftOpen) return
     draftHeading.current?.focus({ preventScroll: true })
     draftHeading.current?.scrollIntoView({ block: 'start' })
-  }, [mode])
+  }, [draftOpen])
 
   function closeDraft() {
-    setMode(null)
+    setDraftOpen(false)
     draftTrigger.current?.focus()
-  }
-
-  function toggleDraft(next: 'benefit' | 'leave', trigger: HTMLButtonElement) {
-    draftTrigger.current = trigger
-    setMode(mode === next ? null : next)
   }
 
   return (
@@ -344,33 +338,29 @@ export default function BenefitDocuments({
               {showPayerOptions && <Button type="button" variant="outline" onClick={() => goToStep('situation')}>Zmień dane</Button>}
               {onBenefitChange && <Button type="button" variant="outline" onClick={() => goToStep('benefit')}>Zmień świadczenie</Button>}
             </div>
-            <div className="flex flex-wrap gap-x-4 gap-y-2 border-t pt-4">
-              {guide.leave && (
-                <Button type="button" variant="link" className="h-auto p-0 whitespace-normal" aria-expanded={mode === 'leave'}
-                  onClick={(event) => toggleDraft('leave', event.currentTarget)}>
+            {guide.leave && (
+              <div className="border-t pt-4">
+                <Button ref={draftTrigger} type="button" variant="link" className="h-auto p-0 whitespace-normal"
+                  aria-expanded={draftOpen} onClick={() => setDraftOpen((open) => !open)}>
                   Przygotuj szkic wniosku urlopowego
                 </Button>
-              )}
-              <Button type="button" variant="link" className="h-auto p-0 whitespace-normal" aria-expanded={mode === 'benefit'}
-                onClick={(event) => toggleDraft('benefit', event.currentTarget)}>
-                Pomoc w wypełnieniu formularza ZUS
-              </Button>
-            </div>
+              </div>
+            )}
           </CardContent>
         )}
       </Card>
 
-      {step === 'documents' && mode && (
+      {step === 'documents' && draftOpen && guide.leave && (
         <Card className={cn(plain && 'border-t bg-transparent pt-4')}>
           <CardHeader className={cn('flex-row flex-wrap items-start justify-between gap-3', plain && 'px-0 pt-0')}>
             <h3 ref={draftHeading} tabIndex={-1} className="scroll-mt-24 text-xl font-semibold focus:outline-none">
-              {useLeave ? 'Szkic wniosku urlopowego' : 'Dane do formularza ' + guide.form.label}
+              Szkic wniosku urlopowego
             </h3>
             <Button type="button" variant="outline" size="sm" onClick={closeDraft}>Zamknij szkic</Button>
           </CardHeader>
           <CardContent className={cn(plain && 'px-0 pb-0')}>
-            <ApplicationDraft key={mode} benefit={benefit} guide={guide} options={options} mode={useLeave ? 'leave' : 'benefit'}
-              addressee={useLeave ? '' : route.addressee} period={period} rateAvailable={rateAvailable} />
+            <ApplicationDraft key={benefit} benefit={benefit} leave={guide.leave} documents={guide.documents}
+              options={options} period={period} />
           </CardContent>
         </Card>
       )}
