@@ -39,7 +39,7 @@ ich kopiować ani rozpowszechniać.
 - [x] Krok 1. Zestaw testowy z PRZYKLADY
 - [ ] Krok 2. Model danych i API
 - [ ] Krok 3. Silnik uprawnień i kalkulatory
-- [ ] Krok 4. Wejście i logowanie
+- [x] Krok 4. Wejście i logowanie
 - [ ] Krok 5. Wywiad i ustalanie uprawnień
 - [ ] Krok 6. Kalkulator na ekranie
 - [ ] Krok 7. Dokumenty, terminy i miejsce złożenia
@@ -165,6 +165,14 @@ Pierwszy ekran decyduje o tym, czy ktoś w ogóle wejdzie w wywiad.
   jeśli zostanie czas.
 
 Gotowe, gdy po kliknięciu widać ekran z danymi z ZUS i przejście dalej.
+
+Zrobione 21.11. Trasa `/wejscie` w `front/src/pages/wejscie-page.tsx` daje dwa wejścia: kartę
+z mObywatelem i obok formularz ręcznego wpisania danych. Pod nimi stoi lista pozostałych metod
+jako wyłączone pozycje, bo zadanie wymaga tylko mObywatela. Po wejściu którąkolwiek drogą ten sam
+ekran pokazuje kartę `Twoje dane`: źródło danych, imię i nazwisko, zamaskowany PESEL, opis sprawy
+i status, a obok przycisk `Przejdź dalej` prowadzący do kalkulatora. Ręczne wpisanie idzie przez
+`POST /api/auth/manual`, który oddaje ten sam kształt `Citizen` co logowanie i dokłada pole
+`source`, więc frontend odróżnia dane z konta od wpisanych z ręki.
 
 Brief, pkt 3, lista symulacji.
 
