@@ -9,7 +9,7 @@ które wnoszą grafikę.
 | Plik | Co przedstawia | Autor i źródło | Licencja |
 | --- | --- | --- | --- |
 | `front/public/formularz.jpg` | Para przegląda dokument przy kuchennym stole. Zdjęcie w sekcji startowej, przycięte do 2400 na 1200 pikseli. | Ron Lach, Pexels, https://www.pexels.com/photo/couple-working-together-at-home-9869384/ | Licencja Pexels. Pozwala używać i przycinać zdjęcie także komercyjnie, bez obowiązku podania autora. Autora podajemy i tak. |
-| `front/public/favicon.svg` i znak w nagłówku | Sadzonka. Ikona `sprout`. | Lucide, https://lucide.dev/icons/sprout | ISC. Treść licencji leży w `front/node_modules/lucide-react/LICENSE`. |
+| `front/public/favicon.svg` i znak w nagłówku | Para skrzydeł z trzech piór, narysowana w `front/src/components/brand/wing-mark.tsx`. | Znak własny serwisu. | Własność projektu, bez zewnętrznej licencji. |
 | `front/public/orzel.png` | Orzeł Biały obok napisu na przycisku logowania przez mObywatela. | Nie mamy zapisanego źródła. Do uzupełnienia. | Do uzupełnienia. |
 | `front/public/mobywatel.png` | Ikona aplikacji mObywatel na symulowanym ekranie logowania. | Nie mamy zapisanego źródła. Do uzupełnienia. | Znak urzędowy państwa. Wchodzi tylko jako ilustracja symulacji, której wymaga zadanie. |
 

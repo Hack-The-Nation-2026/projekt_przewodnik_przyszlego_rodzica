@@ -1,4 +1,4 @@
-# Frontend: Przewodnik Przyszłego Rodzica
+# Frontend: Skrzydła Rodzica
 
 Interfejs aplikacji: Vite, React, TypeScript, Tailwind v4 i komponenty w stylu shadcn/ui.
 
@@ -99,7 +99,7 @@ danych, imię i nazwisko, zamaskowany PESEL, opis sprawy i status, a obok przyci
 prowadzący do kalkulatora. Wpisanie danych bez logowania idzie przez `POST /auth/manual`
 i tworzy profil bez sprawy w ZUS, więc status mówi wprost, że danych z ZUS nie ma.
 
-Ekran jest osiągalny z przycisku w hero, z nagłówka po zalogowaniu i z kolumny `Przewodnik`
+Ekran jest osiągalny z przycisku w hero, z nagłówka po zalogowaniu i z kolumny `Nawigacja`
 w stopce.
 
 ## Logowanie przez mObywatel

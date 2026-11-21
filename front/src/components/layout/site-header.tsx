@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, Sprout, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
+import { WingMark } from '@/components/brand/wing-mark'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/layout/container'
 import { ProfileMenu } from '@/components/layout/profile-menu'
@@ -16,10 +17,9 @@ const NAV = [
   { to: '/o-projekcie', label: 'O projekcie' },
 ]
 
-/** Znak: sadzonka z zestawu Lucide, czyli roślina, życie i wzrost. Jeden kształt
-    w jednym kolorze, więc działa tak samo w nagłówku i w favikonie. */
+/** Znak serwisu: para skrzydeł na białym kaflu. Ten sam rysunek co w favikonie. */
 function LogoMark({ className }: { className?: string }) {
-  return <Sprout className={cn('size-5', className)} aria-hidden />
+  return <WingMark className={cn('size-6', className)} />
 }
 
 function Wordmark() {
@@ -30,7 +30,7 @@ function Wordmark() {
       </span>
       <span className="flex min-w-0 flex-col leading-none">
         <span className="truncate font-display text-base font-semibold leading-none text-primary-foreground sm:text-lg sm:leading-none">
-          Przewodnik Rodzica
+          Skrzydła Rodzica
         </span>
         <span className="mt-0.5 hidden truncate text-[11px] leading-none text-primary-foreground/95 sm:block">
           co ci przysługuje i jak to załatwić

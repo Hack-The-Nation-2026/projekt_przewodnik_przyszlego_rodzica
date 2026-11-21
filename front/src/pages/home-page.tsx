@@ -113,7 +113,7 @@ export function HomePage() {
               Sprawdź, co ci przysługuje w ciąży i po urodzeniu dziecka
             </h1>
             <p className="mt-4 text-base text-primary-foreground/95 sm:text-lg">
-              Przewodnik prowadzi przez zasiłek chorobowy, macierzyński i rodzicielski. Policz, kiedy
+              Skrzydła Rodzica prowadzą przez zasiłek chorobowy, macierzyński i rodzicielski. Policz, kiedy
               i ile dostaniesz, oraz zobacz, jakie dokumenty złożyć.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">

@@ -96,7 +96,7 @@ export function MobywatelPage() {
         className="absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-white/90 transition-colors hover:text-white sm:left-6 sm:top-6"
       >
         <ArrowLeft className="size-4" />
-        Wróć do Przewodnika Rodzica
+        Wróć do serwisu Skrzydła Rodzica
       </Link>
 
       <main className="relative flex min-h-dvh flex-col items-center justify-center px-4 py-20">

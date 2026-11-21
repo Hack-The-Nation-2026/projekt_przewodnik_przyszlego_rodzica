@@ -243,7 +243,7 @@ export function WejsciePage() {
   return (
     <PageContainer className="py-14 sm:py-20">
       <PageHeading
-        title={citizen ? 'Jesteś w środku' : 'Wejdź do Przewodnika'}
+        title={citizen ? 'Jesteś w środku' : 'Wejdź do Skrzydeł Rodzica'}
         description={
           citizen
             ? 'Znamy twoje dane. Sprawdź je i przejdź do kalkulatora, który policzy, co ci przysługuje.'

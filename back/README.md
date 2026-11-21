@@ -1,4 +1,4 @@
-# Backend: Przewodnik Przyszłego Rodzica
+# Backend: Skrzydła Rodzica
 
 REST API w FastAPI z katalogiem świadczeń i symulacją uprawnień dla rodziców.
 
