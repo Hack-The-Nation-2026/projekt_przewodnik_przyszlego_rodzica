@@ -99,9 +99,9 @@ export function HomePage() {
     <>
       <section aria-labelledby="start-title" className="relative isolate overflow-hidden bg-foreground">
         <img
-          src="/formularz.jpg"
-          alt="Rodzice wypełniają przy kuchennym stole wniosek o zasiłek."
-          className="absolute inset-0 size-full object-cover object-[50%_38%]"
+          src="/rodzice-kolyska.jpg"
+          alt="Rodzice leżą wieczorem na łóżku obok kołyski z dzieckiem."
+          className="absolute inset-0 size-full object-cover object-[40%_60%] sm:object-[50%_45%]"
         />
         <div aria-hidden className="home-hero-shade absolute inset-0" />
         <Container className="relative flex min-h-[30rem] items-center py-14 sm:min-h-[36rem] sm:py-16 lg:min-h-[44rem]">
@@ -137,9 +137,18 @@ export function HomePage() {
 
       <section aria-labelledby="jak-to-dziala-title" className="py-14 sm:py-20">
         <Container>
-          <h2 id="jak-to-dziala-title" className="text-2xl font-semibold text-navy sm:text-3xl">
-            Jak to działa
-          </h2>
+          <div className="flex flex-wrap items-center justify-between gap-6">
+            <h2 id="jak-to-dziala-title" className="text-2xl font-semibold text-navy sm:text-3xl">
+              Jak to działa
+            </h2>
+            {/* Bocian z rodziną w gnieździe: znak firmowy wyjaśnia nazwę serwisu. */}
+            <img
+              src="/cover.png"
+              alt="Bocian rozkłada skrzydła nad rodziną siedzącą w gnieździe."
+              loading="lazy"
+              className="w-52 shrink-0 sm:w-72"
+            />
+          </div>
           <ol className="mt-6 grid gap-4 md:grid-cols-3 md:gap-6">
             {STEPS.map((step, index) => (
               <li key={step.title} className="rounded-lg border border-border p-5 sm:p-6">
