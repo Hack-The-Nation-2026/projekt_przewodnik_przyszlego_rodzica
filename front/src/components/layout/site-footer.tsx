@@ -29,8 +29,8 @@ export function SiteFooter() {
         <div>
           <p className="font-display text-lg font-semibold">Zasiłkowy Przewodnik Przyszłego Rodzica</p>
           <p className="mt-3 max-w-sm text-sm text-primary-foreground/80">
-            Prototyp przygotowany w ramach wyzwania ZUS na HackNation 2026. Dane i obliczenia mają
-            charakter demonstracyjny.
+            Zasiłki, terminy i dokumenty związane z ciążą i urodzeniem dziecka w jednym miejscu.
+            Liczymy na podstawie ustawy zasiłkowej i Kodeksu pracy.
           </p>
         </div>
 
@@ -58,7 +58,7 @@ export function SiteFooter() {
 
       <div className="border-t border-primary-foreground/15">
         <Container className="flex flex-col gap-2 py-4 text-xs text-primary-foreground/70 sm:flex-row sm:items-center sm:justify-between">
-          <p>Projekt niezwiązany oficjalnie z ZUS. Materiały ZUS wykorzystane wyłącznie na potrzeby wydarzenia.</p>
+          <p>Serwis niezależny od Zakładu Ubezpieczeń Społecznych.</p>
           <p>HackNation 2026</p>
         </Container>
       </div>

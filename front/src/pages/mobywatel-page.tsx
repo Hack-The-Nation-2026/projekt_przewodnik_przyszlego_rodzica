@@ -40,7 +40,7 @@ function DemoAccounts() {
   return (
     <details className="group mx-auto mt-8 max-w-[400px] text-xs text-white/80">
       <summary className="flex cursor-pointer list-none items-center justify-center gap-1.5 py-1 [&::-webkit-details-marker]:hidden">
-        Konta do dema
+        Konta testowe
         <ChevronDown className="size-3.5 transition-transform group-open:rotate-180" />
       </summary>
       <ul className="mt-3 space-y-1.5">
@@ -178,7 +178,7 @@ export function MobywatelPage() {
 
               {showPasswordHint && (
                 <p className="rounded-lg bg-mb-blue/5 p-3 text-sm text-mb-muted">
-                  To symulacja, więc każde konto ma hasło{' '}
+                  Hasło do wszystkich kont:{' '}
                   <span className="font-medium text-mb-ink">demo1234</span>.
                 </p>
               )}
@@ -202,7 +202,7 @@ export function MobywatelPage() {
           </div>
 
           <p className="mt-5 text-center text-xs leading-relaxed text-white/85">
-            Symulacja mObywatela na potrzeby HackNation 2026. Nie podawaj tu prawdziwego hasła.
+            Nie używaj tu hasła, którego używasz w innych serwisach.
           </p>
 
           {import.meta.env.DEV && <DemoAccounts />}
