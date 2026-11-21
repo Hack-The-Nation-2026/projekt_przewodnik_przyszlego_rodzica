@@ -108,6 +108,8 @@ async function simulate({ values, plan }: { values: InterviewValues; plan: Paren
   }
 }
 
+type SimulationResult = Awaited<ReturnType<typeof simulate>>
+
 /** Rodzicielski rozlicza się osobno dla każdego rodzica, a lista pokazuje jedno świadczenie. */
 function mergeParental(parental: Assessment[]): Assessment {
   const active = parental.filter((item) => statusesWithPayment.has(item.status))
@@ -293,14 +295,18 @@ export function KalkulatorPage() {
     defaultValues: interviewDefaults,
   })
   const values = useWatch({ control: form.control, compute: (answers) => answers })
-  const simulation = useMutation({ mutationFn: simulate })
+  // React Query czyści dane mutacji na czas nowego żądania. Ostatni wynik
+  // trzymamy osobno, bo bez tego karty znikają na moment po każdym ruchu
+  // suwaka, a strona skacze razem z nimi.
+  const [result, setResult] = useState<SimulationResult | null>(null)
+  const simulation = useMutation({ mutationFn: simulate, onSuccess: setResult })
   const { mutate } = simulation
   const steps = getInterviewSteps(values)
   const stepIndex = Math.max(0, steps.findIndex(({ id }) => id === stepId))
   const step = steps[stepIndex]
   const nextStep = steps[stepIndex + 1]
 
-  const pool = simulation.data?.pool ?? null
+  const pool = result?.pool ?? null
   const sharedTotal = pool ? Math.max(0, pool.total_days - 2 * pool.exclusive_days_per_parent) : 0
   const secondShare = Math.min(secondShareDays, sharedTotal)
   const workingOnLeave = !!values.workingOnLeave && values.employment === 'employee'
@@ -317,6 +323,7 @@ export function KalkulatorPage() {
     setSubmitted(null)
     setSecondShareDays(0)
     simulation.reset()
+    setResult(null)
   }
 
   function showDocuments(benefit: BenefitCode) {
@@ -364,11 +371,11 @@ export function KalkulatorPage() {
 
   // Przewijamy do wyniku raz na wysłanie wywiadu, nie po każdym ruchu suwaka.
   useEffect(() => {
-    if (!simulation.data || !submitted || scrolledFor.current === submitted) return
+    if (!result || !submitted || scrolledFor.current === submitted) return
     scrolledFor.current = submitted
     resultHeading.current?.focus({ preventScroll: true })
     resultHeading.current?.scrollIntoView({ block: 'start' })
-  }, [simulation.data, submitted])
+  }, [result, submitted])
 
   useEffect(() => {
     if (documentBenefit && focusDocuments.current && documentsPanel.current) {
@@ -401,7 +408,7 @@ export function KalkulatorPage() {
         backLabel="Wróć do wejścia"
       />
 
-      {import.meta.env.DEV && !simulation.data && (
+      {import.meta.env.DEV && !result && (
         <div className="mt-8 rounded-lg border-2 border-dashed border-fuchsia-600 bg-fuchsia-50 p-3">
           <Button
             type="button"
@@ -421,7 +428,7 @@ export function KalkulatorPage() {
         </div>
       )}
 
-      {!simulation.data && (
+      {!result && (
         <Form {...form}>
           <form className="mt-8 space-y-5" noValidate onSubmit={advance} aria-labelledby="interview-step">
             <Card>
@@ -472,7 +479,7 @@ export function KalkulatorPage() {
         </Form>
       )}
 
-      {simulation.data && (
+      {result && (
         <section className="mt-12 space-y-5" aria-labelledby="benefit-result">
           <div>
             <h2
@@ -484,18 +491,18 @@ export function KalkulatorPage() {
               Wynik wywiadu
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
-              {simulation.data.expected
+              {result.expected
                 ? 'Wstępna symulacja z przewidywaną datą porodu, na podstawie ostatnio wysłanych odpowiedzi.'
                 : 'Symulacja na podstawie ostatnio wysłanych odpowiedzi.'}
             </p>
-            {simulation.data.separatePaternity && (
+            {result.separatePaternity && (
               <p className="mt-1 text-sm text-muted-foreground">
                 Ojcowski jest liczony jako osobny wariant. Przy wyborze terminów uwzględnij pozostałe urlopy.
               </p>
             )}
-            {simulation.data.returnDate && (
+            {result.returnDate && (
               <p className="mt-1 text-sm text-muted-foreground">
-                Planowany powrót do pracy {date.format(new Date(simulation.data.returnDate))}.
+                Planowany powrót do pracy {date.format(new Date(result.returnDate))}.
               </p>
             )}
             <Button className="mt-4 font-semibold" size="lg" type="button" onClick={editAnswers}>
@@ -503,18 +510,18 @@ export function KalkulatorPage() {
               Edytuj odpowiedzi
             </Button>
           </div>
-          {simulation.data.pool && simulation.data.pool.total_days > 0 && (
+          {result.pool && result.pool.total_days > 0 && (
             <ParentalPlanCard
-              pool={simulation.data.pool}
+              pool={result.pool}
               respondent={respondent}
               secondShareDays={secondShare}
               onSecondShareChange={setSecondShareDays}
-              averaged={simulation.data.averaged}
-              flat={simulation.data.flat}
+              averaged={result.averaged}
+              flat={result.flat}
               zaZyciem={values.zaZyciem}
               workingOnLeave={workingOnLeave}
               partnerKnown={values.partnerEmployment !== 'unknown'}
-              extendedDays={simulation.data.averaged.byParent[respondent]?.days}
+              extendedDays={result.averaged.byParent[respondent]?.days}
               busy={simulation.isPending}
             />
           )}
@@ -527,7 +534,7 @@ export function KalkulatorPage() {
             {(Object.keys(benefitList) as BenefitCode[]).map((benefit) => (
               <BenefitCard
                 key={benefit}
-                assessment={simulation.data.assessments.get(benefit) ?? {
+                assessment={result.assessments.get(benefit) ?? {
                   benefit, status: 'missing_data', reason: 'Dla tego świadczenia brakuje wyniku symulacji.',
                 }}
                 documentsOpen={documentBenefit === benefit}
@@ -542,7 +549,7 @@ export function KalkulatorPage() {
                   key={documentBenefit}
                   benefit={documentBenefit}
                   onClose={closeDocuments}
-                  context={simulation.data.documentContext}
+                  context={result.documentContext}
                 />
               </Suspense>
             </div>

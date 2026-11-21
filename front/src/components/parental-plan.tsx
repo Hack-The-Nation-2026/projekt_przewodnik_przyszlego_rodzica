@@ -77,7 +77,7 @@ export function ParentalPlanCard({
   const limitMulti = zaZyciem ? 134 : 86
 
   return (
-    <Card className={cn('mt-8', busy && 'transition-opacity')}>
+    <Card className={cn('mt-8', busy && 'transition-opacity')} aria-busy={busy}>
       <CardHeader>
         <div className="flex items-start gap-1.5">
           <CardTitle>Podział urlopu rodzicielskiego</CardTitle>
