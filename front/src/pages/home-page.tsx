@@ -34,7 +34,11 @@ export function HomePage() {
 
   return (
     <>
-      <section aria-labelledby="start-title" className="relative isolate overflow-hidden bg-foreground">
+      <section
+        data-scroll-section
+        aria-labelledby="start-title"
+        className="relative isolate overflow-hidden bg-foreground"
+      >
         {/* Jedno zdjęcie w proporcji 2:1 na każdym ekranie. Na telefonie stoi nad tekstem
             w całości, na szerokim ekranie tekst leży na zdjęciu, a wysokość jest ograniczona,
             żeby pod hero zostało widać początek kolejnej sekcji. */}
@@ -86,6 +90,7 @@ export function HomePage() {
       </section>
 
       <section
+        data-scroll-section
         id="jak-to-dziala"
         aria-labelledby="jak-to-dziala-title"
         className="py-14 sm:py-20"
@@ -118,6 +123,7 @@ export function HomePage() {
       </section>
 
       <section
+        data-scroll-section
         id="swiadczenia"
         aria-labelledby="swiadczenia-title"
         className="border-t border-border bg-secondary/40 py-14 sm:py-20"
@@ -178,7 +184,7 @@ export function HomePage() {
         </Container>
       </section>
 
-      <section aria-labelledby="wsparcie-title" className="py-14 sm:py-20">
+      <section data-scroll-section aria-labelledby="wsparcie-title" className="py-14 sm:py-20">
         <Container>
           <div className="grid gap-8 lg:grid-cols-[1fr_1.4fr] lg:items-center">
             <h2 id="wsparcie-title" className="text-2xl font-semibold text-navy sm:text-3xl">

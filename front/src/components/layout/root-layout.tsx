@@ -29,15 +29,18 @@ function ScrollToTop() {
 }
 
 /**
- * Kliknięcie rolki nie może samo wozić po stronie.
+ * Rolka przeskakuje o sekcję, a kółko dalej kręci swobodnie.
  *
- * Chrome po wciśnięciu środkowego przycisku myszy włącza autoprzewijanie:
- * strona rusza bez udziału użytkownika i potrafi przelecieć całą sekcję.
- * Blokujemy tylko ten przycisk i tylko poza linkami i polami formularza, więc
- * otwieranie w nowej karcie, wklejanie i zwykłe przewijanie kółkiem, paskiem
- * albo klawiaturą zostają bez zmian.
+ * Chrome po wciśnięciu środkowego przycisku włącza własne autoprzewijanie:
+ * prędkość zależy od odległości kursora, więc jedno kliknięcie potrafi przelecieć
+ * całą sekcję i nie da się tego wyczuć. Zamiast tego liczymy sekcję sami —
+ * znacznik `data-scroll-section` ma każda sekcja strony głównej — i przewijamy
+ * do niej płynnie. Shift z tym samym przyciskiem cofa o jedną sekcję.
+ *
+ * Zwykłe kręcenie kółkiem, przeciąganie paska i klawiatura nie przechodzą przez
+ * ten komponent, bo słucha wyłącznie środkowego przycisku.
  */
-function MiddleClickGuard() {
+function MiddleClickSectionJump() {
   useEffect(() => {
     const keepsNativeBehaviour = (target: EventTarget | null) => {
       if (!(target instanceof Element)) return false
@@ -46,19 +49,54 @@ function MiddleClickGuard() {
       )
     }
 
-    const block = (event: MouseEvent) => {
+    // Chrome startuje autoprzewijanie już na wciśnięciu, więc blokujemy je tutaj,
+    // a sam skok wykonujemy po puszczeniu przycisku.
+    const suppressAutoscroll = (event: MouseEvent) => {
       if (event.button !== 1) return
       if (keepsNativeBehaviour(event.target)) return
       event.preventDefault()
     }
 
+    const jump = (event: MouseEvent) => {
+      if (event.button !== 1) return
+      if (keepsNativeBehaviour(event.target)) return
+      event.preventDefault()
+
+      const direction = event.shiftKey ? -1 : 1
+      const sections = Array.from(
+        document.querySelectorAll<HTMLElement>('[data-scroll-section]'),
+      )
+
+      if (sections.length === 0) {
+        window.scrollBy({ top: direction * window.innerHeight * 0.9, behavior: 'smooth' })
+        return
+      }
+
+      const padding =
+        Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
+      const edge = window.scrollY + padding + 4
+      let current = 0
+      sections.forEach((section, index) => {
+        if (section.getBoundingClientRect().top + window.scrollY <= edge) current = index
+      })
+
+      const next = current + direction
+      if (next < 0) {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else if (next >= sections.length) {
+        window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' })
+      } else {
+        sections[next].scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }
+
     const options: AddEventListenerOptions = { capture: true, passive: false }
-    document.addEventListener('mousedown', block, options)
-    document.addEventListener('auxclick', block, options)
+    document.addEventListener('mousedown', suppressAutoscroll, options)
+    document.addEventListener('auxclick', jump, options)
 
     return () => {
-      document.removeEventListener('mousedown', block, options)
-      document.removeEventListener('auxclick', block, options)
+      document.removeEventListener('mousedown', suppressAutoscroll, options)
+      document.removeEventListener('auxclick', jump, options)
     }
   }, [])
 
@@ -69,7 +107,7 @@ export function RootLayout() {
   return (
     <div className="flex min-h-dvh flex-col">
       <ScrollToTop />
-      <MiddleClickGuard />
+      <MiddleClickSectionJump />
       <a
         href="#tresc"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
