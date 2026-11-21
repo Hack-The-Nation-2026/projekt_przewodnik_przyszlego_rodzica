@@ -172,9 +172,9 @@ function InsuranceCard({ result }: { result: CaseResult }) {
             </dd>
           </div>
         </dl>
-        <p className="text-sm text-muted-foreground">
-          Podstawa: {rule_ids.join(', ')}
-        </p>
+        {rule_ids.length > 0 && (
+          <p className="text-sm text-muted-foreground">Podstawa: {rule_ids.join(', ')}</p>
+        )}
       </CardContent>
     </Card>
   )
@@ -288,6 +288,37 @@ function ResultView({ result, source }: { result: CaseResult; source: string }) 
           </CardHeader>
           <CardContent>
             <ComparisonList result={result} />
+          </CardContent>
+        </Card>
+      )}
+
+      {result.unexpected.length > 0 && (
+        <Card className="border border-amber-300 bg-amber-50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CircleAlert className="size-5" aria-hidden />
+              Kalkulator policzył więcej niż decyzja
+            </CardTitle>
+            <CardDescription className="text-base text-amber-900/80">
+              Te pozycje nie mają odpowiednika w zapisanej decyzji, więc wynik nie jest zgodny.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-2">
+              {result.unexpected.map((row) => (
+                <li
+                  key={`${row.benefit}-${row.person}`}
+                  className="flex flex-wrap items-baseline gap-x-3 gap-y-1"
+                >
+                  <span className="font-medium">{benefitLabel(row.benefit)}</span>
+                  <span className="text-sm text-muted-foreground">
+                    {parentLabels[row.person]}
+                  </span>
+                  <StatusBadge status={row.status} />
+                  <span className="tabular-nums">{money(row.gross_grosze)}</span>
+                </li>
+              ))}
+            </ul>
           </CardContent>
         </Card>
       )}

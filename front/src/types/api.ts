@@ -179,6 +179,13 @@ export interface CaseComparisonRow {
   matches: boolean
 }
 
+export interface CaseUnexpectedRow {
+  benefit: string
+  person: CaseParent
+  status: CaseStatus
+  gross_grosze: number | null
+}
+
 export interface CaseAssessment {
   benefit: string
   person: CaseParent
@@ -212,7 +219,7 @@ export interface CaseResult {
     insured: boolean | null
     insurance_kind: 'compulsory' | 'voluntary' | null
     insured_days: number | null
-    first_time_insured: boolean
+    waiting_period_exempt: boolean
     contribution_arrears: boolean | null
     employment_ended_in_pregnancy: boolean
     employment_end_reason: string | null
@@ -220,6 +227,7 @@ export interface CaseResult {
   insurance: CaseInsurance
   assessments: CaseAssessment[]
   comparison: CaseComparisonRow[]
+  unexpected: CaseUnexpectedRow[]
   matches: boolean | null
 }
 

@@ -7,6 +7,7 @@ ZUS z `PRZYKLADY/`, których regulamin nie pozwala rozpowszechniać.
 import json
 from pathlib import Path
 
+from app.schemas.benefit_calculation import BenefitAssessment
 from app.schemas.cases import (
     Applicant,
     CaseApplication,
@@ -15,6 +16,7 @@ from app.schemas.cases import (
     ComparisonRow,
     ExpectedRow,
     InsuranceCheck,
+    UnexpectedRow,
 )
 from app.schemas.settings import AppSettings
 from app.services.benefit_service import calculate_benefits
@@ -51,7 +53,12 @@ def find_case(case_id: str) -> CaseApplication | None:
 
 
 def check_insurance(applicant: Applicant) -> InsuranceCheck:
-    """Prawo do zasiłku zależy od tytułu, okresu ubezpieczenia i składek."""
+    """Prawo do zasiłku zależy od tytułu, okresu ubezpieczenia i składek.
+
+    Tytuł ubezpieczenia decyduje o progu: 30 dni przy obowiązkowym, 90 przy dobrowolnym.
+    Gdy wniosek nie mówi, jaki to tytuł, przyjmujemy gorszy wariant, bo zbyt łagodna
+    weryfikacja obiecuje zasiłek, którego ZUS nie wypłaci.
+    """
     if applicant.employment == "none":
         return InsuranceCheck(
             covered=False,
@@ -73,18 +80,23 @@ def check_insurance(applicant: Applicant) -> InsuranceCheck:
     if applicant.contribution_arrears is True:
         return InsuranceCheck(
             covered=False,
-            reason="Zadłużenie składkowe przekracza próg, więc zasiłek nie przysługuje.",
-            rule_ids=["A1"],
+            reason=(
+                "Wniosek wskazuje zaległości składkowe, więc zasiłek nie przysługuje, "
+                "dopóki nie zostaną uregulowane."
+            ),
+            rule_ids=[],
         )
 
-    kind = applicant.insurance_kind or "compulsory"
+    kind = applicant.insurance_kind or (
+        "compulsory" if applicant.employment == "employee" else "voluntary"
+    )
     required = REQUIRED_INSURANCE_DAYS[kind]
-    if applicant.first_time_insured:
+    if applicant.waiting_period_exempt:
         return InsuranceCheck(
             covered=True,
             reason=(
-                "Osoba jest zwolniona z okresu wyczekiwania, więc prawo działa "
-                "od pierwszego dnia."
+                "Wniosek potwierdza wyjątek od okresu wyczekiwania, więc prawo "
+                "działa od pierwszego dnia ubezpieczenia."
             ),
             rule_ids=["A3"],
         )
@@ -130,14 +142,42 @@ def _matched(expected: ExpectedRow, status: str, gross_grosze: int | None) -> bo
     return expected.gross_grosze is None or expected.gross_grosze == gross_grosze
 
 
+def _aggregate(
+    assessments: list[BenefitAssessment],
+) -> dict[tuple[str, str], tuple[str, int | None]]:
+    """Zwija części jednego świadczenia do wiersza, który da się porównać z decyzją.
+
+    Kalkulator może zwrócić kilka pozycji dla tej samej osoby i świadczenia, na przykład
+    urlop rodzicielski podzielony na części. Decyzja mówi o łącznej kwocie, więc sumujemy
+    kwoty i dni, a status bierzemy z całości: gdy cokolwiek wypłacono, świadczenie jest
+    co najmniej częściowe.
+    """
+    grouped: dict[tuple[str, str], list[BenefitAssessment]] = {}
+    for row in assessments:
+        grouped.setdefault((row.benefit, row.person), []).append(row)
+
+    aggregated: dict[tuple[str, str], tuple[str, int | None]] = {}
+    for key, rows in grouped.items():
+        statuses = {row.status for row in rows}
+        if "missing_data" in statuses:
+            status = "missing_data"
+        elif len(statuses) == 1:
+            status = statuses.pop()
+        elif statuses & {"granted", "partially_granted"}:
+            status = "partially_granted"
+        else:
+            status = "denied"
+        amounts = [row.gross_grosze for row in rows if row.gross_grosze is not None]
+        aggregated[key] = (status, sum(amounts) if amounts else None)
+    return aggregated
+
+
 def simulate_case(case: CaseApplication, settings: AppSettings | None = None) -> CaseResult:
     result = calculate_benefits(case.request, settings)
-    by_key = {(row.benefit, row.person): row for row in result.assessments}
+    aggregate = _aggregate(result.assessments)
     comparison: list[ComparisonRow] = []
     for expected in case.expected:
-        row = by_key.get((expected.benefit, expected.person))
-        status = row.status if row else "missing_data"
-        gross = row.gross_grosze if row else None
+        status, gross = aggregate.get((expected.benefit, expected.person), ("missing_data", None))
         comparison.append(
             ComparisonRow(
                 benefit=expected.benefit,
@@ -149,6 +189,18 @@ def simulate_case(case: CaseApplication, settings: AppSettings | None = None) ->
                 matches=_matched(expected, status, gross),
             )
         )
+
+    expected_keys = {(row.benefit, row.person) for row in case.expected}
+    unexpected = [
+        UnexpectedRow(
+            benefit=benefit,
+            person=person,
+            status=status,
+            gross_grosze=gross,
+        )
+        for (benefit, person), (status, gross) in aggregate.items()
+        if (benefit, person) not in expected_keys
+    ]
     return CaseResult(
         case_id=case.id,
         title=case.title,
@@ -157,5 +209,10 @@ def simulate_case(case: CaseApplication, settings: AppSettings | None = None) ->
         insurance=check_insurance(case.applicant),
         assessments=result.assessments,
         comparison=comparison,
-        matches=all(item.matches for item in comparison) if comparison else None,
+        unexpected=unexpected,
+        matches=(
+            None
+            if not comparison
+            else all(item.matches for item in comparison) and not unexpected
+        ),
     )

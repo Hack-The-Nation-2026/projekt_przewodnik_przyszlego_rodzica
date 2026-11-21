@@ -367,16 +367,19 @@ Brief, pkt 4 oraz pkt 6.
 - `back/tests/test_rules.py` mapuje wszystkie 85 identyfikatorów z `RULES.md` na scenariusz
   albo na wpis „poza silnikiem” z powodem. Nowa reguła w `RULES.md` bez wpisu wywala test.
 - `back/tests/test_cases.py` przechodzi każdą sprawę przez endpoint i sprawdza zgodność.
+  Gdy kalkulator zwróci kilka części jednego świadczenia, porównanie sumuje je do wiersza
+  decyzji. Pozycja policzona, ale nieobecna w decyzji, trafia do `unexpected` i psuje zgodność,
+  zamiast zniknąć.
 
 ### Stan testu na sprawach
 
 - Dziesięć spraw z zestawu: 10/10 zgodnych, kwoty i statusy co do grosza.
-- 203 testy backendu przechodzą, 32 są pominięte (18 reguł poza silnikiem, 14 porównań z
+- 209 testów backendu przechodzi, 32 są pominięte (18 reguł poza silnikiem, 14 porównań z
   lokalnym zestawem ZUS).
 - Pełny przebieg na `PRZYKLADY/` jest zablokowany, nie zaliczony. 87 PDF-ów to zdjęcia formularzy
   i decyzji: brak warstwy tekstowej, pismo odręczne, dane zaczernione. `pdftotext` nic nie daje,
-  a OCR (tesseract, pol) czyta tylko nagłówki, więc nie da się z tego zrobić wiarygodnego
-  zestawu referencyjnego bez ręcznego przepisania każdej sprawy.
+  a próba OCR na wyrenderowanej stronie czyta tylko nagłówek wniosku, więc nie da się z tego
+  zrobić wiarygodnego zestawu referencyjnego bez ręcznego przepisania każdej sprawy.
 - Sprawy demonstracyjne mają oczekiwania wyliczone tym samym silnikiem, więc dowodzą spięcia
   strony z kalkulatorem i powtarzalności, a nie zgodności z decyzją ZUS. Poprawność reguł
   opiera się na `test_rules.py`.

@@ -20,7 +20,7 @@ class Applicant(BaseModel):
     insured: bool | None = None
     insurance_kind: InsuranceKind | None = None
     insured_days: int | None = Field(default=None, ge=0, le=20000)
-    first_time_insured: bool = False
+    waiting_period_exempt: bool = False
     contribution_arrears: bool | None = None
     employment_ended_in_pregnancy: bool = False
     employment_end_reason: Literal["death", "bankruptcy", "liquidation", "other"] | None = None
@@ -68,6 +68,15 @@ class ComparisonRow(BaseModel):
     matches: bool
 
 
+class UnexpectedRow(BaseModel):
+    """Świadczenie policzone przez kalkulator, którego nie ma w decyzji."""
+
+    benefit: str
+    person: Parent
+    status: str
+    gross_grosze: int | None
+
+
 class CaseResult(BaseModel):
     case_id: str
     title: str
@@ -76,6 +85,7 @@ class CaseResult(BaseModel):
     insurance: InsuranceCheck
     assessments: list[BenefitAssessment]
     comparison: list[ComparisonRow]
+    unexpected: list[UnexpectedRow] = Field(default_factory=list)
     matches: bool | None
 
 

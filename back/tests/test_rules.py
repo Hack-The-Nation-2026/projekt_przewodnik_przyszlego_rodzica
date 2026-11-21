@@ -532,7 +532,7 @@ out(
 )
 
 
-@rule("F9")
+@rule("F9", "tylko start w 21 dni; termin 7 dni na złożenie wniosku nie jest sprawdzany")
 def test_f9_placement_starts_within_21_days() -> None:
     late = placement(maternity_start="2026-05-05")
     assert late.reason_code == "placement_start"
