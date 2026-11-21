@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
+import { Check, CircleAlert, CircleHelp, Minus, Pencil, X } from 'lucide-react'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ParentalPlanCard } from '@/components/parental-plan'
@@ -17,17 +18,18 @@ import type { Assessment, BenefitCode, ParentalPlan, ParentalPool, SimulationRes
 import { asBoolean, interviewDefaults, interviewSchema, parseNumber } from '@/lib/interview-form'
 import type { InterviewValues } from '@/lib/interview-form'
 import { getInterviewSteps } from '@/lib/interview-steps'
+import { cn } from '@/lib/utils'
 
 const currency = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' })
 const date = new Intl.DateTimeFormat('pl-PL', { dateStyle: 'medium', timeZone: 'UTC' })
 
-const statusLabels = {
-  granted: 'Przysługuje',
-  denied: 'Nie przysługuje',
-  partially_granted: 'Częściowo przysługuje',
-  missing_data: 'Brakuje danych',
-  not_applicable: 'Nie dotyczy',
-} satisfies Record<Assessment['status'], string>
+const benefitStatuses = {
+  granted: { label: 'Przysługuje', icon: Check, color: 'border-green-200 bg-green-100 text-green-900' },
+  denied: { label: 'Nie przysługuje', icon: X, color: 'border-red-200 bg-red-100 text-red-900' },
+  partially_granted: { label: 'Częściowo przysługuje', icon: CircleAlert, color: 'border-blue-200 bg-blue-100 text-blue-900' },
+  missing_data: { label: 'Brakuje danych', icon: CircleHelp, color: 'border-amber-200 bg-amber-100 text-amber-950' },
+  not_applicable: { label: 'Nie dotyczy', icon: Minus, color: 'border-slate-300 bg-slate-200 text-slate-800' },
+} satisfies Record<Assessment['status'], { label: string; icon: typeof Check; color: string }>
 
 const sicknessPeriodLabels: Record<string, string> = {
   zasilek_chorobowy: 'Zasiłek chorobowy',
@@ -146,17 +148,19 @@ function buildPlan(
 function BenefitCard({ assessment }: { assessment: Assessment }) {
   const { name, sources } = benefitList[assessment.benefit]
   const active = statusesWithPayment.has(assessment.status)
+  const { label, icon: StatusIcon, color } = benefitStatuses[assessment.status]
   return (
     <Card>
-      <CardHeader className="gap-3">
-        <Badge className="w-fit" variant={active ? 'default' : 'outline'}>
-          {statusLabels[assessment.status]}
+      <CardHeader className="gap-1.5 p-4 pb-2.5">
+        <Badge variant="outline" className={cn('mb-0.5 w-fit gap-1.5 px-2.5 py-1 text-sm font-semibold', color)}>
+          <StatusIcon className="size-4 shrink-0" aria-hidden="true" />
+          {label}
         </Badge>
-        <CardTitle className="text-lg">{name}</CardTitle>
+        <CardTitle className="text-base">{name}</CardTitle>
         <CardDescription>{assessment.reason}</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <dl className="grid gap-3 sm:grid-cols-2">
+      <CardContent className="space-y-2.5 p-4 pt-0">
+        <dl className="grid gap-2 sm:grid-cols-2">
           <div>
             <dt className="text-xs text-muted-foreground">Okres świadczenia</dt>
             <dd className="mt-0.5 text-sm font-medium">
@@ -189,9 +193,9 @@ function BenefitCard({ assessment }: { assessment: Assessment }) {
             ))}
           </ul>
         )}
-        <div className="border-t pt-3 text-xs">
+        <div className="border-t pt-2 text-xs">
           <p className="mb-1 font-medium">Podstawa prawna</p>
-          <ul className="space-y-1">
+          <ul className="flex flex-wrap gap-x-3 gap-y-1">
             {sources.map(({ url, title }) => (
               <li key={title}>
                 <a className="text-primary underline underline-offset-2" href={url}>{title}</a>
@@ -378,11 +382,11 @@ export function KalkulatorPage() {
                 Planowany powrót do pracy {date.format(new Date(simulation.data.returnDate))}.
               </p>
             )}
-            <Button className="mt-4" type="button" variant="outline" onClick={editAnswers}>
+            <Button className="mt-4 font-semibold" size="lg" type="button" onClick={editAnswers}>
+              <Pencil aria-hidden="true" />
               Edytuj odpowiedzi
             </Button>
           </div>
-
           {simulation.data.pool && simulation.data.pool.total_days > 0 && (
             <ParentalPlanCard
               pool={simulation.data.pool}
@@ -399,7 +403,7 @@ export function KalkulatorPage() {
             />
           )}
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-3 md:grid-cols-2">
             {(Object.keys(benefitList) as BenefitCode[]).map((benefit) => (
               <BenefitCard key={benefit} assessment={simulation.data.assessments.get(benefit) ?? {
                 benefit, status: 'missing_data', reason: 'Dla tego świadczenia brakuje wyniku symulacji.',
