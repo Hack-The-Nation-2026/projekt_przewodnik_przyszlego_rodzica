@@ -116,7 +116,7 @@ export function HomePage() {
               'linear-gradient(to right, rgba(29, 43, 58, 0.78), rgba(29, 43, 58, 0.46) 48%, rgba(29, 43, 58, 0.14))',
           }}
         />
-        <Container className="relative flex min-h-[26rem] items-center py-12 sm:min-h-[30rem] lg:min-h-[34rem]">
+        <Container className="relative flex min-h-[30rem] items-center py-14 sm:min-h-[36rem] sm:py-16 lg:min-h-[44rem]">
           <div className="w-full max-w-xl rounded-lg bg-background/95 p-6 shadow-2xl ring-1 ring-black/5 backdrop-blur-sm sm:p-8">
             <h1
               id="start-title"
