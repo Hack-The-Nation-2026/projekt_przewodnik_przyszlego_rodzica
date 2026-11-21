@@ -70,7 +70,7 @@ export function BenefitWarnings({ values, maternityStatus, onEditEmployment }: {
   if (!warnings.length && !needsInsurance) return null
 
   return (
-    <section className="space-y-3" aria-labelledby="benefit-warnings">
+    <section className="mt-6 space-y-3 border-t border-border pt-6" aria-labelledby="benefit-warnings">
       <h3 id="benefit-warnings" className="text-xl font-semibold">Co może zmienić wypłatę</h3>
       {needsInsurance && (
         <div className="space-y-3 rounded-lg border border-input bg-secondary p-4 text-sm">

@@ -491,7 +491,7 @@ export function KalkulatorPage() {
       )}
 
       {result && (
-        <section className="mt-12 space-y-5" aria-labelledby="benefit-result">
+        <section className="mt-12" aria-labelledby="benefit-result">
           <div>
             <h2
               className="scroll-mt-24 text-3xl font-semibold focus:outline-none"
@@ -529,33 +529,33 @@ export function KalkulatorPage() {
             />
           )}
           {result.pool && result.pool.total_days > 0 && (
-            <ParentalPlanCard
-              pool={result.pool}
-              respondent={respondent}
-              secondShareDays={secondShare}
-              onSecondShareChange={setSecondShareDays}
-              averaged={result.averaged}
-              flat={result.flat}
-              zaZyciem={values.zaZyciem}
-              workingOnLeave={workingOnLeave}
-              partnerKnown={values.partnerEmployment !== 'unknown'}
-              extendedDays={result.averaged.byParent[respondent]?.days}
-              busy={simulation.isPending}
-            />
+            <div className="mt-6 border-t border-border pt-6">
+              <ParentalPlanCard
+                pool={result.pool}
+                respondent={respondent}
+                secondShareDays={secondShare}
+                onSecondShareChange={setSecondShareDays}
+                averaged={result.averaged}
+                flat={result.flat}
+                zaZyciem={values.zaZyciem}
+                workingOnLeave={workingOnLeave}
+                partnerKnown={values.partnerEmployment !== 'unknown'}
+                extendedDays={result.averaged.byParent[respondent]?.days}
+                busy={simulation.isPending}
+              />
+            </div>
           )}
 
-          <p className="text-sm text-muted-foreground">
-            Status na górze karty mówi, czy świadczenie przysługuje przy Twoich odpowiedziach.
-            Kwoty podajemy brutto, za cały okres.
-          </p>
-          <div className="grid gap-3 md:grid-cols-2">
-            {resultCards.map((assessment) => (
-              <BenefitCard
-                key={assessment.benefit}
-                assessment={assessment}
-                onShowDocuments={showDocuments}
-              />
-            ))}
+<div className="mt-6 border-t border-border pt-6">
+            <div className="grid gap-3 md:grid-cols-2">
+              {resultCards.map((assessment) => (
+                <BenefitCard
+                  key={assessment.benefit}
+                  assessment={assessment}
+                  onShowDocuments={showDocuments}
+                />
+              ))}
+            </div>
           </div>
           <Dialog
             open={documentBenefit !== null}
