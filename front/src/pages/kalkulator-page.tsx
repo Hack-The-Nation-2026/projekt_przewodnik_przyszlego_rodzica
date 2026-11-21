@@ -331,8 +331,8 @@ export function KalkulatorPage() {
     setStepId(id)
   }
 
-  function editAnswers() {
-    goToStep(steps[0].id)
+  function editAnswers(id: string) {
+    goToStep(id)
     setDocumentBenefit(null)
     setSubmitted(null)
     setSecondShareDays(0)
@@ -501,12 +501,18 @@ export function KalkulatorPage() {
                 Planowany powrót do pracy {date.format(new Date(result.returnDate))}.
               </p>
             )}
-            <Button className="mt-4 font-semibold" size="lg" type="button" onClick={editAnswers}>
+            <Button className="mt-4 font-semibold" size="lg" type="button" onClick={() => editAnswers(steps[0].id)}>
               <Pencil aria-hidden="true" />
               Edytuj odpowiedzi
             </Button>
           </div>
-          {submitted && <BenefitWarnings values={submitted} maternityStatus={result.assessments.get('macierzynski')?.status} />}
+          {submitted && (
+            <BenefitWarnings
+              values={submitted}
+              maternityStatus={result.assessments.get('macierzynski')?.status}
+              onEditEmployment={() => editAnswers('employment')}
+            />
+          )}
           {result.pool && result.pool.total_days > 0 && (
             <ParentalPlanCard
               pool={result.pool}

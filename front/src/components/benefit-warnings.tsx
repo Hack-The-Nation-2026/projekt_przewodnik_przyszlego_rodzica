@@ -1,4 +1,5 @@
 import { TriangleAlert } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import type { Assessment } from '@/lib/benefit-interview'
 import type { InterviewValues } from '@/lib/interview-form'
 
@@ -59,31 +60,43 @@ function getWarnings(values: InterviewValues, maternityStatus?: Assessment['stat
   return warnings
 }
 
-export function BenefitWarnings({ values, maternityStatus }: {
+export function BenefitWarnings({ values, maternityStatus, onEditEmployment }: {
   values: InterviewValues
   maternityStatus?: Assessment['status']
+  onEditEmployment: () => void
 }) {
   const warnings = getWarnings(values, maternityStatus)
-  if (!warnings.length) return null
+  const needsInsurance = values.role === 'mother' && values.insured === 'unknown' && maternityStatus === 'missing_data'
+  if (!warnings.length && !needsInsurance) return null
 
   return (
     <section className="space-y-3" aria-labelledby="benefit-warnings">
       <h3 id="benefit-warnings" className="text-xl font-semibold">Co może zmienić wypłatę</h3>
-      <ul className="space-y-3">
-        {warnings.map(({ title, message, effect, source, sourceTitle }) => (
-          <li key={title} className="flex gap-3 rounded-lg border border-amber-300 bg-amber-50 p-4 text-amber-950">
-            <TriangleAlert className="mt-0.5 size-5 shrink-0 text-amber-800" aria-hidden="true" />
-            <div className="space-y-2 text-sm">
-              <h4 className="text-base font-semibold">{title}</h4>
-              <p>{message}</p>
-              <p><strong>Wpływ na wypłatę</strong> {effect}</p>
-              <a className="inline-block font-medium underline underline-offset-2" href={source} target="_blank" rel="noreferrer">
-                {sourceTitle}
-              </a>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {needsInsurance && (
+        <div className="space-y-3 rounded-lg border border-input bg-secondary p-4 text-sm">
+          <p>Potwierdź ubezpieczenie chorobowe w dniu porodu, aby kalkulator mógł ocenić prawo do zasiłku.</p>
+          <Button className="h-auto min-h-10 whitespace-normal" type="button" variant="outline" onClick={onEditEmployment}>
+            Uzupełnij dane o zatrudnieniu
+          </Button>
+        </div>
+      )}
+      {warnings.length > 0 && (
+        <ul className="space-y-3">
+          {warnings.map(({ title, message, effect, source, sourceTitle }) => (
+            <li key={title} className="flex gap-3 rounded-lg border border-amber-300 bg-amber-50 p-4 text-amber-950">
+              <TriangleAlert className="mt-0.5 size-5 shrink-0 text-amber-800" aria-hidden="true" />
+              <div className="space-y-2 text-sm">
+                <h4 className="text-base font-semibold">{title}</h4>
+                <p>{message}</p>
+                <p><strong>Wpływ na wypłatę</strong> {effect}</p>
+                <a className="inline-block font-medium underline underline-offset-2" href={source} target="_blank" rel="noreferrer">
+                  {sourceTitle}
+                </a>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   )
 }
