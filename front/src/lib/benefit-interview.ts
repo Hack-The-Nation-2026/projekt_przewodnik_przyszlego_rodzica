@@ -7,34 +7,41 @@ const LABOUR_CODE = 'https://eli.gov.pl/eli/DU/1974/141'
 export const benefitList = {
   chorobowy_w_ciazy: {
     name: 'Zasiłek chorobowy w ciąży',
+    what: 'Pieniądze za czas, w którym w ciąży nie możesz pracować i masz zwolnienie lekarskie.',
     sources: [{ title: 'Ustawa zasiłkowa, art. 4, 8–9 i 11', url: SOCIAL_INSURANCE },
       { title: 'Kodeks pracy, art. 92', url: LABOUR_CODE }],
   },
   rehabilitacyjne: {
     name: 'Świadczenie rehabilitacyjne',
+    what: 'Świadczenie po wyczerpaniu zasiłku chorobowego, gdy zdrowie nadal nie pozwala wrócić do pracy.',
     sources: [{ title: 'Ustawa zasiłkowa, art. 18–19', url: SOCIAL_INSURANCE }],
   },
   w_wysokosci_macierzynskiego: {
     name: 'Zasiłek w wysokości zasiłku macierzyńskiego',
+    what: 'Zasiłek dla osoby, której umowa o pracę skończyła się w ciąży. Płacony jak macierzyński.',
     sources: [{ title: 'Ustawa zasiłkowa, art. 30 ust. 3', url: SOCIAL_INSURANCE }],
   },
   macierzynski: {
     name: 'Zasiłek macierzyński',
+    what: 'Pieniądze za urlop macierzyński, czyli pierwsze tygodnie po urodzeniu dziecka.',
     sources: [{ title: 'Ustawa zasiłkowa, art. 29–31', url: SOCIAL_INSURANCE },
       { title: 'Kodeks pracy, art. 180 i 183', url: LABOUR_CODE }],
   },
   uzupelniajacy: {
     name: 'Zasiłek za uzupełniający urlop macierzyński',
+    what: 'Dodatkowy urlop, gdy dziecko urodziło się przedwcześnie albo było w szpitalu po urodzeniu.',
     sources: [{ title: 'Ustawa zasiłkowa, art. 29a i 31', url: SOCIAL_INSURANCE },
       { title: 'Kodeks pracy, art. 180² i 183', url: LABOUR_CODE }],
   },
   rodzicielski: {
     name: 'Zasiłek za okres urlopu rodzicielskiego',
+    what: 'Pieniądze za urlop po macierzyńskim. Wymiar zależy od liczby dzieci i od tego, jak podzielicie go między sobą.',
     sources: [{ title: 'Ustawa zasiłkowa, art. 29a–31', url: SOCIAL_INSURANCE },
       { title: 'Kodeks pracy, art. 182¹a–182¹g i 183', url: LABOUR_CODE }],
   },
   ojcowski: {
     name: 'Zasiłek za okres urlopu ojcowskiego',
+    what: 'Dwa tygodnie urlopu dla ojca, płatne jak zasiłek macierzyński.',
     sources: [{ title: 'Ustawa zasiłkowa, art. 29a i 31', url: SOCIAL_INSURANCE },
       { title: 'Kodeks pracy, art. 182³', url: LABOUR_CODE }],
   },

@@ -2,6 +2,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 import type { FieldPath } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { InfoHint } from '@/components/ui/info-hint'
 import { Input } from '@/components/ui/input'
 import { activeChildren, isPlacement, sicknessYears } from '@/lib/interview-form'
 import type { InterviewValues } from '@/lib/interview-form'
@@ -18,6 +19,7 @@ function Field({
   type = 'text',
   choices,
   hint,
+  explain,
   inputMode,
 }: {
   name: FieldPath<InterviewValues>
@@ -25,6 +27,7 @@ function Field({
   type?: 'text' | 'date'
   choices?: readonly Choice[]
   hint?: string
+  explain?: string
   inputMode?: 'decimal' | 'numeric'
 }) {
   const { control } = useFormContext<InterviewValues>()
@@ -34,7 +37,10 @@ function Field({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
+          <div className="flex items-center gap-1.5">
+            <FormLabel>{label}</FormLabel>
+            {explain && <InfoHint label={label}>{explain}</InfoHint>}
+          </div>
           <FormControl>
             {choices ? (
               <select {...field} value={String(field.value)} className={selectClass}>
@@ -52,11 +58,29 @@ function Field({
   )
 }
 
-function YesNo({ name, label, hint }: { name: FieldPath<InterviewValues>; label: string; hint?: string }) {
-  return <Field name={name} label={label} choices={answers} hint={hint} />
+function YesNo({
+  name,
+  label,
+  hint,
+  explain,
+}: {
+  name: FieldPath<InterviewValues>
+  label: string
+  hint?: string
+  explain?: string
+}) {
+  return <Field name={name} label={label} choices={answers} hint={hint} explain={explain} />
 }
 
-function Check({ name, label }: { name: FieldPath<InterviewValues>; label: string }) {
+function Check({
+  name,
+  label,
+  explain,
+}: {
+  name: FieldPath<InterviewValues>
+  label: string
+  explain?: string
+}) {
   const { control } = useFormContext<InterviewValues>()
   return (
     <FormField
@@ -77,6 +101,7 @@ function Check({ name, label }: { name: FieldPath<InterviewValues>; label: strin
               />
             </FormControl>
             <FormLabel>{label}</FormLabel>
+            {explain && <InfoHint label={label}>{explain}</InfoHint>}
           </div>
           <FormMessage />
         </FormItem>
@@ -139,14 +164,17 @@ export function FamilyEventFields({ values }: { values: InterviewValues }) {
     <div className={fieldsGrid}>
       {!placement && <Field name="birthStage" label="Etap rodzicielstwa" choices={[
         ['expected', 'Spodziewamy się dziecka'], ['born', 'Dziecko już się urodziło'],
-      ]} />}
+      ]}
+        explain="Wybierz, czy dziecko już jest na świecie, czy dopiero przyjdzie. Przy planowanym porodzie policzymy scenariusz na dziś." />}
       <Field
         name="eventDate"
         label={placement ? 'Data przyjęcia dziecka na wychowanie'
           : values.birthStage === 'expected' ? 'Przewidywana data porodu' : 'Data porodu'}
         type="date"
+        explain="Data z karty ciąży albo z aktu urodzenia. Od niej liczą się terminy urlopów."
       />
-      <Field name="childCount" label="Liczba dzieci przy tym zdarzeniu" inputMode="numeric" />
+      <Field name="childCount" label="Liczba dzieci przy tym zdarzeniu" inputMode="numeric"
+        explain="Ile dzieci urodziło się lub urodzi przy tym porodzie. Przy bliźniakach urlop jest dłuższy." />
     </div>
   )
 }
@@ -162,13 +190,16 @@ export function ChildQuestions({ values }: { values: InterviewValues }) {
         <Field name="adoptionOrderDate" label="Data uprawomocnienia przysposobienia" type="date" />
       )}
       {values.role === 'father' && (
-        <YesNo name="takingOver" label="Czy przejmujesz opiekę i pozostały macierzyński od matki?" />
+        <YesNo name="takingOver" label="Czy przejmujesz opiekę i pozostały macierzyński od matki?"
+          explain="Ojciec może przejąć resztę urlopu macierzyńskiego, gdy matka wraca do pracy albo nie może zajmować się dzieckiem." />
       )}
       {values.role === 'father' && values.takingOver === 'yes' && (
         <Field name="takeoverDate" label="Data przejęcia macierzyńskiego" type="date" />
       )}
-      <Check name="zaZyciem" label="Dziecko ma zaświadczenie „Za życiem”" />
-      <YesNo name="hospitalization" label="Czy dziecko wymagało pobytu w szpitalu po urodzeniu lub przyjęciu?" />
+      <Check name="zaZyciem" label="Dziecko ma zaświadczenie „Za życiem”"
+        explain="Zaświadczenie wydaje szpital, gdy dziecko ma ciężką wadę rozwojową. Daje dłuższy urlop rodzicielski." />
+      <YesNo name="hospitalization" label="Czy dziecko wymagało pobytu w szpitalu po urodzeniu lub przyjęciu?"
+        explain="Chodzi o pobyt dziecka w szpitalu zaraz po urodzeniu. Taki pobyt daje dodatkowy urlop uzupełniający." />
     </>
   )
 }
@@ -195,8 +226,10 @@ export function EmploymentFields({ values }: { values: InterviewValues }) {
           ['unknown', 'Nie wiem / wybierz'], ['employee', 'Umowa o pracę'],
           ['contractor', 'Umowa zlecenia'], ['self_employed', 'Działalność gospodarcza'],
           ['other', 'Inna sytuacja'],
-        ]} />
-        <YesNo name="insured" label="Czy w dniu powstania prawa masz ubezpieczenie chorobowe?" />
+        ]}
+          explain="Umowa o pracę daje prawo do zasiłku z ZUS. Przy umowie zlecenia potrzebne jest ubezpieczenie chorobowe." />
+        <YesNo name="insured" label="Czy w dniu powstania prawa masz ubezpieczenie chorobowe?"
+          explain="To ubezpieczenie, z którego ZUS płaci zasiłek. Przy umowie o pracę pracodawca zgłasza Cię do niego automatycznie." />
         <Field name="basis" label="Miesięczna podstawa wymiaru w zł" inputMode="decimal"
           hint="Jeśli znasz podstawę używaną do wyliczenia zasiłku, wpisz ją tutaj." />
         {values.employment === 'self_employed' && (
@@ -235,7 +268,8 @@ export function ReturnFields({ values }: { values: InterviewValues }) {
   return (
     <>
       {values.employment === 'employee' && (
-        <Check name="workingOnLeave" label="Chcę łączyć urlop rodzicielski z pracą u tego samego pracodawcy" />
+        <Check name="workingOnLeave" label="Chcę łączyć urlop rodzicielski z pracą u tego samego pracodawcy"
+          explain="Możesz pracować na część etatu i dalej dostawać zasiłek. Urlop wydłuża się wtedy proporcjonalnie." />
       )}
       <div className={fieldsGrid}>
         <Field name="returnDate" type="date" label="Planowana data powrotu do pracy"
@@ -243,8 +277,10 @@ export function ReturnFields({ values }: { values: InterviewValues }) {
             ? 'Podaj datę rozpoczęcia łączenia pracy z rodzicielskim.' : 'Opcjonalnie, do podsumowania.'} />
         {values.workingOnLeave && values.employment === 'employee' && (
           <>
-            <Field name="workPercent" label="Praca na urlopie w % pełnego etatu" inputMode="decimal" hint="Maksymalnie 50%." />
-            <Field name="contractedPercent" label="Wymiar pracy na umowie w % pełnego etatu" inputMode="decimal" />
+            <Field name="workPercent" label="Praca na urlopie w % pełnego etatu" inputMode="decimal" hint="Maksymalnie 50%."
+              explain="Ile etatu przepracujesz w czasie urlopu. Przepisy pozwalają na najwyżej połowę." />
+            <Field name="contractedPercent" label="Wymiar pracy na umowie w % pełnego etatu" inputMode="decimal"
+              explain="Wymiar z Twojej umowy. Przy pełnym etacie wpisz 100." />
             <Field name="parentalDays" label="Dni rodzicielskiego w części łączonej z pracą" inputMode="numeric"
               hint="Podaj liczbę dni przed wydłużeniem urlopu." />
           </>
@@ -263,8 +299,10 @@ export function PartnerFields({ values }: { values: InterviewValues }) {
           ['unknown', 'Nie wiem / wybierz'], ['employee', 'Umowa o pracę'],
           ['contractor', 'Umowa zlecenia'], ['self_employed', 'Działalność gospodarcza'],
           ['other', 'Inna sytuacja'],
-        ]} />
-        <YesNo name="partnerInsured" label="Czy ma ubezpieczenie chorobowe?" />
+        ]}
+          explain="Dane drugiej osoby potrzebne, żeby policzyć jej część urlopu i zasiłku." />
+        <YesNo name="partnerInsured" label="Czy ma ubezpieczenie chorobowe?"
+          explain="Bez ubezpieczenia chorobowego druga osoba nie dostanie zasiłku. Zostaje jej sam urlop." />
         <Field name="partnerBasis" label="Miesięczna podstawa wymiaru w zł" inputMode="decimal"
           hint="Zostaw puste, jeśli jej nie znasz." />
       </div>

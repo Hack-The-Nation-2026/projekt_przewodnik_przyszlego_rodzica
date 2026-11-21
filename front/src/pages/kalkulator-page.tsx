@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
-import { Check, CircleAlert, CircleHelp, Minus, Pencil, X } from 'lucide-react'
+import { Check, CircleAlert, CircleHelp, FlaskConical, Minus, Pencil, X } from 'lucide-react'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ParentalPlanCard } from '@/components/parental-plan'
 import type { RateVariant } from '@/components/parental-plan'
 import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form } from '@/components/ui/form'
+import { InfoHint } from '@/components/ui/info-hint'
 import { api } from '@/lib/api'
 import { benefitList, buildInterview } from '@/lib/benefit-interview'
 import type { Assessment, BenefitCode, ParentalPlan, ParentalPool, SimulationResponse } from '@/lib/benefit-interview'
@@ -23,12 +23,29 @@ import { cn } from '@/lib/utils'
 const currency = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' })
 const date = new Intl.DateTimeFormat('pl-PL', { dateStyle: 'medium', timeZone: 'UTC' })
 
+/** Przykładowe odpowiedzi dla przycisku deweloperskiego. */
+const demoAnswers: InterviewValues = {
+  ...interviewDefaults,
+  birthStage: 'born',
+  eventDate: '2026-09-01',
+  childCount: '1',
+  hospitalization: 'no',
+  employment: 'employee',
+  insured: 'yes',
+  basis: '8000',
+  partnerEmployment: 'employee',
+  partnerInsured: 'yes',
+  partnerBasis: '6000',
+  sickness: 'no',
+  rehabilitation: 'no',
+}
+
 const benefitStatuses = {
-  granted: { label: 'Przysługuje', icon: Check, color: 'border-green-200 bg-green-100 text-green-900' },
-  denied: { label: 'Nie przysługuje', icon: X, color: 'border-red-200 bg-red-100 text-red-900' },
-  partially_granted: { label: 'Częściowo przysługuje', icon: CircleAlert, color: 'border-blue-200 bg-blue-100 text-blue-900' },
-  missing_data: { label: 'Brakuje danych', icon: CircleHelp, color: 'border-amber-200 bg-amber-100 text-amber-950' },
-  not_applicable: { label: 'Nie dotyczy', icon: Minus, color: 'border-slate-300 bg-slate-200 text-slate-800' },
+  granted: { label: 'Przysługuje', icon: Check, color: 'border-primary bg-primary text-primary-foreground' },
+  denied: { label: 'Nie przysługuje', icon: X, color: 'border-red-600 bg-red-600 text-white' },
+  partially_granted: { label: 'Częściowo przysługuje', icon: CircleAlert, color: 'border-blue-600 bg-blue-600 text-white' },
+  missing_data: { label: 'Brakuje danych', icon: CircleHelp, color: 'border-amber-400 bg-amber-300 text-amber-950' },
+  not_applicable: { label: 'Nie dotyczy', icon: Minus, color: 'border-slate-500 bg-slate-500 text-white' },
 } satisfies Record<Assessment['status'], { label: string; icon: typeof Check; color: string }>
 
 const sicknessPeriodLabels: Record<string, string> = {
@@ -37,6 +54,15 @@ const sicknessPeriodLabels: Record<string, string> = {
 }
 
 const statusesWithPayment = new Set<Assessment['status']>(['granted', 'partially_granted'])
+
+/** Co znaczy status, prostymi słowami. */
+const statusExplanations = {
+  granted: 'Warunki z Twoich odpowiedzi są spełnione.',
+  partially_granted: 'Część okresu się należy, resztę pomijamy. Szczegóły są w opisie karty.',
+  denied: 'Przy tych odpowiedziach świadczenie się nie należy.',
+  missing_data: 'Brakuje odpowiedzi, żeby to policzyć. Wróć do formularza i uzupełnij dane.',
+  not_applicable: 'Ten wariant wywiadu nie obejmuje tego świadczenia.',
+} satisfies Record<Assessment['status'], string>
 
 async function simulate({ values, plan }: { values: InterviewValues; plan: ParentalPlan }) {
   const { request, paternityRequest, supplemental, expected, returnDate } = buildInterview(values, plan)
@@ -146,43 +172,66 @@ function buildPlan(
 }
 
 function BenefitCard({ assessment }: { assessment: Assessment }) {
-  const { name, sources } = benefitList[assessment.benefit]
+  const { name, what, sources } = benefitList[assessment.benefit]
   const active = statusesWithPayment.has(assessment.status)
   const { label, icon: StatusIcon, color } = benefitStatuses[assessment.status]
+  const deniedDays = assessment.denied_days ?? 0
+  const showDays = !!assessment.days || (!!deniedDays && assessment.status === 'partially_granted')
+  const showAmount = assessment.gross_grosze != null || active
   return (
-    <Card>
+    <Card className="overflow-hidden">
+      <div className={cn('flex items-center gap-1.5 border-b px-4 py-1.5 text-xs font-semibold', color)}>
+        <StatusIcon className="size-3.5 shrink-0" aria-hidden="true" />
+        {label}
+        <InfoHint label={label} align="end" className="ml-auto">
+          {statusExplanations[assessment.status]}
+        </InfoHint>
+      </div>
       <CardHeader className="gap-1.5 p-4 pb-2.5">
-        <Badge variant="outline" className={cn('mb-0.5 w-fit gap-1.5 px-2.5 py-1 text-sm font-semibold', color)}>
-          <StatusIcon className="size-4 shrink-0" aria-hidden="true" />
-          {label}
-        </Badge>
-        <CardTitle className="text-base">{name}</CardTitle>
+        <div className="flex items-start gap-1.5">
+          <CardTitle className="text-base">{name}</CardTitle>
+          <InfoHint label={name}>{what}</InfoHint>
+        </div>
         <CardDescription>{assessment.reason}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-2.5 p-4 pt-0">
-        <dl className="grid gap-2 sm:grid-cols-2">
-          <div>
-            <dt className="text-xs text-muted-foreground">Okres świadczenia</dt>
-            <dd className="mt-0.5 text-sm font-medium">
-              {assessment.days ? (assessment.days === 1 ? '1 dzień' : `${assessment.days} dni`) : '—'}
-            </dd>
-            {!!assessment.denied_days && assessment.status === 'partially_granted' && (
-              <dd className="text-xs text-muted-foreground">Odmowa za {assessment.denied_days} dni</dd>
+        {(showDays || showAmount) && (
+          <dl className="grid gap-2 sm:grid-cols-2">
+            {showDays && (
+              <div>
+                <dt className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  Okres świadczenia
+                  <InfoHint label="Okres świadczenia">
+                    Liczba dni, za które świadczenie należy się przy Twoich odpowiedziach.
+                  </InfoHint>
+                </dt>
+                <dd className="mt-0.5 text-sm font-medium">
+                  {assessment.days ? (assessment.days === 1 ? '1 dzień' : `${assessment.days} dni`) : '—'}
+                </dd>
+                {!!deniedDays && assessment.status === 'partially_granted' && (
+                  <dd className="text-xs text-muted-foreground">Odmowa za {deniedDays} dni</dd>
+                )}
+              </div>
             )}
-          </div>
-          <div>
-            <dt className="text-xs text-muted-foreground">
-              {assessment.periods?.some((period) => period.kind === 'wynagrodzenie_chorobowe')
-                ? 'Łączna kwota brutto z wynagrodzeniem chorobowym'
-                : 'Łączna kwota brutto'}
-            </dt>
-            <dd className="mt-0.5 text-sm font-medium">
-              {assessment.gross_grosze == null
-                ? (active ? 'Brakuje danych do wyliczenia' : '—')
-                : currency.format(assessment.gross_grosze / 100)}
-            </dd>
-          </div>
-        </dl>
+            {showAmount && (
+              <div>
+                <dt className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  {assessment.periods?.some((period) => period.kind === 'wynagrodzenie_chorobowe')
+                    ? 'Łączna kwota brutto z wynagrodzeniem chorobowym'
+                    : 'Łączna kwota brutto'}
+                  <InfoHint label="Łączna kwota brutto">
+                    Suma za cały okres, przed podatkiem i składką zdrowotną.
+                  </InfoHint>
+                </dt>
+                <dd className="mt-0.5 text-sm font-medium">
+                  {assessment.gross_grosze == null
+                    ? 'Brakuje danych do wyliczenia'
+                    : currency.format(assessment.gross_grosze / 100)}
+                </dd>
+              </div>
+            )}
+          </dl>
+        )}
         {!!assessment.periods?.length && (
           <ul className="space-y-1 text-xs text-muted-foreground">
             {assessment.periods.map(({ kind, start, end }) => (
@@ -194,7 +243,12 @@ function BenefitCard({ assessment }: { assessment: Assessment }) {
           </ul>
         )}
         <div className="border-t pt-2 text-xs">
-          <p className="mb-1 font-medium">Podstawa prawna</p>
+          <p className="mb-1 flex items-center gap-1.5 font-medium">
+            Podstawa prawna
+            <InfoHint label="Podstawa prawna">
+              Przepisy, z których wynika wyliczenie. Każdy link prowadzi do tekstu ustawy.
+            </InfoHint>
+          </p>
           <ul className="flex flex-wrap gap-x-3 gap-y-1">
             {sources.map(({ url, title }) => (
               <li key={title}>
@@ -305,6 +359,26 @@ export function KalkulatorPage() {
         backLabel="Wróć do wejścia"
       />
 
+      {import.meta.env.DEV && !simulation.data && (
+        <div className="mt-8 rounded-lg border-2 border-dashed border-fuchsia-600 bg-fuchsia-50 p-3">
+          <Button
+            type="button"
+            size="lg"
+            className="w-full bg-fuchsia-600 text-white hover:bg-fuchsia-700"
+            onClick={() => {
+              form.reset(demoAnswers)
+              submitAnswers(demoAnswers)
+            }}
+          >
+            <FlaskConical aria-hidden="true" />
+            DEV: wypełnij przykład i pokaż wynik
+          </Button>
+          <p className="mt-2 text-center text-xs font-semibold tracking-wide text-fuchsia-700 uppercase">
+            Tylko w trybie deweloperskim, przed oddaniem usuń
+          </p>
+        </div>
+      )}
+
       {!simulation.data && (
         <Form {...form}>
           <form className="mt-8 space-y-5" noValidate onSubmit={advance} aria-labelledby="interview-step">
@@ -403,6 +477,10 @@ export function KalkulatorPage() {
             />
           )}
 
+          <p className="text-sm text-muted-foreground">
+            Status na górze karty mówi, czy świadczenie przysługuje przy Twoich odpowiedziach.
+            Kwoty podajemy brutto, za cały okres.
+          </p>
           <div className="grid gap-3 md:grid-cols-2">
             {(Object.keys(benefitList) as BenefitCode[]).map((benefit) => (
               <BenefitCard key={benefit} assessment={simulation.data.assessments.get(benefit) ?? {
