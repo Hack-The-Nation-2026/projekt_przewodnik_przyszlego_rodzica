@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { Compass, Menu, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/layout/container'
 import { cn } from '@/lib/utils'
@@ -15,11 +15,28 @@ const NAV = [
   { to: '/o-projekcie', label: 'O projekcie' },
 ]
 
+/** Znak: duże serce z mniejszym sercem w środku, czyli rodzic i dziecko.
+    Mniejszy kształt jest bursztynowy, więc akcent zostaje widoczny także w favikonie. */
+function LogoMark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 32 32" className={cn('size-5', className)} aria-hidden focusable="false">
+      <path
+        d="M16 21.6C12.8 18.8 5.4 13.8 5.4 9.5 5.4 6.1 7.9 3.7 10.9 3.7 13.1 3.7 15 5.1 16 7.4 17 5.1 18.9 3.7 21.1 3.7 24.1 3.7 26.6 6.1 26.6 9.5 26.6 13.8 19.2 18.8 16 21.6Z"
+        fill="currentColor"
+      />
+      <path
+        d="M16 16.2C14.6 15.1 12.1 13.4 12.1 12.1 12.1 10.8 13 9.6 14.2 9.6 15.2 9.6 15.8 10.3 16 11.9 16.2 10.3 16.8 9.6 17.8 9.6 19 9.6 19.9 10.8 19.9 12.1 19.9 13.4 17.4 15.1 16 16.2Z"
+        fill="var(--color-gold)"
+      />
+    </svg>
+  )
+}
+
 function Wordmark() {
   return (
     <Link to="/" className="flex items-center gap-2.5" aria-label="Strona główna">
       <span className="flex size-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
-        <Compass className="size-5" />
+        <LogoMark />
       </span>
       <span className="flex flex-col leading-none">
         <span className="font-display text-lg font-semibold text-primary">Przewodnik Rodzica</span>

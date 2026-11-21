@@ -12,12 +12,6 @@ import { useBenefits } from '@/hooks/use-benefits'
 import { useAppStore } from '@/store/app-store'
 import { cn } from '@/lib/utils'
 
-const FACTS = [
-  { value: '100%', label: 'podstawy wymiaru zasiłku chorobowego w czasie ciąży' },
-  { value: '20', label: 'tygodni urlopu macierzyńskiego po urodzeniu jednego dziecka' },
-  { value: '41/43', label: 'tygodni urlopu rodzicielskiego do podziału między rodziców' },
-]
-
 const STEPS = [
   {
     title: 'Opisz swoją sytuację',
@@ -34,7 +28,7 @@ const STEPS = [
 ]
 
 const ACTIONS = [
-  { to: '/kalkulator', icon: Calculator, title: 'Policz zasiłek', body: 'Symulacja dla obojga rodziców.' },
+  { to: '/kalkulator', icon: Calculator, title: 'Policz zasiłek', body: 'Terminy i kwoty dla obojga rodziców.' },
   { to: '/dokumenty', icon: FileText, title: 'Zbierz dokumenty', body: 'Wnioski i zaświadczenia.' },
   { to: '/wsparcie', icon: HeartHandshake, title: 'Znajdź wsparcie', body: 'Pomoc w trudnych sytuacjach.' },
 ]
@@ -155,52 +149,54 @@ export function HomePage() {
         <section
           id="start-panel"
           aria-labelledby="start-title"
-          className="flex min-h-full snap-start snap-always flex-col justify-center bg-secondary/40"
+          className="flex min-h-full snap-start snap-always flex-col bg-secondary/40"
         >
-          <Container className="grid items-start gap-5 py-6 sm:gap-8 sm:py-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
-            <div>
-              <h1 id="start-title" className="max-w-2xl text-3xl font-semibold leading-tight text-navy sm:text-5xl">
-                Sprawdź, co ci przysługuje w ciąży i po urodzeniu dziecka
-              </h1>
-              <p className="mt-3 max-w-xl text-muted-foreground sm:mt-5 sm:text-lg">
-                Przewodnik prowadzi przez zasiłek chorobowy, macierzyński i rodzicielski. Policz, kiedy
-                i ile dostaniesz, oraz zobacz, jakie dokumenty złożyć.
-              </p>
-              <div className="mt-5 flex flex-wrap gap-2 sm:mt-8 sm:gap-3">
-                <Link to="/kalkulator" className={buttonVariants({ className: 'sm:h-11 sm:px-6 sm:text-base' })}>
-                  Rozpocznij sprawdzenie
-                  <ArrowRight />
-                </Link>
-                <Button
-                  variant="outline"
-                  className="sm:h-11 sm:px-6 sm:text-base"
-                  onClick={() => goToPanel('swiadczenia-panel')}
-                >
-                  Zobacz świadczenia
-                </Button>
-              </div>
-              <p className="mt-4 text-sm text-muted-foreground">
-                Bez logowania na start. mObywatel tylko wtedy, gdy chcesz pobrać swoje dane.
-              </p>
+          <div className="relative isolate flex flex-1 flex-col justify-center">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-y-0 right-0 hidden w-[40%] lg:block"
+              style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 16% 100%)' }}
+            >
+              <img src="/formularz.jpg" alt="" className="size-full object-cover" />
             </div>
 
-            <Card className="bg-background">
-              <CardHeader className="p-4 pb-2 sm:p-6 sm:pb-4">
-                <CardTitle>W skrócie</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2 p-4 pt-0 sm:space-y-4 sm:px-6 sm:pb-6">
-                {FACTS.map((fact) => (
-                  <div
-                    key={fact.label}
-                    className="grid grid-cols-[4rem_1fr] items-baseline gap-2 border-b border-border pb-2 last:border-0 last:pb-0 sm:grid-cols-[4.5rem_1fr] sm:gap-4 sm:pb-4"
+            <Container className="relative py-6 sm:py-12">
+              <div className="max-w-2xl lg:max-w-[34rem]">
+                <h1 id="start-title" className="text-3xl font-semibold leading-tight text-navy sm:text-5xl">
+                  Sprawdź, co ci przysługuje w ciąży i po urodzeniu dziecka
+                </h1>
+                <p className="mt-3 max-w-xl text-muted-foreground sm:mt-5 sm:text-lg">
+                  Przewodnik prowadzi przez zasiłek chorobowy, macierzyński i rodzicielski. Policz, kiedy
+                  i ile dostaniesz, oraz zobacz, jakie dokumenty złożyć.
+                </p>
+                <div className="mt-5 flex flex-wrap gap-2 sm:mt-8 sm:gap-3">
+                  <Link to="/kalkulator" className={buttonVariants({ className: 'sm:h-11 sm:px-6 sm:text-base' })}>
+                    Rozpocznij sprawdzenie
+                    <ArrowRight />
+                  </Link>
+                  <Button
+                    variant="outline"
+                    className="sm:h-11 sm:px-6 sm:text-base"
+                    onClick={() => goToPanel('swiadczenia-panel')}
                   >
-                    <span className="font-display text-2xl font-semibold text-primary">{fact.value}</span>
-                    <span className="text-sm text-muted-foreground">{fact.label}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </Container>
+                    Zobacz świadczenia
+                  </Button>
+                </div>
+              </div>
+            </Container>
+
+            <figure
+              className="aspect-[4/3] max-h-[38svh] overflow-hidden lg:hidden"
+              style={{ clipPath: 'polygon(0 12%, 100% 0, 100% 100%, 0 100%)' }}
+            >
+              <img
+                src="/formularz.jpg"
+                alt="Dwoje rodziców wypełnia przy stole wniosek o zasiłek."
+                className="size-full object-cover"
+              />
+            </figure>
+          </div>
+
           {citizen && (
             <div className="border-y border-border bg-primary/5">
               <Container className="flex flex-wrap items-center gap-x-4 gap-y-2 py-4">
@@ -255,6 +251,9 @@ export function HomePage() {
                 <ArrowRight />
               </Link>
             </div>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Katalog obejmuje świadczenia związane z ciążą, porodem, adopcją i opieką nad dzieckiem.
+            </p>
 
             <div className="mt-4 grid gap-2 md:mt-8 md:grid-cols-3 md:gap-6">
               {isPending &&

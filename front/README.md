@@ -59,6 +59,20 @@ w `src/index.css`.
 
 Nagłówki i tekst dzielą jeden krój, IBM Plex Sans.
 
+## Znak
+
+Logo to serce z mniejszym sercem w środku, czyli rodzic i dziecko. Ten sam kształt stoi
+w `public/favicon.svg` i w nagłówku, w `src/components/layout/site-header.tsx`. Mniejsze serce
+jest bursztynowe, więc akcent widać nawet w rozmiarze favikony.
+
+## Zdjęcie na stronie startowej
+
+Hero otwiera zdjęcie `public/formularz.jpg`: dwoje rodziców wypełnia przy stole wniosek. Autor
+RDNE Stock project, pobrane z Pexels na licencji Pexels, która pozwala używać i przycinać zdjęcie
+także komercyjnie, bez obowiązku podania autora. Plik jest przycięty do 1400 na 1166 pikseli.
+Na szerokich ekranach zdjęcie dochodzi do prawej krawędzi okna i ma skośny lewy brzeg, a na wąskich
+wchodzi pod tekst i domyka sekcję.
+
 ## Logowanie przez mObywatel
 
 Prawdziwego mObywatela nie da się uruchomić na hackathonie, bo wymaga zarejestrowanego klienta

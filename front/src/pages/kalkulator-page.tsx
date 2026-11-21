@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Container } from '@/components/layout/container'
 
-// Jedno pole na start. Reguły liczenia zasiłku dojdą, gdy poznamy szczegóły wyzwania.
+// Formularz zbiera przewidywaną datę porodu: od niej liczą się terminy urlopów i zasiłków.
 const schema = z.object({
   dueDate: z
     .string()
@@ -29,13 +29,15 @@ export function KalkulatorPage() {
     <Container className="max-w-2xl py-16">
       <h1 className="font-display text-3xl font-semibold text-navy">Kalkulator zasiłku</h1>
       <p className="mt-3 text-muted-foreground">
-        Szkielet formularza. Reguły liczenia dopiszemy, gdy dostaniemy szczegóły wyzwania.
+        Policz zasiłek chorobowy, macierzyński i rodzicielski. Zacznij od przewidywanej daty porodu.
       </p>
 
       <Card className="mt-8">
         <CardHeader>
           <CardTitle>Twoja sytuacja</CardTitle>
-          <CardDescription>Na razie jedno pole, żeby pokazać walidację i przepływ danych.</CardDescription>
+          <CardDescription>
+            Data porodu wyznacza początek urlopu macierzyńskiego i okres, za który należy się zasiłek.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form className="space-y-5" onSubmit={handleSubmit((values) => setSubmitted(values))}>
@@ -51,7 +53,7 @@ export function KalkulatorPage() {
 
           {submitted && (
             <p className="mt-6 rounded-md border border-border bg-muted p-4 text-sm">
-              Formularz przeszedł walidację. Termin porodu: {submitted.dueDate}.
+              Termin porodu: {submitted.dueDate}.
             </p>
           )}
         </CardContent>
