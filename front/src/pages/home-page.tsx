@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Calculator, ChevronDown, FileText, HeartHandshake } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
@@ -32,68 +31,6 @@ const ACTIONS = [
 
 export function HomePage() {
   const { data, isPending, isError, refetch } = useBenefits()
-
-  // Przewijanie idzie sekcjami: gdy bieżąca sekcja nie ma już zapasu w daną stronę, jedno
-  // kółko dostawia sąsiednią sekcję pod nagłówek. Sekcja wyższa od okna przewija się
-  // w środku normalnie, więc długa treść na telefonie nie utyka.
-  useEffect(() => {
-    let lastWheelAt = 0
-    let moved = false
-
-    function handleWheel(event: WheelEvent) {
-      if (event.defaultPrevented || event.ctrlKey || event.shiftKey) return
-      if (Math.abs(event.deltaX) >= Math.abs(event.deltaY)) return
-
-      const sections = Array.from(document.querySelectorAll<HTMLElement>('main section'))
-      if (sections.length < 2) return
-
-      const padding =
-        Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
-      const tops = sections.map(
-        (section) => section.getBoundingClientRect().top + window.scrollY - padding,
-      )
-
-      // Sekcja, pod którą stoi teraz górna krawędź okna.
-      let index = 0
-      tops.forEach((top, position) => {
-        if (window.scrollY >= top - 2) index = position
-      })
-
-      const section = sections[index]
-      const sectionTop = section.getBoundingClientRect().top + window.scrollY
-      const goingDown = event.deltaY > 0
-      const fits = section.offsetHeight <= window.innerHeight - padding + 4
-
-      // Sekcja mieszcząca się w oknie oddaje kółko od razu. Wyższa od okna najpierw
-      // przewija się do końca, a dopiero potem dostawia sąsiednią.
-      const ready = goingDown
-        ? fits
-          ? window.scrollY >= tops[index] - 4
-          : window.scrollY + window.innerHeight >= sectionTop + section.offsetHeight - 1
-        : fits
-          ? window.scrollY >= tops[index] - 4
-          : window.scrollY <= tops[index] + 4
-
-      if (!ready) return
-
-      const target = tops[index + (goingDown ? 1 : -1)]
-      if (target === undefined) return
-
-      event.preventDefault()
-
-      // Jedno kółko to jedno dostawienie, dopóki gest trwa.
-      const now = performance.now()
-      if (now - lastWheelAt > 200) moved = false
-      lastWheelAt = now
-      if (moved) return
-
-      moved = true
-      window.scrollTo({ top: Math.max(0, target) })
-    }
-
-    window.addEventListener('wheel', handleWheel, { passive: false })
-    return () => window.removeEventListener('wheel', handleWheel)
-  }, [])
 
   return (
     <>
