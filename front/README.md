@@ -1,4 +1,4 @@
-# Frontend: Zasiłkowy Przewodnik Przyszłego Rodzica
+# Frontend: Przewodnik Przyszłego Rodzica
 
 Interfejs aplikacji: Vite, React, TypeScript, Tailwind v4 i komponenty w stylu shadcn/ui.
 

@@ -7,7 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
-    app_name: str = "Zasiłkowy Przewodnik Przyszłego Rodzica API"
+    app_name: str = "Przewodnik Przyszłego Rodzica API"
     environment: str = "dev"
     api_prefix: str = "/api"
     # Adresy frontendu rozdzielone przecinkami. Ze stringa robimy listę, żeby .env był czytelny.

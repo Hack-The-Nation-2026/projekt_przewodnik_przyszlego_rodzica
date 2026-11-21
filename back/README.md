@@ -1,4 +1,4 @@
-# Backend: Zasiłkowy Przewodnik Przyszłego Rodzica
+# Backend: Przewodnik Przyszłego Rodzica
 
 REST API w FastAPI z katalogiem świadczeń i symulacją uprawnień dla rodziców.
 

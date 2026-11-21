@@ -28,7 +28,7 @@ export function SiteFooter() {
     <footer className="mt-20 bg-primary text-primary-foreground">
       <Container className="grid gap-10 py-12 md:grid-cols-[1.5fr_1fr_1fr]">
         <div>
-          <p className="font-display text-lg font-semibold">Zasiłkowy Przewodnik Przyszłego Rodzica</p>
+          <p className="font-display text-lg font-semibold">Przewodnik Przyszłego Rodzica</p>
           <p className="mt-3 max-w-sm text-sm text-primary-foreground/80">
             Zasiłki, terminy i dokumenty związane z ciążą i urodzeniem dziecka w jednym miejscu.
             Liczymy na podstawie ustawy zasiłkowej i Kodeksu pracy.
