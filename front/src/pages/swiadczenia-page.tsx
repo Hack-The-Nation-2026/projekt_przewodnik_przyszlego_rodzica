@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowRight, Calculator, FileText } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Calculator, FileText } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
@@ -16,8 +16,9 @@ const scenarios = {
 }
 
 type Scenario = keyof typeof scenarios
+type BenefitScenario = Exclude<Scenario, 'all'>
 
-const benefitScenarios: Record<BenefitCode, Exclude<Scenario, 'all'>[]> = {
+const benefitScenarios: Record<BenefitCode, BenefitScenario[]> = {
   chorobowy_w_ciazy: ['pregnancy'],
   rehabilitacyjne: ['pregnancy', 'birth'],
   w_wysokosci_macierzynskiego: ['pregnancy'],
@@ -27,10 +28,57 @@ const benefitScenarios: Record<BenefitCode, Exclude<Scenario, 'all'>[]> = {
   ojcowski: ['birth', 'adoption'],
 }
 
+const otherBenefits: {
+  name: string
+  description: string
+  scenarios: BenefitScenario[]
+  source: 'ZUS' | 'Gov.pl'
+  url: string
+}[] = [
+  {
+    name: 'Świadczenie wychowawcze 800+',
+    description: 'Comiesięczne wsparcie na wychowanie dziecka do ukończenia 18 lat. ZUS przyjmuje wnioski elektronicznie.',
+    scenarios: ['birth', 'adoption', 'foster'],
+    source: 'ZUS',
+    url: 'https://www.zus.pl/pl/swiadczenia/swiadczenia-dla-rodzin/swiadczenie-wychowawcze-800-plus',
+  },
+  {
+    name: 'Świadczenie rodzicielskie',
+    description: 'Wsparcie dla osób opiekujących się dzieckiem, którym nie przysługuje zasiłek macierzyński. Wniosek możesz złożyć przez Emp@tię.',
+    scenarios: ['birth', 'adoption', 'foster'],
+    source: 'Gov.pl',
+    url: 'https://www.gov.pl/web/gov/uzyskaj-swiadczenie-rodzicielskie',
+  },
+  {
+    name: 'Becikowe',
+    description: 'Jednorazowa zapomoga po urodzeniu dziecka. Obowiązuje kryterium dochodowe, a o pomoc mogą ubiegać się także rodzice adopcyjni.',
+    scenarios: ['birth', 'adoption'],
+    source: 'Gov.pl',
+    url: 'https://www.gov.pl/web/gov/uzyskaj-becikowe',
+  },
+  {
+    name: 'Zasiłek opiekuńczy',
+    description: 'Na czas, kiedy nie możesz pracować, bo opiekujesz się chorym dzieckiem lub w określonych sytuacjach zdrowym dzieckiem.',
+    scenarios: ['birth', 'adoption', 'foster'],
+    source: 'ZUS',
+    url: 'https://www.zus.pl/swiadczenia/zasilki/zasilek-opiekunczy/niezbedne-dokumenty',
+  },
+  {
+    name: 'Aktywny Rodzic',
+    description: 'Program wspierający opiekę nad małym dzieckiem, m.in. w żłobku lub w domu. Sprawdź trzy dostępne warianty i ich warunki.',
+    scenarios: ['birth', 'adoption', 'foster'],
+    source: 'ZUS',
+    url: 'https://www.zus.pl/aktywnyrodzic',
+  },
+]
+
 export function SwiadczeniaPage() {
   const [scenario, setScenario] = useState<Scenario>('all')
   const benefits = (Object.keys(benefitList) as BenefitCode[]).filter((code) =>
     scenario === 'all' || benefitScenarios[code].includes(scenario),
+  )
+  const filteredOtherBenefits = otherBenefits.filter((benefit) =>
+    scenario === 'all' || benefit.scenarios.includes(scenario),
   )
   const placement = scenario === 'adoption' || scenario === 'foster' ? `&sytuacja=${scenario}` : ''
 
@@ -55,33 +103,65 @@ export function SwiadczeniaPage() {
         </Link>
       </div>
 
-      <p className="sr-only" role="status">Liczba świadczeń w katalogu po filtrowaniu: {benefits.length}</p>
-      <ul className="grid gap-4 sm:grid-cols-2">
-        {benefits.map((code) => {
-          const { name, what, sources } = benefitList[code]
-          return (
-            <li key={code}>
-              <Card className="flex h-full flex-col">
-                <CardHeader className="gap-2 pb-4">
-                  <h2 className="text-lg font-semibold">{name}</h2>
-                  <p className="text-sm text-muted-foreground">{what}</p>
-                </CardHeader>
-                <CardContent className="mt-auto space-y-3">
-                  <ul className="space-y-1 text-sm">
-                    {sources.map(({ title, url }) => (
-                      <li key={title}><a href={url} className="text-primary underline underline-offset-2">{title}</a></li>
-                    ))}
-                  </ul>
-                  <Link to={`/dokumenty?swiadczenie=${code}${placement}`} className={buttonVariants({ variant: 'outline' })}
-                    aria-label={`Dokumenty i terminy – ${name}`}>
-                    <FileText aria-hidden="true" /> Dokumenty i terminy <ArrowRight aria-hidden="true" />
-                  </Link>
-                </CardContent>
-              </Card>
-            </li>
-          )
-        })}
-      </ul>
+      <p className="sr-only" role="status">
+        Liczba pozycji w katalogu po filtrowaniu: {benefits.length + filteredOtherBenefits.length}
+      </p>
+      <section className="space-y-4" aria-labelledby="calculator-benefits-title">
+        <h2 id="calculator-benefits-title" className="text-xl font-semibold">Świadczenia w kalkulatorze</h2>
+        <ul className="grid gap-4 sm:grid-cols-2">
+          {benefits.map((code) => {
+            const { name, what, sources } = benefitList[code]
+            return (
+              <li key={code}>
+                <Card className="flex h-full flex-col">
+                  <CardHeader className="gap-2 pb-4">
+                    <h3 className="text-lg font-semibold">{name}</h3>
+                    <p className="text-sm text-muted-foreground">{what}</p>
+                  </CardHeader>
+                  <CardContent className="mt-auto space-y-3">
+                    <ul className="space-y-1 text-sm">
+                      {sources.map(({ title, url }) => (
+                        <li key={title}><a href={url} className="text-primary underline underline-offset-2">{title}</a></li>
+                      ))}
+                    </ul>
+                    <Link to={`/dokumenty?swiadczenie=${code}${placement}`} className={buttonVariants({ variant: 'outline' })}
+                      aria-label={`Dokumenty i terminy – ${name}`}>
+                      <FileText aria-hidden="true" /> Dokumenty i terminy <ArrowRight aria-hidden="true" />
+                    </Link>
+                  </CardContent>
+                </Card>
+              </li>
+            )
+          })}
+        </ul>
+      </section>
+
+      {filteredOtherBenefits.length > 0 && (
+        <section className="space-y-4" aria-labelledby="other-benefits-title">
+          <div className="space-y-1">
+            <h2 id="other-benefits-title" className="text-xl font-semibold">Inne świadczenia dla rodzin</h2>
+            <p className="text-sm text-muted-foreground">Warunki i wnioski znajdziesz w ZUS lub na Gov.pl.</p>
+          </div>
+          <ul className="grid gap-4 sm:grid-cols-2">
+            {filteredOtherBenefits.map(({ name, description, source, url }) => (
+              <li key={name}>
+                <Card className="flex h-full flex-col">
+                  <CardHeader className="gap-2 pb-4">
+                    <h3 className="text-lg font-semibold">{name}</h3>
+                    <p className="text-sm text-muted-foreground">{description}</p>
+                  </CardHeader>
+                  <CardContent className="mt-auto">
+                    <a href={url} className={buttonVariants({ variant: 'outline' })}
+                      aria-label={`Warunki i wniosek (${source}) – ${name}`}>
+                      Warunki i wniosek <ArrowUpRight aria-hidden="true" />
+                    </a>
+                  </CardContent>
+                </Card>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </PageContainer>
   )
 }
