@@ -100,8 +100,14 @@ Budujemy zbiór spraw, na których rozwiniemy kalkulator i sprawdzimy go przed j
   wymiaru, rozstrzygnięcie i kwotę.
 - Zapisać to w formie, którą da się wczytać do aplikacji i użyć w testach.
 
+Lokalny plik `PRZYKLADY/zestaw-testowy.json` zawiera katalog 87 PDF-ów i 14 wybranych spraw.
+`back/tests/zus_cases.py` wczytuje i waliduje wersję 1 zestawu. Daty okresów są włączne, a kwoty
+podane w groszach. Wartość `null` oznacza brak potwierdzonej wartości albo pole nieadekwatne
+do sprawy. Kwota wyliczona pomocniczo jest oznaczona osobno od kwoty potwierdzonej w PDF.
+Katalog i dane ze spraw są przeznaczone do użytku lokalnego pod ignorowaną ścieżką `PRZYKLADY/`.
+
 Gotowe, gdy jedna sprawa z zestawu przechodzi przez kalkulator i daje wynik zgodny z decyzją
-w PDF.
+w PDF. Zestaw jest przygotowany, a to porównanie czeka na działające reguły kalkulatora z kroku 3.
 
 Brief, pkt 3 f oraz pkt 6.
 
