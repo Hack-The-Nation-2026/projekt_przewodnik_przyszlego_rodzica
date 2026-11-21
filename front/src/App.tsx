@@ -3,12 +3,14 @@ import { RootLayout } from '@/components/layout/root-layout'
 import { DokumentyPage } from '@/pages/dokumenty-page'
 import { HomePage } from '@/pages/home-page'
 import { KalkulatorPage } from '@/pages/kalkulator-page'
+import { KartaRoute } from '@/pages/karta-page'
 import { MobywatelPage } from '@/pages/mobywatel-page'
 import { NotFoundPage } from '@/pages/not-found-page'
 import { PanelPage } from '@/pages/panel-page'
 import { SprawyPage } from '@/pages/sprawy-page'
 import { SwiadczeniaPage } from '@/pages/swiadczenia-page'
 import { WejsciePage } from '@/pages/wejscie-page'
+import { WnioskiPage } from '@/pages/wnioski-page'
 import { WsparciePage } from '@/pages/wsparcie-page'
 import { ZusPage } from '@/pages/zus-page'
 
@@ -23,8 +25,10 @@ export default function App() {
         <Route path="wejscie" element={<WejsciePage />} />
         <Route path="swiadczenia" element={<SwiadczeniaPage />} />
         <Route path="kalkulator" element={<KalkulatorPage />} />
+        <Route path="karta" element={<KartaRoute />} />
         <Route path="dokumenty" element={<DokumentyPage />} />
         <Route path="sprawy" element={<SprawyPage />} />
+        <Route path="wnioski" element={<WnioskiPage />} />
         <Route path="zus" element={<ZusPage />} />
         <Route path="panel" element={<PanelPage />} />
         <Route path="wsparcie/:topic?" element={<WsparciePage />} />

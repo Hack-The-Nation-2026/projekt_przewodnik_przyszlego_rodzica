@@ -1,8 +1,9 @@
 import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
-import { Check, CircleAlert, CircleHelp, ClipboardList, FlaskConical, Minus, Pencil, X } from 'lucide-react'
+import { Check, CircleAlert, CircleHelp, ClipboardList, FileText, FlaskConical, Minus, Pencil, Printer, X } from 'lucide-react'
 import { useForm, useWatch } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { BenefitWarnings } from '@/components/benefit-warnings'
 import { useFeature } from '@/hooks/use-settings'
@@ -17,6 +18,8 @@ import { Form } from '@/components/ui/form'
 import { InfoHint } from '@/components/ui/info-hint'
 import { api } from '@/lib/api'
 import { contextFromInterview } from '@/lib/benefit-document-context'
+import { buildEntitlementCard, saveEntitlementCard } from '@/lib/entitlement-card'
+import { saveLeaveCase } from '@/lib/leave-applications'
 import { benefitList, buildInterview } from '@/lib/benefit-interview'
 import type { Assessment, BenefitCode, ParentalPlan, ParentalPool, SimulationResponse } from '@/lib/benefit-interview'
 import { asBoolean, interviewDefaults, interviewSchema, parseNumber } from '@/lib/interview-form'
@@ -308,6 +311,7 @@ export function KalkulatorPage() {
   const stepHeading = useRef<HTMLHeadingElement>(null)
   const focusNextStep = useRef(false)
   const scrolledFor = useRef<InterviewValues | null>(null)
+  const navigate = useNavigate()
   const [stepId, setStepId] = useState('role')
   const [sent, setSent] = useState('')
   const [submitted, setSubmitted] = useState<InterviewValues | null>(null)
@@ -365,6 +369,28 @@ export function KalkulatorPage() {
 
   function closeDocuments() {
     setDocumentBenefit(null)
+  }
+
+  /**
+   * Karta uprawnień powstaje z ostatniego wyniku i jedzie na osobną trasę.
+   * Budujemy ją w locie, więc karta zawsze opisuje to, co widać na ekranie.
+   */
+  function openCard() {
+    if (!submitted || !result) return
+    saveEntitlementCard(buildEntitlementCard(submitted, resultCards, result.documentContext))
+    navigate('/karta')
+  }
+
+  /** Kreator wniosku dostaje ten sam stan sprawy, więc nic nie przepisujemy dwa razy. */
+  function openApplications() {
+    if (!submitted || !result) return
+    saveLeaveCase({
+      values: submitted,
+      assessments: resultCards,
+      context: result.documentContext,
+      pool: result.pool,
+    })
+    navigate('/wnioski')
   }
 
   function submitAnswers(data: InterviewValues) {
@@ -560,6 +586,20 @@ export function KalkulatorPage() {
                 />
               ))}
             </div>
+          </div>
+          <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-3 border-t border-border pt-6">
+            <Button type="button" size="lg" className="font-semibold" onClick={openCard}>
+              <Printer aria-hidden="true" />
+              Zabierz ze sobą
+            </Button>
+            <Button type="button" size="lg" variant="outline" className="font-semibold" onClick={openApplications}>
+              <FileText aria-hidden="true" />
+              Przygotuj wniosek urlopowy
+            </Button>
+            <p className="max-w-xl text-sm text-muted-foreground">
+              Karta uprawnień na jedną stronę: co przysługuje, ile, na jak długo i do kiedy złożyć
+              wniosek. Do wydruku albo pokazania kadrom na telefonie.
+            </p>
           </div>
           <Dialog
             open={documentBenefit !== null}

@@ -182,3 +182,109 @@
     }
   }
 }
+
+/*
+ * Karta uprawnień i wniosek idą na papier. Chowamy wszystko, co należy do
+ * przeglądania strony, i zdejmujemy ozdoby, żeby wydruk był jednym dokumentem.
+ */
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+
+  /*
+   * Jedna kartka A4 ma 182 na 269 mm treści. Zmniejszamy bazowy rozmiar, więc
+   * cały dokument maleje razem z odstępami i dwie kolumny dalej się mieszczą.
+   * Wymiar jest wymuszony, bo ustawienie rozmiaru tekstu z panelu ma rządzić
+   * ekranem, a nie wydrukiem.
+   */
+  html {
+    font-size: 11.5px !important;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  /*
+   * Chowamy nagłówek, stopkę i dymek asystenta przez znacznik, a nie po
+   * nazwie elementu: karta ma własną stopkę z podstawą prawną i nie wolno
+   * jej schować razem z resztą. `.no-print` należy do przycisków strony.
+   */
+  [data-print-hide],
+  .no-print {
+    display: none !important;
+  }
+
+  .print-sheet {
+    margin: 0;
+    padding: 0;
+  }
+
+  .print-sheet article {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    min-height: 0;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+/*
+ * Dostępność. Znaczniki `data-*` na `<html>` ustawia store, a tu jest tylko
+ * ich skutek. Trzymamy to poza `@layer base`, bo te reguły mają wygrywać
+ * z komponentami, a nie rywalizować z nimi o kolejność.
+ */
+
+/* Rozmiar tekstu skaluje całą stronę, bo układ stoi na rem. */
+html[data-text='large'] {
+  font-size: calc(clamp(1rem, 0.23vw + 0.94rem, 1.15rem) * 1.125);
+}
+
+html[data-text='largest'] {
+  font-size: calc(clamp(1rem, 0.23vw + 0.94rem, 1.15rem) * 1.25);
+}
+
+/*
+ * Wysoki kontrast, a nie tryb ciemny: mocniejsze obramowania, ciemniejszy
+ * tekst pomocniczy i wyraźny obrys fokusu. Kolory zostają firmowe.
+ */
+html[data-contrast='high'] {
+  --foreground: #101a16;
+  --muted-foreground: #26332e;
+  --border: color-mix(in srgb, var(--brand-green) 34%, var(--background));
+  --input: color-mix(in srgb, var(--brand-green) 48%, var(--background));
+  --primary: #00602a;
+}
+
+html[data-contrast='high'] a:not([class]) {
+  text-decoration: underline;
+}
+
+html[data-contrast='high'] :focus-visible {
+  outline-width: 3px;
+  outline-offset: 3px;
+}
+
+/* Ograniczenie animacji z panelu działa niezależnie od ustawienia systemowego. */
+html[data-motion='reduced'] *,
+html[data-motion='reduced'] *::before,
+html[data-motion='reduced'] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Fragment czytany teraz przez lektora. Widoczny także wtedy, gdy ktoś czyta wzrokiem. */
+.is-reading {
+  background-color: color-mix(in srgb, var(--gold) 30%, transparent);
+  border-radius: 3px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 30%, transparent);
+}

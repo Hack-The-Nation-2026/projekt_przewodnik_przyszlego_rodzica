@@ -51,6 +51,7 @@ ich kopiować ani rozpowszechniać.
 - [ ] Krok 13. Testy na sprawach i upload wniosków
 - [x] Krok 14. Asystent z AI
 - [ ] Krok 15. Materiały do oddania
+- [x] Krok 17. Karta uprawnień, kreator wniosków i dostępność
 - [ ] Krok 16. Weryfikacja przed oddaniem
 
 ## Krok 0. Reguły zasiłków na papierze
@@ -526,6 +527,49 @@ Ostatnie przejście po wymaganiach, żeby nic nie wypadło.
 Gotowe, gdy cała lista jest odhaczona bez wyjątków.
 
 Brief, pkt 3, 4, 5, 6.
+
+## Krok 17. Karta uprawnień, kreator wniosków i dostępność
+
+Trzy rzeczy, które zamieniają wynik na ekranie w dokument, który da się zabrać ze sobą, oraz
+ustawienia, bez których część ludzi w ogóle nie skorzysta z serwisu.
+
+- Karta uprawnień: jedna strona na A4 i na telefon, z sytuacją w pięciu liniach, świadczeniami,
+  terminami i adresatem każdego wniosku.
+- Kreator wniosku urlopowego: lista wniosków wynikających z sytuacji, pismo gotowe do podpisu,
+  sprawdzenie przed wysłaniem i karta jako druga strona tego samego wydruku.
+- Panel dostępności: wysoki kontrast, trzy rozmiary tekstu, czytanie na głos, prosty język
+  i ograniczenie animacji.
+
+Gotowe, gdy kartę i wniosek da się wydrukować na jednej stronie A4, a ustawienia dostępności
+działają i pamiętają się w przeglądarce.
+
+Zrobione 22.11. Przycisk „Zabierz ze sobą" pod listą świadczeń prowadzi na `/karta`. Karta
+powstaje w `front/src/lib/entitlement-card.ts` z odpowiedzi, ocen i okresów symulacji, jedzie na
+trasę przez `sessionStorage`, więc nic nie zostaje na serwerze, i mówi wprost, czy liczy się
+z przewidywanej daty porodu, czy z danych po porodzie. Kwota miesięczna jest przeliczona z sumy
+i liczby dni, z dopiskiem, że to przybliżenie, bo inaczej karta obiecywałaby precyzję, której nie ma.
+
+Ekran `/wnioski` bierze ten sam stan sprawy i pokazuje tylko wnioski, które wynikają z odpowiedzi:
+macierzyński, rodzicielski, ojcowski, uzupełniający, przejęcie urlopu przez ojca i łączenie urlopu
+z pracą. Przy każdym jest jedno zdanie o tym, co załatwia, kiedy go złożyć i co się stanie po
+terminie. Użytkownik uzupełnia tylko to, czego nie ma w wywiadzie: imię, adres i pracodawcę.
+Sprawdzenie przed wysłaniem porównuje datę z okresem z symulacji, liczbę dni z policzonym wymiarem
+i pilnuje, żeby nie zabrać drugiemu rodzicowi jego nieprzenoszalnych tygodni. Pismo wygląda jak
+pismo: miejscowość i data, adresat, treść, załączniki i miejsce na podpis. Po pobraniu serwis
+proponuje kartę uprawnień jako drugą stronę tego samego wydruku.
+
+Panel dostępności siedzi w nagłówku obok logowania. Wysoki kontrast, nie tryb ciemny: mocniejsze
+obramowania i ciemniejszy tekst pomocniczy naprawiają czytanie, a nie tylko zmieniają kolory na
+zrzucie. Rozmiar tekstu podnosi bazowy rozmiar całej strony, bo układ stoi na rem. Czytanie na głos
+korzysta z syntezatora przeglądarki i podświetla czytany fragment, a gdy urządzenie nie ma polskiego
+lektora, mówi o tym wprost. Wybory zapisują się w `localStorage` i wchodzą na `<html>` przed
+pierwszym malowaniem.
+
+Link „Panel" doszedł do nawigacji głównej, a pełną nazwę nosi podpowiedź i stopka. Na wydruku
+chowamy nagłówek, stopkę i dymek asystenta znacznikiem `data-print-hide`, a bazowy rozmiar strony
+schodzi do 11,5 px, żeby karta zmieściła się na jednej kartce A4.
+
+Brief, pkt 3 g oraz pkt 4.
 
 ## Mapa wymagań na kroki
 

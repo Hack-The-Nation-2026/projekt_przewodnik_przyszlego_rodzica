@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
+import { A11yPanel } from '@/components/accessibility/a11y-panel'
 import { WingMark } from '@/components/brand/wing-mark'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/layout/container'
@@ -9,6 +10,8 @@ import { cn } from '@/lib/utils'
 import { useAppStore } from '@/store/app-store'
 import { useFeature } from '@/hooks/use-settings'
 
+// „Panel" w nagłówku jest krótkie, bo obok stoją jeszcze logotyp i przycisk
+// logowania. Pełną nazwę niesie podpowiedź i stopka.
 const NAV = [
   { to: '/', label: 'Start', end: true },
   { to: '/swiadczenia', label: 'Świadczenia' },
@@ -17,6 +20,7 @@ const NAV = [
   { to: '/sprawy', label: 'Sprawy' },
   { to: '/zus', label: 'ZUS' },
   { to: '/wsparcie', label: 'Wsparcie' },
+  { to: '/panel', label: 'Panel', title: 'Panel administracyjny' },
 ]
 
 /** Znak serwisu: para skrzydeł anioła na białym kaflu. Ten sam rysunek co w favikonie. */
@@ -74,7 +78,7 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-40 shrink-0">
+    <header className="sticky top-0 z-40 shrink-0" data-print-hide>
       <div className="border-b border-primary-foreground/15 bg-primary text-primary-foreground shadow-sm [--ring:var(--primary-foreground)]">
         <Container className="flex h-16 items-center gap-3 lg:gap-6">
           <Wordmark />
@@ -88,6 +92,7 @@ export function SiteHeader() {
                 key={item.to}
                 to={item.to}
                 end={item.end}
+                title={'title' in item ? item.title : undefined}
                 className={({ isActive }) =>
                   cn(
                     'rounded-md px-2 py-2 text-sm font-medium whitespace-nowrap transition-colors',
@@ -103,6 +108,7 @@ export function SiteHeader() {
           </nav>
 
           <div className="ml-auto flex items-center gap-2">
+            <A11yPanel />
             {citizen ? (
               <ProfileMenu />
             ) : (
@@ -147,7 +153,7 @@ export function SiteHeader() {
                     )
                   }
                 >
-                  {item.label}
+                  {'title' in item ? item.title : item.label}
                 </NavLink>
               ))}
               {!citizen && (

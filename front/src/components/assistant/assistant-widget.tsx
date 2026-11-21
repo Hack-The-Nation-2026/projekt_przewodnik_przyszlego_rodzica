@@ -200,6 +200,7 @@ export function AssistantWidget() {
   return (
     <div
       data-scroll-ignore
+      data-print-hide
       className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-end p-4 [&_button:not(:disabled)]:cursor-pointer sm:p-6"
     >
       <div className="pointer-events-auto flex w-full max-w-sm flex-col items-end gap-3">

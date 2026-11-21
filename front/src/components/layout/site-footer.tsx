@@ -33,7 +33,7 @@ export function SiteFooter() {
   }))
 
   return (
-    <footer className="mt-20 bg-primary text-primary-foreground [--ring:var(--primary-foreground)]">
+    <footer className="mt-20 bg-primary text-primary-foreground [--ring:var(--primary-foreground)]" data-print-hide>
       <Container className="grid gap-10 py-12 md:grid-cols-[1.5fr_1fr_1fr]">
         <div>
           <div className="flex items-center gap-2.5">

@@ -5,6 +5,11 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 import './index.css'
+import { initA11ySettings } from '@/store/a11y-store'
+
+// Ustawienia dostępności wchodzą na <html> przed pierwszym malowaniem, żeby
+// strona nie mrugnęła najpierw normalnym kontrastem i rozmiarem.
+initA11ySettings()
 
 const queryClient = new QueryClient({
   defaultOptions: {
