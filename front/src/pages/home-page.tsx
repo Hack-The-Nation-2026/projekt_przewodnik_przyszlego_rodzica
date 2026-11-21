@@ -100,7 +100,7 @@ export function HomePage() {
 
   return (
     <>
-      <section aria-labelledby="start-title" className="home-hero relative isolate overflow-hidden">
+      <section aria-labelledby="start-title" className="relative isolate overflow-hidden bg-foreground">
         <img
           src="/formularz.jpg"
           alt="Rodzice wypełniają przy kuchennym stole wniosek o zasiłek."
@@ -108,14 +108,14 @@ export function HomePage() {
         />
         <div aria-hidden className="home-hero-shade absolute inset-0" />
         <Container className="relative flex min-h-[30rem] items-center py-14 sm:min-h-[36rem] sm:py-16 lg:min-h-[44rem]">
-          <div className="home-hero-card w-full max-w-xl rounded-lg bg-card p-6 ring-1 ring-primary/10 sm:p-8">
+          <div className="w-full max-w-[39rem] text-primary-foreground [--ring:var(--primary-foreground)]">
             <h1
               id="start-title"
-              className="text-3xl font-semibold leading-tight text-navy sm:text-4xl lg:text-5xl"
+              className="text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl"
             >
               Sprawdź, co ci przysługuje w ciąży i po urodzeniu dziecka
             </h1>
-            <p className="mt-4 text-base text-muted-foreground sm:text-lg">
+            <p className="mt-4 text-base text-primary-foreground/95 sm:text-lg">
               Przewodnik prowadzi przez zasiłek chorobowy, macierzyński i rodzicielski. Policz, kiedy
               i ile dostaniesz, oraz zobacz, jakie dokumenty złożyć.
             </p>
@@ -124,7 +124,13 @@ export function HomePage() {
                 Rozpocznij sprawdzenie
                 <ArrowRight />
               </Link>
-              <a href="#swiadczenia" className={buttonVariants({ variant: 'outline', size: 'lg' })}>
+              <a
+                href="#swiadczenia"
+                className={cn(
+                  buttonVariants({ size: 'lg' }),
+                  'bg-background text-foreground hover:bg-secondary hover:text-secondary-foreground',
+                )}
+              >
                 Zobacz świadczenia
               </a>
             </div>

@@ -90,25 +90,21 @@
   --radius-lg: calc(var(--radius) + 2px);
 }
 
-.home-hero {
-  --hero-shade: color-mix(in srgb, var(--brand-green) 35%, black);
-  --hero-shade-left: 46%;
-  --hero-shade-middle: 18%;
-  --hero-shade-right: 4%;
-  --hero-card-shadow: 0 16px 40px rgb(0 0 0 / 20%);
-}
-
 .home-hero-shade {
   background: linear-gradient(
     to right,
-    color-mix(in srgb, var(--hero-shade) var(--hero-shade-left), transparent),
-    color-mix(in srgb, var(--hero-shade) var(--hero-shade-middle), transparent) 54%,
-    color-mix(in srgb, var(--hero-shade) var(--hero-shade-right), transparent)
+    rgb(3 24 15 / 88%),
+    rgb(3 24 15 / 81%) 30%,
+    rgb(3 24 15 / 67%) 47%,
+    rgb(3 24 15 / 32%) 64%,
+    rgb(3 24 15 / 6%)
   );
 }
 
-.home-hero-card {
-  box-shadow: var(--hero-card-shadow);
+@media (width < 72rem) {
+  .home-hero-shade {
+    background: linear-gradient(100deg, rgb(3 24 15 / 88%), rgb(3 24 15 / 76%));
+  }
 }
 
 @layer base {
