@@ -1,7 +1,10 @@
-"""Zaślepka pod logikę świadczeń. Prawdziwe dane i reguły dojdą po doprecyzowaniu wyzwania."""
+"""Katalog świadczeń i symulacja uprawnień."""
+
 from fastapi import APIRouter
 
 from app.schemas.benefit import BenefitSummary
+from app.schemas.benefit_calculation import BenefitSimulation, SimulationResult
+from app.services.benefit_service import calculate_benefits
 
 router = APIRouter(prefix="/benefits", tags=["benefits"])
 
@@ -28,3 +31,8 @@ _BENEFITS: list[BenefitSummary] = [
 @router.get("", response_model=list[BenefitSummary])
 def list_benefits() -> list[BenefitSummary]:
     return _BENEFITS
+
+
+@router.post("/simulate", response_model=SimulationResult)
+def simulate_benefits(request: BenefitSimulation) -> SimulationResult:
+    return calculate_benefits(request)

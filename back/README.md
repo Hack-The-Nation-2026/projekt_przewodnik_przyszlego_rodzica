@@ -1,7 +1,6 @@
 # Backend — Zasiłkowy Przewodnik Przyszłego Rodzica
 
-REST API w FastAPI, które obsłuży logikę uprawnień i kalkulatorów zasiłków.
-Na razie szkielet, treść wyzwania dopiszemy później.
+REST API w FastAPI z katalogiem świadczeń i symulacją uprawnień dla rodziców.
 
 ## Uruchomienie
 
@@ -56,6 +55,49 @@ back/
 cd back
 pytest
 ```
+
+## Symulacja świadczeń
+
+`POST /api/benefits/simulate` jest dostępny w [Swagger UI](http://localhost:8000/docs).
+Przykładowe wejście dla dwojga rodziców z osobnymi podstawami wymiaru:
+
+```json
+{
+  "family": {
+    "event": "birth",
+    "event_date": "2026-06-01",
+    "first_parent": {"employment": "employee", "sickness_insured": true, "monthly_basis_grosze": 600000},
+    "second_parent": {"employment": "employee", "sickness_insured": true, "monthly_basis_grosze": 480000},
+    "claims": [
+      {"benefit": "macierzynski"},
+      {"benefit": "rodzicielski", "days": 224},
+      {"benefit": "rodzicielski", "person": "second_parent", "days": 63}
+    ]
+  }
+}
+```
+
+Wynik zawiera okresy z datami włącznie, kwoty w groszach, numery reguł z `RULES.md`
+i powód rozstrzygnięcia. `missing_data` oznacza, że brakuje faktu potrzebnego do oceny prawa.
+Przy ustalonym prawie i nieznanej podstawie kwota ma wartość `null`.
+
+Przy urodzeniu `first_parent` oznacza matkę, a `second_parent` drugiego rodzica. Wnioski
+w `claims` rozpatrywane są w podanej kolejności. Dla `rodzicielski` wartość `days` na wejściu
+zużywa wspólną pulę przed wydłużeniem. Odpowiedź rozróżnia `base_days_used` i faktyczny czas
+świadczenia w `days`. Użyte wcześniej części i dni można podać w `parental_parts_already_used`
+i `parental_days_already_used`. Przy niepełnym etacie podajcie wymiar umowy w
+`contractual_work_percent` i część pełnego etatu wykonywaną podczas urlopu w `work_percent`.
+
+Pozostałe sekcje żądania obejmują `pregnancy_sickness`, `rehabilitation`, `post_employment`
+i `maternity_top_ups`. `monthly_basis_grosze` to ustalona podstawa miesięczna. Pole
+`fixed_monthly_gross_grosze` służy do prostego przeliczenia, gdy stałe wynagrodzenie jest
+jedynym składnikiem podstawy. Przy złożonej historii zatrudnienia podajcie ustaloną podstawę.
+Wskaźnik waloryzacji świadczenia rehabilitacyjnego podaje się jako mnożnik, np. `"1.1"`.
+
+Do porównań z dokumentami rozpoznanymi na HackNation służy `pytest tests/test_zus_calculation.py`.
+Testy korzystają z ignorowanych plików `PRZYKLADY/zestaw-testowy.json` i
+`PRZYKLADY/krok-3-symulacje.json`. Drugi zawiera żądania dla kalkulatora i określa,
+co dało się potwierdzić w danej sprawie. Bez obu plików testy referencyjne są pomijane.
 
 ## Logowanie przez mObywatel
 

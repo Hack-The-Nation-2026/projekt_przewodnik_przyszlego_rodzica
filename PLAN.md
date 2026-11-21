@@ -36,7 +36,7 @@ ich kopiować ani rozpowszechniać.
 ## Postęp
 
 - [x] Krok 0. Reguły zasiłków na papierze
-- [ ] Krok 1. Zestaw testowy z PRZYKLADY
+- [x] Krok 1. Zestaw testowy z PRZYKLADY
 - [ ] Krok 2. Model danych i API
 - [ ] Krok 3. Silnik uprawnień i kalkulatory
 - [ ] Krok 4. Wejście i logowanie
@@ -113,7 +113,7 @@ do sprawy. Kwota wyliczona pomocniczo jest oznaczona osobno od kwoty potwierdzon
 Katalog i dane ze spraw są przeznaczone do użytku lokalnego pod ignorowaną ścieżką `PRZYKLADY/`.
 
 Gotowe, gdy jedna sprawa z zestawu przechodzi przez kalkulator i daje wynik zgodny z decyzją
-w PDF. Zestaw jest przygotowany, a to porównanie czeka na działające reguły kalkulatora z kroku 3.
+w PDF. Warunek sprawdzono w testach referencyjnych kroku 3.
 
 Brief, pkt 3 f oraz pkt 6.
 
@@ -145,6 +145,12 @@ Serce projektu i największa część punktów za związek z wyzwaniem.
 - Wariant z zaświadczeniem "Za życiem", z wydłużonym urlopem rodzicielskim.
 
 Gotowe, gdy wynik zgadza się z zestawem testowym z kroku 1 dla każdej wybranej sprawy.
+
+Silnik i `POST /api/benefits/simulate` działają. Testy porównują 14 scenariuszy zapisanych
+lokalnie w `PRZYKLADY/krok-3-symulacje.json`. Pełną zgodność części scenariuszy nadal trzeba
+potwierdzić z ZUS. W materiałach brakuje m.in. dat przyjęcia dzieci do pieczy, pełnych rozliczeń
+oraz miesięcznych kwot po PIT potrzebnych do weryfikacji podwyższenia. Jeden skan zawiera różne
+daty we wniosku i w adnotacji o wypłacie. Test wykazuje różnicę zamiast dostosowywać regułę do skanu.
 
 Brief, pkt 3 a, b, c, d, e, f, j.
 
