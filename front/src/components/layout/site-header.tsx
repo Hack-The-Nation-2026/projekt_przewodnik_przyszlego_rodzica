@@ -109,9 +109,12 @@ export function SiteHeader() {
           <div className="flex items-center justify-self-end gap-2">
             {citizen ? (
               <div className="hidden items-center gap-2 sm:flex">
-                <span className="text-sm text-primary-foreground/80">
+                <Link
+                  to="/wejscie"
+                  className="text-sm text-primary-foreground/80 hover:text-primary-foreground hover:underline"
+                >
                   {citizen.first_name} {citizen.last_name}
-                </span>
+                </Link>
                 <Button
                   variant="outline"
                   size="sm"
@@ -166,18 +169,48 @@ export function SiteHeader() {
                   {item.label}
                 </NavLink>
               ))}
-              {!citizen && (
-                <Button
-                  variant="mobywatel"
-                  className="mt-2"
-                  onClick={() => {
-                    setOpen(false)
-                    startMobywatelLogin()
-                  }}
-                >
-                  <EagleMark />
-                  Zaloguj przez mObywatel
-                </Button>
+              {citizen ? (
+                <div className="mt-2 flex items-center gap-2 border-t border-primary-foreground/15 pt-2">
+                  <Link
+                    to="/wejscie"
+                    onClick={() => setOpen(false)}
+                    className="flex-1 rounded-md px-3 py-2.5 text-sm font-medium text-primary-foreground/85 hover:bg-primary-foreground/10"
+                  >
+                    {citizen.first_name} {citizen.last_name}
+                  </Link>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground"
+                    onClick={() => {
+                      setOpen(false)
+                      signOut()
+                    }}
+                  >
+                    Wyloguj
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <Button
+                    variant="mobywatel"
+                    className="mt-2"
+                    onClick={() => {
+                      setOpen(false)
+                      startMobywatelLogin()
+                    }}
+                  >
+                    <EagleMark />
+                    Zaloguj przez mObywatel
+                  </Button>
+                  <Link
+                    to="/wejscie"
+                    onClick={() => setOpen(false)}
+                    className="mt-1 rounded-md px-3 py-2.5 text-center text-sm font-medium text-primary-foreground/85 hover:bg-primary-foreground/10"
+                  >
+                    Wpisz dane ręcznie
+                  </Link>
+                </>
               )}
             </Container>
           </nav>

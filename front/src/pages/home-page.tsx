@@ -129,7 +129,7 @@ export function HomePage() {
               i ile dostaniesz, oraz zobacz, jakie dokumenty złożyć.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link to="/kalkulator" className={buttonVariants({ size: 'lg' })}>
+              <Link to="/wejscie" className={buttonVariants({ size: 'lg' })}>
                 Rozpocznij sprawdzenie
                 <ArrowRight />
               </Link>
@@ -137,6 +137,9 @@ export function HomePage() {
                 Zobacz świadczenia
               </a>
             </div>
+            <p className="mt-4 text-sm text-muted-foreground">
+              Wejdziesz przez mObywatel albo wpiszesz dane ręcznie.
+            </p>
           </div>
         </Container>
       </section>
@@ -144,9 +147,9 @@ export function HomePage() {
       {citizen && (
         <div className="border-b border-border bg-primary/5">
           <Container className="flex flex-wrap items-center gap-x-4 gap-y-2 py-4">
-            <span className="font-medium text-navy">
+            <Link to="/wejscie" className="font-medium text-navy hover:underline">
               {citizen.first_name} {citizen.last_name}
-            </span>
+            </Link>
             <span className="text-muted-foreground">{citizen.case_label}</span>
             <Badge
               variant="outline"

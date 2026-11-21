@@ -5,6 +5,7 @@ const COLUMNS = [
   {
     title: 'Przewodnik',
     links: [
+      { to: '/wejscie', label: 'Wejście i logowanie' },
       { to: '/swiadczenia', label: 'Świadczenia' },
       { to: '/kalkulator', label: 'Kalkulator' },
       { to: '/dokumenty', label: 'Dokumenty' },
