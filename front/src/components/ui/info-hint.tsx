@@ -105,7 +105,7 @@ export function InfoHint({
         onKeyDown={(event) => {
           if (event.key === 'Escape') setOpen(false)
         }}
-        className="flex size-5 shrink-0 items-center justify-center text-current opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none"
+        className="flex size-6 shrink-0 items-center justify-center text-current opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none"
       >
         <Info className="size-3.5" aria-hidden="true" />
       </button>

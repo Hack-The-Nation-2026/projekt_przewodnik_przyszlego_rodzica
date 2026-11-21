@@ -26,7 +26,7 @@ function LogoMark({ className }: { className?: string }) {
 
 function Wordmark() {
   return (
-    <Link to="/" className="flex min-w-0 items-center gap-2.5" aria-label="Strona główna">
+    <Link to="/" className="-my-1 flex min-w-0 items-center gap-2.5 py-1" aria-label="Strona główna">
       <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-primary-foreground text-primary">
         <LogoMark />
       </span>
@@ -152,9 +152,10 @@ export function SiteHeader() {
               ))}
               {!citizen && (
                 <>
+                  {/* Na szerokim ekranie ten sam przycisk stoi już w nagłówku. */}
                   <Button
                     variant="mobywatelHeader"
-                    className="mt-2"
+                    className="mt-2 sm:hidden"
                     onClick={() => {
                       setOpen(false)
                       startMobywatelLogin()

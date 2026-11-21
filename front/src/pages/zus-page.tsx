@@ -61,9 +61,9 @@ function Toggle({
         <Button
           key={option.label}
           type="button"
-          size="sm"
           variant={option.value === value ? 'default' : 'outline'}
           aria-pressed={option.value === value}
+          className="h-10 sm:h-9"
           onClick={() => onChange(option.value)}
         >
           {option.label}

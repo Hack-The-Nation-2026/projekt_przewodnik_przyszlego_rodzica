@@ -47,7 +47,7 @@ ich kopiować ani rozpowszechniać.
 - [x] Krok 9. Ryzyka i ostrzeżenia
 - [x] Krok 10. Trudne sytuacje i wsparcie
 - [x] Krok 11. Panel administracyjny
-- [ ] Krok 12. Wygląd i responsywność
+- [x] Krok 12. Wygląd i responsywność
 - [ ] Krok 13. Testy na sprawach i upload wniosków
 - [ ] Krok 14. Funkcje z AI
 - [ ] Krok 15. Materiały do oddania
@@ -328,6 +328,16 @@ Pełne RWD jest wymagane, a kompletność i UX to 25% oceny.
 - Upewnić się, że pierwszy ekran da się obsłużyć kciukiem.
 
 Gotowe, gdy żaden ekran nie rozpada się na wąskim widoku.
+
+Zrobione 21.11. Przeszedłem wszystkie trasy, także panel, wsparcie i ekran 404, na szerokościach
+320, 360, 390, 768, 1024, 1280, 1440 i 1920 pikseli. Żaden ekran nie przewija się w poziomie,
+tekst nie schodzi poniżej 12 px, a podstawowy tekst ma 16–18 px. Przyciski pierwszego ekranu mają
+44 px wysokości, pozycje rozwiniętego menu 43 px. Z tego przejścia zostały poprawki dotyku: ikony
+„i” mają 24 px zamiast 20, przełączniki w symulacji ZUS 40 px na telefonie, logo w nagłówku i linki
+w stopce dostały wyższy obszar dotyku, a podwójny przycisk logowania zniknął z rozwiniętego menu
+na szerokich ekranach. Dialog „Dokumenty i terminy” mieści się na 390 px bez wewnętrznego
+przewijania, a karta podziału urlopu i karty świadczeń układają się w jedną kolumnę od 1024 px
+w dół.
 
 Brief, pkt 4 i pkt 5.
 

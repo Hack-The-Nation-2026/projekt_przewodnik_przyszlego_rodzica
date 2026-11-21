@@ -53,15 +53,15 @@ export function SiteFooter() {
         {columns.map((column) => (
           <div key={column.title}>
             <p className="text-sm font-semibold">{column.title}</p>
-            <ul className="mt-3 space-y-2 text-sm text-primary-foreground/95">
+            <ul className="mt-2 text-sm text-primary-foreground/95">
               {column.links.map((link) => (
                 <li key={link.label + link.to}>
                   {link.to.startsWith('http') ? (
-                    <a className="hover:text-primary-foreground" href={link.to}>
+                    <a className="inline-block py-1 hover:text-primary-foreground" href={link.to}>
                       {link.label}
                     </a>
                   ) : (
-                    <Link className="hover:text-primary-foreground" to={link.to}>
+                    <Link className="inline-block py-1 hover:text-primary-foreground" to={link.to}>
                       {link.label}
                     </Link>
                   )}
