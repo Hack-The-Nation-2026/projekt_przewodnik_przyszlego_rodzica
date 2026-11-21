@@ -38,17 +38,34 @@ export function HomePage() {
   return (
     <>
       <section className="relative isolate overflow-hidden border-b border-border bg-secondary/40">
-        {/* Zdjęcie zajmuje prawy skraj sekcji: dochodzi do krawędzi okna i ma skośny lewy brzeg. */}
+        {/* Zdjęcie zajmuje prawy skraj sekcji: dochodzi do krawędzi okna, ma skośny lewy brzeg
+            i rzuca cień na treść obok. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 right-0 hidden w-[40%] lg:block"
-          style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 16% 100%)' }}
+          className="pointer-events-none absolute inset-y-0 right-0 hidden lg:block lg:w-[46%] xl:w-[52%] xl:max-w-[60rem]"
         >
-          <img src="/formularz.jpg" alt="" className="size-full object-cover" />
+          <div
+            className="size-full"
+            style={{
+              filter:
+                'drop-shadow(-10px 0 14px rgba(29, 43, 58, 0.32)) drop-shadow(-34px 0 46px rgba(29, 43, 58, 0.22))',
+            }}
+          >
+            <div
+              className="size-full"
+              style={{ clipPath: 'polygon(16% 0, 100% 0, 100% 100%, 0 100%)' }}
+            >
+              <img
+                src="/formularz.jpg"
+                alt=""
+                className="size-full object-cover object-[50%_38%]"
+              />
+            </div>
+          </div>
         </div>
 
         <Container className="relative py-16 lg:py-24">
-          <div className="max-w-2xl lg:max-w-[34rem]">
+          <div className="max-w-2xl lg:max-w-[28rem] xl:max-w-[30rem]">
             <h1 className="text-4xl font-semibold leading-tight text-navy sm:text-5xl">
               Sprawdź, co ci przysługuje w ciąży i po urodzeniu dziecka
             </h1>
@@ -70,11 +87,11 @@ export function HomePage() {
           {/* Na wąskich ekranach to samo zdjęcie wchodzi pod tekst i domyka sekcję, z tym samym skosem. */}
           <figure
             className="relative -mx-4 -mb-16 mt-10 aspect-[4/3] overflow-hidden sm:-mx-6 lg:hidden"
-            style={{ clipPath: 'polygon(0 12%, 100% 0, 100% 100%, 0 100%)' }}
+            style={{ clipPath: 'polygon(0 0, 100% 12%, 100% 100%, 0 100%)' }}
           >
             <img
               src="/formularz.jpg"
-              alt="Dwoje rodziców wypełnia przy stole wniosek o zasiłek."
+              alt="Rodzice wypełniają przy kuchennym stole wniosek o zasiłek."
               className="size-full object-cover"
             />
           </figure>
