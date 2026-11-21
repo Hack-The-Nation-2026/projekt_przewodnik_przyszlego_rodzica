@@ -142,3 +142,93 @@ export interface AppSettings {
   features: FeatureFlag[]
   updated_at: string | null
 }
+
+/** Status decyzji w zestawie spraw. Te same wartości co w kalkulatorze. */
+export type CaseStatus = 'granted' | 'denied' | 'partially_granted' | 'missing_data'
+export type CaseParent = 'first_parent' | 'second_parent'
+
+export interface CaseExpectedRow {
+  benefit: string
+  person: CaseParent
+  status: CaseStatus
+  gross_grosze: number | null
+}
+
+/** Wniosek z zestawu demonstracyjnego, widoczny na liście wyboru. */
+export interface CaseSummary {
+  id: string
+  title: string
+  facts: string
+  applicant_label: string
+  expected: CaseExpectedRow[]
+}
+
+export interface CaseInsurance {
+  covered: boolean | null
+  reason: string
+  rule_ids: string[]
+}
+
+export interface CaseComparisonRow {
+  benefit: string
+  person: CaseParent
+  status: CaseStatus
+  gross_grosze: number | null
+  expected_status: CaseStatus
+  expected_gross_grosze: number | null
+  matches: boolean
+}
+
+export interface CaseAssessment {
+  benefit: string
+  person: CaseParent
+  status: CaseStatus
+  reason_code: string
+  reason: string
+  rule_ids: string[]
+  days: number
+  denied_days: number
+  monthly_basis_grosze: number | null
+  gross_grosze: number | null
+  periods: {
+    kind: string
+    start: string
+    end: string
+    days: number
+    rate_percent: number
+    daily_grosze: number | null
+    gross_grosze: number | null
+  }[]
+}
+
+/** Wynik przejścia wniosku przez weryfikację i kalkulator. */
+export interface CaseResult {
+  case_id: string
+  title: string
+  facts: string
+  applicant: {
+    label: string
+    employment: 'employee' | 'contractor' | 'self_employed' | 'none'
+    insured: boolean | null
+    insurance_kind: 'compulsory' | 'voluntary' | null
+    insured_days: number | null
+    first_time_insured: boolean
+    contribution_arrears: boolean | null
+    employment_ended_in_pregnancy: boolean
+    employment_end_reason: string | null
+  }
+  insurance: CaseInsurance
+  assessments: CaseAssessment[]
+  comparison: CaseComparisonRow[]
+  matches: boolean | null
+}
+
+/** Wniosek do wysłania z formularza albo wgrany z pliku JSON. */
+export interface CaseApplication {
+  id: string
+  title: string
+  facts: string
+  applicant: Record<string, unknown>
+  request: Record<string, unknown>
+  expected: CaseExpectedRow[]
+}

@@ -7,6 +7,7 @@ import { MobywatelPage } from '@/pages/mobywatel-page'
 import { NotFoundPage } from '@/pages/not-found-page'
 import { PanelPage } from '@/pages/panel-page'
 import { PlaceholderPage } from '@/pages/placeholder-page'
+import { SprawyPage } from '@/pages/sprawy-page'
 import { WejsciePage } from '@/pages/wejscie-page'
 import { WsparciePage } from '@/pages/wsparcie-page'
 import { ZusPage } from '@/pages/zus-page'
@@ -31,6 +32,7 @@ export default function App() {
         />
         <Route path="kalkulator" element={<KalkulatorPage />} />
         <Route path="dokumenty" element={<DokumentyPage />} />
+        <Route path="sprawy" element={<SprawyPage />} />
         <Route path="zus" element={<ZusPage />} />
         <Route path="panel" element={<PanelPage />} />
         <Route path="wsparcie/:topic?" element={<WsparciePage />} />

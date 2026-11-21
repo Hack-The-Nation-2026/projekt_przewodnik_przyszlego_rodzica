@@ -14,6 +14,7 @@ const NAV = [
   { to: '/swiadczenia', label: 'Świadczenia' },
   { to: '/kalkulator', label: 'Kalkulator' },
   { to: '/dokumenty', label: 'Dokumenty' },
+  { to: '/sprawy', label: 'Sprawy' },
   { to: '/zus', label: 'ZUS' },
   { to: '/wsparcie', label: 'Wsparcie' },
   { to: '/o-projekcie', label: 'O projekcie' },
@@ -26,7 +27,7 @@ function LogoMark({ className }: { className?: string }) {
 
 function Wordmark() {
   return (
-    <Link to="/" className="-my-1 flex min-w-0 items-center gap-2.5 py-1" aria-label="Strona główna">
+    <Link to="/" className="-my-1 flex shrink-0 items-center gap-2.5 py-1" aria-label="Strona główna">
       <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-primary-foreground text-primary">
         <LogoMark />
       </span>
@@ -80,7 +81,7 @@ export function SiteHeader() {
           <Wordmark />
 
           <nav
-            className="hidden flex-1 items-center justify-center gap-0.5 xl:flex xl:px-2"
+            className="hidden flex-1 items-center justify-center gap-0.5 xl:flex xl:px-1"
             aria-label="Nawigacja główna"
           >
             {nav.map((item) => (
@@ -90,7 +91,7 @@ export function SiteHeader() {
                 end={item.end}
                 className={({ isActive }) =>
                   cn(
-                    'rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap transition-colors',
+                    'rounded-md px-2 py-2 text-sm font-medium whitespace-nowrap transition-colors',
                     isActive
                       ? 'bg-primary-foreground/10 text-primary-foreground'
                       : 'text-primary-foreground/95 hover:bg-primary-foreground/10 hover:text-primary-foreground',
