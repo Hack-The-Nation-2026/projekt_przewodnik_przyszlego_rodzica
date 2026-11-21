@@ -354,6 +354,49 @@ Gotowe, gdy wybrana sprawa z `PRZYKLADY/` przechodzi przez stronę i daje wynik 
 
 Brief, pkt 4 oraz pkt 6.
 
+### Co jest
+
+- `GET /api/cases` zwraca dziesięć spraw, `GET /api/cases/{id}` liczy wybraną, a
+  `POST /api/cases/simulate` przyjmuje wniosek wgrany z pliku. `GET /api/cases/{id}/application`
+  daje ten sam wniosek do pobrania, żeby można go było poprawić i wgrać z powrotem.
+- Sprawy leżą w `back/app/data/demo-cases.json` i jadą z kodem. Regulamin nie pozwala
+  rozpowszechniać skanów ZUS, więc dane są wymyślone, a strona mówi o tym wprost.
+- Strona `/sprawy`: kafle spraw, wgrywanie pliku JSON, weryfikacja ubezpieczenia z podstawą
+  prawną, wyliczenie i porównanie z zapisaną decyzją. Wgrany wniosek z błędną decyzją pokazuje
+  różnicę na czerwono.
+- `back/tests/test_rules.py` mapuje wszystkie 85 identyfikatorów z `RULES.md` na scenariusz
+  albo na wpis „poza silnikiem” z powodem. Nowa reguła w `RULES.md` bez wpisu wywala test.
+- `back/tests/test_cases.py` przechodzi każdą sprawę przez endpoint i sprawdza zgodność.
+
+### Stan testu na sprawach
+
+- Dziesięć spraw z zestawu: 10/10 zgodnych, kwoty i statusy co do grosza.
+- 203 testy backendu przechodzą, 32 są pominięte (18 reguł poza silnikiem, 14 porównań z
+  lokalnym zestawem ZUS).
+- Pełny przebieg na `PRZYKLADY/` jest zablokowany, nie zaliczony. 87 PDF-ów to zdjęcia formularzy
+  i decyzji: brak warstwy tekstowej, pismo odręczne, dane zaczernione. `pdftotext` nic nie daje,
+  a OCR (tesseract, pol) czyta tylko nagłówki, więc nie da się z tego zrobić wiarygodnego
+  zestawu referencyjnego bez ręcznego przepisania każdej sprawy.
+- Sprawy demonstracyjne mają oczekiwania wyliczone tym samym silnikiem, więc dowodzą spięcia
+  strony z kalkulatorem i powtarzalności, a nie zgodności z decyzją ZUS. Poprawność reguł
+  opiera się na `test_rules.py`.
+
+### Luki, które ujawniła mapa reguł
+
+- F8: szpital po przyjęciu starszego dziecka daje 0 dni, bo okno liczy się od urodzenia.
+- C4: brak limitu 91 dni po ustaniu ubezpieczenia.
+- C1: silnik zna tylko niezdolność w ciąży (100%), wariantu 80% nie ma.
+- G6: termin urlopu rodzicielskiego to 1 stycznia roku, w którym dziecko kończy 7 lat, czyli
+  o rok dłużej niż przepis.
+- G9, G10: górne granice wydłużenia (82/86 i 130/134 tygodni) nie są pilnowane.
+- G7, H3, F9: terminy składania wniosków (21 i 7 dni) nie są sprawdzane.
+- F7: części urlopu przy przyjęciu dziecka liczą się wspólnym limitem pięciu, bez rozróżnienia.
+- Sekcja L: podstawa wymiaru przychodzi z formularza, więc L1, L2, L4, L5, L7, L8, L9, L13 są
+  poza silnikiem. Z sekcji L działa tylko przeliczenie stałego wynagrodzenia (13,71%) i limit
+  po ustaniu ubezpieczenia.
+
+Krok zostaje nieodhaczony, bo kryterium mówi o sprawie z `PRZYKLADY/`.
+
 ## Krok 14. Funkcje z AI
 
 Brief dopuszcza AI w aplikacji i w procesie twórczym, ale każe wskazać zakres użycia.
