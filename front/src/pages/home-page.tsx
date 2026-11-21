@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Calculator, ChevronDown, FileText, HeartHandshake } from 'lucide-react'
+import { ArrowRight, Calculator, ChevronDown, FileText, HeartHandshake, Sprout } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -29,6 +29,7 @@ const STEPS = [
 const ACTIONS = [
   { to: '/kalkulator', icon: Calculator, title: 'Policz zasiłek', body: 'Terminy i kwoty dla obojga rodziców.' },
   { to: '/dokumenty', icon: FileText, title: 'Zbierz dokumenty', body: 'Wnioski i zaświadczenia.' },
+  { to: '/planowanie', icon: Sprout, title: 'Planujesz dziecko?', body: 'Lista przygotowań, zanim pojawi się data porodu.' },
   { to: '/wsparcie', icon: HeartHandshake, title: 'Znajdź wsparcie', body: 'Pomoc w trudnych sytuacjach.' },
 ]
 
@@ -209,7 +210,7 @@ export function HomePage() {
             <h2 id="wsparcie-title" className="text-2xl font-semibold text-navy sm:text-3xl">
               Dokumenty i wsparcie
             </h2>
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {ACTIONS.map((action) => (
                 <Link
                   key={action.to}

@@ -152,21 +152,35 @@ function ChildFields({ index, values, multiple }: { index: number; values: Inter
   )
 }
 
-export function RoleFields() {
-  return <Field name="role" label="Twoja rola" choices={[
-    ['mother', 'Matka dziecka'], ['father', 'Ojciec dziecka'],
-    ['adoption', 'Rodzic adopcyjny'], ['foster', 'Rodzic zastępczy'],
-  ]} />
+/**
+ * Pierwszy ekran decyduje o całej reszcie: od razu pytamy, na jakim etapie
+ * jest sprawa. Trzecia odpowiedź prowadzi do trybu planowania, a czwarta do
+ * trybu „jestem w trakcie urlopu”, bo te dwie sytuacje mają własne ekrany.
+ */
+export function RoleFields({ values }: { values: InterviewValues }) {
+  const family = values.role === 'mother' || values.role === 'father'
+  return (
+    <div className={fieldsGrid}>
+      <Field name="role" label="Twoja rola" choices={[
+        ['mother', 'Matka dziecka'], ['father', 'Ojciec dziecka'],
+        ['adoption', 'Rodzic adopcyjny'], ['foster', 'Rodzic zastępczy'],
+      ]}
+        explain="Na tej podstawie dobierzemy pytania o Twoją sytuację." />
+      {family && <Field name="birthStage" label="Na jakim etapie jesteście" choices={[
+        ['expected', 'Jesteśmy w ciąży'],
+        ['born', 'Dziecko już się urodziło'],
+        ['planning', 'Dopiero planujemy dziecko'],
+        ['on_leave', 'Jestem w trakcie urlopu'],
+      ]}
+        explain="Trzecia odpowiedź otwiera tryb planowania, a czwarta tryb „jestem w trakcie urlopu”. W obu pytamy tylko o teraźniejszość." />}
+    </div>
+  )
 }
 
 export function FamilyEventFields({ values }: { values: InterviewValues }) {
   const placement = isPlacement(values)
   return (
     <div className={fieldsGrid}>
-      {!placement && <Field name="birthStage" label="Etap rodzicielstwa" choices={[
-        ['expected', 'Spodziewamy się dziecka'], ['born', 'Dziecko już się urodziło'],
-      ]}
-        explain="Wybierz, czy dziecko już jest na świecie, czy dopiero przyjdzie. Przy planowanym porodzie policzymy scenariusz na dziś." />}
       <Field
         name="eventDate"
         label={placement ? 'Data przyjęcia dziecka na wychowanie'

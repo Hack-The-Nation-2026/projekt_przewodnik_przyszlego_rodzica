@@ -3,10 +3,11 @@ import { useMutation } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
 import { Check, CircleAlert, CircleHelp, ClipboardList, FileText, FlaskConical, Minus, Pencil, Printer, X } from 'lucide-react'
 import { useForm, useWatch } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { BenefitWarnings } from '@/components/benefit-warnings'
-import { useFeature } from '@/hooks/use-settings'
+import { WhyPanelBody, WhyTrigger } from '@/components/why-panel'
+import { useFeature, useSettings } from '@/hooks/use-settings'
 import { ParentalPlanCard } from '@/components/parental-plan'
 import type { RateVariant } from '@/components/parental-plan'
 import { PageContainer } from '@/components/layout/page-container'
@@ -19,6 +20,10 @@ import { InfoHint } from '@/components/ui/info-hint'
 import { api } from '@/lib/api'
 import { contextFromInterview } from '@/lib/benefit-document-context'
 import { buildEntitlementCard, saveEntitlementCard } from '@/lib/entitlement-card'
+import { buildWhyPanel } from '@/lib/why-panel'
+import { buildWeekTimeline, withSharedScale } from '@/lib/week-timeline'
+import type { TimelineInput } from '@/lib/week-timeline'
+import { WeekTimeline } from '@/components/week-timeline'
 import { saveLeaveCase } from '@/lib/leave-applications'
 import { benefitList, buildInterview } from '@/lib/benefit-interview'
 import type { Assessment, BenefitCode, ParentalPlan, ParentalPool, SimulationResponse } from '@/lib/benefit-interview'
@@ -191,9 +196,10 @@ function buildPlan(
   }
 }
 
-function BenefitCard({ assessment, onShowDocuments }: {
+function BenefitCard({ assessment, onShowDocuments, onWhy }: {
   assessment: Assessment
   onShowDocuments: (benefit: BenefitCode) => void
+  onWhy: (benefit: BenefitCode) => void
 }) {
   const { name, what, sources } = benefitList[assessment.benefit]
   const active = statusesWithPayment.has(assessment.status)
@@ -238,6 +244,9 @@ function BenefitCard({ assessment, onShowDocuments }: {
                 <dd className="mt-0.5 text-sm font-medium">
                   {assessment.days ? (assessment.days === 1 ? '1 dzień' : `${assessment.days} dni`) : '—'}
                 </dd>
+                <dd className="mt-1">
+                  <WhyTrigger label="dlaczego tak" onClick={() => onWhy(assessment.benefit)} />
+                </dd>
                 {!!deniedDays && assessment.status === 'partially_granted' && (
                   <dd className="text-xs text-muted-foreground">Odmowa za {deniedDays} dni</dd>
                 )}
@@ -257,6 +266,9 @@ function BenefitCard({ assessment, onShowDocuments }: {
                   {assessment.gross_grosze == null
                     ? 'Brakuje danych do wyliczenia'
                     : currency.format(assessment.gross_grosze / 100)}
+                </dd>
+                <dd className="mt-1">
+                  <WhyTrigger label="dlaczego tak" onClick={() => onWhy(assessment.benefit)} />
                 </dd>
               </div>
             )}
@@ -317,6 +329,7 @@ export function KalkulatorPage() {
   const [submitted, setSubmitted] = useState<InterviewValues | null>(null)
   const [secondShareDays, setSecondShareDays] = useState(0)
   const [documentBenefit, setDocumentBenefit] = useState<BenefitCode | null>(null)
+  const [whyBenefit, setWhyBenefit] = useState<BenefitCode | null>(null)
   const form = useForm<InterviewValues>({
     resolver: zodResolver(interviewSchema),
     defaultValues: interviewDefaults,
@@ -329,6 +342,7 @@ export function KalkulatorPage() {
   const simulation = useMutation({ mutationFn: simulate, onSuccess: setResult })
   const { mutate } = simulation
   // Panel administracyjny może wyłączyć kartę podziału urlopu i sekcję ostrzeżeń.
+  const { data: settings } = useSettings()
   const parentalPlanEnabled = useFeature('parental_plan')
   const riskWarningsEnabled = useFeature('risk_warnings')
   const steps = getInterviewSteps(values)
@@ -348,6 +362,51 @@ export function KalkulatorPage() {
   const secondShare = Math.min(secondShareDays, sharedTotal)
   const workingOnLeave = !!values.workingOnLeave && values.employment === 'employee'
   const respondent = values.role === 'father' ? 'second_parent' : 'first_parent'
+  const timelineInput: TimelineInput | null = submitted && result && result.documentContext.eventDate
+    ? {
+        values: submitted,
+        context: result.documentContext,
+        assessments: resultCards,
+        pool: result.pool,
+        respondent,
+        secondShareDays: secondShare,
+        averagedGross: result.averaged.gross || null,
+        flatGross: result.flat.gross || null,
+        settings: settings
+          ? { exclusive_weeks: settings.leave.exclusive_weeks, parental_weeks_single: settings.leave.parental_weeks_single }
+          : undefined,
+      }
+    : null
+  const timelineShares = timelineInput && result?.pool && values.partnerEmployment !== 'unknown' && !workingOnLeave
+    ? [0, sharedTotal]
+    : []
+  const timelineScale = timelineInput
+    ? withSharedScale([
+        buildWeekTimeline(timelineInput),
+        ...timelineShares.map((share) => buildWeekTimeline({ ...timelineInput, secondShareDays: share })),
+      ])
+    : []
+  const timeline = timelineScale[0] ?? null
+  const timelineCompare = timelineShares.map((share, index) => ({
+    label: share === 0
+      ? 'Pierwszy rodzic bierze całość'
+      : `Drugi rodzic bierze ${Math.round(share / 7)} tygodni`,
+    data: timelineScale[index + 1],
+  }))
+  const whyAssessment = whyBenefit
+    ? resultCards.find((assessment) => assessment.benefit === whyBenefit) ?? null
+    : null
+  const whyData = whyAssessment && submitted && result
+    ? buildWhyPanel({
+        assessment: whyAssessment,
+        values: submitted,
+        context: result.documentContext,
+        pool: result.pool,
+        averaged: result.averaged,
+        flat: result.flat,
+        settings,
+      })
+    : null
 
   function goToStep(id: string) {
     focusNextStep.current = true
@@ -402,6 +461,16 @@ export function KalkulatorPage() {
 
   async function advance(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    // Dwie odpowiedzi z pierwszego ekranu mają własne tryby, więc nie walidujemy
+    // formularza: wywiad o ciąży nie ma tam czego szukać.
+    if (values.birthStage === 'planning') {
+      navigate('/planowanie')
+      return
+    }
+    if (values.birthStage === 'on_leave') {
+      navigate('/urlop')
+      return
+    }
     if (!nextStep) {
       await form.handleSubmit(submitAnswers, (errors) => {
         const invalidStep = steps.find(({ fields }) => fields.some((field) => errors[field]))
@@ -546,6 +615,18 @@ export function KalkulatorPage() {
                 Planowany powrót do pracy {date.format(new Date(result.returnDate))}.
               </p>
             )}
+            {resultCards.some((assessment) => assessment.status === 'denied') && (
+              <div className="mt-4 rounded-lg border border-gold bg-gold/10 p-4">
+                <p className="font-medium">Masz już decyzję odmowną?</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Jeśli ZUS odmówił wypłaty, na odwołanie jest miesiąc od doręczenia decyzji.{' '}
+                  <Link to="/odwolanie" className="font-medium text-primary underline decoration-dotted underline-offset-2">
+                    Sprawdź, co dalej
+                  </Link>
+                  .
+                </p>
+              </div>
+            )}
             <Button className="mt-4 font-semibold" size="lg" type="button" onClick={() => editAnswers(steps[0].id)}>
               <Pencil aria-hidden="true" />
               Edytuj odpowiedzi
@@ -583,10 +664,16 @@ export function KalkulatorPage() {
                   key={assessment.benefit}
                   assessment={assessment}
                   onShowDocuments={showDocuments}
+                  onWhy={setWhyBenefit}
                 />
               ))}
             </div>
           </div>
+          {timeline && (
+            <div className="mt-6 border-t border-border pt-6">
+              <WeekTimeline data={timeline} variants={timelineCompare} />
+            </div>
+          )}
           <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-3 border-t border-border pt-6">
             <Button type="button" size="lg" className="font-semibold" onClick={openCard}>
               <Printer aria-hidden="true" />
@@ -601,6 +688,13 @@ export function KalkulatorPage() {
               wniosek. Do wydruku albo pokazania kadrom na telefonie.
             </p>
           </div>
+          <Dialog
+            open={whyBenefit !== null}
+            onClose={() => setWhyBenefit(null)}
+            title={whyAssessment ? `Dlaczego tak — ${benefitList[whyAssessment.benefit].name}` : 'Dlaczego tak'}
+          >
+            {whyData && <WhyPanelBody data={whyData} />}
+          </Dialog>
           <Dialog
             open={documentBenefit !== null}
             onClose={closeDocuments}

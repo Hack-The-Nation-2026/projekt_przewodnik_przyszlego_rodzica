@@ -6,8 +6,11 @@ import { KalkulatorPage } from '@/pages/kalkulator-page'
 import { KartaRoute } from '@/pages/karta-page'
 import { MobywatelPage } from '@/pages/mobywatel-page'
 import { NotFoundPage } from '@/pages/not-found-page'
+import { OdwolaniePage } from '@/pages/odwolanie-page'
+import { PlanowaniePage } from '@/pages/planowanie-page'
 import { PanelPage } from '@/pages/panel-page'
 import { SprawyPage } from '@/pages/sprawy-page'
+import { UrlopPage } from '@/pages/urlop-page'
 import { SwiadczeniaPage } from '@/pages/swiadczenia-page'
 import { WejsciePage } from '@/pages/wejscie-page'
 import { WnioskiPage } from '@/pages/wnioski-page'
@@ -29,6 +32,9 @@ export default function App() {
         <Route path="dokumenty" element={<DokumentyPage />} />
         <Route path="sprawy" element={<SprawyPage />} />
         <Route path="wnioski" element={<WnioskiPage />} />
+        <Route path="planowanie" element={<PlanowaniePage />} />
+        <Route path="urlop" element={<UrlopPage />} />
+        <Route path="odwolanie" element={<OdwolaniePage />} />
         <Route path="zus" element={<ZusPage />} />
         <Route path="panel" element={<PanelPage />} />
         <Route path="wsparcie/:topic?" element={<WsparciePage />} />

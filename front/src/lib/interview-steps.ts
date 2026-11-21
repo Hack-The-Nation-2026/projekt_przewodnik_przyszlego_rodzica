@@ -31,13 +31,13 @@ export function getInterviewSteps(values: InterviewValues): InterviewStep[] {
     {
       id: 'role', title: 'Zacznijmy od Twojej roli',
       description: 'Na tej podstawie dobierzemy pytania o Twoją sytuację.',
-      fields: ['role'],
+      fields: ['role', 'birthStage'],
       Fields: RoleFields,
     },
     {
       id: 'family', title: 'Poród lub przyjęcie dziecka',
       description: 'Podaj datę zdarzenia i liczbę dzieci.',
-      fields: ['birthStage', 'eventDate', 'childCount'],
+      fields: ['eventDate', 'childCount'],
       Fields: FamilyEventFields,
     },
     {

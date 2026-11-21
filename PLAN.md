@@ -52,6 +52,7 @@ ich kopiować ani rozpowszechniać.
 - [x] Krok 14. Asystent z AI
 - [ ] Krok 15. Materiały do oddania
 - [x] Krok 17. Karta uprawnień, kreator wniosków i dostępność
+- [x] Krok 18. Oś czasu, wyjaśnienia liczb i ścieżki po fakcie
 - [ ] Krok 16. Weryfikacja przed oddaniem
 
 ## Krok 0. Reguły zasiłków na papierze
@@ -571,6 +572,56 @@ schodzi do 11,5 px, żeby karta zmieściła się na jednej kartce A4.
 
 Brief, pkt 3 g oraz pkt 4.
 
+## Krok 18. Oś czasu, wyjaśnienia liczb i ścieżki po fakcie
+
+Cztery moduły, które odpowiadają na pytania zadawane w środku sprawy, a nie tylko przed nią.
+
+- Oś czasu tygodni: macierzyński i rodzicielski na jednej taśmie, ze znacznikiem „dziś” i porodem,
+  z nieprzenoszalnymi tygodniami wyróżnionymi i porównaniem wariantów podziału.
+- Panel „dlaczego tak” przy każdej kwocie i każdym wymiarze: rozbicie na części, reguła wymiaru,
+  kontrprzykłady i podstawa prawna; wariant dla braku uprawnień z drogą wyjścia.
+- Tryb planowania dla ludzi, którzy dopiero myślą o dziecku, i tryb „jestem w trakcie urlopu”.
+- Ścieżka po decyzji odmownej: diagnoza sporu, terminarz od doręczenia i projekt odwołania.
+- Słownik pojęć w dymkach: jedno źródło tekstu dla całego serwisu.
+
+Gotowe, gdy każdy z tych ekranów da się przejść bez zaglądania do aktów prawnych, a liczby mają
+widoczne uzasadnienie.
+
+Zrobione 22.11. Oś czasu liczy `front/src/lib/week-timeline.ts` z okresów symulacji i z puli urlopu:
+pasma dla obojga rodziców, znaczniki „dziś”, porodu i terminów, a przy nieprzewidzianej dacie porodu
+plakietka „szacunkowe”. Warianty porównawcze stoją na wspólnej podziałce, bo taśmy o różnych skalach
+nie dałyby się zestawić wzrokiem. Na telefonie taśma obraca się w pion: ten sam plan czytany jako
+lista tygodni z datami i kwotami.
+
+Panel „dlaczego tak” (`front/src/lib/why-panel.ts`) rozbija kwotę na podstawę wymiaru, stawkę,
+wymiar i kwotę dzienną, podaje regułę wymiaru zdaniem, dokłada kontrprzykłady z tej samej sytuacji
+i linkuje podstawę prawną. Przy braku uprawnień pokazuje, który warunek nie został spełniony i co go
+spełni. Nie ocenia szans: procentów „szans na wygraną” nie ma tu nigdzie.
+
+Tryb planowania pyta o teraźniejszość i składa listę przygotowań podzieloną na „teraz”, „przed
+ciążą” i „w ciąży”. Nie liczy kwot ani tygodni, a pozycje, których nie potwierdzają materiały ZUS,
+dostają znacznik „do potwierdzenia w ZUS” bez liczby. Tryb „jestem w trakcie urlopu” daje status
+jednym zdaniem, najbliższe decyzje z datami i symulację „jeśli złożę teraz” obok „jeśli poczekam”.
+Stan trybu urlopu zapisuje się w przeglądarce, więc kolejna wizyta pokazuje status bez wywiadu.
+Gdy termin na 81,5% minął, oba warianty liczą się po realnych stawkach, a nie po tej, do której nie
+ma już prawa.
+
+Ekran `/odwolanie` prowadzi od czterech pytań o decyzję przez diagnozę sporu i listę dokumentów do
+projektu pisma. Termin liczy się jako miesiąc od doręczenia, a nie trzydzieści dni, i po jego
+minięciu ekran pokazuje drugą drogę: wniosek o zmianę decyzji przy nowych dowodach. Terminy sądowe
+i opłaty mają znacznik „do potwierdzenia”, bo ich nie zgadujemy. Wejście jest dwa: link w nawigacji
+i pytanie „masz już decyzję odmowną?” pod wynikiem bez uprawnień.
+
+Słownik (`front/src/lib/glossary.ts`) trzyma czternaście pojęć w jednym miejscu i pokazuje je
+kropkowanym podkreśleniem przez ten sam mechanizm dymków co reszta serwisu. Definicja nie używa
+innych niezdefiniowanych pojęć i nie zawiera liczb. Cała lista stoi też na ekranie `/dokumenty`.
+
+Moduły a) do j) z briefu zostają nietknięte; tryb planowania domyka zdanie o braku weryfikacji przed
+porodem, a ścieżka po decyzji odmownej obsługuje literę h) w najostrzejszej wersji: nie „uważaj,
+możesz stracić prawo”, a „straciłeś i da się to jeszcze naprawić”.
+
+Brief, pkt 3 oraz pkt 4.
+
 ## Mapa wymagań na kroki
 
 | Wymaganie | Krok |
@@ -603,6 +654,15 @@ Brief, pkt 3 g oraz pkt 4.
 | Interfejs responsywny | 12 |
 | Wskazanie funkcji z AI | 14 |
 | Upload przykładowych wniosków | 13 |
+| Karta uprawnień i terminy w jednym dokumencie | 17 |
+| Kreator wniosków urlopowych | 17 |
+| Dostępność: kontrast, rozmiar tekstu, lektor, prosty język | 17 |
+| Oś czasu tygodni i porównanie wariantów | 18 |
+| Wyjaśnienie każdej liczby: „dlaczego tak” | 18 |
+| Tryb planowania przed ciążą | 18 |
+| Tryb „jestem w trakcie urlopu” | 18 |
+| Ścieżka po decyzji odmownej | 18 |
+| Słownik pojęć w dymkach | 18 |
 | Materiały graficzne | 15 |
 | Stack React i Python, REST | 2, 4 |
 

@@ -4,6 +4,7 @@ import {
   ArrowLeft, Check, CircleAlert, Download, FileText, Printer, Send, X,
 } from 'lucide-react'
 import { EntitlementCard } from '@/components/entitlement-card'
+import { Term } from '@/components/glossary/term'
 import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -184,7 +185,10 @@ export function WnioskiPage() {
               <CardContent className="space-y-2 text-sm">
                 <p><span className="font-medium">Kiedy złożyć: </span>{selected.when}</p>
                 <p><span className="font-medium">Po terminie: </span>{selected.late}</p>
-                <p><span className="font-medium">Adresat: </span>{selected.addressee}</p>
+                <p className="flex flex-wrap items-baseline gap-1">
+                  <span className="font-medium">Adresat: </span>
+                  <Term name="platnik">{selected.addressee}</Term>
+                </p>
                 {selected.period && (
                   <p>
                     <span className="font-medium">Okres z symulacji: </span>

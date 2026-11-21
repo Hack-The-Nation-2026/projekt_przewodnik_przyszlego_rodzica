@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { GlossaryList } from '@/components/glossary/term'
 import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
 import { benefitList, type BenefitCode } from '@/lib/benefit-interview'
@@ -24,6 +25,18 @@ export function DokumentyPage() {
           setSearchParams(params, { replace: true })
         }} />
       </Suspense>
+      <section aria-labelledby="slownik-title" className="border-t border-border pt-8">
+        <h2 id="slownik-title" className="font-display text-xl font-semibold">
+          Słownik pojęć
+        </h2>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+          Trudne słowa z wniosków i decyzji, wyjaśnione po ludzku. Kropkowane pojęcia w całym
+          serwisie otwierają tę samą definicję.
+        </p>
+        <div className="mt-4">
+          <GlossaryList />
+        </div>
+      </section>
     </PageContainer>
   )
 }

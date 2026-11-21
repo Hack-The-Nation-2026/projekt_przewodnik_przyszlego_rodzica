@@ -22,11 +22,17 @@ export function InfoHint({
   label,
   align = 'start',
   className,
+  trigger,
   children,
 }: {
   label: string
   align?: 'start' | 'end'
   className?: string
+  /**
+   * Treść wyzwalacza. Bez niej dymek otwiera ikona „i", a ze słowem —
+   * podkreślonym pojęciem ze słownika, które sam się tłumaczy.
+   */
+  trigger?: ReactNode
   children: ReactNode
 }) {
   const [open, setOpen] = useState(false)
@@ -105,9 +111,13 @@ export function InfoHint({
         onKeyDown={(event) => {
           if (event.key === 'Escape') setOpen(false)
         }}
-        className="flex size-6 shrink-0 items-center justify-center text-current opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none"
+        className={
+          trigger
+            ? 'underline decoration-dotted underline-offset-2 hover:no-underline focus-visible:outline-none'
+            : 'flex size-6 shrink-0 items-center justify-center text-current opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none'
+        }
       >
-        <Info className="size-3.5" aria-hidden="true" />
+        {trigger ?? <Info className="size-3.5" aria-hidden="true" />}
       </button>
       {open && createPortal(
         <span

@@ -11,7 +11,7 @@ const child = z.object({
 
 const fields = z.object({
   role: z.enum(['mother', 'father', 'adoption', 'foster']),
-  birthStage: z.enum(['expected', 'born']),
+  birthStage: z.enum(['expected', 'born', 'planning', 'on_leave']),
   eventDate: z.string(),
   childCount: z.string(),
   children: z.array(child),

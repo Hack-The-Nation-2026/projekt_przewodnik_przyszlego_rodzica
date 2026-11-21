@@ -20,6 +20,7 @@ const NAV = [
   { to: '/sprawy', label: 'Sprawy' },
   { to: '/zus', label: 'ZUS' },
   { to: '/wsparcie', label: 'Wsparcie' },
+  { to: '/odwolanie', label: 'Odwołanie', title: 'Ścieżka po decyzji odmownej' },
   { to: '/panel', label: 'Panel', title: 'Panel administracyjny' },
 ]
 
