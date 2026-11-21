@@ -52,7 +52,7 @@ function AnswerLink({ link }: { link: AssistantLink }) {
   )
 
   const className =
-    'flex h-full items-start justify-between gap-3 rounded-md border border-border px-3 py-2.5 text-sm transition-colors hover:bg-accent'
+    'flex h-full items-start justify-between gap-3 rounded-md border border-primary/35 bg-primary/5 px-3 py-2.5 text-sm transition-colors hover:border-primary/70 hover:bg-primary/10'
 
   if (link.kind === 'page') {
     return (
@@ -82,11 +82,6 @@ function AssistantTurn({
       </span>
       <div className="min-w-0 flex-1">
         <p className="text-sm leading-relaxed">{answer.answer}</p>
-        {answer.mode === 'model' && (
-          <p className="mt-1 text-xs text-muted-foreground">
-            Zdanie ułożył model językowy, linki pochodzą z katalogu serwisu.
-          </p>
-        )}
         <ul className="mt-2 grid gap-2">
           {answer.links.map((link) => (
             <li key={link.href}>

@@ -3,7 +3,8 @@
 Model dostaje tylko pytanie użytkownika i listę tematów naszego katalogu. Nie wysyłamy
 materiałów ZUS, danych osobowych ani niczego z wniosków. Model nie liczy i nie wybiera
 linków: wskazuje temat, a linki bierzemy z katalogu, więc trasa i tak jest sprawdzona
-testem. Odpowiedź przechodzi ten sam filtr co tryb demo, więc kwota nie wycieknie.
+testem. Odpowiedź przechodzi ten sam filtr co tryb demo, więc kwota nie wycieknie,
+a drugi filtr odrzuca wymyślone nazwy stron i instytucji.
 """
 
 import json
@@ -29,20 +30,49 @@ CURRENCY = re.compile(r"\b(pln|zł|zl|złotych|zlotych)\b", re.IGNORECASE)
 MIN_ANSWER = 25
 MAX_ANSWER = 420
 
+# Model nie zna serwisu i wymyślał nazwy sekcji, na przykład "sekcję Uprawnienia".
+# Zdanie musi się więc obyć bez nazw własnych. Wielka litera wolno tylko w słowie
+# otwierającym zdanie, i tylko z tej listy, bo nazwy stron i instytucji są w linkach
+# pod odpowiedzią, a te pochodzą z katalogu.
+OPENERS = frozenset(
+    {
+        "sprawdź",
+        "zajrzyj",
+        "zobacz",
+        "wybierz",
+        "najprościej",
+        "otwórz",
+        "wejdź",
+        "zapoznaj",
+        "przejrzyj",
+        "przeczytaj",
+        "skorzystaj",
+        "ustal",
+    }
+)
+UPPERCASE = re.compile(r"[A-ZĄĆĘŁŃÓŚŹŻ]")
+SENTENCE_END = ".!?…"
+
 SYSTEM_PROMPT = """Jesteś asystentem nawigacyjnym w serwisie "Skrzydła Rodzica" o zasiłkach \
 dla rodziców w Polsce.
 
-Twoje zadanie to powiedzieć, gdzie w serwisie ktoś znajdzie odpowiedź na swoje pytanie.
+Twoje zadanie to powiedzieć, że odpowiedź jest na stronach pod linkami.
 
 Zasady:
 - Nie podawaj żadnych liczb: kwot, tygodni, dni, terminów ani dat.
 - Nie interpretuj przepisów i nie oceniaj, czy ktoś ma prawo do świadczenia.
 - Nie pytaj o dane osobowe, PESEL ani o dokumenty.
-- Odpowiadaj po polsku, najwyżej dwoma zdaniami, bez list i bez punktów.
+- Nie znasz serwisu, więc nie nazywaj żadnej strony, sekcji, zakładki ani instytucji i nie
+  opisuj, co na nich jest. Nie wymyślaj nazw. Nazwy są w linkach pod odpowiedzią.
+- Napisz jedno krótkie zdanie po polsku, bez list i bez punktów. Zacznij je od słowa
+  "Sprawdź" albo "Zajrzyj". Wielkich liter używaj tylko w tym pierwszym słowie.
 - Wybierz jeden temat z listy i podaj jego id. Jeśli żaden nie pasuje, podaj null.
 
+Przykład dobrego zdania: "Sprawdź strony pod odpowiedzią, tam krok po kroku przejdziesz przez \
+wniosek."
+
 Zwróć wyłącznie JSON w formacie:
-{"topic": "<id tematu albo null>", "answer": "<jedno albo dwa zdania po polsku>"}"""
+{"topic": "<id tematu albo null>", "answer": "<jedno zdanie po polsku>"}"""
 
 
 def _catalog_hint() -> str:
@@ -94,11 +124,39 @@ def _parse(content: str) -> tuple[str | None, str]:
     return (topic if isinstance(topic, str) else None), answer
 
 
+def _words(text: str) -> list[tuple[int, str]]:
+    """Słowa razem z pozycją, bo wielka litera na początku zdania jest w porządku."""
+    return [(match.start(), match.group()) for match in re.finditer(r"\S+", text)]
+
+
+def _opens_sentence(text: str, start: int) -> bool:
+    before = text[:start].rstrip()
+    return not before or before[-1] in SENTENCE_END
+
+
+def _has_invented_name(answer: str) -> bool:
+    """Każda wielka litera poza otwarciem zdania to nazwa, a nazw model nie wymyśla.
+
+    Nazwę w środku zdania widać po wielkiej literze, bo zwykłe słowo pisze się małą.
+    Na otwarciu zdania nie da się jej odróżnić od zwykłego słowa, dlatego pierwsze słowo
+    musi pochodzić z krótkiej listy czasowników, od których zaczyna się wskazówka.
+    """
+    for start, word in _words(answer):
+        if not UPPERCASE.search(word):
+            continue
+        if _opens_sentence(answer, start) and word.lower() in OPENERS:
+            continue
+        return True
+    return False
+
+
 def _is_safe(answer: str) -> bool:
     """Kwoty i terminy zostają w silniku reguł, więc liczba w zdaniu dyskwalifikuje odpowiedź."""
     if not MIN_ANSWER <= len(answer) <= MAX_ANSWER:
         return False
-    return not DIGITS.search(answer) and not CURRENCY.search(answer)
+    if DIGITS.search(answer) or CURRENCY.search(answer):
+        return False
+    return not _has_invented_name(answer)
 
 
 def answer_with_model(question: str, settings: Settings) -> AssistantAnswer | None:

@@ -448,8 +448,12 @@ działa jako panel w prawym dolnym rogu.
 - Z kluczem `ASSISTANT_API_KEY` zdanie układa model językowy (`deepseek/deepseek-v4.1-flash`
   przez OpenRouter). Model wybiera temat z katalogu, a linki i tak bierzemy z katalogu, więc trasa
   zostaje deterministyczna. Odpowiedź modelu przechodzi ten sam filtr co demo: cyfra albo słowo
-  o walucie ją odrzuca i wtedy odpowiada katalog. Gdy model nie odpowie w dwanaście sekund albo
-  dostawca padnie, strona działa dalej, tylko z katalogu.
+  o walucie ją odrzuca i wtedy odpowiada katalog. Drugi filtr pilnuje nazw. Model nie zna serwisu
+  i wymyślał nieistniejące sekcje, na przykład "sekcję Uprawnienia", więc wielka litera wolno mu
+  tylko w pierwszym słowie zdania i tylko z krótkiej listy czasowników, takich jak "Sprawdź" albo
+  "Zajrzyj". Nazwa w środku zdania odrzuca odpowiedź i wtedy też odpowiada katalog, w którym nazwy
+  stron są prawdziwe. Gdy model nie odpowie w dwanaście sekund albo dostawca padnie, strona działa
+  dalej, tylko z katalogu.
 - Do modelu idzie wyłącznie treść pytania i lista tematów. Nie wysyłamy danych osobowych ani
   materiałów ZUS. Bez klucza nic nie wychodzi poza serwer i cała aplikacja działa offline.
   Panel pisze wprost, że to nawigacja, a nie doradca prawny, i że kwoty liczy kalkulator.

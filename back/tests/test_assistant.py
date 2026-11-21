@@ -134,8 +134,8 @@ from app.core.config import Settings, get_settings  # noqa: E402
 from app.services import assistant_llm  # noqa: E402
 
 GOOD_JSON = (
-    '{"topic": "wniosek", "answer": "Formularz, załączniki i miejsce złożenia znajdziesz '
-    'na stronie o dokumentach."}'
+    '{"topic": "wniosek", "answer": "Sprawdź strony pod odpowiedzią, formularz i załączniki '
+    'są opisane krok po kroku."}'
 )
 
 
@@ -163,9 +163,48 @@ def test_model_answer_with_a_currency_word_is_rejected(monkeypatch):
     assert assistant_llm.answer_with_model("ile dostanę", Settings(assistant_api_key="t")) is None
 
 
+def test_model_answer_with_an_invented_section_is_rejected(monkeypatch):
+    # Model nie zna serwisu i wymyślił sekcję "Uprawnienia", której nie ma.
+    payload = (
+        '{"topic": "swiadczenia", "answer": "Sprawdź sekcję Uprawnienia, gdzie znajdziesz '
+        'kalkulator i wywiad oraz listę świadczeń."}'
+    )
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: payload)
+    answer = assistant_llm.answer_with_model("co mi przysługuje", Settings(assistant_api_key="t"))
+    assert answer is None
+
+
+def test_model_answer_naming_an_institution_is_rejected(monkeypatch):
+    # Nawet prawdziwa nazwa jest tu zbędna, bo instytucje są w linkach z katalogu.
+    payload = '{"topic": "wniosek", "answer": "Sprawdź dokumenty, potem zanieś wniosek do ZUS."}'
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: payload)
+    answer = assistant_llm.answer_with_model(
+        "gdzie złożyć wniosek", Settings(assistant_api_key="t")
+    )
+    assert answer is None
+
+
+def test_route_falls_back_to_the_catalog_when_the_model_invents_a_page(monkeypatch):
+    payload = (
+        '{"topic": "swiadczenia", "answer": "Sprawdź sekcję Uprawnienia, tam jest lista '
+        'świadczeń."}'
+    )
+    app.dependency_overrides[get_settings] = lambda: Settings(assistant_api_key="t")
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: payload)
+    try:
+        body = client.post("/api/assistant/ask", json={"question": "co mi przysługuje"}).json()
+    finally:
+        app.dependency_overrides.clear()
+    assert body["mode"] == "catalog"
+    assert body["topic"] == "swiadczenia"
+    assert "sekcję" not in body["answer"]
+    assert "wywiad oraz listę" not in body["answer"]
+
+
 def test_model_unknown_topic_goes_to_the_institutions(monkeypatch):
     payload = (
-        '{"topic": "cos-nowego", "answer": "Tego nie ma w katalogu, zajrzyj na strony instytucji."}'
+        '{"topic": "cos-nowego", "answer": "Zajrzyj na strony instytucji, tam szukaj '
+        'odpowiedzi na to pytanie."}'
     )
     monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: payload)
     answer = assistant_llm.answer_with_model("dziwne pytanie", Settings(assistant_api_key="t"))
