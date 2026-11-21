@@ -187,8 +187,10 @@ function BenefitCard({ assessment, documentsOpen, onShowDocuments }: {
   const showDays = !!assessment.days || (!!deniedDays && assessment.status === 'partially_granted')
   const showAmount = assessment.gross_grosze != null || active
   return (
-    <Card className="overflow-hidden">
-      <div className={cn('flex items-center gap-1.5 border-b px-4 py-1.5 text-xs font-semibold', color)}>
+    <Card>
+      {/* Pasek statusu sam zaokrągla górne rogi. Karta nie może przycinać
+          zawartości, bo chowałyby się w niej dymki z wyjaśnieniami. */}
+      <div className={cn('flex items-center gap-1.5 rounded-t-lg border-b px-4 py-1.5 text-xs font-semibold', color)}>
         <StatusIcon className="size-3.5 shrink-0" aria-hidden="true" />
         {label}
         <InfoHint label={label} align="end" className="ml-auto">
