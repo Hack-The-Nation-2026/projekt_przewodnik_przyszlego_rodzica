@@ -40,9 +40,9 @@
   --gold-foreground: #3a2a06;
   --navy: #1d2b3a;
 
-  /* Biel i czerwień godła, do przycisku mObywatela w nagłówku. */
+  /* Czerwień godła i jej ciemniejszy odcień na stan kursora. */
   --pl-red: #d22630;
-  --pl-red-soft: #fbeaec; /* kryjące tło podświetlenia, żeby zieleń nagłówka nie prześwitywała */
+  --pl-red-dark: #b01d26;
 }
 
 @theme inline {
@@ -71,7 +71,7 @@
   --color-gold-foreground: var(--gold-foreground);
   --color-navy: var(--navy);
   --color-pl-red: var(--pl-red);
-  --color-pl-red-soft: var(--pl-red-soft);
+  --color-pl-red-dark: var(--pl-red-dark);
 
   /* Ekran mObywatela ma własną, celowo obcą paletę: użytkownik ma poczuć, że
      wyszedł z naszego serwisu do serwisu rządowego. */
