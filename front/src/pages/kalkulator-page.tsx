@@ -190,7 +190,12 @@ function BenefitCard({ assessment, onShowDocuments }: {
   const showDays = !!assessment.days || (!!deniedDays && assessment.status === 'partially_granted')
   const showAmount = assessment.gross_grosze != null || active
   return (
-    <Card>
+    <Card className="flex flex-col md:row-span-3 md:grid md:grid-rows-subgrid">
+      {/* Karta zajmuje trzy wiersze siatki: treść, podstawę prawną i przycisk.
+          Subgrid trzyma te trzy wiersze wspólne z kartą obok, więc gdy jednej
+          brakuje okresu czy kwoty, podstawa prawna i przycisk i tak stają na
+          tej samej wysokości co u sąsiada. */}
+      <div>
       {/* Pasek statusu sam zaokrągla górne rogi. Karta nie może przycinać
           zawartości, bo chowałyby się w niej dymki z wyjaśnieniami. */}
       <div className={cn('flex items-center gap-1.5 rounded-t-lg border-b px-4 py-1.5 text-xs font-semibold', color)}>
@@ -207,7 +212,7 @@ function BenefitCard({ assessment, onShowDocuments }: {
         </div>
         <CardDescription>{assessment.reason}</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-2.5 p-4 pt-0">
+      <CardContent className="space-y-2.5 px-4 pb-2 pt-0">
         {(showDays || showAmount) && (
           <dl className="grid gap-2 sm:grid-cols-2">
             {showDays && (
@@ -255,33 +260,36 @@ function BenefitCard({ assessment, onShowDocuments }: {
             ))}
           </ul>
         )}
-        <div className="border-t pt-2 text-xs">
-          <p className="mb-1 flex items-center gap-1.5 font-medium">
-            Podstawa prawna
-            <InfoHint label="Podstawa prawna">
-              Przepisy, z których wynika wyliczenie. Każdy link prowadzi do tekstu ustawy.
-            </InfoHint>
-          </p>
-          <ul className="flex flex-wrap gap-x-3 gap-y-1">
-            {sources.map(({ url, title }) => (
-              <li key={title}>
-                <a className="text-primary underline underline-offset-2" href={url}>{title}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
+      </CardContent>
+      </div>
+      <div className="mx-4 border-t pt-2 text-xs">
+        <p className="mb-1 flex items-center gap-1.5 font-medium">
+          Podstawa prawna
+          <InfoHint label="Podstawa prawna">
+            Przepisy, z których wynika wyliczenie. Każdy link prowadzi do tekstu ustawy.
+          </InfoHint>
+        </p>
+        <ul className="flex flex-wrap gap-x-3 gap-y-1">
+          {sources.map(({ url, title }) => (
+            <li key={title}>
+              <a className="text-primary underline underline-offset-2" href={url}>{title}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="px-4 pt-2 pb-4">
         <Button
           type="button"
           variant="ghost"
           aria-haspopup="dialog"
           aria-label={`Dokumenty i terminy — ${name}`}
           onClick={() => onShowDocuments(assessment.benefit)}
-          className="mt-1 w-full font-semibold text-primary hover:bg-primary/10 hover:text-primary"
+          className="w-full font-semibold text-primary hover:bg-primary/10 hover:text-primary"
         >
           <ClipboardList aria-hidden="true" />
           Dokumenty i terminy
         </Button>
-      </CardContent>
+      </div>
     </Card>
   )
 }
