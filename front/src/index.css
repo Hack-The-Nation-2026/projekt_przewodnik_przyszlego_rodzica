@@ -40,6 +40,9 @@
   --navy: #1d2b3a;
   --green-deep: #00431f;
   --green-ink: #00531f;
+
+  /* Biel i czerwień godła, do przycisku mObywatela w nagłówku. */
+  --pl-red: #d22630;
 }
 
 @theme inline {
@@ -69,6 +72,7 @@
   --color-navy: var(--navy);
   --color-green-deep: var(--green-deep);
   --color-green-ink: var(--green-ink);
+  --color-pl-red: var(--pl-red);
 
   /* Ekran mObywatela ma własną, celowo obcą paletę: użytkownik ma poczuć, że
      wyszedł z naszego serwisu do serwisu rządowego. */
@@ -79,8 +83,10 @@
   --color-mb-muted: #5c6670;
   --color-mb-line: #c7ced6;
 
+  /* Jedna rodzina na całą stronę. Nagłówki różnią się od treści tylko wagą
+     i rozmiarem, bez osobnego kroju ozdobnego. */
   --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-display: var(--font-sans);
 
   --radius-sm: calc(var(--radius) - 2px);
   --radius-md: var(--radius);

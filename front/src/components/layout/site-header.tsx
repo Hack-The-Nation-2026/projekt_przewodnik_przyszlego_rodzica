@@ -29,6 +29,22 @@ function Wordmark() {
   )
 }
 
+/** Godło w barwach bieli i czerwieni, obok napisu na przycisku logowania.
+    Sam orzeł jest biały i przezroczysty, czerwień to tło elementu, więc kafel
+    trzyma ostry kształt w każdym rozmiarze. */
+function EagleMark() {
+  return (
+    <img
+      src="/orzel.png"
+      alt=""
+      aria-hidden
+      width={20}
+      height={20}
+      className="size-5 rounded-[4px] bg-pl-red"
+    />
+  )
+}
+
 export function SiteHeader() {
   const [open, setOpen] = useState(false)
   const location = useLocation()
@@ -44,20 +60,6 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40">
-      <div className="border-b border-secondary bg-secondary text-secondary-foreground">
-        <Container className="flex h-9 items-center justify-between text-xs">
-          <p>Wyzwanie ZUS, HackNation 2026</p>
-          <div className="hidden items-center gap-4 sm:flex">
-            <a className="hover:underline" href="https://www.zus.pl">
-              zus.pl
-            </a>
-            <Link className="hover:underline" to="/o-projekcie">
-              Kontakt
-            </Link>
-          </div>
-        </Container>
-      </div>
-
       <div className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <Container className="grid h-16 grid-cols-[auto_1fr_auto] items-center gap-4">
           <Wordmark />
@@ -92,11 +94,12 @@ export function SiteHeader() {
               </div>
             ) : (
               <Button
-                variant="gold"
+                variant="mobywatel"
                 size="sm"
                 className="hidden sm:inline-flex"
                 onClick={startMobywatelLogin}
               >
+                <EagleMark />
                 Zaloguj przez mObywatel
               </Button>
             )}
@@ -134,13 +137,14 @@ export function SiteHeader() {
               ))}
               {!citizen && (
                 <Button
-                  variant="gold"
+                  variant="mobywatel"
                   className="mt-2"
                   onClick={() => {
                     setOpen(false)
                     startMobywatelLogin()
                   }}
                 >
+                  <EagleMark />
                   Zaloguj przez mObywatel
                 </Button>
               )}

@@ -9,6 +9,9 @@ const buttonVariants = cva(
       variant: {
         default: 'bg-primary text-primary-foreground hover:bg-primary/90',
         gold: 'bg-gold text-gold-foreground hover:bg-gold-dark',
+        /* Biel i czerwień godła: przycisk logowania przez mObywatel. */
+        mobywatel:
+          'border border-pl-red/35 bg-white text-pl-red shadow-sm hover:border-pl-red/60 hover:bg-pl-red/6',
         outline:
           'border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground',
         ghost: 'hover:bg-accent hover:text-accent-foreground',

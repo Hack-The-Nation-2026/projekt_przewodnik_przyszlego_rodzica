@@ -1,22 +1,5 @@
 import { Link } from 'react-router-dom'
 import { Container } from '@/components/layout/container'
-import { useHealth } from '@/hooks/use-health'
-import { cn } from '@/lib/utils'
-
-function ApiStatus() {
-  const { isSuccess, isError } = useHealth()
-  const online = isSuccess && !isError
-
-  return (
-    <span className="inline-flex items-center gap-2 text-xs text-primary-foreground/70">
-      <span
-        className={cn('size-2 rounded-full', online ? 'bg-gold' : 'bg-primary-foreground/40')}
-        aria-hidden
-      />
-      {online ? 'API połączone' : 'API offline'}
-    </span>
-  )
-}
 
 const COLUMNS = [
   {
@@ -49,9 +32,6 @@ export function SiteFooter() {
             Prototyp przygotowany w ramach wyzwania ZUS na HackNation 2026. Dane i obliczenia mają
             charakter demonstracyjny.
           </p>
-          <div className="mt-4">
-            <ApiStatus />
-          </div>
         </div>
 
         {COLUMNS.map((column) => (
