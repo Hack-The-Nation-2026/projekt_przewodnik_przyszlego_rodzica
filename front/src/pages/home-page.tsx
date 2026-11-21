@@ -10,12 +10,6 @@ import { useBenefits } from '@/hooks/use-benefits'
 import { useAppStore } from '@/store/app-store'
 import { cn } from '@/lib/utils'
 
-const FACTS = [
-  { value: '100%', label: 'podstawy wymiaru zasiłku chorobowego w czasie ciąży' },
-  { value: '20', label: 'tygodni urlopu macierzyńskiego po urodzeniu jednego dziecka' },
-  { value: '41/43', label: 'tygodni urlopu rodzicielskiego do podziału między rodziców' },
-]
-
 const STEPS = [
   {
     title: 'Opisz swoją sytuację',
@@ -32,7 +26,7 @@ const STEPS = [
 ]
 
 const ACTIONS = [
-  { to: '/kalkulator', icon: Calculator, title: 'Policz zasiłek', body: 'Symulacja dla obojga rodziców.' },
+  { to: '/kalkulator', icon: Calculator, title: 'Policz zasiłek', body: 'Terminy i kwoty dla obojga rodziców.' },
   { to: '/dokumenty', icon: FileText, title: 'Zbierz dokumenty', body: 'Wnioski i zaświadczenia.' },
   { to: '/wsparcie', icon: HeartHandshake, title: 'Znajdź wsparcie', body: 'Pomoc w trudnych sytuacjach.' },
 ]
@@ -43,10 +37,19 @@ export function HomePage() {
 
   return (
     <>
-      <section className="border-b border-border bg-secondary/40">
-        <Container className="grid items-start gap-12 py-16 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
-          <div>
-            <h1 className="max-w-2xl text-4xl font-semibold leading-tight text-navy sm:text-5xl">
+      <section className="relative isolate overflow-hidden border-b border-border bg-secondary/40">
+        {/* Zdjęcie zajmuje prawy skraj sekcji: dochodzi do krawędzi okna i ma skośny lewy brzeg. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 right-0 hidden w-[40%] lg:block"
+          style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 16% 100%)' }}
+        >
+          <img src="/formularz.jpg" alt="" className="size-full object-cover" />
+        </div>
+
+        <Container className="relative py-16 lg:py-24">
+          <div className="max-w-2xl lg:max-w-[34rem]">
+            <h1 className="text-4xl font-semibold leading-tight text-navy sm:text-5xl">
               Sprawdź, co ci przysługuje w ciąży i po urodzeniu dziecka
             </h1>
             <p className="mt-5 max-w-xl text-lg text-muted-foreground">
@@ -62,28 +65,19 @@ export function HomePage() {
                 Zobacz świadczenia
               </Link>
             </div>
-            <p className="mt-4 text-sm text-muted-foreground">
-              Bez logowania na start. mObywatel tylko wtedy, gdy chcesz pobrać swoje dane.
-            </p>
           </div>
 
-          <Card className="bg-background">
-            <CardHeader>
-              <CardTitle>W skrócie</CardTitle>
-              <CardDescription>Najważniejsze liczby, od których zaczyna się rozmowa.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {FACTS.map((fact) => (
-                <div
-                  key={fact.label}
-                  className="grid grid-cols-[4.5rem_1fr] items-baseline gap-4 border-b border-border pb-4 last:border-0 last:pb-0"
-                >
-                  <span className="font-display text-2xl font-semibold text-primary">{fact.value}</span>
-                  <span className="text-sm text-muted-foreground">{fact.label}</span>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+          {/* Na wąskich ekranach to samo zdjęcie wchodzi pod tekst i domyka sekcję, z tym samym skosem. */}
+          <figure
+            className="relative -mx-4 -mb-16 mt-10 aspect-[4/3] overflow-hidden sm:-mx-6 lg:hidden"
+            style={{ clipPath: 'polygon(0 12%, 100% 0, 100% 100%, 0 100%)' }}
+          >
+            <img
+              src="/formularz.jpg"
+              alt="Dwoje rodziców wypełnia przy stole wniosek o zasiłek."
+              className="size-full object-cover"
+            />
+          </figure>
         </Container>
       </section>
 
@@ -131,7 +125,7 @@ export function HomePage() {
             <div>
               <h2 className="text-2xl font-semibold text-navy sm:text-3xl">Czego dotyczą świadczenia</h2>
               <p className="mt-2 max-w-2xl text-muted-foreground">
-                Lista pochodzi z API projektu, więc pokazuje, że front i backend już ze sobą rozmawiają.
+                Katalog obejmuje świadczenia związane z ciążą, porodem, adopcją i opieką nad dzieckiem.
               </p>
             </div>
             <Link to="/swiadczenia" className={buttonVariants({ variant: 'outline' })}>
