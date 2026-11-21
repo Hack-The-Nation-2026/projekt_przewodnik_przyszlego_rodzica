@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { WingMark } from '@/components/brand/wing-mark'
 import { Container } from '@/components/layout/container'
+import { useFeature } from '@/hooks/use-settings'
 
 const COLUMNS = [
   {
@@ -10,7 +11,7 @@ const COLUMNS = [
       { to: '/swiadczenia', label: 'Świadczenia' },
       { to: '/kalkulator', label: 'Kalkulator' },
       { to: '/dokumenty', label: 'Dokumenty' },
-      { to: '/zus', label: 'Symulacja ZUS' },
+      { to: '/zus', label: 'Symulacja ZUS', feature: 'zus_simulations' as const },
       { to: '/wsparcie', label: 'Wsparcie' },
     ],
   },
@@ -19,6 +20,7 @@ const COLUMNS = [
     links: [
       { to: '/o-projekcie', label: 'O projekcie' },
       { to: '/o-projekcie', label: 'Kontakt' },
+      { to: '/panel', label: 'Panel administracyjny' },
       { to: 'https://www.zus.pl', label: 'zus.pl' },
       { to: 'https://www.gov.pl/web/rodzina/urlop-rodzicielski', label: 'gov.pl' },
     ],
@@ -26,6 +28,12 @@ const COLUMNS = [
 ]
 
 export function SiteFooter() {
+  const zusEnabled = useFeature('zus_simulations')
+  const columns = COLUMNS.map((column) => ({
+    ...column,
+    links: column.links.filter((link) => !('feature' in link) || (link.feature === 'zus_simulations' && zusEnabled)),
+  }))
+
   return (
     <footer className="mt-20 bg-primary text-primary-foreground [--ring:var(--primary-foreground)]">
       <Container className="grid gap-10 py-12 md:grid-cols-[1.5fr_1fr_1fr]">
@@ -42,7 +50,7 @@ export function SiteFooter() {
           </p>
         </div>
 
-        {COLUMNS.map((column) => (
+        {columns.map((column) => (
           <div key={column.title}>
             <p className="text-sm font-semibold">{column.title}</p>
             <ul className="mt-3 space-y-2 text-sm text-primary-foreground/95">

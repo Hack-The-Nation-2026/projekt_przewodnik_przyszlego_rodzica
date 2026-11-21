@@ -5,6 +5,7 @@ import { Check, CircleAlert, CircleHelp, ClipboardList, FlaskConical, Minus, Pen
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { BenefitWarnings } from '@/components/benefit-warnings'
+import { useFeature } from '@/hooks/use-settings'
 import { ParentalPlanCard } from '@/components/parental-plan'
 import type { RateVariant } from '@/components/parental-plan'
 import { PageContainer } from '@/components/layout/page-container'
@@ -323,6 +324,9 @@ export function KalkulatorPage() {
   const [result, setResult] = useState<SimulationResult | null>(null)
   const simulation = useMutation({ mutationFn: simulate, onSuccess: setResult })
   const { mutate } = simulation
+  // Panel administracyjny może wyłączyć kartę podziału urlopu i sekcję ostrzeżeń.
+  const parentalPlanEnabled = useFeature('parental_plan')
+  const riskWarningsEnabled = useFeature('risk_warnings')
   const steps = getInterviewSteps(values)
   const stepIndex = Math.max(0, steps.findIndex(({ id }) => id === stepId))
   const step = steps[stepIndex]
@@ -521,14 +525,14 @@ export function KalkulatorPage() {
               Edytuj odpowiedzi
             </Button>
           </div>
-          {submitted && (
+          {submitted && riskWarningsEnabled && (
             <BenefitWarnings
               values={submitted}
               maternityStatus={result.assessments.get('macierzynski')?.status}
               onEditEmployment={() => editAnswers('employment')}
             />
           )}
-          {result.pool && result.pool.total_days > 0 && (
+          {parentalPlanEnabled && result.pool && result.pool.total_days > 0 && (
             <div className="mt-6 border-t border-border pt-6">
               <ParentalPlanCard
                 pool={result.pool}

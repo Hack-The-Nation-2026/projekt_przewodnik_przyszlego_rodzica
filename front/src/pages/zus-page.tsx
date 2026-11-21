@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useWatch } from 'react-hook-form'
@@ -7,7 +8,7 @@ import { Check, ExternalLink, FileCheck2, Loader2, Plug, ShieldCheck, Unplug } f
 import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -15,6 +16,7 @@ import { InfoHint } from '@/components/ui/info-hint'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { api } from '@/lib/api'
 import { useAppStore } from '@/store/app-store'
+import { useFeature } from '@/hooks/use-settings'
 import type {
   BirthCertificateOrder,
   EzlaCertificate,
@@ -536,6 +538,7 @@ function LinksSection({ links }: { links: ZusLink[] | undefined }) {
 
 /** Ekran symulacji ZUS: ubezpieczenie, składki, e-ZLA, PUE i akta urodzenia. */
 export function ZusPage() {
+  const zusEnabled = useFeature('zus_simulations')
   const [insured, setInsured] = useState(true)
   const [withDebt, setWithDebt] = useState(false)
   const [basisInput, setBasisInput] = useState('8000')
@@ -565,6 +568,31 @@ export function ZusPage() {
     queryFn: async () => (await api.get<ZusLink[]>('/zus/links')).data,
     staleTime: Infinity,
   })
+
+  if (!zusEnabled) {
+    return (
+      <PageContainer className="py-12 sm:py-16">
+        <PageHeading
+          title="Symulacja ZUS"
+          description="Ta część serwisu jest teraz wyłączona."
+          crumb="Symulacja ZUS"
+        />
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle>Symulacje ZUS są wyłączone</CardTitle>
+            <CardDescription>
+              Włącza się je w panelu administracyjnym, bez wdrożenia nowej wersji serwisu.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link to="/panel" className={buttonVariants({ variant: 'outline' })}>
+              Przejdź do panelu
+            </Link>
+          </CardContent>
+        </Card>
+      </PageContainer>
+    )
+  }
 
   return (
     <PageContainer className="py-12 sm:py-16">

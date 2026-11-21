@@ -113,3 +113,32 @@ export interface ZusLink {
   url: string
   description: string
 }
+
+/** Parametry kalkulatora zmieniane z panelu administracyjnego. */
+export interface RateSettings {
+  maternity: number
+  averaged: number
+  parental: number
+}
+
+export interface LeaveSettings {
+  maternity_weeks_by_child_count: number[]
+  parental_weeks_single: number
+  parental_weeks_multiple: number
+  za_zyciem_extra_weeks: number
+  exclusive_weeks: number
+}
+
+export interface FeatureFlag {
+  key: string
+  label: string
+  description: string
+  enabled: boolean
+}
+
+export interface AppSettings {
+  rates: RateSettings
+  leave: LeaveSettings
+  features: FeatureFlag[]
+  updated_at: string | null
+}

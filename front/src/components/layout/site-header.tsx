@@ -7,6 +7,7 @@ import { Container } from '@/components/layout/container'
 import { ProfileMenu } from '@/components/layout/profile-menu'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/store/app-store'
+import { useFeature } from '@/hooks/use-settings'
 
 const NAV = [
   { to: '/', label: 'Start', end: true },
@@ -62,6 +63,9 @@ export function SiteHeader() {
   const location = useLocation()
   const navigate = useNavigate()
   const citizen = useAppStore((state) => state.citizen)
+  // Panel może wyłączyć ekran ZUS, wtedy link znika z obu nawigacji.
+  const zusEnabled = useFeature('zus_simulations')
+  const nav = NAV.filter((item) => item.to !== '/zus' || zusEnabled)
 
   // Wychodzimy na stronę mObywatela i wracamy dokładnie tam, gdzie jesteśmy.
   function startMobywatelLogin() {
@@ -79,7 +83,7 @@ export function SiteHeader() {
             className="hidden flex-1 items-center justify-center gap-0.5 xl:flex xl:px-2"
             aria-label="Nawigacja główna"
           >
-            {NAV.map((item) => (
+            {nav.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
@@ -128,7 +132,7 @@ export function SiteHeader() {
         {open && (
           <nav className="border-t border-primary-foreground/15 bg-primary xl:hidden" aria-label="Nawigacja mobilna">
             <Container className="flex flex-col py-2">
-              {NAV.map((item) => (
+              {nav.map((item) => (
                 <NavLink
                   key={item.to}
                   to={item.to}

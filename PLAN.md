@@ -46,7 +46,7 @@ ich kopiować ani rozpowszechniać.
 - [x] Krok 8. Symulacje ZUS
 - [x] Krok 9. Ryzyka i ostrzeżenia
 - [x] Krok 10. Trudne sytuacje i wsparcie
-- [ ] Krok 11. Panel administracyjny
+- [x] Krok 11. Panel administracyjny
 - [ ] Krok 12. Wygląd i responsywność
 - [ ] Krok 13. Testy na sprawach i upload wniosków
 - [ ] Krok 14. Funkcje z AI
@@ -304,6 +304,18 @@ Zmiana parametru nie może wymagać wdrożenia, bo brief wprost tego oczekuje.
 - Dodawanie i wyłączanie funkcji.
 
 Gotowe, gdy zmiana parametru w panelu zmienia wynik kalkulatora bez ruszania kodu.
+
+Zrobione 21.11. Ekran `/panel` zmienia stopy procentowe (macierzyński, wniosek w 21 dni,
+rodzicielski) i wymiary urlopów w tygodniach: macierzyński dla 1 do 5 dzieci, rodzicielski przy
+jednym i przy większej liczbie dzieci, dodatek „Za życiem” i tygodnie nieprzenoszalne. Pod nimi
+stoi lista funkcji z przełącznikami, dodawaniem nowej pozycji i usuwaniem. Zapis idzie przez
+`PUT /api/admin/settings` do `back/data/admin-settings.json`, a `POST /api/admin/settings/reset`
+przywraca wartości domyślne. Każde przeliczenie czyta ten plik, więc zmiana stopy rodzicielskiego
+z 70 na 50% obniża kwotę w kalkulatorze bez wdrożenia; panel pokazuje podgląd wyniku po zapisie.
+`GET /api/settings` wystawia ten sam zestaw frontowi: karta podziału urlopu bierze z niego stopy
+i tygodnie do opisów, a wyłączona funkcja chowa link do symulacji ZUS, kartę podziału urlopu albo
+sekcję ostrzeżeń. Testy w `back/tests/test_admin_settings.py` pilnują walidacji, zapisu, resetu,
+uszkodzonego pliku i wpływu parametrów na wynik.
 
 Brief, pkt 3, ostatni akapit.
 

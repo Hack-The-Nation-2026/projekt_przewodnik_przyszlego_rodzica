@@ -3,6 +3,7 @@ import { InfoHint } from '@/components/ui/info-hint'
 import { Slider } from '@/components/ui/slider'
 import type { ParentalPool } from '@/lib/benefit-interview'
 import { cn } from '@/lib/utils'
+import { useSettings } from '@/hooks/use-settings'
 
 const currency = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN', useGrouping: 'always' })
 
@@ -75,6 +76,14 @@ export function ParentalPlanCard({
   const differs = averaged.gross !== flat.gross
   const limitOne = zaZyciem ? 130 : 82
   const limitMulti = zaZyciem ? 134 : 86
+  // Stopy i wymiary urlopu przychodzą z panelu administracyjnego, więc opisy muszą
+  // pokazywać to, czym naprawdę liczy backend.
+  const { data: settings } = useSettings()
+  const percent = new Intl.NumberFormat('pl-PL', { maximumFractionDigits: 2 })
+  const averagedRate = percent.format(settings?.rates.averaged ?? 81.5)
+  const parentalRate = percent.format(settings?.rates.parental ?? 70)
+  const exclusiveWeeks = settings?.leave.exclusive_weeks ?? 9
+  const parentalWeeksSingle = settings?.leave.parental_weeks_single ?? 41
 
   return (
     <Card className={cn(busy && 'transition-opacity')} aria-busy={busy}>
@@ -82,13 +91,15 @@ export function ParentalPlanCard({
         <div className="flex items-start gap-1.5">
           <CardTitle>Podział urlopu rodzicielskiego</CardTitle>
           <InfoHint label="Urlop rodzicielski">
-            Czas po urlopie macierzyńskim, za który ZUS płaci zasiłek. Przy jednym dziecku to
-            41 tygodni.
+            Czas po urlopie macierzyńskim, za który ZUS płaci zasiłek. Przy jednym dziecku to{' '}
+            {parentalWeeksSingle}{' '}
+            {parentalWeeksSingle === 1 ? 'tydzień' : parentalWeeksSingle < 5 ? 'tygodnie' : 'tygodni'}.
           </InfoHint>
         </div>
         <div className="flex items-start gap-1.5">
           <CardDescription>
-            {weeks(totalDays)} tygodni dla obojga rodziców, po 9 nieprzenoszalnych dla każdego.
+            {weeks(totalDays)} tygodni dla obojga rodziców, po {exclusiveWeeks} nieprzenoszalnych dla
+            każdego.
           </CardDescription>
           <InfoHint label="Jak czytać pasek podziału">
             Pełny kolor to 9 tygodni zarezerwowanych dla jednego rodzica. Jaśniejszy to tygodnie
@@ -103,8 +114,8 @@ export function ParentalPlanCard({
               <span className="flex items-center gap-1.5 text-sm font-medium">
                 <label htmlFor="second-share">Wspólne tygodnie dla drugiego rodzica</label>
                 <InfoHint label="Wspólne tygodnie">
-                  Tygodnie, które możesz oddać drugiemu rodzicowi. Po 9 tygodni każdego z was
-                  zostaje poza podziałem.
+                  Tygodnie, które możesz oddać drugiemu rodzicowi. Po {exclusiveWeeks} tygodni każdego
+                z was zostaje poza podziałem.
                 </InfoHint>
               </span>
             </div>
@@ -180,26 +191,28 @@ export function ParentalPlanCard({
         <div className="border-t pt-5">
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
             <h4 className="text-base font-semibold">Zasiłek za urlop rodzicielski, oboje rodzice</h4>
-            <p className="text-xs text-muted-foreground">9 tygodni drugiego rodzica zawsze po 70%.</p>
+            <p className="text-xs text-muted-foreground">
+              {exclusiveWeeks} tygodni drugiego rodzica zawsze po {parentalRate}%.
+            </p>
           </div>
           {differs ? (
             <dl className="mt-3 grid gap-2 text-base sm:max-w-xl">
               <div className="flex items-center justify-between gap-4">
                 <dt className="flex items-center gap-1.5 text-muted-foreground">
-                  Wniosek w 21 dni (81,5%)
+                  Wniosek w 21 dni ({averagedRate}%)
                   <InfoHint label="Wniosek w 21 dni">
-                    Stawka 81,5% należy się, gdy wniosek o urlop rodzicielski złożysz w ciągu
-                    21 dni od porodu.
+                    Stawka {averagedRate}% należy się, gdy wniosek o urlop rodzicielski złożysz
+                    w ciągu 21 dni od porodu.
                   </InfoHint>
                 </dt>
                 <dd className="font-semibold text-primary">{currency.format(averaged.gross / 100)}</dd>
               </div>
               <div className="flex items-center justify-between gap-4">
                 <dt className="flex items-center gap-1.5 text-muted-foreground">
-                  Wniosek później (70%)
+                  Wniosek później ({parentalRate}%)
                   <InfoHint label="Wniosek później">
-                    Po 21 dniach stawka spada do 70%. Zasiłek dostajesz wtedy od razu za cały
-                    urlop, w jednej niższej kwocie.
+                    Po 21 dniach stawka spada do {parentalRate}%. Zasiłek dostajesz wtedy od razu
+                    za cały urlop, w jednej niższej kwocie.
                   </InfoHint>
                 </dt>
                 <dd className="font-semibold text-navy">{currency.format(flat.gross / 100)}</dd>
@@ -216,7 +229,7 @@ export function ParentalPlanCard({
             </dl>
           ) : (
             <p className="mt-2 text-sm text-muted-foreground">
-              Ten wariant nie obejmuje 81,5%, więc urlop liczy się po 70%.
+              Ten wariant nie obejmuje {averagedRate}%, więc urlop liczy się po {parentalRate}%.
             </p>
           )}
         </div>
