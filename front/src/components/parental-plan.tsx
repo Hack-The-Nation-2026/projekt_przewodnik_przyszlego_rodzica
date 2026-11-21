@@ -68,10 +68,12 @@ export function ParentalPlanCard({
   const firstDays = exclusive + (sharedTotal - secondShare)
   const secondDays = exclusive + secondShare
   const totalDays = pool.total_days
+  // Na telefonie paski są jeden pod drugim i potrzebują wspólnej skali.
+  const maxDaysPerParent = exclusive + sharedTotal
 
   const rows = [
     { parent: 'first_parent' as const, label: 'Pierwszy rodzic', days: firstDays, exclusiveColor: 'bg-primary', sharedColor: 'bg-primary/40' },
-    { parent: 'second_parent' as const, label: 'Drugi rodzic', days: secondDays, exclusiveColor: 'bg-gold/40', sharedColor: 'bg-gold' },
+    { parent: 'second_parent' as const, label: 'Drugi rodzic', days: secondDays, exclusiveColor: 'bg-gold', sharedColor: 'bg-gold/40' },
   ]
   const differs = averaged.gross !== flat.gross
   const limitOne = zaZyciem ? 130 : 82
@@ -96,16 +98,10 @@ export function ParentalPlanCard({
             {parentalWeeksSingle === 1 ? 'tydzień' : parentalWeeksSingle < 5 ? 'tygodnie' : 'tygodni'}.
           </InfoHint>
         </div>
-        <div className="flex items-start gap-1.5">
-          <CardDescription>
-            {weeks(totalDays)} tygodni dla obojga rodziców, po {exclusiveWeeks} nieprzenoszalnych dla
-            każdego.
-          </CardDescription>
-          <InfoHint label="Jak czytać pasek podziału">
-            Pierwszy odcinek każdego paska oznacza 9 tygodni zarezerwowanych dla danego rodzica.
-            Następny odcinek to tygodnie ze wspólnej puli, które przesuwa suwak.
-          </InfoHint>
-        </div>
+        <CardDescription>
+          {weeks(totalDays)} tygodni dla obojga rodziców, po {exclusiveWeeks} nieprzenoszalnych dla
+          każdego.
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-5">
         {!workingOnLeave && (
@@ -172,7 +168,11 @@ export function ParentalPlanCard({
                     </span>
                   )}
                 </div>
-                <div className="flex h-3 overflow-hidden rounded-full" aria-hidden="true">
+                <div
+                  className="flex h-3 w-[var(--bar-width)] overflow-hidden rounded-full sm:w-full"
+                  style={{ '--bar-width': `${(days / maxDaysPerParent) * 100}%` } as React.CSSProperties}
+                  aria-hidden="true"
+                >
                   <div className={exclusiveColor} style={{ width: `${(exclusive / days) * 100}%` }} />
                   <div className={sharedColor} style={{ width: `${(shared / days) * 100}%` }} />
                 </div>
@@ -187,6 +187,25 @@ export function ParentalPlanCard({
             )
           })}
         </div>
+
+        <ul className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted-foreground">
+          <li className="flex items-center gap-2">
+            <span className="flex gap-1" aria-hidden="true">
+              {rows.map(({ parent, exclusiveColor }) => (
+                <span key={parent} className={cn('size-3 rounded-sm', exclusiveColor)} />
+              ))}
+            </span>
+            Tygodnie zarezerwowane dla każdego rodzica
+          </li>
+          <li className="flex items-center gap-2">
+            <span className="flex gap-1" aria-hidden="true">
+              {rows.map(({ parent, sharedColor }) => (
+                <span key={parent} className={cn('size-3 rounded-sm', sharedColor)} />
+              ))}
+            </span>
+            Tygodnie ze wspólnej puli
+          </li>
+        </ul>
 
         <div className="border-t pt-5">
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
