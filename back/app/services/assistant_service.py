@@ -339,9 +339,9 @@ TOPICS: tuple[Topic, ...] = (
         id="wczesniak",
         question="Dziecko urodziło się za wcześnie, co z urlopem?",
         answer=(
-            "Po porodzie przed terminem urlop macierzyński wydłuża uzupełniający urlop "
-            "macierzyński, liczony od pobytu dziecka w szpitalu. Wpisz pobyty w wywiadzie, "
-            "a zasady i przykłady są na ekranie wsparcia."
+            "Gdy dziecko urodzi się przed terminem, do urlopu macierzyńskiego dochodzi "
+            "uzupełniający urlop macierzyński. Jego wymiar zależy od pobytu dziecka w szpitalu: "
+            "wpisz pobyty w wywiadzie, a zasady i przykłady są na ekranie wsparcia."
         ),
         links=(
             AssistantLink(
@@ -516,8 +516,8 @@ TOPICS: tuple[Topic, ...] = (
         id="terminy",
         question="Do kiedy mam czas na złożenie?",
         answer=(
-            "Terminy zależą od świadczenia i różnią się między wnioskami. Rozpiska stoi przy "
-            "każdym dokumencie, a szczegóły potwierdza ZUS."
+            "Terminy zależą od świadczenia i różnią się między wnioskami. Rozpiska przy każdym "
+            "dokumencie podaje, do kiedy złożyć wniosek, a termin wypłaty potwierdza ZUS."
         ),
         links=(
             AssistantLink(
@@ -535,6 +535,12 @@ TOPICS: tuple[Topic, ...] = (
             "termin sklad",
             "kiedy sklad",
             "kiedy zloz",
+            "kiedy wyplac",
+            "kiedy zus wyplaca",
+            "kiedy przyznaja",
+            "kiedy dostane pieniadze",
+            "kiedy wplynie",
+            "po jakim czasie",
             "do jakiej daty",
             "czy nie jest za pozno",
         ),
