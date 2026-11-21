@@ -48,6 +48,19 @@ def test_unknown_digest_points_to_the_manual_form():
     assert "formularzu" in payload["hint"]
 
 
+def test_changed_file_is_still_recognised_by_name():
+    sample = load_samples()[5]
+    response = client.post(
+        "/api/samples/recognize",
+        json={"sha256": "b" * 64, "file_name": sample.file_name},
+    )
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["matched"] is True
+    assert payload["sample"]["id"] == sample.id
+    assert "po nazwie pliku" in payload["hint"]
+
+
 def test_digest_must_be_a_sha256_hex_string():
     response = client.post("/api/samples/recognize", json={"sha256": "nie-hex"})
     assert response.status_code == 422

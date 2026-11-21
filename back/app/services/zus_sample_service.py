@@ -44,18 +44,36 @@ def find_sample(sample_id: str) -> ZusSample | None:
     return next((sample for sample in load_samples() if sample.id == sample_id), None)
 
 
-def recognize(digest: str) -> ZusRecognition:
+def recognize(digest: str, file_name: str | None = None) -> ZusRecognition:
     """Dopasowanie po SHA-256. Ten sam plik daje ten sam odcisk, więc wynik jest pewny.
 
     Dwa zestawy mogą być tym samym plikiem. Wtedy rozpoznajemy pierwszy z nich, a drugi
     ma w danych `duplicate_of`, żeby lista nie pokazywała tej samej sprawy dwa razy.
+
+    Gdy odcisk nie pasuje, próbujemy jeszcze nazwy pliku. Wtedy treść mogła się zmienić,
+    więc komunikat mówi, że dopasowanie jest po nazwie i dane trzeba sprawdzić.
     """
     sample = next((item for item in load_samples() if item.sha256 == digest), None)
-    if sample is None:
-        return ZusRecognition(sha256=digest, matched=False, sample=None, hint=UNKNOWN_HINT)
-    return ZusRecognition(
-        sha256=digest,
-        matched=True,
-        sample=sample,
-        hint=f"Rozpoznano zestaw {sample.id}: {sample.file_name}",
-    )
+    if sample is not None:
+        return ZusRecognition(
+            sha256=digest,
+            matched=True,
+            sample=sample,
+            hint=f"Rozpoznano zestaw {sample.id}: {sample.file_name}",
+        )
+    if file_name:
+        wanted = file_name.strip().casefold()
+        sample = next(
+            (item for item in load_samples() if item.file_name.casefold() == wanted), None
+        )
+        if sample is not None:
+            return ZusRecognition(
+                sha256=digest,
+                matched=True,
+                sample=sample,
+                hint=(
+                    f"Rozpoznano zestaw {sample.id} po nazwie pliku, bo odcisk się nie zgadza. "
+                    "Sprawdź, czy to ten sam dokument."
+                ),
+            )
+    return ZusRecognition(sha256=digest, matched=False, sample=None, hint=UNKNOWN_HINT)

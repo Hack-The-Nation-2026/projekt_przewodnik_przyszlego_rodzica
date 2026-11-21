@@ -57,8 +57,13 @@ class ZusRecognition(BaseModel):
 
 
 class DigestRequest(BaseModel):
-    """Odcisk liczy przeglądarka, więc sam dokument nie opuszcza urządzenia."""
+    """Odcisk liczy przeglądarka, więc sam dokument nie opuszcza urządzenia.
+
+    `file_name` jest tylko zapasem: gdy ktoś zapisał plik ponownie i odcisk się zmienił,
+    rozpoznajemy sprawę po nazwie i mówimy o tym wprost.
+    """
 
     model_config = ConfigDict(extra="forbid")
 
     sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    file_name: str | None = Field(default=None, max_length=200)

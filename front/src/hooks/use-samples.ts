@@ -26,11 +26,13 @@ export function useSample(sampleId: string | null) {
   })
 }
 
-/** Rozpoznanie wgranego PDF-a po odcisku SHA-256. */
+/**
+   * Rozpoznanie wgranego PDF-a: najpierw odcisk, potem nazwa pliku jako zapas.
+   */
 export function useRecognizeSample() {
   return useMutation({
-    mutationFn: async (sha256: string) => {
-      const { data } = await api.post<ZusRecognition>('/samples/recognize', { sha256 })
+    mutationFn: async (file: { sha256: string; file_name: string }) => {
+      const { data } = await api.post<ZusRecognition>('/samples/recognize', file)
       return data
     },
   })

@@ -327,13 +327,16 @@ export function SampleRecognition({ onResult }: { onResult: (result: CaseResult)
     setSample(null)
     try {
       const digest = await sha256Hex(file)
-      recognize.mutate(digest, {
-        onSuccess: (data) => {
-          setSample(data.sample)
-          setMessage(data.hint)
+      recognize.mutate(
+        { sha256: digest, file_name: file.name },
+        {
+          onSuccess: (data) => {
+            setSample(data.sample)
+            setMessage(data.hint)
+          },
+          onError: () => setError('Nie udało się sprawdzić pliku. Sprawdź, czy backend działa.'),
         },
-        onError: () => setError('Nie udało się sprawdzić pliku. Sprawdź, czy backend działa.'),
-      })
+      )
     } catch (digestError) {
       setError(digestError instanceof Error ? digestError.message : 'Nie udało się policzyć odcisku pliku.')
     }

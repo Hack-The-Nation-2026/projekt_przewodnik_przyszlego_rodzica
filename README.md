@@ -44,9 +44,10 @@ prawdziwych decyzji. Poprawność reguł pilnuje `back/tests/test_rules.py`.
 Obok spraw demonstracyjnych `/sprawy` rozpoznaje wszystkie 87 zestawów z `PRZYKLADY/`. Przeglądarka
 liczy SHA-256 wybranego pliku, wysyła sam odcisk, a backend szuka go w `back/app/data/zus-samples.json`.
 PDF nie opuszcza urządzenia, więc skan z danymi o zdrowiu nie trafia do serwera ani do modelu
-językowego. Dla rozpoznanej sprawy strona pokazuje opis stanu faktycznego, wzory formularzy
-z zestawu i wynik zapisany w materiale. Kwoty i daty, których skan nie podaje albo które są
-zamazane, wpisuje się w krótkim formularzu i wtedy kalkulator liczy świadczenie główne.
+językowego. Gdy plik został zapisany ponownie i odcisk się zmienił, rozpoznanie schodzi na nazwę
+pliku i mówi o tym wprost. Dla rozpoznanej sprawy strona pokazuje opis stanu faktycznego, wzory
+formularzy z zestawu i wynik zapisany w materiale. Kwoty i daty, których skan nie podaje albo
+które są zamazane, wpisuje się w krótkim formularzu i wtedy kalkulator liczy świadczenie główne.
 
 Dane do rozpoznania powstają skryptem `back/scripts/build_zus_samples.py`, który czyta skany
 z `PRZYKLADY/` i zapisuje tylko metadane: odcisk pliku, wzory formularzy, rodzaj świadczeń i wynik

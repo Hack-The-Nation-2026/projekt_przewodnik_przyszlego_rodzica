@@ -17,7 +17,7 @@ def list_samples() -> list[ZusSampleSummary]:
 @router.post("/recognize", response_model=ZusRecognition)
 def recognize_sample(payload: DigestRequest) -> ZusRecognition:
     """Dopasowuje SHA-256 pliku do zestawu. Przeglądarka liczy odcisk lokalnie."""
-    return recognize(payload.sha256)
+    return recognize(payload.sha256, payload.file_name)
 
 
 @router.get("/{sample_id}", response_model=ZusSample)

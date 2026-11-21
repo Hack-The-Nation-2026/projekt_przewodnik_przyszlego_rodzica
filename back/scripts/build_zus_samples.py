@@ -1,13 +1,21 @@
 """Buduje `app/data/zus-samples.json` z zestawu przykładowego ZUS.
 
 Skany leżą w `PRZYKLADY/` (poza repozytorium). Do kodu trafia tylko to, co potrzebne do
-rozpoznania sprawy: odcisk SHA-256, wzory formularzy, rodzaj świadczeń, wynik z okładki
-zestawu i krótki opis stanu faktycznego. Treści dokumentów nie kopiujemy.
+rozpoznania sprawy: odcisk SHA-256, wzory formularzy, rodzaj świadczeń, wynik z materiału
+i krótki opis stanu faktycznego. Treści dokumentów nie kopiujemy.
 
-OCR jest opcjonalny. Gdy katalog z cache istnieje (`--ocr-dir`), skrypt bierze z niego
-tekst okładki i wzory formularzy. Bez OCR-a zostają same heurystyki z nazwy pliku.
+OCR jest opcjonalny. Gdy katalogi z cache istnieją (`--cover-dir`, `--pages-dir`), skrypt
+bierze z nich tekst pierwszej strony i pozostałych stron. Bez OCR-a zostają same heurystyki
+z nazwy pliku.
 
-    python3 scripts/build_zus_samples.py --ocr-dir /tmp/opencode/ocr-out
+Cache robi się raz, na wyrenderowanych stronach:
+
+    pdftoppm -r 250 -png plik.pdf strona            # pierwsza strona
+    tesseract strona-1.png stdout -l pol --psm 4    # język polski z tessdata_fast
+    pdftoppm -f 2 -r 120 -png plik.pdf reszta
+    tesseract reszta-2.png stdout -l pol --psm 6
+
+    python3 scripts/build_zus_samples.py --cover-dir /tmp/ocr-cover --pages-dir /tmp/ocr-pages
 """
 
 import argparse
