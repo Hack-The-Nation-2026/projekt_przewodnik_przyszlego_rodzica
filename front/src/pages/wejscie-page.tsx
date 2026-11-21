@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import type { ReactNode } from 'react'
-import { ArrowRight, CreditCard, Landmark, Loader2, LogOut, ShieldCheck, Smartphone } from 'lucide-react'
+import { ArrowRight, Loader2, LogOut, Smartphone } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -24,13 +24,6 @@ const schema = z.object({
 })
 
 type FormValues = z.infer<typeof schema>
-
-/** Metody, których w demie nie ma. Brief wymaga tylko mObywatela, więc pokazujemy je jako plan. */
-const OTHER_METHODS = [
-  { icon: ShieldCheck, label: 'Profil Zaufany' },
-  { icon: Landmark, label: 'Bankowość' },
-  { icon: CreditCard, label: 'e-dowód' },
-]
 
 function describeFailure(error: unknown) {
   if (!axios.isAxiosError(error)) return 'Nie udało się zapisać danych.'
@@ -169,22 +162,9 @@ function MethodChooser() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center gap-3 rounded-md bg-secondary/60 p-3">
-              <img
-                src="/mobywatel.png"
-                alt=""
-                aria-hidden
-                width={32}
-                height={32}
-                className="size-8 rounded-md"
-              />
-              <span className="text-sm text-secondary-foreground">
-                Logowanie jest symulowane, tak jak dopuszcza zadanie.
-              </span>
-            </div>
             <Link
               to="/mobywatel?returnTo=/wejscie"
-              className={cn(buttonVariants({ size: 'lg' }), 'w-full')}
+              className={cn(buttonVariants({ variant: 'mobywatel', size: 'lg' }), 'w-full')}
             >
               <Smartphone />
               Zaloguj przez mObywatel
@@ -259,25 +239,6 @@ function MethodChooser() {
           </CardContent>
         </Card>
       </div>
-
-      <div>
-        <h2 className="text-sm font-semibold text-navy">Inne metody logowania</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Zadanie wymaga tylko mObywatela, więc reszta czeka na podłączenie.
-        </p>
-        <ul className="mt-3 grid gap-2 sm:grid-cols-3">
-          {OTHER_METHODS.map(({ icon: Icon, label }) => (
-            <li
-              key={label}
-              className="flex items-center gap-2 rounded-md border border-dashed border-border px-3 py-2 text-sm text-muted-foreground"
-            >
-              <Icon className="size-4" aria-hidden />
-              {label}
-              <span className="ml-auto text-xs">niedostępne</span>
-            </li>
-          ))}
-        </ul>
-      </div>
     </div>
   )
 }
@@ -296,9 +257,7 @@ export function WejsciePage() {
           : 'Wybierz, jak chcesz zacząć. mObywatel wypełnia dane za ciebie, a ręczne wpisanie wystarczy, żeby policzyć świadczenia.'}
       </p>
 
-      <div className="mt-8">
-        {citizen ? <SessionCard /> : <MethodChooser />}
-      </div>
+      <div className="mt-8">{citizen ? <SessionCard /> : <MethodChooser />}</div>
     </Container>
   )
 }
