@@ -43,6 +43,9 @@ PIP = AssistantLink(
     description="Prawa pracownika i ochrona zatrudnienia w ciąży.",
 )
 
+# Gdy pytanie nie pasuje do żadnego tematu, zostają trzy oficjalne adresy.
+INSTITUTION_LINKS: tuple[AssistantLink, ...] = (ZUS, FAMILY, PIP)
+
 
 @dataclass(frozen=True)
 class Topic:
@@ -627,7 +630,7 @@ def ask(question: str) -> AssistantAnswer:
         return AssistantAnswer(
             topic=None,
             answer=FALLBACK_ANSWER,
-            links=[ZUS, FAMILY, PIP],
+            links=list(INSTITUTION_LINKS),
             suggestions=[topic.public() for topic in TOPICS[:4]],
         )
 

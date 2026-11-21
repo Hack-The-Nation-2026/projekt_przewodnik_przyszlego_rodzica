@@ -89,6 +89,11 @@ function AssistantTurn({
       </span>
       <div className="min-w-0 flex-1">
         <p className="leading-relaxed">{answer.answer}</p>
+        {answer.mode === 'model' && (
+          <p className="mt-1.5 text-xs text-muted-foreground">
+            Zdanie ułożył model językowy, linki pochodzą z katalogu serwisu.
+          </p>
+        )}
         <ul className="mt-3 grid gap-2 sm:grid-cols-2">
           {answer.links.map((link) => (
             <li key={link.href}>
@@ -199,8 +204,8 @@ export function AsystentPage() {
           <div className="min-w-0">
             <p className="font-medium">To nawigacja, nie doradca prawny</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Zasiłki liczy kalkulator z reguł zapisanych w przepisach. Pytanie zostaje w tym
-              serwisie i nie idzie do żadnego zewnętrznego modelu.
+              Zasiłki liczy kalkulator z reguł zapisanych w przepisach. Do modelu idzie samo
+              pytanie, bez danych osobowych i bez materiałów ZUS.
             </p>
           </div>
           {turns.length > 0 && (

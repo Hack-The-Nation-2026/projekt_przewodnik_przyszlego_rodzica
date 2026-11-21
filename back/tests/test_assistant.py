@@ -126,3 +126,89 @@ def test_ranking_ignores_case_and_diacritics():
     without = ranked_topics("gdzie zloze wniosek")
     assert with_diacritics and without
     assert with_diacritics[0][0].id == without[0][0].id
+
+
+# --- Ścieżka modelu -------------------------------------------------------------------
+
+from app.core.config import Settings, get_settings  # noqa: E402
+from app.services import assistant_llm  # noqa: E402
+
+GOOD_JSON = (
+    '{"topic": "wniosek", "answer": "Formularz, załączniki i miejsce złożenia znajdziesz '
+    'na stronie o dokumentach."}'
+)
+
+
+def test_model_sentence_keeps_links_from_the_catalog(monkeypatch):
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: GOOD_JSON)
+    settings = Settings(assistant_api_key="t")
+    answer = assistant_llm.answer_with_model("gdzie złożyć wniosek", settings)
+    assert answer is not None
+    assert answer.mode == "model"
+    assert answer.topic == "wniosek"
+    assert answer.links[0].href == "/dokumenty"
+
+
+def test_model_answer_with_a_number_is_rejected(monkeypatch):
+    payload = (
+        '{"topic": "kwota", "answer": "Zasiłek wynosi 100 procent podstawy, sprawdź kalkulator."}'
+    )
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: payload)
+    assert assistant_llm.answer_with_model("ile dostanę", Settings(assistant_api_key="t")) is None
+
+
+def test_model_answer_with_a_currency_word_is_rejected(monkeypatch):
+    payload = '{"topic": "kwota", "answer": "Kwotę w złotych policzy kalkulator na tej stronie."}'
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: payload)
+    assert assistant_llm.answer_with_model("ile dostanę", Settings(assistant_api_key="t")) is None
+
+
+def test_model_unknown_topic_goes_to_the_institutions(monkeypatch):
+    payload = (
+        '{"topic": "cos-nowego", "answer": "Tego nie ma w katalogu, zajrzyj na strony instytucji."}'
+    )
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: payload)
+    answer = assistant_llm.answer_with_model("dziwne pytanie", Settings(assistant_api_key="t"))
+    assert answer is not None
+    assert answer.topic is None
+    assert {link.kind for link in answer.links} == {"external"}
+
+
+def test_broken_json_falls_back_to_the_catalog(monkeypatch):
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: "nie json")
+    assert assistant_llm.answer_with_model("cokolwiek", Settings(assistant_api_key="t")) is None
+
+
+def test_route_answers_with_the_model_when_a_key_is_set(monkeypatch):
+    app.dependency_overrides[get_settings] = lambda: Settings(assistant_api_key="t")
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, settings: GOOD_JSON)
+    try:
+        body = client.post("/api/assistant/ask", json={"question": "gdzie złożyć wniosek"}).json()
+    finally:
+        app.dependency_overrides.clear()
+    assert body["mode"] == "model"
+    assert body["topic"] == "wniosek"
+
+
+def test_route_keeps_working_when_the_model_fails(monkeypatch):
+    def boom(question, settings):
+        raise RuntimeError("dostawca padł")
+
+    app.dependency_overrides[get_settings] = lambda: Settings(assistant_api_key="t")
+    monkeypatch.setattr(assistant_llm, "_request", boom)
+    try:
+        response = client.post("/api/assistant/ask", json={"question": "gdzie złożyć wniosek"})
+    finally:
+        app.dependency_overrides.clear()
+    assert response.status_code == 200
+    assert response.json()["mode"] == "catalog"
+    assert response.json()["topic"] == "wniosek"
+
+
+def test_route_without_a_key_never_touches_the_network(monkeypatch):
+    def unexpected(question, settings):
+        raise AssertionError("bez klucza nie ma prawa być wywołania modelu")
+
+    monkeypatch.setattr(assistant_llm, "_request", unexpected)
+    body = client.post("/api/assistant/ask", json={"question": "gdzie złożyć wniosek"}).json()
+    assert body["mode"] == "catalog"

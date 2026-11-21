@@ -261,4 +261,6 @@ export interface AssistantAnswer {
   answer: string
   links: AssistantLink[]
   suggestions: AssistantTopic[]
+  /** Kto ułożył zdanie: katalog tematów czy model językowy. Linki zawsze z katalogu. */
+  mode: 'catalog' | 'model'
 }

@@ -442,8 +442,14 @@ na `/asystent`.
 - Asystent nie podaje kwot, tygodni ani terminów. `back/tests/test_assistant.py` sprawdza, że
   w żadnej odpowiedzi, pytaniu ani etykiecie linku nie ma cyfry, oraz że każda podstrona, do której
   odsyła, ma trasę w `front/src/App.tsx`.
-- Pytanie nie opuszcza serwera: nie ma wywołania zewnętrznego modelu. Strona mówi wprost, że to
-  nawigacja, a nie doradca prawny, i że kwoty liczy kalkulator.
+- Z kluczem `ASSISTANT_API_KEY` zdanie układa model językowy (`deepseek/deepseek-v4.1-flash`
+  przez OpenRouter). Model wybiera temat z katalogu, a linki i tak bierzemy z katalogu, więc trasa
+  zostaje deterministyczna. Odpowiedź modelu przechodzi ten sam filtr co demo: cyfra albo słowo
+  o walucie ją odrzuca i wtedy odpowiada katalog. Gdy model nie odpowie w dwanaście sekund albo
+  dostawca padnie, strona działa dalej, tylko z katalogu.
+- Do modelu idzie wyłącznie treść pytania i lista tematów. Nie wysyłamy danych osobowych ani
+  materiałów ZUS. Bez klucza nic nie wychodzi poza serwer i cała aplikacja działa offline.
+  Strona mówi wprost, że to nawigacja, a nie doradca prawny, i że kwoty liczy kalkulator.
 
 ## Krok 15. Materiały do oddania
 

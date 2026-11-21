@@ -20,6 +20,18 @@ class Settings(BaseSettings):
     def cors_origin_list(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
 
+    # Asystent nawigacyjny. Bez klucza działa tryb demo z katalogu tematów, więc cała
+    # aplikacja działa offline. Z kluczem model tylko układa zdanie i wybiera temat,
+    # a linki i liczby dalej pochodzą z katalogu serwisu.
+    assistant_api_key: str = ""
+    assistant_model: str = "deepseek/deepseek-v4.1-flash"
+    assistant_base_url: str = "https://openrouter.ai/api/v1"
+    assistant_timeout_seconds: float = 12.0
+
+    @property
+    def assistant_enabled(self) -> bool:
+        return bool(self.assistant_api_key.strip())
+
 
 @lru_cache
 def get_settings() -> Settings:

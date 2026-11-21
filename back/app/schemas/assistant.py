@@ -34,3 +34,5 @@ class AssistantAnswer(BaseModel):
     answer: str
     links: list[AssistantLink]
     suggestions: list[AssistantTopic] = Field(default_factory=list)
+    # Kto ułożył zdanie: katalog (tryb demo) czy model językowy. Linki zawsze z katalogu.
+    mode: Literal["catalog", "model"] = "catalog"
