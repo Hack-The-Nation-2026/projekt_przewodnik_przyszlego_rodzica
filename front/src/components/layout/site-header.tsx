@@ -59,7 +59,7 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-40">
+    <header className="sticky top-0 z-40 shrink-0">
       <div className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <Container className="grid h-16 grid-cols-[auto_1fr_auto] items-center gap-4">
           <Wordmark />
