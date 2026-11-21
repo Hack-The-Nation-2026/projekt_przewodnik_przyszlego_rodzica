@@ -253,8 +253,8 @@ export function AssistantWidget() {
                     <p className="text-sm font-medium">Od czego chcesz zacząć?</p>
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    Wskażę stronę, na której znajdziesz odpowiedź. Kwoty i terminy zostawiam
-                    kalkulatorowi.
+                    Wskażę stronę, na której znajdziesz odpowiedź. Kwoty i terminy wylicza
+                    kalkulator.
                   </p>
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     {topics.isPending
@@ -337,7 +337,7 @@ export function AssistantWidget() {
         {!open && teaser && (
           <div className="flex items-start gap-2 rounded-xl border border-border bg-background p-3 shadow-lg">
             <p className="text-sm">
-              Masz pytanie? Napisz, a wskażę stronę, na której znajdziesz odpowiedź.
+              Masz pytanie? Wskażę stronę, na której znajdziesz odpowiedź.
             </p>
             <button
               type="button"

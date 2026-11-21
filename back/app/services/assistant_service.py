@@ -119,8 +119,8 @@ TOPICS: tuple[Topic, ...] = (
         id="kwota",
         question="Ile dostanę zasiłku?",
         answer=(
-            "Kwoty liczy kalkulator z twoich danych, nie asystent. Wpisz podstawę wymiaru "
-            "i sytuację rodzinną, a zobaczysz wyliczenie dla obojga rodziców razem."
+            "Kwoty liczy kalkulator z twoich danych. Wpisz podstawę wymiaru i sytuację "
+            "rodzinną, a zobaczysz wyliczenie dla obojga rodziców razem."
         ),
         links=(
             AssistantLink(
@@ -150,9 +150,8 @@ TOPICS: tuple[Topic, ...] = (
         id="skladki",
         question="Ile płacę składek?",
         answer=(
-            "Składki zależą od podstawy wymiaru, więc kwoty nie podam od ręki. W kalkulatorze "
-            "wpiszesz swoje dane i zobaczysz wyliczenie, a symulacja ZUS pokaże składki "
-            "i ubezpieczenie na wybrany dzień."
+            "Składki zależą od podstawy wymiaru, a symulacja ZUS pokazuje je na wybranym dniu. "
+            "W kalkulatorze wpiszesz swoje dane i zobaczysz wyliczenie zasiłku."
         ),
         links=(
             AssistantLink(
@@ -655,9 +654,10 @@ TOPICS: tuple[Topic, ...] = (
 )
 
 FALLBACK_ANSWER = (
-    "Tego pytania nie obejmuje katalog serwisu, więc nie chcę zgadywać. Sprawdź u źródła, "
-    "strony są poniżej: sprawy zasiłkowe prowadzi ZUS, przepisy o urlopach ministerstwo rodziny, "
-    "a praw pracowniczych pilnuje inspekcja pracy."
+    "Tego pytania nie obejmuje zakres serwisu, więc nie podaję odpowiedzi, której nie mogę "
+    "potwierdzić. Oficjalne strony są poniżej: sprawy zasiłkowe prowadzi ZUS, przepisy o urlopach "
+    "Ministerstwo Rodziny, Pracy i Polityki Społecznej, a praw pracowniczych Państwowa Inspekcja "
+    "Pracy."
 )
 
 BY_ID = {topic.id: topic for topic in TOPICS}

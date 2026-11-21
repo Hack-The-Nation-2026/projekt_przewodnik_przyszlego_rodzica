@@ -73,8 +73,9 @@ def test_question_outside_the_catalog_points_at_the_sources():
     """Pytanie spoza zakresu nie kończy rozmowy, tylko mówi, gdzie sprawdzić."""
     body = client.post("/api/assistant/ask", json={"question": "ile mogę mieć dzieci"}).json()
     assert body["topic"] is None
-    assert "źródł" in body["answer"]
-    assert not body["answer"].startswith("Nie mam")
+    for name in ("ZUS", "Ministerstwo Rodziny", "Inspekcja Pracy"):
+        assert name in body["answer"]
+    assert "potwierdzić" in body["answer"]
     hrefs = {link["href"] for link in body["links"]}
     assert "/swiadczenia" in hrefs
     assert {
