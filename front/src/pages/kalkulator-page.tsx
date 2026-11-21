@@ -1,9 +1,8 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FamilyFields, EmploymentFields, PregnancyFields } from '@/components/benefit-interview-fields'
 import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
 import { Badge } from '@/components/ui/badge'
@@ -15,6 +14,7 @@ import { benefitList, buildInterview } from '@/lib/benefit-interview'
 import type { Assessment, BenefitCode, SimulationResponse } from '@/lib/benefit-interview'
 import { interviewDefaults, interviewSchema } from '@/lib/interview-form'
 import type { InterviewValues } from '@/lib/interview-form'
+import { getInterviewSteps } from '@/lib/interview-steps'
 
 const currency = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' })
 const date = new Intl.DateTimeFormat('pl-PL', { dateStyle: 'medium', timeZone: 'UTC' })
@@ -107,18 +107,55 @@ function BenefitCard({ assessment }: { assessment: Assessment }) {
 }
 
 export function KalkulatorPage() {
-  const heading = useRef<HTMLHeadingElement>(null)
+  const resultHeading = useRef<HTMLHeadingElement>(null)
+  const stepHeading = useRef<HTMLHeadingElement>(null)
+  const focusNextStep = useRef(false)
+  const [stepId, setStepId] = useState('role')
   const form = useForm<InterviewValues>({
     resolver: zodResolver(interviewSchema),
     defaultValues: interviewDefaults,
   })
   const values = useWatch({ control: form.control, compute: (answers) => answers })
   const simulation = useMutation({ mutationFn: simulate })
+  const steps = getInterviewSteps(values)
+  const stepIndex = Math.max(0, steps.findIndex(({ id }) => id === stepId))
+  const step = steps[stepIndex]
+  const nextStep = steps[stepIndex + 1]
+
+  function goToStep(id: string) {
+    focusNextStep.current = true
+    setStepId(id)
+  }
+
+  function editAnswers() {
+    goToStep(steps[0].id)
+    simulation.reset()
+  }
+
+  async function advance(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (!nextStep) {
+      await form.handleSubmit((data) => simulation.mutate(data), (errors) => {
+        const invalidStep = steps.find(({ fields }) => fields.some((field) => errors[field]))
+        if (invalidStep && invalidStep.id !== step.id) goToStep(invalidStep.id)
+      })(event)
+    } else if (await form.trigger(step.fields, { shouldFocus: true })) {
+      goToStep(nextStep.id)
+    }
+  }
+
+  useEffect(() => {
+    if (focusNextStep.current && stepHeading.current) {
+      focusNextStep.current = false
+      stepHeading.current.focus({ preventScroll: true })
+      stepHeading.current.scrollIntoView({ block: 'start' })
+    }
+  }, [stepId, simulation.isSuccess])
 
   useEffect(() => {
     if (simulation.data) {
-      heading.current?.focus({ preventScroll: true })
-      heading.current?.scrollIntoView({ block: 'start' })
+      resultHeading.current?.focus({ preventScroll: true })
+      resultHeading.current?.scrollIntoView({ block: 'start' })
     }
   }, [simulation.data])
 
@@ -132,29 +169,56 @@ export function KalkulatorPage() {
         backLabel="Wróć do wejścia"
       />
 
-      <Form {...form}>
-        <form
-          className="mt-8 space-y-5"
-          noValidate
-          onSubmit={form.handleSubmit((data) => simulation.mutate(data))}
-        >
-          <fieldset disabled={simulation.isPending} className="min-w-0 space-y-5">
-            <FamilyFields values={values} />
-            <EmploymentFields values={values} />
-            {values.role === 'mother' && <PregnancyFields values={values} />}
-            <Button type="submit" disabled={simulation.isPending}>
-              {simulation.isPending ? 'Sprawdzamy świadczenia…' : 'Sprawdź świadczenia'}
-            </Button>
-          </fieldset>
-          {simulation.isError && (
-            <p role="alert" className="rounded-lg border border-destructive/40 p-4 text-sm">
-              {isAxiosError(simulation.error) && simulation.error.response?.status === 422
-                ? 'Nie można sprawdzić uprawnień dla tej kombinacji odpowiedzi. Sprawdź daty i pola formularza.'
-                : 'Nie udało się pobrać wyniku. Spróbuj ponownie.'}
-            </p>
-          )}
-        </form>
-      </Form>
+      {!simulation.data && (
+        <Form {...form}>
+          <form className="mt-8 space-y-5" noValidate onSubmit={advance} aria-labelledby="interview-step">
+            <Card>
+              <CardHeader>
+                <p className="text-sm font-medium text-primary" id="interview-progress">
+                  Krok {stepIndex + 1} z {steps.length}
+                </p>
+                <progress
+                  className="mb-3 h-2 w-full overflow-hidden rounded-full accent-primary"
+                  value={stepIndex + 1}
+                  max={steps.length}
+                  aria-labelledby="interview-progress"
+                />
+                <h2
+                  id="interview-step"
+                  ref={stepHeading}
+                  tabIndex={-1}
+                  className="scroll-mt-24 text-2xl font-semibold focus:outline-none"
+                >
+                  {step.title}
+                </h2>
+                <CardDescription>{step.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <fieldset disabled={simulation.isPending} className="min-w-0 space-y-5">
+                  <div key={step.id} className="space-y-5"><step.Fields values={values} /></div>
+                  <div className="flex flex-wrap items-center gap-3 border-t pt-5">
+                    {stepIndex > 0 && (
+                      <Button type="button" variant="outline" onClick={() => goToStep(steps[stepIndex - 1].id)}>
+                        Wstecz
+                      </Button>
+                    )}
+                    <Button type="submit" disabled={simulation.isPending}>
+                      {nextStep ? 'Dalej' : simulation.isPending ? 'Sprawdzamy świadczenia…' : 'Sprawdź świadczenia'}
+                    </Button>
+                  </div>
+                </fieldset>
+              </CardContent>
+            </Card>
+            {simulation.isError && (
+              <p role="alert" className="rounded-lg border border-destructive/40 p-4 text-sm">
+                {isAxiosError(simulation.error) && simulation.error.response?.status === 422
+                  ? 'Nie można sprawdzić uprawnień dla tej kombinacji odpowiedzi. Sprawdź daty i pola formularza.'
+                  : 'Nie udało się pobrać wyniku. Spróbuj ponownie.'}
+              </p>
+            )}
+          </form>
+        </Form>
+      )}
 
       {simulation.data && (
         <section className="mt-12 space-y-5" aria-labelledby="benefit-result">
@@ -162,7 +226,7 @@ export function KalkulatorPage() {
             <h2
               className="scroll-mt-24 text-3xl font-semibold focus:outline-none"
               id="benefit-result"
-              ref={heading}
+              ref={resultHeading}
               tabIndex={-1}
             >
               Wynik wywiadu
@@ -182,6 +246,9 @@ export function KalkulatorPage() {
                 Planowany powrót do pracy {date.format(new Date(simulation.data.returnDate))}.
               </p>
             )}
+            <Button className="mt-4" type="button" variant="outline" onClick={editAnswers}>
+              Edytuj odpowiedzi
+            </Button>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             {(Object.keys(benefitList) as BenefitCode[]).map((benefit) => (
