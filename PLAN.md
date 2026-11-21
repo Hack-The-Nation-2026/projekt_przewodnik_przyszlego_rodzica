@@ -367,11 +367,25 @@ Brief, pkt 4 oraz pkt 6.
 - `GET /api/cases` zwraca dziesięć spraw, `GET /api/cases/{id}` liczy wybraną, a
   `POST /api/cases/simulate` przyjmuje wniosek wgrany z pliku. `GET /api/cases/{id}/application`
   daje ten sam wniosek do pobrania, żeby można go było poprawić i wgrać z powrotem.
+- `GET /api/samples` daje 87 zestawów z `PRZYKLADY/`, `POST /api/samples/recognize` dopasowuje
+  SHA-256 wgranego pliku, a `GET /api/samples/{id}` zwraca rozpoznaną sprawę. Odcisk liczy
+  przeglądarka (`front/src/lib/sha256.ts`), więc PDF zostaje na urządzeniu, a do API idzie
+  wyłącznie skrót.
+- Dane rozpoznawcze leżą w `back/app/data/zus-samples.json` i powstają skryptem
+  `back/scripts/build_zus_samples.py`: odcisk pliku, wzory formularzy, rodzaj świadczeń, wynik
+  z okładki zestawu i opis stanu faktycznego. Treści skanów nie kopiujemy.
 - Sprawy leżą w `back/app/data/demo-cases.json` i jadą z kodem. Regulamin nie pozwala
   rozpowszechniać skanów ZUS, więc dane są wymyślone, a strona mówi o tym wprost.
 - Strona `/sprawy`: kafle spraw, wgrywanie pliku JSON, weryfikacja ubezpieczenia z podstawą
   prawną, wyliczenie i porównanie z zapisaną decyzją. Wgrany wniosek z błędną decyzją pokazuje
   różnicę na czerwono.
+- Sekcja „Zestaw przykładowy ZUS” na `/sprawy`: wgranie PDF-a albo wybór sprawy z listy. Po
+  rozpoznaniu widać opis sprawy, wzory formularzy i wynik zapisany w materiale, a krótki formularz
+  przyjmuje datę i podstawę wymiaru, których skan nie podaje. Kalkulator liczy wtedy świadczenie
+  główne i porównuje status z rozpoznaną sprawą.
+- Nieznany plik dostaje komunikat, że nie jest z zestawu, i wskaźnik na formularz ręczny.
+  Rozpoznanie nie udaje odczytu treści: 87 zestawów to skany bez warstwy tekstowej, z zamazanymi
+  danymi osobowymi i pismem odręcznym.
 - `back/tests/test_rules.py` mapuje wszystkie 85 identyfikatorów z `RULES.md` na scenariusz
   albo na wpis „poza silnikiem” z powodem. Nowa reguła w `RULES.md` bez wpisu wywala test.
 - `back/tests/test_cases.py` przechodzi każdą sprawę przez endpoint i sprawdza zgodność.
@@ -384,10 +398,10 @@ Brief, pkt 4 oraz pkt 6.
 - Dziesięć spraw z zestawu: 10/10 zgodnych, kwoty i statusy co do grosza.
 - 209 testów backendu przechodzi, 32 są pominięte (18 reguł poza silnikiem, 14 porównań z
   lokalnym zestawem ZUS).
-- Pełny przebieg na `PRZYKLADY/` jest zablokowany, nie zaliczony. 87 PDF-ów to zdjęcia formularzy
-  i decyzji: brak warstwy tekstowej, pismo odręczne, dane zaczernione. `pdftotext` nic nie daje,
-  a próba OCR na wyrenderowanej stronie czyta tylko nagłówek wniosku, więc nie da się z tego
-  zrobić wiarygodnego zestawu referencyjnego bez ręcznego przepisania każdej sprawy.
+- Pełny przebieg na `PRZYKLADY/` jest częściowy. 87 PDF-ów to zdjęcia formularzy i decyzji: brak
+  warstwy tekstowej, pismo odręczne, dane zaczernione. `pdftotext` nic nie daje, a OCR czyta
+  nagłówki i okładkę zestawu, nie kwoty. Dlatego rozpoznajemy komplet 87 spraw, ale kwot
+  i okresów nie odczytujemy ze skanu — wpisuje je użytkownik, a kalkulator liczy od nich.
 - Sprawy demonstracyjne mają oczekiwania wyliczone tym samym silnikiem, więc dowodzą spięcia
   strony z kalkulatorem i powtarzalności, a nie zgodności z decyzją ZUS. Poprawność reguł
   opiera się na `test_rules.py`.

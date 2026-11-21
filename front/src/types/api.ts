@@ -241,6 +241,44 @@ export interface CaseApplication {
   expected: CaseExpectedRow[]
 }
 
+/** Wynik zapisany w zestawie przykładowym ZUS. */
+export type ZusOutcome = 'granted' | 'denied' | 'partially_granted' | 'unknown'
+
+/** Jedna sprawa z zestawu przykładowego, widziana na liście wyboru. */
+export interface ZusSampleSummary {
+  id: string
+  title: string
+  facts: string
+  outcome: ZusOutcome
+  forms: string[]
+  tags: string[]
+  file_name: string
+  duplicate_of: string | null
+}
+
+/** Rozpoznana sprawa: dochodzą wzory formularzy i dane osoby z wniosku. */
+export interface ZusSample extends ZusSampleSummary {
+  sha256: string
+  pages: number
+  evidence: string
+  benefits: string[]
+  role: 'mother' | 'father' | null
+  applicant: {
+    label: string
+    employment: 'employee' | 'contractor' | 'self_employed' | 'none'
+    insured: boolean | null
+    insurance_kind: 'compulsory' | 'voluntary' | null
+  }
+}
+
+/** Odpowiedź na odcisk wgranego PDF-a. */
+export interface ZusRecognition {
+  sha256: string
+  matched: boolean
+  sample: ZusSample | null
+  hint: string
+}
+
 /** Miejsce, do którego odsyła asystent: nasza podstrona albo strona instytucji. */
 export interface AssistantLink {
   label: string

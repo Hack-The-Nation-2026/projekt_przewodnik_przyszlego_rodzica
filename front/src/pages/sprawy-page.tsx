@@ -3,6 +3,7 @@ import { isAxiosError } from 'axios'
 import { Check, CircleAlert, CircleHelp, Download, FileUp, ShieldCheck, ShieldX, X } from 'lucide-react'
 import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
+import { SampleRecognition } from '@/components/sample-recognition'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -428,6 +429,7 @@ export function SprawyPage() {
   const cases = useCases()
   const [chosenId, setChosenId] = useState<string | null>(null)
   const [uploaded, setUploaded] = useState<CaseResult | null>(null)
+  const [sourceLabel, setSourceLabel] = useState('zestaw demonstracyjny')
   const [downloadError, setDownloadError] = useState<string | null>(null)
   const selectedId = chosenId ?? cases.data?.[0]?.id ?? null
   const selected = useCase(selectedId)
@@ -449,14 +451,19 @@ export function SprawyPage() {
     }
   }
 
-  const source = uploaded ? 'wgrany plik' : 'zestaw demonstracyjny'
+  const source = uploaded ? sourceLabel : 'zestaw demonstracyjny'
 
   return (
     <PageContainer className="space-y-8 py-10">
       <PageHeading
         title="Sprawy"
-        description="Wybierz wniosek z zestawu albo wgraj własny plik JSON. Najpierw sprawdzamy ubezpieczenie, potem liczymy świadczenia na tych samych danych."
+        description="Wgraj PDF z zestawu przykładowego ZUS albo wybierz wniosek z zestawu. Najpierw sprawdzamy ubezpieczenie, potem liczymy świadczenia na tych samych danych."
       />
+
+      <SampleRecognition onResult={(result) => {
+        setSourceLabel('zestaw przykładowy ZUS')
+        setUploaded(result)
+      }} />
 
       <Card>
         <CardHeader>
@@ -509,7 +516,10 @@ export function SprawyPage() {
 
       <UploadCard
         onDownload={selectedId ? downloadApplication : null}
-        onResult={(result) => setUploaded(result)}
+        onResult={(result) => {
+          setSourceLabel('wgrany plik JSON')
+          setUploaded(result)
+        }}
       />
       {downloadError && (
         <p role="alert" className="text-red-800">
@@ -528,8 +538,9 @@ export function SprawyPage() {
       {!uploaded && selected.data && <ResultView result={selected.data} source={source} />}
 
       <p className="max-w-2xl text-sm text-muted-foreground">
-        Wnioski w zestawie są wymyślone. Regulamin zadania nie pozwala publikować prawdziwych
-        dokumentów ZUS, więc żadna sprawa nie pochodzi ze skanów.
+        Wnioski demonstracyjne są wymyślone. Zestaw przykładowy ZUS rozpoznajemy po odcisku pliku i
+        pokazujemy z niego tylko opis sprawy oraz wzory formularzy, bo regulamin zadania zabrania
+        publikowania samych dokumentów. Kwoty i daty wpisujesz ze swojego pliku.
       </p>
     </PageContainer>
   )

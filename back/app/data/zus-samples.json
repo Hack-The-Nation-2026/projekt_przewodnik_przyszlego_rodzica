@@ -1,0 +1,2242 @@
+[
+ {
+  "id": "ZUS-001",
+  "sha256": "3e34d10a8ceffd035ed2174fa1750c077c6b43adeba96a5be26a283d9c2c1e24",
+  "file_name": "Agata Go_1_zas. mac. za okres urlopu macierzyńskiego.pdf",
+  "pages": 20,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński za okres urlopu macierzyńskiego. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "W sprawie ustalono uprawnienia do zasiłku chorobowego dla kobiety w ciąży oraz zasiłku macierzyńskiego - wypłacono świadczenia",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-002",
+  "sha256": "03b393788ee74110920719e1dd8d5ff0267f04e565e355f29e93e9516a3fdece",
+  "file_name": "Agnieszka Poz._zas.mac. za okres mac., uzup., rodz. - skrajny wcześniak masa poniżej 1000 - decyzja przyznająca.pdf",
+  "pages": 22,
+  "title": "Zasiłek macierzyński, uzupełniający urlop macierzyński",
+  "facts": "Zasiłek macierzyński za okres macierzyński, uzupełniający, rodzicielski. Skrajny wcześniak masa poniżej 1000. Decyzja przyznająca. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "uzupelniajacy"
+  ],
+  "tags": [
+   "wczesniak",
+   "decyzja_przyznajaca"
+  ],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-003",
+  "sha256": "8498706eabc8f0584519aac9b713985f0ed58438485d0ebe451e485d4fc2f8d0",
+  "file_name": "Agnieszka Wa_05_zas. mac. łęczenie urlopu rodzicielskiego z pracą.pdf",
+  "pages": 28,
+  "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński łączenie urlopu rodzicielskiego z pracą. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "W sprawie została dokonana wypłata: - zasitku macierzyńskiego za okres od 22-11-2023 to i Z wykonywanieni pracy na 4 etatu), - od 01-02-2025 wypłata zasiłku macierzyńskiego zósta z wnioskiem ubezpieczonej, - w Sprawie zostało wypłacone podwyższenie zasiłku” ma świadczenia rodzicielskiego za okres od 01-05-2024 do 3",
+  "benefits": [
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-004",
+  "sha256": "4cac2bae72af6a09c58e132ca87d18b8c7a1a7b10f2cba38b821b8e388247605",
+  "file_name": "Agnieszka War_02_zas. macierzyński - przyjęcie dziecka na wychowanie.pdf",
+  "pages": 16,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński. Przyjęcie dziecka na wychowanie. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "przyjecie_na_wychowanie"
+  ],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-005",
+  "sha256": "1a2f0afda53a2532786b66fcdac990a7327ddfc9b4487dcaea4565b246975c7e",
+  "file_name": "Alicja Cho_3_Zasiłek macierzyński za okres urlopu macierzyńskiego i rodzicielskiego.pdf",
+  "pages": 8,
+  "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński za okres urlopu macierzyńskiego i rodzicielskiego. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [],
+  "forms": [
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-006",
+  "sha256": "9758bb8e6cf5396b29f54530dcc5f73deda4c10cf3624979691d626b8c1f9f83",
+  "file_name": "Alicja Ta_2_zasiłek chorobowy i macierzyński.pdf",
+  "pages": 58,
+  "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
+  "facts": "Zasiłek chorobowy i macierzyński. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "DECYZJA PRZYZNAJĄCA ZASIŁEK CHOROBOWY ZA OKRES CIĄŻY ORAZ DECYZJA PRZYZNAJĄCA ZASIŁEK MACIERZYŃSKI",
+  "benefits": [
+   "chorobowy_w_ciazy",
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-007",
+  "sha256": "6bcda503b0b6c213eb150f880e94ed065bb09a1d5e7fe794686e9953a21dca8b",
+  "file_name": "Alina Wa I_1_zas. mac. martwe urodzenie.pdf",
+  "pages": 14,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński martwe urodzenie. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "martwe_urodzenie"
+  ],
+  "forms": [
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-008",
+  "sha256": "95befcf305df2f5b98125492c9c5cb2d6476e45647b5c2131125d98e043baa6a",
+  "file_name": "Andrzej El_5_zas. macierzyński za część urlopu rodzicielskiego - 9 tygodni.pdf",
+  "pages": 14,
+  "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński za część urlopu rodzicielskiego. 9 tygodni. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [
+   "dziewiec_tygodni"
+  ],
+  "forms": [],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-009",
+  "sha256": "59ace4c6d8bd99dc35451969e26646ac65f840a88a44f3c8fd1f4c280d46727b",
+  "file_name": "Andrzej No_1_zas. macierzyński.pdf",
+  "pages": 12,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-010",
+  "sha256": "7451a508719b24d08559214c5fa27cc00a253515f98aa7a6afcb335a70d27a11",
+  "file_name": "Anna Ko_4_zas. chorobowy w ciąży.pdf",
+  "pages": 38,
+  "title": "Zasiłek chorobowy w ciąży",
+  "facts": "Zasiłek chorobowyobowy w ciąży. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "chorobowy_w_ciazy"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-011",
+  "sha256": "a382c4791019b946fe7268a19d04d17e3f847b52ba66917e5f2671acd990180b",
+  "file_name": "Anna Le_zas. chorobowy w ciąży.pdf",
+  "pages": 12,
+  "title": "Zasiłek chorobowy w ciąży",
+  "facts": "Zasiłek chorobowyobowy w ciąży. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "chorobowy_w_ciazy"
+  ],
+  "tags": [],
+  "forms": [
+   "Z-3b"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-012",
+  "sha256": "4f8286ac5320305915136c643015bf4c62c47674ccd898571e0e0a40fcc10324",
+  "file_name": "Anna Lu_2_zas. mac. za okres urlopu macierzyńskiego, uzupełniającego url. mac., rodzicielskiego.pdf",
+  "pages": 42,
+  "title": "Zasiłek macierzyński, uzupełniający urlop macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński za okres urlopu macierzyńskiego, uzupełniającego url. macierzyński, rodzicielskiego. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "uzupelniajacy",
+   "rodzicielski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-013",
+  "sha256": "1b7699888c19497c380ee5347e6f2de4bb6abec8ec38cfb838f8dc5fd57d8e29",
+  "file_name": "Anna No_3_zas. chorobowy i macierzyński.pdf",
+  "pages": 52,
+  "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
+  "facts": "Zasiłek chorobowyobowy i macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "chorobowy_w_ciazy",
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [
+   "Odpis aktu urodzenia"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-014",
+  "sha256": "83a2003ca7fdf5dbd443c2a1966abda265017ee0335ed0bdaa80d1750a5d93f6",
+  "file_name": "Anna Ol_2_zas. mac. - 9 tygodni urlopu rodzicielskiego dla ojca.pdf",
+  "pages": 16,
+  "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński. 9 tygodni urlopu rodzicielskiego dla ojca. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [
+   "dziewiec_tygodni"
+  ],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-015",
+  "sha256": "64bfb982a356bffda0190cf7f8da56e4df9c641310cf526f4c31732c66585fe9",
+  "file_name": "Anna Ra_1_zas. mac. za urlop macierzyński rodzicielski.pdf",
+  "pages": 20,
+  "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński za urlop macierzyński rodzicielski. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-016",
+  "sha256": "1a53dd703904345c728ca7c21600eacd1a8f07848ca52876ca3b1e5ab120e140",
+  "file_name": "Anna War_01_zas. macierzyński, martwe urodzenie.pdf",
+  "pages": 12,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński, martwe urodzenie. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "W sprawie została dokonana wypłata zasiłku macierzyńs od 14-09-2026 do 08-11-2026 s 8 ie p 1 R: it lzy |-ż D f jo oż 1) LE l KA i i x i i [ i Ń t | rę H",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "martwe_urodzenie"
+  ],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-017",
+  "sha256": "11304abb82ecbdf9a62742c6605878278e18115776c61b9e9d6e2f8ec97ddeae",
+  "file_name": "Anna Wro_6_zas. w wysokości zasiłku macierzyńskiego.pdf",
+  "pages": 34,
+  "title": "Zasiłek w wysokości zasiłku macierzyńskiego",
+  "facts": "Zasiłek w wysokości zasiłku macierzyńskiego. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "w_wysokosci_macierzynskiego"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-018",
+  "sha256": "850dbccfe57dbc0c7128ea78fb00d0e6994cb4844f797a8bbd8b2462499d418f",
+  "file_name": "Anna Łó 5_zas. macierzyński.pdf",
+  "pages": 20,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-019",
+  "sha256": "cba3ea2cebb8407458c5c5356d561ad01fa394f49daf6396ee3f0bdb188d52fb",
+  "file_name": "Barbara Ra_4_zas. mac._rezygnacja po 14 tyg..pdf",
+  "pages": 22,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński, rezygnacja po 14 tyg. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "rezygnacja_z_urlopu"
+  ],
+  "forms": [
+   "Odpis aktu urodzenia"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-020",
+  "sha256": "44fe5c8216e25bf86b86e9617764cd63ff1c20408dcb0137fcdfd32da264e1b7",
+  "file_name": "Cecylia By_zas. macierzyński za okres urlopu macierzyńskiego i rodzicielskiego w trakcie zatrudnienia.pdf",
+  "pages": 30,
+  "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński za okres urlopu macierzyńskiego i rodzicielskiego w trakcie zatrudnienia. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [],
+  "forms": [
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-021",
+  "sha256": "f7636bd8c878482ee865ba3c8d6ae55876a989de2687e9e33879e7434d561ca6",
+  "file_name": "Dagmara Chrz_2_odmowa prawa do zasiłku chorobowego w ciąży_brak ubezpieczenia.pdf",
+  "pages": 14,
+  "title": "Zasiłek chorobowy w ciąży",
+  "facts": "Odmowa prawa do zasiłku chorobowego w ciąży, brak ubezpieczenia. ZUS odmówił prawa do świadczenia.",
+  "outcome": "denied",
+  "evidence": "",
+  "benefits": [
+   "chorobowy_w_ciazy"
+  ],
+  "tags": [
+   "brak_ubezpieczenia",
+   "decyzja_odmowna"
+  ],
+  "forms": [
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": false,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-022",
+  "sha256": "28d15681986c0ca355c187e0883a510e5479385d8aededbeba272c9eda6ef2b2",
+  "file_name": "Dariusz Go_3_zas. mac. za okres urlopu ojcowskiego (1).pdf",
+  "pages": 12,
+  "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
+  "facts": "Zasiłek macierzyński za okres urlopu ojcowskiego (1). ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "W sprawie ustalono uprawnienia do zasiłku macierzyńskiego za okres urlopu 2a ABD ojcowskiego 9411 do 17 maja 2026 r.",
+  "benefits": [
+   "macierzynski",
+   "ojcowski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-023",
+  "sha256": "28d15681986c0ca355c187e0883a510e5479385d8aededbeba272c9eda6ef2b2",
+  "file_name": "Dariusz Go_3_zas. mac. za okres urlopu ojcowskiego.pdf",
+  "pages": 12,
+  "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
+  "facts": "Ten sam zestaw co ZUS-022.",
+  "outcome": "granted",
+  "evidence": "W sprawie ustalono uprawnienia do zasiłku macierzyńskiego za okres urlopu 2a ABD ojcowskiego 9411 do 17 maja 2026 r.",
+  "benefits": [
+   "macierzynski",
+   "ojcowski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": "ZUS-022"
+ },
+ {
+  "id": "ZUS-024",
+  "sha256": "a29e5fbd4ef9ba90694d3d5580012880a795221c194965ba46f4c82ffa592082",
+  "file_name": "Dariusz Łód_4_zas. macierzyński za rodzicielski dla ojca_matka nieubezpieczona.pdf",
+  "pages": 16,
+  "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński za rodzicielski dla ojca, matka nieubezpieczona. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-025",
+  "sha256": "33f2f33dcc7ec8091834f35d86185749c066ad0ef6d0b7acf0d0a8c4f3f698cc",
+  "file_name": "Dorota Wa I_3_zasiłek w wysokości zasiłku macierzyńskiego.pdf",
+  "pages": 22,
+  "title": "Zasiłek w wysokości zasiłku macierzyńskiego",
+  "facts": "Zasiłek w wysokości zasiłku macierzyńskiego. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "w_wysokosci_macierzynskiego"
+  ],
+  "tags": [],
+  "forms": [
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-026",
+  "sha256": "41f4e1f8c8bd16651c53440ea70efce8dfabc16f15d6b7bc71f5df482f98fcdd",
+  "file_name": "Ewa Ko_1_zas. mac..pdf",
+  "pages": 30,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-027",
+  "sha256": "6a68a43bb6c3fd370d6f2c4c87fd8b147498d40a125b558a39fab43aee1872e9",
+  "file_name": "Ewa No_2_zas. macierzyński.pdf",
+  "pages": 16,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-028",
+  "sha256": "3e771a9a8ac7404b89212cb954ad717cb8e04feb16a446ca0c7c3ff83ea542fe",
+  "file_name": "Ewa Wro_5_zas. macierzyński_martwe urodzenie.pdf",
+  "pages": 16,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński, martwe urodzenie. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "martwe_urodzenie"
+  ],
+  "forms": [
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-029",
+  "sha256": "0c34a3c062d604cd5b5c893cb9cc7a8161acff708d05ac59839fc6d0ec1de763",
+  "file_name": "Ewa Łó 6_zas. macierzyński.pdf",
+  "pages": 20,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [
+   "ZAM"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-030",
+  "sha256": "bc2c370919db43766d312631bea31d208105370ff9c3f337c62df4c0c8d16378",
+  "file_name": "Ewa Łód_5_zas. macierzyński - odmowa - nie podlega ubezp. chorobowemu na dzień porodu.pdf",
+  "pages": 22,
+  "title": "Zasiłek macierzyński, zasiłek chorobowy w ciąży",
+  "facts": "Zasiłek macierzyński. Odmowa. Nie podlega ubezpieczenie chorobowemu na dzień porodu. ZUS odmówił prawa do świadczenia.",
+  "outcome": "denied",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "chorobowy_w_ciazy"
+  ],
+  "tags": [
+   "brak_ubezpieczenia",
+   "decyzja_odmowna"
+  ],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": false,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-031",
+  "sha256": "30acf542066494cb53f233d3943c99097c1b82d1db24b4bd80436fd22a15f88b",
+  "file_name": "Helena Gd_5_zas. mac._odmowa_brak zgłoszenia do ubezpieczeń.pdf",
+  "pages": 8,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński, odmowa, brak zgłoszenia do ubezpieczeń. ZUS odmówił prawa do świadczenia.",
+  "outcome": "denied",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "brak_ubezpieczenia",
+   "decyzja_odmowna"
+  ],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": false,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-032",
+  "sha256": "3d4d5ab773030ca9a769b0a6d4647cf172b5ae825f28a1f7801c14107d4d3304",
+  "file_name": "Jacek War_04_zas. macierzyński_urlop ojcowski.pdf",
+  "pages": 14,
+  "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
+  "facts": "Zasiłek macierzyński, urlop ojcowski. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "W sprawie została dokonana wypłata zasiłku macierzyńs ojcowskiego od 14-09-2026 do 27-09-2026 a'okres urlopu $ .",
+  "benefits": [
+   "macierzynski",
+   "ojcowski"
+  ],
+  "tags": [
+   "urlop_ojcowski"
+  ],
+  "forms": [],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-033",
+  "sha256": "2ae6fefdc576061c41232bd12c6102bb6a620b953333f259831aa27ce9563d51",
+  "file_name": "Jan Zie_5_zas. macierzyński_urlop ojcowski.pdf",
+  "pages": 16,
+  "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
+  "facts": "Zasiłek macierzyński, urlop ojcowski. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "ojcowski"
+  ],
+  "tags": [
+   "urlop_ojcowski"
+  ],
+  "forms": [],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-034",
+  "sha256": "224731f3e3a6d88ed7d62aeffc171069a58df2a1b54c998955a639ba5ed06cd7",
+  "file_name": "Jan Łó 2_zasiłek macierzyński u. rodz..pdf",
+  "pages": 12,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński u. rodzicielski. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-035",
+  "sha256": "7cae1e0a07f2aca7f4b50d7a95f3387bda348cf21085accfc2bc3f5265fb22e2",
+  "file_name": "Janina Poz_2_zas. macierzyński, podwyższenie kwoty zasiłku.pdf",
+  "pages": 14,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński, podwyższenie kwoty zasiłku. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "podwyzszenie_swiadczenia"
+  ],
+  "forms": [
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-036",
+  "sha256": "8cd3fab8924095fd3d6b6572b499c2101d0aeabd08668014e21cba22e7e96e27",
+  "file_name": "Joanna El_1_zas. macierzyński.pdf",
+  "pages": 20,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-037",
+  "sha256": "1d10d12bfd45c3c7058d690141ae26bf2dc6603c73ffc9acbecd85641784a95d",
+  "file_name": "Joanna Rze_2_zas. chorobowy i macierzyński.pdf",
+  "pages": 26,
+  "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
+  "facts": "Zasiłek chorobowyobowy i macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "chorobowy_w_ciazy",
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-038",
+  "sha256": "5b76814d8de5fb5256376a1161a61679c40761c3d9ae9eb2e9429994522d5707",
+  "file_name": "Joanna Wa I_5_zas. mac., osoba współpracująca, odmowa_zadłużenie z tytułu składek.pdf",
+  "pages": 26,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński, osoba współpracująca, odmowa, zadłużenie z tytułu składek. ZUS odmówił prawa do świadczenia.",
+  "outcome": "denied",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "osoba_wspolpracujaca",
+   "zadluzenie",
+   "decyzja_odmowna"
+  ],
+  "forms": [
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "self_employed",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-039",
+  "sha256": "ad58e85426ba41960753951e2646ee2a65e53386fb14e1462ebf66db63318143",
+  "file_name": "Joanna Łód_3_Zasiłek w wysokości zas. mac. i macierzyński z powodu likwidacji - przyznanie prawa.pdf",
+  "pages": 20,
+  "title": "Zasiłek w wysokości zasiłku macierzyńskiego, zasiłek macierzyński",
+  "facts": "Zasiłek w wysokości zasiłek macierzyński i macierzyński z powodu likwidacji. Przyznanie prawa. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "",
+  "benefits": [
+   "w_wysokosci_macierzynskiego",
+   "macierzynski"
+  ],
+  "tags": [
+   "likwidacja_pracodawcy"
+  ],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-040",
+  "sha256": "9f15cb2eaa68dca74a7b8466a8bb7ff7ccd37c296c7268b2e8681d6eefd644ab",
+  "file_name": "Jolanta Go_5_zas. mac.-przyjęcia dziecka w wychowaniu_rodzina zastępcza.pdf",
+  "pages": 18,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek mac.-przyjęcia dziecka w wychowaniu, rodzina zastępcza. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "W sprawie ustalono uprawnienia do zasiłku macierzyńskiego -wypłacono świadczenie",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "przyjecie_na_wychowanie",
+   "rodzina_zastepcza"
+  ],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-041",
+  "sha256": "38e0cdcf078c1b9e681cdbb48663b96e3cdb00e455338e1c50ada61c07328cb8",
+  "file_name": "Jolanta Ko_2_zas. mac. martwe urodzenie.pdf",
+  "pages": 10,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński martwe urodzenie. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "martwe_urodzenie"
+  ],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-042",
+  "sha256": "bd80693de7a16e653539c943bd9a1fa7927e3178f62771387fa2102c94e95c33",
+  "file_name": "Jolanta Pi_2_zas. chorobowy i mac._urlop mac., urlop rodzicielski_zaświadczenie za życiem.pdf",
+  "pages": 74,
+  "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek chorobowyobowy i macierzyński, urlop macierzyński, urlop rodzicielski, zaświadczenie za życiem. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "chorobowy_w_ciazy",
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [
+   "zaswiadczenie_za_zyciem"
+  ],
+  "forms": [
+   "Z-3"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-043",
+  "sha256": "430265f33a2584dfbde40e3788cfd0fcb0715e840b993a47e6fd624b87a202a6",
+  "file_name": "Jolanta Poz_9_ zas. mac. - url. mac. i rodz., 3 dzieci, 1 martwourodzone, 1 za życiem, łącznie urlop rodz. z pracą - decyzja przyznająca.pdf",
+  "pages": 40,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński. Url. macierzyński i rodzicielski, 3 dzieci, 1 martwourodzone, 1 za życiem, łącznie urlop rodzicielski z pracą. Decyzja przyznająca. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "martwe_urodzenie",
+   "zaswiadczenie_za_zyciem",
+   "laczenie_z_praca",
+   "decyzja_przyznajaca"
+  ],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-044",
+  "sha256": "d8dae410639700e57e71e063f05e49c4929e489c8129b5a4cd9bc58bec0a39a4",
+  "file_name": "Julia Gd._01_zas. macierzyński_przyjęcie dziecka na wychowanie_przysposobienie.pdf",
+  "pages": 16,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński, przyjęcie dziecka na wychowanie, przysposobienie. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "przyjecie_na_wychowanie",
+   "przysposobienie"
+  ],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-045",
+  "sha256": "88d4156ca9e03e524c6b00e157be247d936cbaee508639c0c8abde5ac955fd94",
+  "file_name": "Julia No_4_zas. macierzyński.pdf",
+  "pages": 10,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-046",
+  "sha256": "1d810e7282086831a33f1b7ac202b8252072e85ce8044e67ef8e845a56efe63c",
+  "file_name": "Justyna Gd_3_zas. chorobowy w ciąży oraz zas. mac._bliźnięta.pdf",
+  "pages": 62,
+  "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
+  "facts": "Zasiłek chorobowyobowy w ciąży oraz zasiłek macierzyński, bliźnięta. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "chorobowy_w_ciazy",
+   "macierzynski"
+  ],
+  "tags": [
+   "bliznieta"
+  ],
+  "forms": [
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-047",
+  "sha256": "4dd44524617c95a0a5def4415f31dd2c5aecfa81533ad607682b173535b353a4",
+  "file_name": "Justyna Toruńska_5_zas. macierzyński, bliźnięta, wcześniaki, zaśw. za życiem.pdf",
+  "pages": 46,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński, bliźnięta, wcześniaki, zaśw. za życiem. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "wczesniak",
+   "bliznieta",
+   "zaswiadczenie_za_zyciem"
+  ],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-048",
+  "sha256": "2da5bc53ffa85a8d3407a484b02e6e8769b0839917217e9b9fe1071fab1de495",
+  "file_name": "Justyna Wa I_4_zas. chorobowy w ciąży, osoba współpracująca, odmowa, zadłużenie z tytułu składek.pdf",
+  "pages": 16,
+  "title": "Zasiłek chorobowy w ciąży",
+  "facts": "Zasiłek chorobowyobowy w ciąży, osoba współpracująca, odmowa, zadłużenie z tytułu składek. ZUS odmówił prawa do świadczenia.",
+  "outcome": "denied",
+  "evidence": "",
+  "benefits": [
+   "chorobowy_w_ciazy"
+  ],
+  "tags": [
+   "osoba_wspolpracujaca",
+   "zadluzenie",
+   "decyzja_odmowna"
+  ],
+  "forms": [
+   "Z-3b",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "self_employed",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-049",
+  "sha256": "668c6fb1ab18fcc9afc269505eb244d8a18d2324b398ea1fe480db359117272c",
+  "file_name": "Józef Lu_3_zas. mac. za okres urlopu ojcowskiego.pdf",
+  "pages": 16,
+  "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
+  "facts": "Zasiłek macierzyński za okres urlopu ojcowskiego. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "ojcowski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-050",
+  "sha256": "127ceb74de4a23016e1eb0d19c3e1e2cb1652ca204c90c3d31e5359a14754e8b",
+  "file_name": "Karol Go_2_zas. mac. za 9 tygodni urlopu macierzyńskiego dla ojca.pdf",
+  "pages": 10,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński za 9 tygodni urlopu macierzyńskiego dla ojca. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "W sprawie ustalono uprawnienia do zasiłku macierzyńskiego -wypłacono świadczenie",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "dziewiec_tygodni"
+  ],
+  "forms": [],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-051",
+  "sha256": "80147a4b983df4d217824f0c9c519e02ff75b618823138d17cc1c682a0321be4",
+  "file_name": "Karolina Ra_2_zas. macierzyński za urlop macierzyński, uzupełniający urlop macierzyński, rodzicielski.pdf",
+  "pages": 38,
+  "title": "Zasiłek macierzyński, uzupełniający urlop macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński za urlop macierzyński, uzupełniający urlop macierzyński, rodzicielski. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "uzupelniajacy",
+   "rodzicielski"
+  ],
+  "tags": [],
+  "forms": [
+   "Z-3b",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-052",
+  "sha256": "07c1865ed3362f821f1b2a708932a32972e0997214c94a5c79d486394cf5bfef",
+  "file_name": "Katarzyna Lu_5_zas. mac. - odmowa.pdf",
+  "pages": 28,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński. Odmowa. ZUS odmówił prawa do świadczenia.",
+  "outcome": "denied",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "decyzja_odmowna"
+  ],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-053",
+  "sha256": "2c9571b439f2cbafb131647f72c713c71326be698dae0c33bf1edb8527cf86e4",
+  "file_name": "Katarzyna Łó 4_zasiłek w wysokości zasiłku macierzyńskiego.pdf",
+  "pages": 14,
+  "title": "Zasiłek w wysokości zasiłku macierzyńskiego",
+  "facts": "Zasiłek w wysokości zasiłku macierzyńskiego. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "w_wysokosci_macierzynskiego"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-054",
+  "sha256": "5bc3054d6453a8a3d24e9e0ca5edc0ace3f97eebe4e62d9f8ccaa06e7df0910e",
+  "file_name": "Kinga Wro_4_zas. macierzyński, za część.pdf",
+  "pages": 22,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński, za część. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [
+   "Z-3b",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-055",
+  "sha256": "110e4899d565ea9efe79c345bcbc2b95e92b9baed4955d9e4ed2ee41acdb78e9",
+  "file_name": "Konrad Wa I_2_zas. mac. za okres urlopu ojcowskiego.pdf",
+  "pages": 16,
+  "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
+  "facts": "Zasiłek macierzyński za okres urlopu ojcowskiego. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "ojcowski"
+  ],
+  "tags": [],
+  "forms": [
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-056",
+  "sha256": "12bb00e9e4b5e774cb0d5eb4e26297bcd809ea161be4340a80216f0003290489",
+  "file_name": "Krystyna Poz_1_zas. mac. - martwe urodzenie.pdf",
+  "pages": 24,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński. Martwe urodzenie. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "martwe_urodzenie"
+  ],
+  "forms": [
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-057",
+  "sha256": "eb88fc5acd518dfe67f1822cc8c3b77d7a0a481f957615a50c08869ae0f777c0",
+  "file_name": "Krystyna Zab_3_Odmowa zas. macierzyńskiego_umowa dla pozoru.pdf",
+  "pages": 14,
+  "title": "Zasiłek macierzyński",
+  "facts": "Odmowa zasiłek macierzyńskiego, umowa dla pozoru. ZUS odmówił prawa do świadczenia.",
+  "outcome": "denied",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "umowa_pozorna",
+   "decyzja_odmowna"
+  ],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": false,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-058",
+  "sha256": "6a4b2d0f113e6a9d5de3ce60b41545514259a2e7c6f4dac1996b5d9a6539eceb",
+  "file_name": "Krystyna Łód - zas. macierzyński_urlop macierzyński i rodzicielski - prawo do zasiłku.pdf",
+  "pages": 30,
+  "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Urlop macierzyński i rodzicielski. Prawo do zasiłku. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-059",
+  "sha256": "5eec3e175b761599d6d548cf57539c242acdba16cb6652802a0e7a79141d8b8c",
+  "file_name": "Marek Wro_3_zas. macierzyński za część urlopu rodzicielskiego - 9 tyg.pdf",
+  "pages": 20,
+  "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński za część urlopu rodzicielskiego. 9 tyg. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [
+   "dziewiec_tygodni"
+  ],
+  "forms": [
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-060",
+  "sha256": "f7ab67f49f422218339a9dc4622dc1edf1705f6e409e9f7791749a44fcd7f747",
+  "file_name": "Małgorzata Rze_3_zas. macierzyński_umowa zlecenie bez chorobowego_odmowa.pdf",
+  "pages": 20,
+  "title": "Zasiłek macierzyński, zasiłek chorobowy w ciąży",
+  "facts": "Zasiłek macierzyński, umowa zlecenie bez chorobowego, odmowa. ZUS odmówił prawa do świadczenia.",
+  "outcome": "denied",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "chorobowy_w_ciazy"
+  ],
+  "tags": [
+   "umowa_zlecenie",
+   "decyzja_odmowna"
+  ],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "contractor",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-061",
+  "sha256": "efb8ff8918d46e3eeda2711ea6a65742a3fa740682d263a66dd4b2402f53efa4",
+  "file_name": "Natalia Chrz_4_za. mac. za okres urlopu macierzyńskiego, uzupełniającego, rodzicielskiego.pdf",
+  "pages": 22,
+  "title": "Zasiłek macierzyński, uzupełniający urlop macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Za. macierzyński za okres urlopu macierzyńskiego, uzupełniającego, rodzicielskiego. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "uzupelniajacy",
+   "rodzicielski"
+  ],
+  "tags": [],
+  "forms": [
+   "Z-3b",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-062",
+  "sha256": "6ebd4aff43fd93d34300083894f83a16b5e25f9413a9044f0616ba51820d74a5",
+  "file_name": "Natalia Ko_5_zas. mac. w tym przed przewidywaną datą porodu.pdf",
+  "pages": 22,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński w tym przed przewidywaną datą porodu. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "przed_terminem"
+  ],
+  "forms": [
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-063",
+  "sha256": "9398a942cc7f87f6276a0d064a3bd467d07407ca72cad9b5f5e5e2b87f4c9154",
+  "file_name": "Natalia Kr_2_zas. mac. za okres urlopu rodzicielskiego.pdf",
+  "pages": 30,
+  "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński za okres urlopu rodzicielskiego. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-064",
+  "sha256": "7605ebb1870351d0c42104451c04f8600e8d3771136dc1bcdd660c1d893a3655",
+  "file_name": "Natalia Zi_2_zas. macierzyński.pdf",
+  "pages": 20,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-065",
+  "sha256": "f04a559ee1d9cb22d14de56ec53d11f592817b7ac1a8e938b4ab342dee473d7a",
+  "file_name": "Natalia Łó 3_zas. macierzyński.pdf",
+  "pages": 28,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-066",
+  "sha256": "3d00d374e53cacbeb902420c3dadd19f1aef4c036294c9fb28a29c106eec6ab5",
+  "file_name": "Paulina Po_7_zas. chorobowy i mac. matka za okres url. mac. rodz. - nie podlega ubezpieczeniom - decyzja odmowna.pdf",
+  "pages": 46,
+  "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
+  "facts": "Zasiłek chorobowyobowy i macierzyński matka za okres url. macierzyński rodzicielski. Nie podlega ubezpieczeniom. Decyzja odmowna. ZUS odmówił prawa do świadczenia.",
+  "outcome": "denied",
+  "evidence": "",
+  "benefits": [
+   "chorobowy_w_ciazy",
+   "macierzynski"
+  ],
+  "tags": [
+   "brak_ubezpieczenia",
+   "decyzja_odmowna"
+  ],
+  "forms": [
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": false,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-067",
+  "sha256": "1a4375131143b2cf81273851db217b7282a7dbf4ef06a56be066c3fa1b6cd73e",
+  "file_name": "Paulina Rze_5_zas. macierzyński, uzupełniający, rodzicielski.pdf",
+  "pages": 30,
+  "title": "Zasiłek macierzyński, uzupełniający urlop macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński, uzupełniający, rodzicielski. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "uzupelniajacy",
+   "rodzicielski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-068",
+  "sha256": "10b60347570c04870baf5be754a396c4d0f2c870b655a604e53b4f2ed6b4a377",
+  "file_name": "Piotr Cho_5_zas. mac. za okres urlopu ojcowskiego, odmowa z powodu zadłużenia, osoba prowadząca działalność.pdf",
+  "pages": 16,
+  "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
+  "facts": "Zasiłek macierzyński za okres urlopu ojcowskiego, odmowa z powodu zadłużenia, osoba prowadząca działalność. ZUS odmówił prawa do świadczenia.",
+  "outcome": "denied",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "ojcowski"
+  ],
+  "tags": [
+   "decyzja_odmowna"
+  ],
+  "forms": [],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "self_employed",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-069",
+  "sha256": "6f0ee0e7cb8e37a6b7f14a5f84fb8995c5510459ca65f621a1fb014a456fb6c6",
+  "file_name": "Piotr Rze_1_zas. macierzyński - urlop ojcowski.pdf",
+  "pages": 12,
+  "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
+  "facts": "Zasiłek macierzyński. Urlop ojcowski. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "ojcowski"
+  ],
+  "tags": [
+   "urlop_ojcowski"
+  ],
+  "forms": [],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-070",
+  "sha256": "e8d01da2203f8695047a48a934319d9f8be6771b54ec50e676e0944f7ebef829",
+  "file_name": "Piotr Ta_1_zas. macierzyński_urlop ojcowski.pdf",
+  "pages": 18,
+  "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
+  "facts": "Zasiłek macierzyński, urlop ojcowski. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "DECYZJA PRZYZNAJĄCA ZASIŁEK MACIERZYŃSKI ZA OKRES URLOPU OJCOWSKIEGO",
+  "benefits": [
+   "macierzynski",
+   "ojcowski"
+  ],
+  "tags": [
+   "urlop_ojcowski"
+  ],
+  "forms": [],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-071",
+  "sha256": "f0be9756f10b9ff1fe7a818187442a59af17667e6188df4923d990e9b3771d43",
+  "file_name": "Pola Rze_4_zas. chorobowy w ciąży i zas. macierzyński.pdf",
+  "pages": 28,
+  "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
+  "facts": "Zasiłek chorobowyobowy w ciąży i zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "chorobowy_w_ciazy",
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-072",
+  "sha256": "d2c3d5a60b4a4c727a882640c67305d5b1b8276bdda11ab3cd4321ac52986d6e",
+  "file_name": "Ryszard Ra_5_zas. macierzyński za okres urlopu rodzicielskiego-9 tyg..pdf",
+  "pages": 18,
+  "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński za okres urlopu rodzicielskiego-9 tyg. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [
+   "dziewiec_tygodni"
+  ],
+  "forms": [],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-073",
+  "sha256": "f71938c6f6083e179a6b86fee00df57d1f287effc8853a0791fed533cc06e7fa",
+  "file_name": "Sylwia Ol_4_zas. mac. za okres urlopu mac. i rodzicielskiego.pdf",
+  "pages": 16,
+  "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński za okres urlopu macierzyński i rodzicielskiego. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-074",
+  "sha256": "fe06ee7c5812c53c1a069a83af1523a08f54f8e245b699adc9a5a751e35334c0",
+  "file_name": "Teresa No_5_zas. chorobowy i macierzyński.pdf",
+  "pages": 56,
+  "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
+  "facts": "Zasiłek chorobowyobowy i macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "chorobowy_w_ciazy",
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [
+   "Odpis aktu urodzenia"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-075",
+  "sha256": "968cb8afc4a91b9e4901a102e9b670b33947c07aad696ca891d24c5e625b03a0",
+  "file_name": "Teresa Ta_zas. chorobowy i macierzyński_umowa zlecenie.pdf",
+  "pages": 44,
+  "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
+  "facts": "Zasiłek chorobowyobowy i macierzyński, umowa zlecenie. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "DECYZJA PRZYZNAJĄCA ZASIŁEK CHOROBOWY ZA OKRES CIĄŻY ORAZ DEZYCJA PRZYZNAJĄCA ZASIŁEK MACIERZYŃSKI",
+  "benefits": [
+   "chorobowy_w_ciazy",
+   "macierzynski"
+  ],
+  "tags": [
+   "umowa_zlecenie"
+  ],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "contractor",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-076",
+  "sha256": "522b7bf501e300f2a80013f828970244333df3b272601a351c6c067d450e993d",
+  "file_name": "Tomasz Po_11_zas. mac. ojciec - za okres rodz. - 6ta część - decyzja odmowna.pdf",
+  "pages": 14,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński ojciec. Za okres rodzicielski. 6ta część. Decyzja odmowna. ZUS odmówił prawa do świadczenia.",
+  "outcome": "denied",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "decyzja_odmowna"
+  ],
+  "forms": [],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-077",
+  "sha256": "36bf2089dfc35b34ad664a57d5ae5ea38fd1b2c1f7f6ae7bdc244bce3a733acd",
+  "file_name": "Wojciech Lu_4_zas. mac. za okres urlopu rodzicielskiego.pdf",
+  "pages": 14,
+  "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński za okres urlopu rodzicielskiego. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "father",
+  "applicant": {
+   "label": "Ojciec",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-078",
+  "sha256": "375bd43a0bf0379d1c0c18505e19e456acdd0bb39062d29c11cfb86191a1e7b0",
+  "file_name": "Zofia By_1_Zas. macierzyński za ookres urlopu macierzyńskiego i rodzicielskiego w trakcie zatrudnienia.pdf",
+  "pages": 30,
+  "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zas. macierzyński za ookres urlopu macierzyńskiego i rodzicielskiego w trakcie zatrudnienia. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [],
+  "forms": [
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-079",
+  "sha256": "fe5a5c24ed13ad20572a90900e64981075856c5224b74886ca30ab947050ef6d",
+  "file_name": "Zofia Le_zas. mac. za okres u. mac. i rodz..pdf",
+  "pages": 16,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński za okres u. macierzyński i rodzicielski. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-080",
+  "sha256": "6a290e861e97d2b8463e16ee98bb856c961a21deffbf5fb6807a39f897295616",
+  "file_name": "Zofia Lu_1_zas. mac. za okres urlopu macierzyńskiego i rodzicielskiego.pdf",
+  "pages": 18,
+  "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński za okres urlopu macierzyńskiego i rodzicielskiego. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [],
+  "forms": [
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-081",
+  "sha256": "2288e71ba4edf2e9237d683721185d40ea9f8cd9798b06f873dca9c8d131483a",
+  "file_name": "Zofia Zi_4_zas. macierzyński po ustaniu ubezp._zatrudnienie do dnia porodu.pdf",
+  "pages": 20,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński po ustaniu ubezpieczenie, zatrudnienie do dnia porodu. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [
+   "po_ustaniu_ubezpieczenia",
+   "zatrudnienie_do_dnia_porodu"
+  ],
+  "forms": [
+   "Odpis aktu urodzenia"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-082",
+  "sha256": "8573441e27599f356975f5d7481a94ae55ec9007c622102783e0f363ad777063",
+  "file_name": "Zuzanna Cho._zas. mac. za okres urlopu macierzyńskiego i rodzicielskiego, umowa zlecenie.pdf",
+  "pages": 14,
+  "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński za okres urlopu macierzyńskiego i rodzicielskiego, umowa zlecenie. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [
+   "umowa_zlecenie"
+  ],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "contractor",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-083",
+  "sha256": "6867299bf06474a1baa29653726e89d421e1f07f559270d6be055d4c02968611",
+  "file_name": "Zuzanna Go_4_zas. chorobowy w ciąży, zas. mac. za okres urlopu mac. i rodzicielskiego.pdf",
+  "pages": 30,
+  "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek chorobowyobowy w ciąży, zasiłek macierzyński za okres urlopu macierzyński i rodzicielskiego. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "W sprawie ustalono uprawnienia do zasiłku chorobowego dla kobiety w ciąży oraz zasiłku macierzyńskiego - wypłacono świadczenia",
+  "benefits": [
+   "chorobowy_w_ciazy",
+   "macierzynski",
+   "rodzicielski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-084",
+  "sha256": "8931d3b4f574078e80829a2ee9c7e4d438e4447d80145e07788cb0fb7088dbfb",
+  "file_name": "Zuzanna Ko_3_zac. mac..pdf",
+  "pages": 38,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zac. macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-085",
+  "sha256": "e37d46eaf846c78038ef7715c570782545c7df8b7c069d4cc99afc6b466d3b56",
+  "file_name": "Zuzanna Le_zas. chorobowy w ciąży.pdf",
+  "pages": 14,
+  "title": "Zasiłek chorobowy w ciąży",
+  "facts": "Zasiłek chorobowyobowy w ciąży. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "chorobowy_w_ciazy"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-086",
+  "sha256": "4cadaad1fb25513744b0b671488ab20e1a577095cdbb1f5e2009133010025eab",
+  "file_name": "Zuzanna Wa_03_zas. mac. za urlop macierzyński, uzupełniający, rodzicielski.pdf",
+  "pages": 16,
+  "title": "Zasiłek macierzyński, uzupełniający urlop macierzyński, zasiłek za urlop rodzicielski",
+  "facts": "Zasiłek macierzyński za urlop macierzyński, uzupełniający, rodzicielski. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "W sprawie została dokonana wypłata: - zasiłku macierzyńskiego za okres od 02-05-2026 do 18-0 - zasiłku uzupełniającego za okres od 19-09-2026 do 25- - zasiłku rodzicielskiego za okres od 26-09-2026 do 07: 1 4 EJ + H ż i i ę t H",
+  "benefits": [
+   "macierzynski",
+   "uzupelniajacy",
+   "rodzicielski"
+  ],
+  "tags": [],
+  "forms": [],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ },
+ {
+  "id": "ZUS-087",
+  "sha256": "0c21799370ac261e50405d4deaef2ea70d2d105e42347a2e31c7dea9b0f1c4bd",
+  "file_name": "Zuzanna Wro_2_zas. macierzyński.pdf",
+  "pages": 20,
+  "title": "Zasiłek macierzyński",
+  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "outcome": "unknown",
+  "evidence": "",
+  "benefits": [
+   "macierzynski"
+  ],
+  "tags": [],
+  "forms": [
+   "Z-3b"
+  ],
+  "role": "mother",
+  "applicant": {
+   "label": "Matka",
+   "employment": "employee",
+   "insured": null,
+   "insurance_kind": null
+  },
+  "duplicate_of": null
+ }
+]

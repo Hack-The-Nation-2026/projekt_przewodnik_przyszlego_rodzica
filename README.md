@@ -13,8 +13,9 @@ a potem dostaje dokumenty, terminy i miejsce złożenia wniosku.
   każdego rodzica i osobny wynik dla obojga.
 - **Dokumenty i wnioski** (`/dokumenty`): formularz, załączniki, termin i miejsce złożenia dla
   każdego świadczenia. Do tego szkic wniosku do pobrania i plik `.ics` z terminami do kalendarza.
-- **Sprawy** (`/sprawy`): dziesięć scenariuszy demonstracyjnych i własny wniosek w formacie JSON.
-  Strona pokazuje weryfikację ubezpieczenia, wyliczenie i porównanie z oczekiwanym wynikiem.
+- **Sprawy** (`/sprawy`): zestaw przykładowy ZUS rozpoznawany po odcisku wgranego PDF-a, dziesięć
+  scenariuszy demonstracyjnych i własny wniosek w formacie JSON. Strona pokazuje weryfikację
+  ubezpieczenia, wyliczenie i porównanie z oczekiwanym wynikiem.
 - **Symulacja ZUS** (`/zus`): ubezpieczenie, zadłużenie, e-ZLA, PUE/eZUS i wniosek o odpis aktu
   urodzenia. Wszystko lokalnie, bez połączenia z systemami ZUS.
 - **Wsparcie** (`/wsparcie`): organizacje i zasady dla sytuacji po stracie dziecka, przy wcześniaku,
@@ -37,6 +38,19 @@ Regulamin zadania nie pozwala publikować dokumentów ZUS, więc sprawy w `/spra
 na wymyślonych danych, a oczekiwany wynik każdej z nich jest zapisany w
 `back/app/data/demo-cases.json`. To pokazuje spięcie strony z kalkulatorem, a nie odwzorowanie
 prawdziwych decyzji. Poprawność reguł pilnuje `back/tests/test_rules.py`.
+
+## Zestaw przykładowy ZUS
+
+Obok spraw demonstracyjnych `/sprawy` rozpoznaje wszystkie 87 zestawów z `PRZYKLADY/`. Przeglądarka
+liczy SHA-256 wybranego pliku, wysyła sam odcisk, a backend szuka go w `back/app/data/zus-samples.json`.
+PDF nie opuszcza urządzenia, więc skan z danymi o zdrowiu nie trafia do serwera ani do modelu
+językowego. Dla rozpoznanej sprawy strona pokazuje opis stanu faktycznego, wzory formularzy
+z zestawu i wynik zapisany w materiale. Kwoty i daty, których skan nie podaje albo które są
+zamazane, wpisuje się w krótkim formularzu i wtedy kalkulator liczy świadczenie główne.
+
+Dane do rozpoznania powstają skryptem `back/scripts/build_zus_samples.py`, który czyta skany
+z `PRZYKLADY/` i zapisuje tylko metadane: odcisk pliku, wzory formularzy, rodzaj świadczeń i wynik
+sprawy. Treści dokumentów nie kopiujemy, bo regulamin tego zabrania.
 
 ## Stack
 
