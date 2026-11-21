@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, X } from 'lucide-react'
+import { Menu, Sprout, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/layout/container'
 import { ProfileMenu } from '@/components/layout/profile-menu'
@@ -16,22 +16,10 @@ const NAV = [
   { to: '/o-projekcie', label: 'O projekcie' },
 ]
 
-/** Znak: roślina, czyli dwa liście na łodydze, symbol życia i wzrostu. Lewy liść jest
-    duży, prawy mniejszy, tak jak we wzorcu, więc znak nie jest symetrycznym kleksem.
-    Łodyga jest szeroka u płasko ściętej stopy i z lekko wklęsłymi bokami zwęża się
-    ku liściom, więc wygląda jak młody pęd wschodzący z ziemi, a nie jak patyk.
-    Jeden biały kształt, bez drugiego koloru, więc działa tak samo w nagłówku i w favikonie. */
+/** Znak: sadzonka z zestawu Lucide, czyli roślina, życie i wzrost. Jeden kształt
+    w jednym kolorze, więc działa tak samo w nagłówku i w favikonie. */
 function LogoMark({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 32 32" className={cn('size-[26px]', className)} aria-hidden focusable="false">
-      <path d="M15.2 13.8C12.2 7.2 7.6 3.8 3.2 3.8 3.6 9.4 8.4 13.4 15.2 13.8Z" fill="currentColor" />
-      <path d="M16.6 13.8C19.4 9.8 23.2 7.2 27.4 6.2 27 10.2 23.4 13.4 16.6 13.8Z" fill="currentColor" />
-      <path
-        d="M13.5 28.9C13.5 27.4 13.9 21.4 14.9 14.6 15.1 13.3 16.9 13.3 17.1 14.6 18.1 21.4 18.5 27.4 18.5 28.9 18.5 29.5 17.5 29.9 16 29.9 14.5 29.9 13.5 29.5 13.5 28.9Z"
-        fill="currentColor"
-      />
-    </svg>
-  )
+  return <Sprout className={cn('size-5', className)} aria-hidden />
 }
 
 function Wordmark() {
