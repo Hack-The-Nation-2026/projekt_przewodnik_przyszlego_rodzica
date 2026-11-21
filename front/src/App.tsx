@@ -7,6 +7,7 @@ import { MobywatelPage } from '@/pages/mobywatel-page'
 import { NotFoundPage } from '@/pages/not-found-page'
 import { PlaceholderPage } from '@/pages/placeholder-page'
 import { WejsciePage } from '@/pages/wejscie-page'
+import { WsparciePage } from '@/pages/wsparcie-page'
 import { ZusPage } from '@/pages/zus-page'
 
 export default function App() {
@@ -30,16 +31,7 @@ export default function App() {
         <Route path="kalkulator" element={<KalkulatorPage />} />
         <Route path="dokumenty" element={<DokumentyPage />} />
         <Route path="zus" element={<ZusPage />} />
-        <Route
-          path="wsparcie"
-          element={
-            <PlaceholderPage
-              title="Wsparcie w trudnych sytuacjach"
-              crumb="Wsparcie"
-              description="Miejsca i organizacje, które pomagają po stracie dziecka, przy wcześniaku i w ciężkiej chorobie."
-            />
-          }
-        />
+        <Route path="wsparcie/:topic?" element={<WsparciePage />} />
         <Route
           path="o-projekcie"
           element={

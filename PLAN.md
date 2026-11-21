@@ -45,7 +45,7 @@ ich kopiować ani rozpowszechniać.
 - [x] Krok 7. Dokumenty, terminy i miejsce złożenia
 - [x] Krok 8. Symulacje ZUS
 - [x] Krok 9. Ryzyka i ostrzeżenia
-- [ ] Krok 10. Trudne sytuacje i wsparcie
+- [x] Krok 10. Trudne sytuacje i wsparcie
 - [ ] Krok 11. Panel administracyjny
 - [ ] Krok 12. Wygląd i responsywność
 - [ ] Krok 13. Testy na sprawach i upload wniosków
@@ -287,6 +287,11 @@ i oddzielona od kalkulatora.
 - Lista fundacji i stowarzyszeń udzielających wsparcia w tych sytuacjach.
 
 Gotowe, gdy ścieżka istnieje i prowadzi do konkretnych organizacji.
+
+Zrobione 21.11. Podstrona `/wsparcie` prowadzi do osobnych poradników po poronieniu lub martwym
+urodzeniu, po śmierci dziecka, przy wcześniactwie lub hospitalizacji oraz przy ciężkiej chorobie.
+Poradniki linkują do organizacji, dokumentów ZUS i zasad gov.pl, pokazują regułę 8 tygodni i 7 dni
+oraz sześć przypadków uzupełniającego urlopu macierzyńskiego.
 
 Brief, pkt 3 i oraz pkt 3 a.
 
