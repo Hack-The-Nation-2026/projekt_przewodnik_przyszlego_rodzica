@@ -1,5 +1,6 @@
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import type { FieldPath } from 'react-hook-form'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { InfoHint } from '@/components/ui/info-hint'
@@ -237,6 +238,20 @@ export function EmploymentFields({ values }: { values: InterviewValues }) {
         )}
       </div>
       <Check name="employmentEnded" label="Zatrudnienie ustało lub jest znana data jego zakończenia" />
+      {values.role === 'mother' && values.employment === 'employee' && (
+        <Accordion type="single" collapsible className="rounded-md border border-input">
+          <AccordionItem value="employment-changes">
+            <AccordionTrigger>Zmiany zatrudnienia lub wynagrodzenia w ciąży (opcjonalnie)</AccordionTrigger>
+            <AccordionContent className={fieldsGrid}>
+              <YesNo name="newContractDuringPregnancy" label="Czy w ciąży zawarłaś nową umowę o pracę?" />
+              {values.newContractDuringPregnancy === 'yes' && (
+                <YesNo name="workPerformedUnderContract" label="Czy wykonywałaś pracę na podstawie tej umowy?" />
+              )}
+              <YesNo name="payRaisedDuringPregnancy" label="Czy dostałaś podwyżkę w ciąży?" />
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      )}
     </>
   )
 }

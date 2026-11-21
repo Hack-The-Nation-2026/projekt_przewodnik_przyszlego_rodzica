@@ -44,7 +44,7 @@ ich kopiować ani rozpowszechniać.
 - [x] Krok 6. Kalkulator na ekranie
 - [x] Krok 7. Dokumenty, terminy i miejsce złożenia
 - [x] Krok 8. Symulacje ZUS
-- [ ] Krok 9. Ryzyka i ostrzeżenia
+- [x] Krok 9. Ryzyka i ostrzeżenia
 - [ ] Krok 10. Trudne sytuacje i wsparcie
 - [ ] Krok 11. Panel administracyjny
 - [ ] Krok 12. Wygląd i responsywność
@@ -270,6 +270,10 @@ Punkt h jest wart tyle samo co reszta treści, a łatwo go pominąć.
 - Przy każdym ostrzeżeniu krótka informacja, co to zmieni w kwocie użytkownika.
 
 Gotowe, gdy ostrzeżenia pojawiają się dopasowane do wpisanej sytuacji, a nie wszystkie naraz.
+
+Zrobione 21.11. W kroku „Zatrudnienie i ubezpieczenie” kalkulator zbiera opcjonalne informacje o
+nowej umowie o pracę i podwyżce w ciąży. Sekcja „Co może zmienić wypłatę” w wynikach pokazuje tylko
+ostrzeżenia wynikające z odpowiedzi i uwzględnia ochronę prawa do zasiłku po ustaniu zatrudnienia.
 
 Brief, pkt 3 h.
 

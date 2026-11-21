@@ -60,7 +60,10 @@ export function getInterviewSteps(values: InterviewValues): InterviewStep[] {
   steps.push({
     id: 'employment', title: 'Zatrudnienie i ubezpieczenie',
     description: 'Jeśli nie wiesz, czy masz ubezpieczenie, możesz wybrać „Nie wiem”.',
-    fields: ['employment', 'insured', 'basis', 'arrears', 'employmentEnded'],
+    fields: [
+      'employment', 'insured', 'basis', 'arrears', 'employmentEnded',
+      'newContractDuringPregnancy', 'workPerformedUnderContract', 'payRaisedDuringPregnancy',
+    ],
     Fields: EmploymentFields,
   })
   if (values.employmentEnded) {

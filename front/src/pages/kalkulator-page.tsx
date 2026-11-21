@@ -4,6 +4,7 @@ import { isAxiosError } from 'axios'
 import { Check, CircleAlert, CircleHelp, FlaskConical, Minus, Pencil, X } from 'lucide-react'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { BenefitWarnings } from '@/components/benefit-warnings'
 import { ParentalPlanCard } from '@/components/parental-plan'
 import type { RateVariant } from '@/components/parental-plan'
 import { PageContainer } from '@/components/layout/page-container'
@@ -508,6 +509,7 @@ export function KalkulatorPage() {
               Edytuj odpowiedzi
             </Button>
           </div>
+          {submitted && <BenefitWarnings values={submitted} maternityStatus={result.assessments.get('macierzynski')?.status} />}
           {result.pool && result.pool.total_days > 0 && (
             <ParentalPlanCard
               pool={result.pool}
