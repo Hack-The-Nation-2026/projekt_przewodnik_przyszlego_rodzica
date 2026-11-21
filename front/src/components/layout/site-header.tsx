@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/layout/container'
+import { ProfileMenu } from '@/components/layout/profile-menu'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/store/app-store'
 
@@ -35,15 +36,15 @@ function LogoMark({ className }: { className?: string }) {
 
 function Wordmark() {
   return (
-    <Link to="/" className="flex items-center gap-2.5" aria-label="Strona główna">
-      <span className="flex size-9 items-center justify-center rounded-md bg-primary-foreground text-primary">
+    <Link to="/" className="flex min-w-0 items-center gap-2.5" aria-label="Strona główna">
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-primary-foreground text-primary">
         <LogoMark />
       </span>
-      <span className="flex flex-col leading-none">
-        <span className="font-display text-lg font-semibold text-primary-foreground">
+      <span className="flex min-w-0 flex-col leading-none">
+        <span className="truncate font-display text-base font-semibold text-primary-foreground sm:text-lg">
           Przewodnik Rodzica
         </span>
-        <span className="mt-0.5 text-[11px] text-primary-foreground/80">
+        <span className="mt-0.5 hidden truncate text-[11px] text-primary-foreground/80 sm:block">
           co ci przysługuje i jak to załatwić
         </span>
       </span>
@@ -72,7 +73,6 @@ export function SiteHeader() {
   const location = useLocation()
   const navigate = useNavigate()
   const citizen = useAppStore((state) => state.citizen)
-  const signOut = useAppStore((state) => state.signOut)
 
   // Wychodzimy na stronę mObywatela i wracamy dokładnie tam, gdzie jesteśmy.
   function startMobywatelLogin() {
@@ -83,10 +83,13 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 shrink-0">
       <div className="border-b border-primary-foreground/15 bg-primary text-primary-foreground shadow-sm">
-        <Container className="grid h-16 grid-cols-[auto_1fr_auto] items-center gap-4">
+        <Container className="flex h-16 items-center gap-4">
           <Wordmark />
 
-          <nav className="hidden items-center justify-center gap-1 lg:flex" aria-label="Nawigacja główna">
+          <nav
+            className="hidden flex-1 items-center justify-center gap-1 lg:flex"
+            aria-label="Nawigacja główna"
+          >
             {NAV.map((item) => (
               <NavLink
                 key={item.to}
@@ -106,24 +109,9 @@ export function SiteHeader() {
             ))}
           </nav>
 
-          <div className="flex items-center justify-self-end gap-2">
+          <div className="ml-auto flex items-center gap-2">
             {citizen ? (
-              <div className="hidden items-center gap-2 sm:flex">
-                <Link
-                  to="/wejscie"
-                  className="text-sm text-primary-foreground/80 hover:text-primary-foreground hover:underline"
-                >
-                  {citizen.first_name} {citizen.last_name}
-                </Link>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground"
-                  onClick={signOut}
-                >
-                  Wyloguj
-                </Button>
-              </div>
+              <ProfileMenu />
             ) : (
               <Button
                 variant="mobywatel"
@@ -169,28 +157,7 @@ export function SiteHeader() {
                   {item.label}
                 </NavLink>
               ))}
-              {citizen ? (
-                <div className="mt-2 flex items-center gap-2 border-t border-primary-foreground/15 pt-2">
-                  <Link
-                    to="/wejscie"
-                    onClick={() => setOpen(false)}
-                    className="flex-1 rounded-md px-3 py-2.5 text-sm font-medium text-primary-foreground/85 hover:bg-primary-foreground/10"
-                  >
-                    {citizen.first_name} {citizen.last_name}
-                  </Link>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground"
-                    onClick={() => {
-                      setOpen(false)
-                      signOut()
-                    }}
-                  >
-                    Wyloguj
-                  </Button>
-                </div>
-              ) : (
+              {!citizen && (
                 <>
                   <Button
                     variant="mobywatel"
