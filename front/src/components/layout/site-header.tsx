@@ -18,9 +18,9 @@ const NAV = [
   { to: '/o-projekcie', label: 'O projekcie' },
 ]
 
-/** Znak serwisu: para skrzydeł na białym kaflu. Ten sam rysunek co w favikonie. */
+/** Znak serwisu: para skrzydeł anioła na białym kaflu. Ten sam rysunek co w favikonie. */
 function LogoMark({ className }: { className?: string }) {
-  return <WingMark className={cn('size-6', className)} />
+  return <WingMark className={cn('size-7', className)} />
 }
 
 function Wordmark() {
