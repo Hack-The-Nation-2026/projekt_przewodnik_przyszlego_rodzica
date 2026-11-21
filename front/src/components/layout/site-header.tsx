@@ -15,18 +15,14 @@ const NAV = [
   { to: '/o-projekcie', label: 'O projekcie' },
 ]
 
-/** Znak: duże serce z mniejszym sercem w środku, czyli rodzic i dziecko.
-    Mniejszy kształt jest bursztynowy, więc akcent zostaje widoczny także w favikonie. */
+/** Znak: korona w kształcie serca na pniu, czyli rodzina i życie. Jeden biały kształt,
+    bez drugiego koloru, więc działa tak samo w nagłówku i w favikonie. */
 function LogoMark({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 32 32" className={cn('size-5', className)} aria-hidden focusable="false">
+    <svg viewBox="0 0 32 32" className={cn('size-[26px]', className)} aria-hidden focusable="false">
       <path
-        d="M16 21.6C12.8 18.8 5.4 13.8 5.4 9.5 5.4 6.1 7.9 3.7 10.9 3.7 13.1 3.7 15 5.1 16 7.4 17 5.1 18.9 3.7 21.1 3.7 24.1 3.7 26.6 6.1 26.6 9.5 26.6 13.8 19.2 18.8 16 21.6Z"
+        d="M16 25.4C12.3 22.2 3.5 16.4 3.5 11.3 3.5 7.3 6.4 4.5 9.9 4.5 12.5 4.5 14.75 6.1 16 8.8 17.25 6.1 19.5 4.5 22.1 4.5 25.6 4.5 28.5 7.3 28.5 11.3 28.5 16.4 19.7 22.2 16 25.4ZM12.4 21.8H19.6L20.2 28.8A1.2 1.2 0 0 1 19 30H13A1.2 1.2 0 0 1 11.8 28.8Z"
         fill="currentColor"
-      />
-      <path
-        d="M16 16.2C14.6 15.1 12.1 13.4 12.1 12.1 12.1 10.8 13 9.6 14.2 9.6 15.2 9.6 15.8 10.3 16 11.9 16.2 10.3 16.8 9.6 17.8 9.6 19 9.6 19.9 10.8 19.9 12.1 19.9 13.4 17.4 15.1 16 16.2Z"
-        fill="var(--color-gold)"
       />
     </svg>
   )
