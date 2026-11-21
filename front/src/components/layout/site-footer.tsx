@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Container } from '@/components/layout/container'
+import { cn } from '@/lib/utils'
 
 const COLUMNS = [
   {
@@ -22,11 +23,16 @@ const COLUMNS = [
   },
 ]
 
-export function SiteFooter() {
+export function SiteFooter({ compact = false }: { compact?: boolean }) {
   return (
-    <footer className="mt-20 bg-green-deep text-primary-foreground">
-      <Container className="grid gap-10 py-12 md:grid-cols-[1.5fr_1fr_1fr]">
-        <div>
+    <footer className={cn('bg-green-deep text-primary-foreground', compact ? 'mt-auto' : 'mt-20')}>
+      <Container
+        className={cn(
+          'grid md:grid-cols-[1.5fr_1fr_1fr]',
+          compact ? 'grid-cols-2 gap-4 py-5' : 'gap-10 py-12',
+        )}
+      >
+        <div className={cn(compact && 'col-span-2 md:col-span-1')}>
           <p className="font-display text-lg font-semibold">Zasiłkowy Przewodnik Przyszłego Rodzica</p>
           <p className="mt-3 max-w-sm text-sm text-primary-foreground/80">
             Zasiłki, terminy i dokumenty związane z ciążą i urodzeniem dziecka w jednym miejscu.
