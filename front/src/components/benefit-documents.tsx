@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type { ReactNode } from 'react'
-import { ArrowUpRight, CalendarDays, FileText, MapPin } from 'lucide-react'
+import { ArrowDown, ArrowUpRight, CalendarDays, FileText, MapPin } from 'lucide-react'
 import { ApplicationDraft, DocumentField } from '@/components/application-draft'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -122,6 +122,9 @@ export default function BenefitDocuments({
   context?: DocumentContext
   onClose?: () => void
 }) {
+  const checklistHeading = useRef<HTMLHeadingElement>(null)
+  const draftDetails = useRef<HTMLDetailsElement>(null)
+  const draftToggle = useRef<HTMLElement>(null)
   const [role, setRole] = useState<Role>(context?.role ?? 'mother')
   const [employment, setEmployment] = useState<Employment>(context?.employment ?? 'unknown')
   const [payerSize, setPayerSize] = useState<PayerSize>('unknown')
@@ -138,6 +141,17 @@ export default function BenefitDocuments({
     ? undefined : scenario?.periods[benefit]
   const rateAvailable = (benefit === 'macierzynski' || benefit === 'rodzicielski') && role !== 'father'
   const showPayerOptions = benefit !== 'w_wysokosci_macierzynskiego'
+
+  function showChecklist() {
+    checklistHeading.current?.focus({ preventScroll: true })
+    checklistHeading.current?.scrollIntoView({ block: 'start' })
+  }
+
+  function openDraft() {
+    if (draftDetails.current) draftDetails.current.open = true
+    draftToggle.current?.focus({ preventScroll: true })
+    draftToggle.current?.scrollIntoView({ block: 'start' })
+  }
 
   return (
     <section className="space-y-4" aria-labelledby="documents-title">
@@ -193,11 +207,24 @@ export default function BenefitDocuments({
               <option value="over_20">Powyżej 20 osób</option>
             </SelectField>
           )}
+          <div className="space-y-3 border-t pt-4 sm:col-span-2">
+            <p className="text-sm" role="status">
+              <strong>Adresat wniosku o świadczenie</strong>
+              <span className="block">{route.addressee || 'Do potwierdzenia u płatnika składek'}</span>
+            </p>
+            <Button type="button" className="h-auto min-h-10 whitespace-normal" onClick={showChecklist}>
+              Pokaż dokumenty i terminy <ArrowDown aria-hidden="true" />
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
       <Card>
-        <CardHeader><h3 className="text-xl font-semibold">{benefitList[benefit].name}</h3></CardHeader>
+        <CardHeader>
+          <h3 ref={checklistHeading} tabIndex={-1} className="scroll-mt-24 text-xl font-semibold focus:outline-none">
+            {benefitList[benefit].name}
+          </h3>
+        </CardHeader>
         <CardContent className="space-y-5 text-sm">
           <div className="space-y-2">
             <h4 className="flex items-center gap-2 font-semibold"><MapPin className="size-4 text-primary" aria-hidden="true" /> Gdzie złożyć</h4>
@@ -229,14 +256,17 @@ export default function BenefitDocuments({
               {guide.leave && <a className="text-primary underline underline-offset-2" href={leaveRegulation.url}>{leaveRegulation.label}</a>}
             </div>
           </div>
+          <Button type="button" variant="outline" className="h-auto min-h-10 whitespace-normal" onClick={openDraft}>
+            Przygotuj szkic wniosku <ArrowDown aria-hidden="true" />
+          </Button>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader><h3 className="text-xl font-semibold">Przygotuj szkic</h3></CardHeader>
         <CardContent>
-          <details key={benefit} className="space-y-4">
-            <summary className="w-fit cursor-pointer font-medium text-primary">Otwórz symulację wypełniania wniosku</summary>
+          <details key={benefit} ref={draftDetails} className="space-y-4">
+            <summary ref={draftToggle} className="w-fit cursor-pointer scroll-mt-24 font-medium text-primary">Otwórz symulację wypełniania wniosku</summary>
             {guide.leave && (
               <SelectField name="document-mode" title="Rodzaj wniosku" value={mode} onChange={setMode}>
                 <option value="benefit">Wniosek o świadczenie ({guide.form.label})</option>
