@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Calculator, FileText, HeartHandshake } from 'lucide-react'
+import { ArrowRight, Calculator, ChevronDown, FileText, HeartHandshake } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -98,14 +98,14 @@ export function HomePage() {
   return (
     <>
       <section aria-labelledby="start-title" className="relative isolate overflow-hidden bg-foreground">
-        {/* Jedno zdjęcie w proporcji 2:1 na każdym ekranie, bez przycinania. Na szerokim
-            leży pod tekstem, na wąskim stoi nad nim, więc wszędzie widać dokładnie ten sam
-            kadr. Osobny kadr mobilny nie jest już potrzebny. */}
+        {/* Jedno zdjęcie w proporcji 2:1 na każdym ekranie. Na telefonie stoi nad tekstem
+            w całości, na szerokim ekranie tekst leży na zdjęciu, a wysokość jest ograniczona,
+            żeby pod hero zostało widać początek kolejnej sekcji. */}
         <img
           src="/rodzice-kolyska.jpg"
           alt="Mama i tata leżą z niemowlakiem na łóżku w jasnej sypialni."
           fetchPriority="high"
-          className="aspect-[2/1] w-full object-cover"
+          className="aspect-[2/1] w-full object-cover lg:max-h-[76vh] lg:object-[50%_0%]"
         />
         <div aria-hidden className="home-hero-shade absolute inset-0 hidden lg:block" />
         <Container className="relative py-10 sm:py-12 lg:absolute lg:inset-0 lg:flex lg:items-center lg:py-0">
@@ -137,9 +137,22 @@ export function HomePage() {
             </div>
           </div>
         </Container>
+        <div className="absolute inset-x-0 bottom-5 hidden justify-center lg:flex">
+          <a
+            href="#jak-to-dziala"
+            aria-label="Przewiń do sekcji Jak to działa"
+            className="home-scroll-hint flex size-10 items-center justify-center rounded-full bg-background/90 text-primary shadow-lg ring-1 ring-black/5 backdrop-blur-sm hover:bg-background focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:outline-none"
+          >
+            <ChevronDown aria-hidden="true" className="size-5" />
+          </a>
+        </div>
       </section>
 
-      <section aria-labelledby="jak-to-dziala-title" className="py-14 sm:py-20">
+      <section
+        id="jak-to-dziala"
+        aria-labelledby="jak-to-dziala-title"
+        className="py-14 sm:py-20"
+      >
         <Container>
           <div className="flex flex-wrap items-center justify-between gap-6">
             <h2 id="jak-to-dziala-title" className="text-2xl font-semibold text-navy sm:text-3xl">
