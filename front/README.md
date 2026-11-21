@@ -61,10 +61,11 @@ Nagłówki i tekst dzielą jeden krój, IBM Plex Sans.
 
 ## Znak
 
-Logo to kiełek, dwa liście na łodydze, czyli życie i wzrost. Jeden biały kształt na zielonym
-kaflu, bez drugiego koloru. Łodyga jest szeroka u płasko ściętej stopy i z lekko wklęsłymi
-bokami zwęża się ku liściom, więc wygląda jak młody pęd wschodzący z ziemi. Ten sam rysunek
-stoi w `public/favicon.svg` i w nagłówku, w `src/components/layout/site-header.tsx`.
+Logo to roślina: dwa liście na łodydze, czyli życie i wzrost. Lewy liść jest duży, prawy mniejszy,
+tak jak we wzorcu, więc znak nie jest symetrycznym kleksem. Jeden biały kształt na zielonym kaflu,
+bez drugiego koloru. Łodyga jest szeroka u płasko ściętej stopy i z lekko wklęsłymi bokami zwęża
+się ku liściom, więc wygląda jak młody pęd wschodzący z ziemi. Ten sam rysunek stoi
+w `public/favicon.svg` i w nagłówku, w `src/components/layout/site-header.tsx`.
 
 ## Układ i skala
 
