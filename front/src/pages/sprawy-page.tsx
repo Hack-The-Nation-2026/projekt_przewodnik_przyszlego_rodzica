@@ -188,7 +188,7 @@ function AssessmentsList({ assessments }: { assessments: CaseAssessment[] }) {
           key={`${row.benefit}-${row.person}`}
           className="flex flex-wrap items-baseline gap-x-6 gap-y-2 py-3 first:pt-0 last:pb-0"
         >
-          <div className="min-w-0 flex-1">
+          <div className="w-full sm:min-w-0 sm:flex-1">
             <p className="font-medium">{benefitLabel(row.benefit)}</p>
             <p className="text-sm text-muted-foreground">
               {parentLabels[row.person]}
@@ -359,9 +359,14 @@ function UploadCard({
             Wybierz plik JSON
           </Button>
           {onDownload && (
-            <Button type="button" variant="ghost" onClick={onDownload}>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={onDownload}
+              aria-label="Pobierz wybrany wniosek jako plik JSON"
+            >
               <Download className="size-4" aria-hidden />
-              Pobierz wzór z wybranego wniosku
+              Pobierz wniosek
             </Button>
           )}
         </div>
