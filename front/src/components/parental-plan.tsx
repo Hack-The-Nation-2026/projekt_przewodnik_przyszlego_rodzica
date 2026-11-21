@@ -169,7 +169,10 @@ export function ParentalPlanCard({
                   )}
                 </div>
                 <div
-                  className="flex h-3 w-[var(--bar-width)] overflow-hidden rounded-full sm:w-full"
+                  className={cn(
+                    'flex h-3 w-[var(--bar-width)] overflow-hidden rounded-full sm:w-full',
+                    end && 'ml-auto flex-row-reverse',
+                  )}
                   style={{ '--bar-width': `${(days / maxDaysPerParent) * 100}%` } as React.CSSProperties}
                   aria-hidden="true"
                 >
