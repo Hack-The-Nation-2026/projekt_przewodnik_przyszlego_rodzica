@@ -115,6 +115,9 @@
   }
 
   html {
+    /* Cały układ trzyma się rem, więc podniesienie bazowego rozmiaru skaluje
+       typografię i odstępy razem — strona wygląda jak przy powiększeniu 130%. */
+    font-size: 130%;
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
     /* Nagłówek jest przyklejony, więc kotwice i sekcje przewijane kółkiem lądują pod nim. */

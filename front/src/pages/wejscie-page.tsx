@@ -138,7 +138,7 @@ function MethodChooser() {
         <CardContent className="space-y-4">
           <Link
             to="/mobywatel?returnTo=/wejscie"
-            className={cn(buttonVariants({ variant: 'mobywatel', size: 'lg' }), 'w-full')}
+            className={cn(buttonVariants({ variant: 'mobywatel', size: 'lg' }), 'w-full whitespace-normal')}
           >
             <Smartphone />
             Zaloguj przez mObywatel

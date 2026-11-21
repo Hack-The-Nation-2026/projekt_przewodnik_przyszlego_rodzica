@@ -71,11 +71,11 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 shrink-0">
       <div className="border-b border-primary-foreground/15 bg-primary text-primary-foreground shadow-sm [--ring:var(--primary-foreground)]">
-        <Container className="flex h-16 items-center gap-4 lg:gap-8">
+        <Container className="flex h-16 items-center gap-3 lg:gap-6">
           <Wordmark />
 
           <nav
-            className="hidden flex-1 items-center justify-center gap-1 lg:flex lg:px-4"
+            className="hidden flex-1 items-center justify-center gap-0.5 min-[90rem]:flex min-[90rem]:px-2"
             aria-label="Nawigacja główna"
           >
             {NAV.map((item) => (
@@ -85,7 +85,7 @@ export function SiteHeader() {
                 end={item.end}
                 className={({ isActive }) =>
                   cn(
-                    'rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                    'rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap transition-colors',
                     isActive
                       ? 'bg-primary-foreground/10 text-primary-foreground'
                       : 'text-primary-foreground/95 hover:bg-primary-foreground/10 hover:text-primary-foreground',
@@ -114,7 +114,7 @@ export function SiteHeader() {
             <Button
               variant="ghost"
               size="icon"
-              className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground lg:hidden"
+              className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground min-[90rem]:hidden"
               aria-label={open ? 'Zamknij menu' : 'Otwórz menu'}
               aria-expanded={open}
               onClick={() => setOpen((value) => !value)}
@@ -125,7 +125,7 @@ export function SiteHeader() {
         </Container>
 
         {open && (
-          <nav className="border-t border-primary-foreground/15 bg-primary lg:hidden" aria-label="Nawigacja mobilna">
+          <nav className="border-t border-primary-foreground/15 bg-primary min-[90rem]:hidden" aria-label="Nawigacja mobilna">
             <Container className="flex flex-col py-2">
               {NAV.map((item) => (
                 <NavLink
