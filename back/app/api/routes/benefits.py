@@ -5,6 +5,7 @@ from fastapi import APIRouter
 from app.schemas.benefit import BenefitSummary
 from app.schemas.benefit_calculation import BenefitSimulation, SimulationResult
 from app.services.benefit_service import calculate_benefits
+from app.services.settings_store import load_settings
 
 router = APIRouter(prefix="/benefits", tags=["benefits"])
 
@@ -35,4 +36,5 @@ def list_benefits() -> list[BenefitSummary]:
 
 @router.post("/simulate", response_model=SimulationResult)
 def simulate_benefits(request: BenefitSimulation) -> SimulationResult:
-    return calculate_benefits(request)
+    # Parametry czytamy przy każdym zapytaniu, żeby zmiana w panelu działała od razu.
+    return calculate_benefits(request, load_settings())

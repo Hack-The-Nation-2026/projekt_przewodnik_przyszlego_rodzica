@@ -23,3 +23,6 @@ __pycache__/
 Thumbs.db
 .idea/
 .vscode/
+
+# Parametry zapisane z panelu administracyjnego (runtime, nie kod).
+back/data/

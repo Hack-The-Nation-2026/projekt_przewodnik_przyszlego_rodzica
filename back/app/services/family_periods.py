@@ -4,9 +4,9 @@ from dataclasses import dataclass
 from datetime import date
 
 from app.schemas.benefit_calculation import Child, FamilyPlan
+from app.schemas.settings import LeaveSettings
 from app.services.benefit_amounts import DAY, anniversary
 
-MATERNITY_DAYS = (140, 217, 231, 245, 259)
 SUPPLEMENT_EFFECTIVE = date(2025, 3, 19)
 
 
@@ -28,7 +28,15 @@ class FamilyEvent:
     parental_days: int
 
 
-def _birth_event(plan: FamilyPlan, birth: date) -> FamilyEvent:
+def _maternity_days(leave: LeaveSettings, children: int) -> int:
+    return leave.maternity_weeks_by_child_count[min(children, 5) - 1] * 7
+
+
+def _parental_weeks(leave: LeaveSettings, children: int) -> int:
+    return leave.parental_weeks_single if children == 1 else leave.parental_weeks_multiple
+
+
+def _birth_event(plan: FamilyPlan, birth: date, leave: LeaveSettings) -> FamilyEvent:
     if any(child.death_date and child.death_date < birth for child in plan.children):
         raise FamilyEventError("contradictory_death_date", "Data śmierci dziecka poprzedza poród.")
 
@@ -49,7 +57,7 @@ def _birth_event(plan: FamilyPlan, birth: date) -> FamilyEvent:
     liveborn = [child for child in plan.children if not child.stillborn]
     survivors = [child for child in liveborn if child.death_date is None]
     deaths = [child.death_date for child in liveborn if child.death_date is not None]
-    stop = start + DAY * MATERNITY_DAYS[min(count, 5) - 1]
+    stop = start + DAY * _maternity_days(leave, count)
     if not liveborn:
         stop = birth + DAY * 56
     elif not survivors:
@@ -58,18 +66,20 @@ def _birth_event(plan: FamilyPlan, birth: date) -> FamilyEvent:
         stop = min(stop, max(birth + DAY * 56, final_days)) if last_death < stop else stop
     elif len(survivors) < count:
         last_change = max(deaths, default=birth)
-        remaining_stop = start + DAY * MATERNITY_DAYS[min(len(survivors), 5) - 1]
+        remaining_stop = start + DAY * _maternity_days(leave, len(survivors))
         stop = min(stop, max(last_change, remaining_stop))
 
     parental_stop = date(birth.year + 7, 1, 1)
     if not survivors:
         parental_stop = max(deaths) + DAY * 7 if deaths else birth
-    parental_weeks = (41 if len(liveborn) == 1 else 43) + 24 * plan.za_zyciem
+    parental_weeks = _parental_weeks(leave, len(liveborn)) + (
+        leave.za_zyciem_extra_weeks * plan.za_zyciem
+    )
     parental_days = parental_weeks * 7 if liveborn else 0
     return FamilyEvent(birth, birth, plan.children, start, stop, parental_stop, parental_days)
 
 
-def _placement_event(plan: FamilyPlan, placed: date) -> FamilyEvent:
+def _placement_event(plan: FamilyPlan, placed: date, leave: LeaveSettings) -> FamilyEvent:
     if plan.maternity_transfer is not None:
         raise FamilyEventError(
             "placement_transfer_requires_review",
@@ -120,10 +130,13 @@ def _placement_event(plan: FamilyPlan, placed: date) -> FamilyEvent:
             "Data rozpoczęcia urlopu po przyjęciu dziecka jest poza dopuszczalnym okresem.",
         )
     age_stop = max(age_limits)
-    maternity_days = MATERNITY_DAYS[min(len(eligible_children), 5) - 1]
-    maternity_days = max(63, min(maternity_days, (age_stop - start).days))
-    parental_weeks = 38 if maternity_days == 63 else (41 if len(eligible_children) == 1 else 43)
-    parental_weeks += 24 * plan.za_zyciem
+    maternity_days = max(
+        63, min(_maternity_days(leave, len(eligible_children)), (age_stop - start).days)
+    )
+    parental_weeks = (
+        38 if maternity_days == 63 else _parental_weeks(leave, len(eligible_children))
+    )
+    parental_weeks += leave.za_zyciem_extra_weeks * plan.za_zyciem
     return FamilyEvent(
         placed,
         qualifying_date,
@@ -135,7 +148,7 @@ def _placement_event(plan: FamilyPlan, placed: date) -> FamilyEvent:
     )
 
 
-def family_event(plan: FamilyPlan) -> FamilyEvent:
+def family_event(plan: FamilyPlan, leave: LeaveSettings) -> FamilyEvent:
     event_date = plan.event_date
     if event_date is None and plan.event == "birth":
         event_date = plan.expected_birth_date
@@ -144,9 +157,9 @@ def family_event(plan: FamilyPlan) -> FamilyEvent:
             "missing_event_date", "Podaj datę porodu lub przyjęcia dziecka.", missing=True
         )
     return (
-        _birth_event(plan, event_date)
+        _birth_event(plan, event_date, leave)
         if plan.event == "birth"
-        else _placement_event(plan, event_date)
+        else _placement_event(plan, event_date, leave)
     )
 
 

@@ -13,6 +13,7 @@ from app.schemas.benefit_calculation import (
     Rehabilitation,
     SimulationResult,
 )
+from app.schemas.settings import AppSettings, default_settings
 from app.services.benefit_amounts import (
     DAY,
     contribution_issue,
@@ -336,9 +337,14 @@ def calculate_maternity_top_up(claim: MaternityTopUp) -> BenefitAssessment:
     )
 
 
-def calculate_benefits(request: BenefitSimulation) -> SimulationResult:
+def calculate_benefits(
+    request: BenefitSimulation, settings: AppSettings | None = None
+) -> SimulationResult:
+    params = settings or default_settings()
     result = (
-        calculate_family(request.family) if request.family else SimulationResult(assessments=[])
+        calculate_family(request.family, params)
+        if request.family
+        else SimulationResult(assessments=[])
     )
     if request.pregnancy_sickness:
         result.assessments.append(calculate_pregnancy_sickness(request.pregnancy_sickness))

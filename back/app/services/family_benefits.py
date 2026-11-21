@@ -14,6 +14,7 @@ from app.schemas.benefit_calculation import (
     Person,
     SimulationResult,
 )
+from app.schemas.settings import AppSettings, default_settings
 from app.services.benefit_amounts import (
     DAY,
     anniversary,
@@ -31,17 +32,18 @@ from app.services.family_periods import (
     supplemental_days,
 )
 
-EXCLUSIVE_DAYS = 63
-AVERAGED_RATE = Decimal("81.5")
 PARENTS: tuple[Parent, ...] = ("first_parent", "second_parent")
 MATERNITY_PROTECTED_TERMINATIONS = {"death", "bankruptcy", "liquidation", "unlawful_court_ruling"}
 
 
 class ParentalPool:
-    def __init__(self, total: int, previous: dict[Parent, int], parts: int):
+    def __init__(
+        self, total: int, previous: dict[Parent, int], parts: int, exclusive_days: int = 63
+    ):
         self.total = total
-        self.shared = max(0, total - EXCLUSIVE_DAYS * len(PARENTS))
-        self.exclusive = {parent: min(total, EXCLUSIVE_DAYS) for parent in PARENTS}
+        self.exclusive_days = exclusive_days
+        self.shared = max(0, total - exclusive_days * len(PARENTS))
+        self.exclusive = {parent: min(total, exclusive_days) for parent in PARENTS}
         self.parts = parts
         for parent, days in previous.items():
             self.use(parent, days, count_part=False)
@@ -63,7 +65,7 @@ class ParentalPool:
     def result(self) -> FamilyPool:
         return FamilyPool(
             total_days=self.total,
-            exclusive_days_per_parent=min(self.total, EXCLUSIVE_DAYS),
+            exclusive_days_per_parent=min(self.total, self.exclusive_days),
             remaining_shared_days=self.shared,
             remaining_days_by_parent={parent: self.available(parent) for parent in PARENTS},
         )
@@ -85,6 +87,7 @@ def _parental_payments(
     days: int,
     exclusive: int,
     shared_rate: Decimal | int,
+    exclusive_rate: Decimal | int = 70,
 ) -> list[PaymentPeriod]:
     basis = monthly_basis(person)
     work_days = _work_days(claim, days)
@@ -92,7 +95,7 @@ def _parental_payments(
     segments = []
     extensions = []
     for left, right in zip(stop_points, stop_points[1:], strict=False):
-        rate = 70 if left < exclusive else shared_rate
+        rate = exclusive_rate if left < exclusive else shared_rate
         if left < work_days:
             segments.append((right - left, rate, claim.work_percent))
             extended = _extended_duration(claim, right) - _extended_duration(claim, left)
@@ -124,7 +127,8 @@ def _averaged_rate_applies(plan: FamilyPlan, event: FamilyEvent) -> bool:
 
 
 class FamilyCalculator:
-    def __init__(self, plan: FamilyPlan):
+    def __init__(self, plan: FamilyPlan, settings: AppSettings | None = None):
+        self.settings = settings or default_settings()
         self.plan = plan
         self.event: FamilyEvent | None = None
         self.event_error: FamilyEventError | None = None
@@ -133,11 +137,12 @@ class FamilyCalculator:
         self.averaged_parental_used = plan.averaged_parental_used_in_first_year is True
         self.accepted: dict[Parent, list[BenefitAssessment]] = {parent: [] for parent in PARENTS}
         try:
-            self.event = family_event(plan)
+            self.event = family_event(plan, self.settings.leave)
             self.pool = ParentalPool(
                 self.event.parental_days,
                 plan.parental_days_already_used,
                 plan.parental_parts_already_used,
+                self.settings.leave.exclusive_weeks * 7,
             )
         except FamilyEventError as error:
             self.event_error = error
@@ -247,7 +252,9 @@ class FamilyCalculator:
                 "F9",
             )
         days = min(claim.days or (stop - start).days, (stop - start).days)
-        rate = AVERAGED_RATE if _averaged_rate_applies(plan, event) else 100
+        rates = self.settings.rates
+        averaged = _averaged_rate_applies(plan, event)
+        rate = rates.averaged if averaged else rates.maternity
         basis = monthly_basis(person)
         rule = "F1" if plan.event != "birth" else "D1"
         return grant(
@@ -255,7 +262,7 @@ class FamilyCalculator:
             basis,
             [payment(claim.benefit, start, days, rate, basis)],
             rule,
-            "I3" if rate == AVERAGED_RATE else "I1",
+            "I3" if averaged else "I1",
             person=claim.person,
             denied=(claim.days or days) - days,
         )
@@ -466,8 +473,15 @@ class FamilyCalculator:
             and (self.averaged_parental_used or start < anniversary(event.date, 1))
         )
         reduced_days = 0 if claim.person == plan.averaged_rate_applicant else exclusive
+        rates = self.settings.rates
         periods = _parental_payments(
-            claim, person, start, days, reduced_days, AVERAGED_RATE if averaged else 70
+            claim,
+            person,
+            start,
+            days,
+            reduced_days,
+            rates.averaged if averaged else rates.parental,
+            rates.parental,
         )
         if self._overlaps(claim, periods):
             return self._reject(
@@ -531,8 +545,8 @@ class FamilyCalculator:
         return result
 
 
-def calculate_family(plan: FamilyPlan) -> SimulationResult:
-    calculator = FamilyCalculator(plan)
+def calculate_family(plan: FamilyPlan, settings: AppSettings | None = None) -> SimulationResult:
+    calculator = FamilyCalculator(plan, settings)
     assessments = [calculator.assess(claim) for claim in plan.claims]
     return SimulationResult(
         assessments=assessments,
