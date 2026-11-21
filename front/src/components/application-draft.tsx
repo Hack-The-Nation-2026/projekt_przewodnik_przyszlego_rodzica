@@ -10,10 +10,16 @@ import { isFamilyBenefit } from '@/lib/benefit-document-context'
 import type { DateRange } from '@/lib/benefit-document-context'
 import { formatDocumentDate, shiftDate } from '@/lib/benefit-documents'
 import type { DocumentGuide, DocumentOptions } from '@/lib/benefit-documents'
+import { cn } from '@/lib/utils'
 
-export function DocumentField({ title, name, children }: { title: string; name: string; children: ReactNode }) {
+export function DocumentField({ title, name, children, className }: {
+  title: string
+  name: string
+  children: ReactNode
+  className?: string
+}) {
   return (
-    <div className="min-w-0 space-y-2">
+    <div className={cn('min-w-0 space-y-2', className)}>
       <Label htmlFor={name} className="leading-snug">{title}</Label>
       {children}
     </div>

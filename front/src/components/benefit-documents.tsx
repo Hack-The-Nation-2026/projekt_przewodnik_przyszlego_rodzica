@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils'
 
 const benefits = Object.keys(benefitList) as BenefitCode[]
 const ezus = 'https://www.zus.pl/ezus'
+const situationField = 'sm:row-span-2 sm:grid sm:grid-rows-subgrid sm:gap-y-2 sm:space-y-0'
 type Step = 'benefit' | 'situation' | 'documents'
 const stepTitles: Record<Step, string> = {
   benefit: 'Wybierz świadczenie',
@@ -26,16 +27,17 @@ const stepTitles: Record<Step, string> = {
   documents: 'Co złożyć i gdzie',
 }
 
-function SelectField<T extends string>({ name, title, value, onChange, disabled, children }: {
+function SelectField<T extends string>({ name, title, value, onChange, disabled, children, className }: {
   name: string
   title: string
   value: T
   onChange: (value: T) => void
   disabled?: boolean
   children: ReactNode
+  className?: string
 }) {
   return (
-    <DocumentField name={name} title={title}>
+    <DocumentField name={name} title={title} className={className}>
       <Select value={value} disabled={disabled} onValueChange={(selected) => onChange(selected as T)}>
         <SelectTrigger id={name}><SelectValue /></SelectTrigger>
         <SelectContent>{children}</SelectContent>
@@ -154,6 +156,8 @@ export default function BenefitDocuments({
   const rateAvailable = (benefit === 'macierzynski' || benefit === 'rodzicielski') && role !== 'father'
   const showPayerOptions = benefit !== 'w_wysokosci_macierzynskiego'
   const payerSizeApplies = employment !== 'self_employed' && coverage !== 'ended'
+  const showFamilyRole = isFamilyBenefit(benefit)
+  const showMaternityCase = benefit === 'macierzynski' && role === 'mother'
   const steps: Step[] = [
     ...(onBenefitChange ? ['benefit' as const] : []),
     ...(showPayerOptions ? ['situation' as const] : []),
@@ -224,8 +228,8 @@ export default function BenefitDocuments({
           <CardContent className="space-y-5">
             <p className="text-sm text-muted-foreground">Podaj dane, które znasz. Na ich podstawie dobierzemy załączniki i adresata.</p>
             <div className="grid gap-4 sm:grid-cols-2">
-              {isFamilyBenefit(benefit) && (
-                <SelectField name="document-role" title="Sytuacja rodzinna" value={role} onChange={(value) => {
+              {showFamilyRole && (
+                <SelectField name="document-role" title="Sytuacja rodzinna" value={role} className={situationField} onChange={(value) => {
                   setRole(value)
                   setMaternityCase(value === 'father' ? 'takeover' : 'standard')
                   setCoverageOverride(undefined)
@@ -233,32 +237,35 @@ export default function BenefitDocuments({
                   {Object.entries(documentRoles).map(([key, name]) => <SelectItem key={key} value={key}>{name}</SelectItem>)}
                 </SelectField>
               )}
-              {benefit === 'macierzynski' && role === 'mother' && (
-                <SelectField name="document-maternity-case" title="Wariant macierzyńskiego" value={maternityCase} onChange={setMaternityCase}>
+              {showMaternityCase && (
+                <SelectField name="document-maternity-case" title="Wariant macierzyńskiego" value={maternityCase}
+                  className={situationField} onChange={setMaternityCase}>
                   <SelectItem value="standard">Od porodu</SelectItem>
                   <SelectItem value="before_birth">Część przed porodem</SelectItem>
                 </SelectField>
               )}
-              <SelectField name="document-employment" title="Tytuł ubezpieczenia" value={employment} onChange={(value) => {
-                setEmployment(value)
-                setPayerSize('unknown')
-              }}>
+              <SelectField name="document-employment" title="Tytuł ubezpieczenia" value={employment}
+                className={cn(situationField, (!showFamilyRole || showMaternityCase) && 'sm:col-span-2')}
+                onChange={(value) => {
+                  setEmployment(value)
+                  setPayerSize('unknown')
+                }}>
                 {Object.entries(documentEmployment).map(([key, name]) => <SelectItem key={key} value={key}>{name}</SelectItem>)}
               </SelectField>
             </div>
-            <fieldset className="min-w-0 rounded-md border border-border px-4 pb-4">
-              <legend className="px-2 text-sm font-semibold">
+            <fieldset className="min-w-0">
+              <legend className="mb-3 w-full border-t border-border pt-4 text-sm font-semibold">
                 Okres ubezpieczenia i płatnik <span className="font-normal text-muted-foreground">(opcjonalnie)</span>
               </legend>
               <div className="grid gap-4 sm:grid-cols-2">
-                <SelectField name="document-coverage" title="Kiedy przypada wnioskowany okres?" value={coverage}
+                <SelectField name="document-coverage" title="Kiedy przypada wnioskowany okres?" value={coverage} className={situationField}
                   onChange={(value) => setCoverageOverride({ benefit, value })}>
                   <SelectItem value="unknown">Do ustalenia</SelectItem>
                   <SelectItem value="active">W czasie ubezpieczenia chorobowego</SelectItem>
                   <SelectItem value="ended">Po ustaniu ubezpieczenia</SelectItem>
                 </SelectField>
                 <SelectField name="document-payer" title="Liczba osób u płatnika zgłoszonych do ubezpieczenia chorobowego"
-                  value={payerSizeApplies ? payerSize : 'not_applicable'} disabled={!payerSizeApplies}
+                  value={payerSizeApplies ? payerSize : 'not_applicable'} disabled={!payerSizeApplies} className={situationField}
                   onChange={(value) => {
                     if (value !== 'not_applicable') setPayerSize(value)
                   }}>
