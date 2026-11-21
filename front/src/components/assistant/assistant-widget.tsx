@@ -166,7 +166,7 @@ export function AssistantWidget() {
   return (
     <div
       data-scroll-ignore
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-end p-4 sm:p-6"
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-end p-4 [&_button:not(:disabled)]:cursor-pointer sm:p-6"
     >
       <div className="pointer-events-auto flex w-full max-w-sm flex-col items-end gap-3">
         {open && (
@@ -179,7 +179,6 @@ export function AssistantWidget() {
             <header className="flex items-center gap-2 border-b border-border px-3 py-2.5">
               <Sparkles className="size-4 shrink-0 text-primary" aria-hidden="true" />
               <p className="text-sm font-semibold">Asystent</p>
-              <span className="text-xs text-muted-foreground">nawigacja</span>
               <div className="ml-auto flex items-center">
                 {turns.length > 0 && (
                   <Button

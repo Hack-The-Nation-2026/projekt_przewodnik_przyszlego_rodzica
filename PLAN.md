@@ -456,7 +456,7 @@ działa jako panel w prawym dolnym rogu.
   dalej, tylko z katalogu.
 - Do modelu idzie wyłącznie treść pytania i lista tematów. Nie wysyłamy danych osobowych ani
   materiałów ZUS. Bez klucza nic nie wychodzi poza serwer i cała aplikacja działa offline.
-  Panel pisze wprost, że to nawigacja, a nie doradca prawny, i że kwoty liczy kalkulator.
+  Panel mówi wprost, że wskazuje stronę, a nie podaje kwot ani terminów, bo te liczy kalkulator.
 
 ## Krok 15. Materiały do oddania
 
