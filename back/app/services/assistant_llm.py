@@ -15,7 +15,13 @@ import httpx
 
 from app.core.config import Settings
 from app.schemas.assistant import AssistantAnswer, AssistantTurn
-from app.services.assistant_service import BY_ID, TOPICS, build_answer
+from app.services.assistant_service import (
+    BY_ID,
+    PHRASE_WEIGHT,
+    TOPICS,
+    build_answer,
+    ranked_topics,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -95,6 +101,28 @@ def _parse_topic(content: str) -> str | None:
     return topic if isinstance(topic, str) else None
 
 
+def _model_choice_is_supported(question: str, topic_id: str) -> bool:
+    """Czy samo pytanie potwierdza temat wybrany przez model.
+
+    Model czyta ze zrozumieniem, ale czasem wskaże temat, na który pytanie w ogóle nie
+    wskazuje (na przykład pytanie o zwolnienie z pracy trafiało w temat o stracie dziecka).
+    Wtedy lepiej wrócić do katalogu. Słabe trafienie katalogu nie unieważnia modelu, bo
+    właśnie takie pytania model rozpoznaje lepiej niż dopasowanie po słowach.
+    """
+    matches = ranked_topics(question)
+    if not matches:
+        # Samo pytanie nie niesie tematu, na przykład "a co z tym?". Wtedy decyduje model
+        # razem z historią rozmowy.
+        return True
+    best_topic, best_score = matches[0]
+    if best_topic.id == topic_id:
+        return True
+    if best_score < PHRASE_WEIGHT:
+        return True
+    scores = {topic.id: score for topic, score in matches}
+    return scores.get(topic_id, 0) >= best_score
+
+
 def answer_with_model(
     question: str,
     history: Sequence[AssistantTurn],
@@ -110,5 +138,8 @@ def answer_with_model(
 
     topic = BY_ID.get(topic_id) if topic_id else None
     if topic is None:
+        return None
+    if not _model_choice_is_supported(question, topic.id):
+        logger.info("Asystent: model wskazał temat %s bez oparcia w pytaniu", topic.id)
         return None
     return build_answer(topic, question, history, mode="model")

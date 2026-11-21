@@ -147,6 +147,30 @@ TOPICS: tuple[Topic, ...] = (
         stems=("kwot", "wylicz", "wysokosc", "pieniadz"),
     ),
     Topic(
+        id="bliznieta",
+        question="Mam bliźniaki, czy dostanę więcej?",
+        answer=(
+            "Przy bliźniakach wymiar urlopu i wyliczenie są większe, bo liczy się każde dziecko. "
+            "Wybierz liczbę dzieci w wywiadzie, a kalkulator pokaże wymiar i wyliczenie."
+        ),
+        links=(
+            AssistantLink(
+                label="Kalkulator",
+                href="/kalkulator",
+                kind="page",
+                description="Wyliczenie przy jednym dziecku i przy bliźniakach.",
+            ),
+            AssistantLink(
+                label="Lista świadczeń",
+                href="/swiadczenia",
+                kind="page",
+                description="Co obejmuje serwis i na czym polega każde świadczenie.",
+            ),
+        ),
+        phrases=("blizniak", "bliznieta", "blizniet", "blizniaki", "dwoje dzieci"),
+        stems=("blizni",),
+    ),
+    Topic(
         id="skladki",
         question="Ile płacę składek?",
         answer=(
@@ -214,12 +238,204 @@ TOPICS: tuple[Topic, ...] = (
         ),
     ),
     Topic(
+        id="swiadczenia_poza_zus",
+        question="Czy dostanę świadczenie wychowawcze albo becikowe?",
+        answer=(
+            "Świadczenie wychowawcze i becikowe są na liście obok zasiłków ZUS, razem z warunkami "
+            "i linkiem do wniosku. Sprawdź je tam, a szczegóły potwierdzi ZUS albo urząd."
+        ),
+        links=(
+            AssistantLink(
+                label="Lista świadczeń",
+                href="/swiadczenia",
+                kind="page",
+                description="Zasiłki ZUS i świadczenia, które załatwiasz poza nim.",
+            ),
+            AssistantLink(
+                label="Świadczenie wychowawcze",
+                href=(
+                    "https://www.zus.pl/pl/swiadczenia/swiadczenia-dla-rodzin/"
+                    "swiadczenie-wychowawcze-800-plus"
+                ),
+                kind="external",
+                description="Warunki i wniosek na stronie ZUS.",
+            ),
+        ),
+        phrases=(
+            "800 plus",
+            "dostane 800",
+            "800",
+            "wychowawcz",
+            "becikow",
+            "500 plus",
+            "zapomoga",
+        ),
+        stems=("wychowawcz", "becikow"),
+    ),
+    Topic(
+        id="urlop_wymiar",
+        question="Ile trwa urlop macierzyński i rodzicielski?",
+        answer=(
+            "Wymiar urlopu macierzyńskiego zależy od liczby dzieci urodzonych przy jednym "
+            "porodzie, a urlopu rodzicielskiego od liczby dzieci. Wyliczenie z podziałem na "
+            "rodziców pokaże kalkulator, a zasady urlopów opisuje ministerstwo rodziny."
+        ),
+        links=(
+            AssistantLink(
+                label="Kalkulator",
+                href="/kalkulator",
+                kind="page",
+                description="Wymiar urlopu i wyliczenie dla obojga rodziców.",
+            ),
+            AssistantLink(
+                label="Urlop rodzicielski na gov.pl",
+                href="https://www.gov.pl/web/rodzina/urlop-rodzicielski",
+                kind="external",
+                description="Zasady urlopów opisane przez ministerstwo rodziny.",
+            ),
+        ),
+        phrases=(
+            "ile trwa urlop",
+            "jak dlugo trwa urlop",
+            "jak dlugo urlop",
+            "ile tygodni urlop",
+            "ile miesiecy urlop",
+            "wymiar urlop",
+            "dlugosc urlop",
+            "kiedy konczy sie urlop",
+            "urlop macierzynski ile",
+        ),
+    ),
+    Topic(
+        id="podstawa_wymiaru",
+        question="Co to jest podstawa wymiaru?",
+        answer=(
+            "Podstawa wymiaru to kwota, od której liczy się zasiłek, więc od niej zależy jego "
+            "wysokość. Wpisz ją w kalkulatorze, a dane z ubezpieczenia zobaczysz na ekranie ZUS."
+        ),
+        links=(
+            AssistantLink(
+                label="Kalkulator",
+                href="/kalkulator",
+                kind="page",
+                description="Podstawa wymiaru i wyliczenie zasiłku.",
+            ),
+            AssistantLink(
+                label="Symulacja ZUS",
+                href="/zus",
+                kind="page",
+                description="Dane z ubezpieczenia, w tym podstawa wymiaru.",
+            ),
+        ),
+        phrases=(
+            "podstawa wymiaru",
+            "podstawa zasilku",
+            "co to jest podstawa",
+            "od czego liczy sie zasilek",
+            "jak liczy sie zasilek",
+        ),
+    ),
+    Topic(
+        id="wczesniak",
+        question="Dziecko urodziło się za wcześnie, co z urlopem?",
+        answer=(
+            "Po porodzie przed terminem urlop macierzyński wydłuża uzupełniający urlop "
+            "macierzyński, liczony od pobytu dziecka w szpitalu. Wpisz pobyty w wywiadzie, "
+            "a zasady i przykłady są na ekranie wsparcia."
+        ),
+        links=(
+            AssistantLink(
+                label="Kalkulator",
+                href="/kalkulator",
+                kind="page",
+                description="Pobyty dziecka w szpitalu i wyliczenie urlopu.",
+            ),
+            AssistantLink(
+                label="Wsparcie i trudne sytuacje",
+                href="/wsparcie",
+                kind="page",
+                description="Zasady uzupełniającego urlopu i wsparcie dla rodziny.",
+            ),
+        ),
+        phrases=(
+            "wczesniak",
+            "wczesniakiem",
+            "wczesniaki",
+            "za wczesnie",
+            "przed terminem",
+            "przedwczesn",
+            "urodzilo sie za wczesnie",
+        ),
+        stems=("wczesni",),
+    ),
+    Topic(
+        id="chorobowe_w_ciazy",
+        question="Jak wygląda zasiłek chorobowy w ciąży?",
+        answer=(
+            "Zwolnienie w okresie ciąży jest osobnym przypadkiem i inaczej wpływa na wysokość "
+            "zasiłku chorobowego. Wyliczenie z twoich danych pokaże kalkulator, a zasady "
+            "potwierdza ZUS."
+        ),
+        links=(
+            AssistantLink(
+                label="Kalkulator",
+                href="/kalkulator",
+                kind="page",
+                description="Zwolnienie i jego wpływ na wyliczenie.",
+            ),
+            AssistantLink(
+                label="ZUS o zasiłku chorobowym",
+                href="https://www.zus.pl/swiadczenia/zasilki/zasilek-chorobowy",
+                kind="external",
+                description="Zasady i dokumenty po stronie ZUS.",
+            ),
+        ),
+        phrases=(
+            "zasilek chorobowy w ciazy",
+            "chorobowy w ciazy",
+            "chorobowe w ciazy",
+            "zwolnienie w ciazy",
+            "na zwolnieniu w ciazy",
+            "l4 w ciazy",
+            "ciaza a zwolnienie",
+        ),
+    ),
+    Topic(
+        id="ochrona_pracy",
+        question="Jestem w ciąży, a pracodawca chce mnie zwolnić",
+        answer=(
+            "Ochrona zatrudnienia w ciąży to sprawa prawa pracy, a nie zasiłku, więc nie "
+            "rozstrzygam jej tutaj. Skontaktuj się z Państwową Inspekcją Pracy, a w serwisie "
+            "sprawdzisz, jak ciąża wpływa na zasiłek."
+        ),
+        links=(
+            PIP,
+            AssistantLink(
+                label="Kalkulator",
+                href="/kalkulator",
+                kind="page",
+                description="Wpływ sytuacji na wyliczenie zasiłku.",
+            ),
+        ),
+        phrases=(
+            "zwolnic",
+            "zwolnil",
+            "wypowiedzen",
+            "ochrona pracy",
+            "prawa pracownic",
+            "zwolnienie z prac",
+            "chce mnie zwolnic",
+            "pracodawca chce",
+            "ciaza a praca",
+        ),
+    ),
+    Topic(
         id="uprawnienia",
         question="Czy mam prawo do zasiłku?",
         answer=(
-            "Uprawnienia zależą od twojej sytuacji: umowy, ubezpieczenia i tego, kto jest "
-            "rodzicem. Odpowiedz na pytania w kalkulatorze, a serwis pokaże, które świadczenia "
-            "wchodzą w grę i czego jeszcze brakuje."
+            "Uprawnienia zależą od sytuacji zawodowej i ubezpieczenia: inna jest umowa o pracę, "
+            "inna zlecenie czy własna firma. Odpowiedz na pytania w kalkulatorze, a serwis pokaże, "
+            "które świadczenia wchodzą w grę i czego jeszcze brakuje."
         ),
         links=(
             AssistantLink(
@@ -239,7 +455,8 @@ TOPICS: tuple[Topic, ...] = (
             "czy mam prawo",
             "jakie mam prawa",
             "czy mi przyslug",
-            "czy dostan",
+            "czy dostane zasilek",
+            "czy dostane cos",
             "co zrobic zeby dostac",
             "czy sie kwalifikuj",
             "czy moge dostac",
@@ -269,6 +486,10 @@ TOPICS: tuple[Topic, ...] = (
             "co zabrac",
             "co przygotowac",
             "jakie papiery",
+            "zgubilam",
+            "zgubil",
+            "zgubiony",
+            "zus z 3",
         ),
         stems=("dokument", "zalacznik", "formularz", "papiery"),
     ),
@@ -361,7 +582,7 @@ TOPICS: tuple[Topic, ...] = (
             ),
             AssistantLink(
                 label="eZUS",
-                href="https://www.zus.pl/ezus",
+                href="https://www.zus.pl/ezus/logowanie?jezyk=pl",
                 kind="external",
                 description="Konto, stan sprawy i korespondencja z ZUS.",
             ),
@@ -392,7 +613,7 @@ TOPICS: tuple[Topic, ...] = (
             ),
             AssistantLink(
                 label="eZUS",
-                href="https://www.zus.pl/ezus",
+                href="https://www.zus.pl/ezus/logowanie?jezyk=pl",
                 kind="external",
                 description="Oficjalne konto i stan sprawy w ZUS.",
             ),
@@ -430,6 +651,11 @@ TOPICS: tuple[Topic, ...] = (
             "podzial urlop",
             "kto zostaje",
             "urlop dla obojga",
+            "ojciec",
+            "ojca",
+            "ojcu",
+            "ojcem",
+            "tata",
         ),
         stems=("oboj", "podzial"),
     ),
@@ -483,8 +709,18 @@ TOPICS: tuple[Topic, ...] = (
                 description="Wnioski właściwe dla rodziców adopcyjnych.",
             ),
         ),
-        phrases=("adopcyj", "przysposob", "rodzina zastepcz", "rodzic zastepcz", "zastepcz"),
-        stems=("adopcyj", "przysposob", "zastepcz"),
+        phrases=(
+            "adopcyj",
+            "adoptowali",
+            "adoptowalismy",
+            "adoptujemy",
+            "adoptowac",
+            "przysposob",
+            "rodzina zastepcz",
+            "rodzic zastepcz",
+            "zastepcz",
+        ),
+        stems=("adopt", "przysposob", "zastepcz"),
     ),
     Topic(
         id="trudna_sytuacja",
@@ -509,7 +745,6 @@ TOPICS: tuple[Topic, ...] = (
             "szukam pomoc",
             "poronien",
             "smierc dziec",
-            "wczesniak",
             "chore dziec",
             "kryzys",
             "przemoc",
@@ -537,6 +772,39 @@ TOPICS: tuple[Topic, ...] = (
         stems=("zalegl", "dlug", "skladk"),
     ),
     Topic(
+        id="zasilek_opiekunczy",
+        question="Czy należy mi się zasiłek opiekuńczy na dziecko?",
+        answer=(
+            "Zasiłek opiekuńczy przysługuje na czas opieki nad chorym dzieckiem. Zasady "
+            "i potrzebne dokumenty są na liście świadczeń i na stronie ZUS."
+        ),
+        links=(
+            AssistantLink(
+                label="Lista świadczeń",
+                href="/swiadczenia",
+                kind="page",
+                description="Zasiłek opiekuńczy i pozostałe świadczenia poza ZUS.",
+            ),
+            AssistantLink(
+                label="ZUS o zasiłku opiekuńczym",
+                href=(
+                    "https://www.zus.pl/swiadczenia/zasilki/zasilek-opiekunczy/niezbedne-dokumenty"
+                ),
+                kind="external",
+                description="Zasady i dokumenty po stronie ZUS.",
+            ),
+        ),
+        phrases=(
+            "zasilek opiekuncz",
+            "opiekuncz",
+            "chore dziecko",
+            "chorego dziecka",
+            "dziecko jest chore",
+            "opieka nad dzieckiem",
+        ),
+        stems=("opiekuncz", "chore"),
+    ),
+    Topic(
         id="ezla",
         question="Gdzie zobaczę moje zwolnienie lekarskie?",
         answer=(
@@ -552,7 +820,7 @@ TOPICS: tuple[Topic, ...] = (
             ),
             AssistantLink(
                 label="eZUS",
-                href="https://www.zus.pl/ezus",
+                href="https://www.zus.pl/ezus/logowanie?jezyk=pl",
                 kind="external",
                 description="Zwolnienia lekarskie i stan sprawy.",
             ),
@@ -662,6 +930,10 @@ FALLBACK_ANSWER = (
 
 BY_ID = {topic.id: topic for topic in TOPICS}
 
+# Pytanie spoza katalogu: podpowiedzi prowadzą do początku, listy świadczeń i instytucji,
+# zamiast pierwszych tematów z katalogu, które nie mają z pytaniem nic wspólnego.
+FALLBACK_SUGGESTION_IDS = ("start", "swiadczenia", "instytucje")
+
 
 def _normalise(text: str) -> str:
     """Sprowadza pytanie do małych liter bez ogonków, żeby porównanie było odporne na pisownię."""
@@ -743,6 +1015,20 @@ def suggestions_for(question: str, chosen: str | None, limit: int = 3) -> list[A
     return [topic.public() for topic in picked[:limit]]
 
 
+def fallback_suggestions(history: Sequence[AssistantTurn] = ()) -> list[AssistantTopic]:
+    """Pytanie spoza katalogu: temat z rozmowy, a potem początek, świadczenia i instytucje."""
+    picked: list[str] = []
+    for turn in reversed(history):
+        if turn.topic in BY_ID and turn.topic not in picked:
+            picked.append(turn.topic)
+    for topic_id in FALLBACK_SUGGESTION_IDS:
+        if len(picked) >= 3:
+            break
+        if topic_id not in picked:
+            picked.append(topic_id)
+    return [BY_ID[topic_id].public() for topic_id in picked[:3]]
+
+
 def build_answer(
     topic: Topic,
     question: str,
@@ -787,7 +1073,7 @@ def ask(
             topic=None,
             answer=FALLBACK_ANSWER,
             links=list(FALLBACK_LINKS),
-            suggestions=suggestions_for(f"{_context_text(history)} {question}", None, 4),
+            suggestions=fallback_suggestions(history),
         )
 
     if matches[0][1] <= WEAK_SCORE:

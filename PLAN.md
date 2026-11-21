@@ -429,10 +429,12 @@ działa jako panel w prawym dolnym rogu.
 
 ### Co jest
 
-- Katalog dwudziestu jeden tematów w `back/app/services/assistant_service.py`. Każdy ma gotowe
-  pytanie, odpowiedź nawigacyjną i linki, czyli podstronę serwisu albo stronę ZUS, ministerstwa
-  rodziny i PIP. Jest temat na samo "czym jest ZUS?" i osobny na "ile płacę składek", bo bez nich
-  takie pytania kończyły się listą instytucji zamiast odpowiedzi.
+- Katalog dwudziestu dziewięciu tematów w `back/app/services/assistant_service.py`. Każdy ma
+  gotowe pytanie, odpowiedź nawigacyjną i linki, czyli podstronę serwisu albo stronę ZUS,
+  ministerstwa rodziny i PIP. Osobne tematy mają "czym jest ZUS?", "ile płacę składek", wymiar
+  urlopu, podstawa wymiaru, wcześniak, zasiłek chorobowy w ciąży, ochrona pracy w ciąży, bliźnięta,
+  świadczenia spoza ZUS i zasiłek opiekuńczy. Bez nich te pytania kończyły się ogólnikiem,
+  listą instytucji albo odpowiedzią o czymś innym.
 - Dopasowanie jest deterministyczne i działa bez klucza API. Pytanie jest normalizowane (małe
   litery, bez ogonków), a temat wygrywa na frazach i rdzeniach słów, więc "łączyć pracę" i
   "laczyc prace" trafiają w to samo. Pytanie spoza katalogu dostaje wprost powiedziane, że nie
@@ -459,9 +461,11 @@ działa jako panel w prawym dolnym rogu.
   wybiera tylko temat z katalogu i nic więcej nie pisze. Zdanie, linki i następne pytania zawsze
   pochodzą z katalogu. Wcześniej model układał własne zdanie i wymyślał nieistniejące sekcje
   ("sekcja Uprawnienia"), a po zaostrzeniu filtrów odpisywał ogólnikiem. Skoro treść bierze się
-  z katalogu, nie ma czego halucynować, a odpowiedź i tak jest konkretna. Gdy model wskaże temat,
-  którego nie ma, nie odpowie w dwanaście sekund albo dostawca padnie, odpowiada dopasowanie
-  deterministyczne.
+  z katalogu, nie ma czego halucynować, a odpowiedź i tak jest konkretna. Wybór modelu jest
+  sprawdzany z dopasowaniem: jeśli pytanie nie daje wskazanemu tematowi żadnego oparcia, a inny
+  temat pasuje mocno, asystent wraca do katalogu. Bez tego pytanie o zwolnienie z pracy w ciąży
+  dostawało odpowiedź o stracie dziecka. Gdy model wskaże temat, którego nie ma, nie odpowie
+  w dwanaście sekund albo dostawca padnie, też odpowiada dopasowanie deterministyczne.
 - Do modelu idzie wyłącznie treść pytania, poprzednie pytania z rozmowy i lista tematów.
   Nie wysyłamy danych osobowych ani materiałów ZUS. Bez klucza nic nie wychodzi poza serwer
   i cała aplikacja działa offline. Panel mówi wprost, że wskazuje stronę, a nie podaje kwot

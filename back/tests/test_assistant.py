@@ -32,6 +32,18 @@ QUESTIONS = [
     ("Do kogo zwrócić się poza serwisem?", "instytucje"),
     ("Czym jest ZUS?", "czym_jest_zus"),
     ("Ile płacę składek?", "skladki"),
+    ("Mam bliźniaki, czy dostanę więcej?", "bliznieta"),
+    ("Ile trwa urlop macierzyński?", "urlop_wymiar"),
+    ("Co to jest podstawa wymiaru?", "podstawa_wymiaru"),
+    ("Dziecko urodziło się za wcześnie, co z urlopem?", "wczesniak"),
+    ("Czy zasiłek chorobowy w ciąży jest płatny 100%?", "chorobowe_w_ciazy"),
+    ("Czy ojciec może wziąć urlop rodzicielski?", "oboje_rodzice"),
+    ("Jestem w ciąży, a pracodawca chce mnie zwolnić", "ochrona_pracy"),
+    ("Czy dostanę 800 plus?", "swiadczenia_poza_zus"),
+    ("Czy należy mi się zasiłek opiekuńczy na dziecko?", "zasilek_opiekunczy"),
+    ("Co zrobić, jak zgubiłam ZUS Z-3?", "dokumenty"),
+    ("Adoptowaliśmy dziecko, jakie dokumenty?", "adopcja"),
+    ("czy dostane swiadczenie na chore dziecko jesli wyzdrowieje", "zasilek_opiekunczy"),
 ]
 
 DIGIT = re.compile(r"\d")
@@ -83,7 +95,11 @@ def test_question_outside_the_catalog_points_at_the_sources():
         "https://www.gov.pl/web/rodzina",
         "https://www.pip.gov.pl",
     } <= hrefs
-    assert body["suggestions"]
+    assert [row["id"] for row in body["suggestions"]] == [
+        "start",
+        "swiadczenia",
+        "instytucje",
+    ]
 
 
 def test_every_answer_offers_the_next_questions():
@@ -119,6 +135,13 @@ def test_unknown_question_points_at_the_official_sites():
         "https://www.pip.gov.pl",
     } <= hrefs
     assert answer["suggestions"]
+
+
+def test_links_do_not_point_at_the_dead_ezus_shortcut():
+    """Stary adres https://www.zus.pl/ezus zwracał 404, więc linki idą do logowania."""
+    hrefs = {link.href for topic in TOPICS for link in topic.links}
+    assert "https://www.zus.pl/ezus" not in hrefs
+    assert "https://www.zus.pl/ezus/logowanie?jezyk=pl" in hrefs
 
 
 def test_links_are_either_our_pages_or_https():
@@ -268,6 +291,55 @@ def test_route_answers_with_the_model_when_a_key_is_set(monkeypatch):
     assert body["mode"] == "model"
     assert body["topic"] == "wniosek"
     assert body["answer"] == BY_ID["wniosek"].answer
+
+
+def test_model_cannot_send_a_question_to_a_topic_it_does_not_mention(monkeypatch):
+    # Model wskazał temat o stracie dziecka na pytanie o zwolnienie z pracy. Pytanie nie
+    # daje temu tematowi żadnego oparcia, więc odpowiedź wraca do katalogu.
+    payload = '{"topic": "trudna_sytuacja"}'
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, history, settings: payload)
+    answer = assistant_llm.answer_with_model(
+        "Jestem w ciąży, a pracodawca chce mnie zwolnić", [], Settings(assistant_api_key="t")
+    )
+    assert answer is None
+
+
+def test_slowo_weak_match_does_not_overrule_the_model(monkeypatch):
+    # "złożyć" daje słabe trafienie w temat wniosku, ale model lepiej rozpoznał dokumenty.
+    payload = '{"topic": "dokumenty"}'
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, history, settings: payload)
+    answer = assistant_llm.answer_with_model(
+        "Urodziłam wczoraj, co mam teraz złożyć?", [], Settings(assistant_api_key="t")
+    )
+    assert answer is not None
+    assert answer.topic == "dokumenty"
+
+
+def test_model_choice_that_the_question_supports_stays(monkeypatch):
+    payload = '{"topic": "chorobowe_w_ciazy"}'
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, history, settings: payload)
+    answer = assistant_llm.answer_with_model(
+        "Czy zasiłek chorobowy w ciąży jest płatny 100%?", [], Settings(assistant_api_key="t")
+    )
+    assert answer is not None
+    assert answer.topic == "chorobowe_w_ciazy"
+    assert answer.mode == "model"
+
+
+def test_route_overrides_a_topic_the_question_does_not_support(monkeypatch):
+    app.dependency_overrides[get_settings] = lambda: Settings(assistant_api_key="t")
+    payload = '{"topic": "trudna_sytuacja"}'
+    monkeypatch.setattr(assistant_llm, "_request", lambda question, history, settings: payload)
+    try:
+        body = client.post(
+            "/api/assistant/ask",
+            json={"question": "Jestem w ciąży, a pracodawca chce mnie zwolnić"},
+        ).json()
+    finally:
+        app.dependency_overrides.clear()
+    assert body["topic"] == "ochrona_pracy"
+    assert body["mode"] == "catalog"
+    assert "wsparciu" not in body["answer"]
 
 
 def test_route_keeps_working_when_the_model_fails(monkeypatch):
