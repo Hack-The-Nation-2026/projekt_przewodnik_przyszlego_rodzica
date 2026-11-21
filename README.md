@@ -21,13 +21,11 @@ bez kopiowania i rozpowszechniania.
 
 ## Szybki start
 
-Backend:
+Backend (środowisko `.venv` jest już gotowe z zależnościami):
 
 ```bash
 cd back
-python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements-dev.txt
 cp .env.example .env
 uvicorn app.main:app --reload
 ```
