@@ -4,16 +4,18 @@ Projekt na hackathon **HackNation 2026**, wyzwanie **ZUS**. Celem jest narzędzi
 sposób pokazuje rodzicom, jakie świadczenia i urlopy im przysługują, ile wyniosą i jak je uzyskać.
 
 To na razie szkielet: struktura repo, działający frontend ze stroną startową i
-nagłówkiem oraz backend z pierwszymi endpointami. Reguły liczenia zasiłków dojdą, gdy doprecyzujemy
-zakres.
+nagłówkiem oraz backend z pierwszymi endpointami. Reguły liczenia zasiłków są spisane w
+`RULES.md`, a kod, który je policzy, dojdzie w kolejnych krokach z `PLAN.md`.
 
 ## Struktura
 
 ```
 zadanie-rodzice/
-├── back/   # FastAPI, REST API
-├── front/  # Vite, React, Tailwind i shadcn/ui
-└── OPIS/   # materiały ZUS (lokalnie, nie trafiają do repozytorium)
+├── back/     # FastAPI, REST API
+├── front/    # Vite, React, Tailwind i shadcn/ui
+├── RULES.md  # reguły zasiłków z odesłaniami do przepisów
+├── PLAN.md   # kroki realizacji
+└── OPIS/     # materiały ZUS (lokalnie, nie trafiają do repozytorium)
 ```
 
 Folder `OPIS/` jest w `.gitignore`. Materiały ZUS wolno wykorzystać tylko na potrzeby wydarzenia,
@@ -47,7 +49,6 @@ Frontend działa na http://localhost:5173, API na http://localhost:8000 (dokumen
   a po zalogowaniu wracamy tam, gdzie przerwaliśmy, i widzimy dane zależne od konta.
 - Nagłówek z nawigacją, nazwą zalogowanej osoby i wylogowaniem (stan trzyma zustand).
 - Strona startowa: sekcja powitalna, kroki, lista świadczeń pobrana z API i skróty.
-- Stopka z informacją o statusie API.
 - Backend: `/api/health` i `/api/benefits`, CORS pod adres frontendu.
 - Formularz w kalkulatorze z walidacją zod jako wzorzec dla kolejnych ekranów.
 
