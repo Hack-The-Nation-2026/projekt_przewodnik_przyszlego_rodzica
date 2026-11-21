@@ -160,7 +160,7 @@ export function KalkulatorPage() {
         <section className="mt-12 space-y-5" aria-labelledby="benefit-result">
           <div>
             <h2
-              className="scroll-mt-24 font-serif text-3xl font-semibold focus:outline-none"
+              className="scroll-mt-24 text-3xl font-semibold focus:outline-none"
               id="benefit-result"
               ref={heading}
               tabIndex={-1}
