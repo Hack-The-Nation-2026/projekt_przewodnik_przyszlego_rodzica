@@ -20,8 +20,8 @@ odhaczania. Po każdym skończonym kroku wracamy tutaj i zaznaczamy, co gotowe.
   oraz załącznik z wymiarami i wysokościami zasiłków.
 - `PRZYKLADY/` zawiera 87 spraw w PDF. To jest zestaw, na którym jury sprawdzi wyliczenia.
 
-Materiały ZUS zostają lokalnie. `.gitignore` wycina `OPIS/` i `PRZYKLADY/`, bo regulamin nie
-pozwala ich kopiować ani rozpowszechniać.
+Materiały ZUS zostają lokalnie. `.gitignore` wycina `OPIS/` i `PRZYKLADY/`, bo brief nie pozwala
+ich kopiować ani rozpowszechniać.
 
 ## Gdzie idą punkty
 
@@ -61,13 +61,26 @@ z czego liczyć.
 - Wymiar urlopu macierzyńskiego zależnie od liczby dzieci, od 20 do 37 tygodni.
 - Sześć przypadków uzupełniającego urlopu macierzyńskiego z tabeli w załączniku, z progami tygodnia
   ciąży, masy urodzeniowej i czasu hospitalizacji.
-- Urlop rodzicielski, 41 lub 43 tygodnie, z dziewięcioma tygodniami nieprzenoszalnymi dla każdego
-  z rodziców i podziałem na maksymalnie pięć części.
+- Urlop rodzicielski, 41 lub 43 tygodnie, a przy zaświadczeniu "Za życiem" 65 albo 67 tygodni, z
+  dziewięcioma tygodniami nieprzenoszalnymi dla każdego z rodziców i podziałem na maksymalnie
+  pięć części.
+- Limit wydłużenia urlopu rodzicielskiego przy łączeniu z pracą, 82 albo 86 tygodni, a przy
+  zaświadczeniu "Za życiem" 130 albo 134.
 - Urlop ojcowski, 14 dni, do 12. miesiąca życia dziecka.
-- Wysokości zasiłku, 100% podstawy za macierzyński, uzupełniający i ojcowski, 70% za rodzicielski
-  oraz 81,5% przy wniosku złożonym do 21 dni po porodzie.
-- Okres zasiłkowy 270 dni oraz wynagrodzenie chorobowe, 33 dni albo 14 dni po 50. roku życia.
-- Warunki podlegania ubezpieczeniu, 30 dni przy obowiązkowym i 90 dni przy dobrowolnym.
+- Wysokości zasiłku, 100% podstawy za macierzyński, uzupełniający, ojcowski oraz za świadczenie
+  rehabilitacyjne i zasiłek chorobowy w ciąży, 70% za urlop rodzicielski, a 81,5% przy wniosku
+  złożonym do 21 dni po porodzie. Wyjątkiem jest dziewięć tygodni nieprzenoszalnych drugiego
+  rodzica, za które zawsze przysługuje 70%.
+- Świadczenie rehabilitacyjne po wyczerpaniu zasiłku chorobowego, gdy leczenie rokuje odzyskanie
+  zdolności do pracy, nie dłużej niż 12 miesięcy, w wysokości 90% podstawy za pierwsze trzy
+  miesiące i 75% za pozostałe.
+- Zasiłek w wysokości zasiłku macierzyńskiego po ustaniu zatrudnienia, gdy umowa wygasła wskutek
+  śmierci pracodawcy albo rozwiązano ją w ciąży z powodu upadłości lub likwidacji i nie zapewniono
+  innego zatrudnienia. Wypłacany do dnia porodu.
+- Okres zasiłkowy 182 dni, a 270 dni, gdy niezdolność przypada w ciąży albo jest spowodowana
+  gruźlicą. Wynagrodzenie chorobowe przez 33 dni, a 14 dni po 50. roku życia.
+- Wymagany okres ubezpieczenia do nabycia prawa, 30 dni przy obowiązkowym i 90 dni przy
+  dobrowolnym.
 
 Gotowe, gdy istnieje tabela reguł z odesłaniem do przepisu albo strony materiału.
 
@@ -78,8 +91,9 @@ Brief, pkt 3 a, b, c, d, e, f, j oraz pkt 7.
 Budujemy zbiór spraw, na których rozwiniemy kalkulator i sprawdzimy go przed jurorami.
 
 - Pogrupować 87 spraw po typie. W nazwach widać już chorobowy w ciąży, macierzyński,
-  uzupełniający, ojcowski, dziewięć tygodni dla ojca, martwe urodzenie, adopcję i rodzinę
-  zastępczą, odmowy z powodu braku ubezpieczenia, łączenie z pracą i podwyższenie kwoty.
+  uzupełniający, ojcowski, dziewięć tygodni dla ojca, zasiłek w wysokości zasiłku macierzyńskiego,
+  martwe urodzenie, adopcję i rodzinę zastępczą, odmowy z powodu braku ubezpieczenia, łączenie
+  z pracą i podwyższenie kwoty.
 - Wybrać kilkanaście reprezentatywnych spraw i dla każdej wypisać stan faktyczny, podstawę
   wymiaru, rozstrzygnięcie i kwotę.
 - Zapisać to w formie, którą da się wczytać do aplikacji i użyć w testach.
@@ -112,10 +126,13 @@ Serce projektu i największa część punktów za związek z wyzwaniem.
 - Tryb korzystania przez oboje rodziców, z podziałem wspólnej puli.
 - Wariant adopcji i rodziny zastępczej niezawodowej.
 - Wariant indywidualnej podstawy wymiaru, liczony na konkretnej sprawie z zestawu.
+- Ustalenie prawa do świadczenia rehabilitacyjnego oraz do zasiłku w wysokości zasiłku
+  macierzyńskiego po ustaniu zatrudnienia.
+- Wariant z zaświadczeniem "Za życiem", z wydłużonym urlopem rodzicielskim.
 
 Gotowe, gdy wynik zgadza się z zestawem testowym z kroku 1 dla każdej wybranej sprawy.
 
-Brief, pkt 3 b, c, d, e, f, j.
+Brief, pkt 3 a, b, c, d, e, f, j.
 
 ## Krok 4. Wejście i logowanie
 
@@ -123,8 +140,9 @@ Pierwszy ekran decyduje o tym, czy ktoś w ogóle wejdzie w wywiad.
 
 - Dwa wejścia, zalogowanie przez mObywatel oraz ręczne wpisanie danych.
 - Symulacja logowania przez mObywatel. Brief wymaga tylko zasymulowania.
-- Jedna lista metod logowania, w której mObywatel jest pierwszą pozycją, a obok stoją Profil
-  Zaufany, bankowość i e-dowód. Każda metoda pokazuje tę samą symulację.
+- Opcjonalnie jedna lista metod logowania, w której mObywatel jest pierwszą pozycją, a obok stoją
+  Profil Zaufany, bankowość i e-dowód. Brief wymaga tylko mObywatela, więc reszta idzie na koniec,
+  jeśli zostanie czas.
 
 Gotowe, gdy po kliknięciu widać ekran z danymi z ZUS i przejście dalej.
 
@@ -134,9 +152,11 @@ Brief, pkt 3, lista symulacji.
 
 Użytkownik odpowiada na kilka pytań i od razu widzi, co mu przysługuje, a czego nie.
 
-- Pytania o rolę, rodzaj umowy, datę porodu, liczbę dzieci, zaświadczenie "Za życiem" i planowany
-  powrót do pracy.
-- Ekran z listą świadczeń, każde z wymiarem, kwotą i podstawą prawną.
+- Pytania o rolę, rodzaj umowy, datę porodu, datę ustania stosunku pracy, liczbę dzieci,
+  zaświadczenie "Za życiem" i planowany powrót do pracy.
+- Lista świadczeń obejmująca zasiłek chorobowy w ciąży, świadczenie rehabilitacyjne, zasiłek
+  w wysokości zasiłku macierzyńskiego, macierzyński, uzupełniający, rodzicielski i ojcowski,
+  każde z wymiarem, kwotą i podstawą prawną.
 - Osobny, wyraźny komunikat, gdy prawa nie ma, wraz z wyjaśnieniem przyczyny.
 
 Gotowe, gdy da się przejść wywiad od początku do listy świadczeń bez zaglądania do kodu.
@@ -149,8 +169,10 @@ Jeden zintegrowany kalkulator z wyborem opcji, zgodnie z rekomendacją z briefu.
 
 - Suwaki do podziału urlopu między rodzicami, z widocznymi dziewięcioma nieprzenoszalnymi
   tygodniami.
-- Porównanie wariantu 81,5% i 70%.
-- Tryb łączenia pracy z urlopem.
+- Porównanie wariantu 81,5% i 70%, z zaznaczeniem, że dziewięć tygodni nieprzenoszalnych drugiego
+  rodzica zawsze liczy się po 70%.
+- Tryb łączenia pracy z urlopem, z wydłużeniem do 82 albo 86 tygodni.
+- Opcja zaświadczenia "Za życiem" z urlopem rodzicielskim 65 albo 67 tygodni.
 - Widoczny wynik liczony na żywo przy każdej zmianie.
 
 Gotowe, gdy każdy wariant z kroku 3 da się ustawić z ekranu.
@@ -296,7 +318,7 @@ Brief, pkt 3, 4, 5, 6.
 
 | Wymaganie | Krok |
 | --- | --- |
-| a. Świadczenia w ciąży, także brak uprawnień | 3, 5 |
+| a. Świadczenia w ciąży, także brak uprawnień | 0, 3, 5 |
 | b. Kalkulator macierzyńskiego dla obojga rodziców | 3, 6 |
 | c. Łączenie pracy z urlopem rodzicielskim | 3, 6 |
 | d. Symulacja, gdy korzystają oboje rodzice | 3, 6 |
@@ -324,7 +346,8 @@ Brief, pkt 3, 4, 5, 6.
 | Interfejs responsywny | 12 |
 | Wskazanie funkcji z AI | 14 |
 | Upload przykładowych wniosków | 13 |
-| Stack React i Python, REST | 2, 12 |
+| Materiały graficzne | 15 |
+| Stack React i Python, REST | 2, 4 |
 
 ## Ryzyka
 

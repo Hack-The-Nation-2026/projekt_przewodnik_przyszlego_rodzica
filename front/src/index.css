@@ -70,6 +70,15 @@
   --color-green-deep: var(--green-deep);
   --color-green-ink: var(--green-ink);
 
+  /* Ekran mObywatela ma własną, celowo obcą paletę: użytkownik ma poczuć, że
+     wyszedł z naszego serwisu do serwisu rządowego. */
+  --color-mb-blue-deep: #0c3c78;
+  --color-mb-blue: #15529c;
+  --color-mb-blue-lift: #3a76c4;
+  --color-mb-ink: #14181d;
+  --color-mb-muted: #5c6670;
+  --color-mb-line: #c7ced6;
+
   --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
 

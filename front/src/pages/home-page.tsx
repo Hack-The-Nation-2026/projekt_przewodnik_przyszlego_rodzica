@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, Calculator, FileText, HeartHandshake } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/layout/container'
 import { useBenefits } from '@/hooks/use-benefits'
+import { useAppStore } from '@/store/app-store'
 import { cn } from '@/lib/utils'
 
 const FACTS = [
@@ -37,6 +39,7 @@ const ACTIONS = [
 
 export function HomePage() {
   const { data, isPending, isError, refetch } = useBenefits()
+  const citizen = useAppStore((state) => state.citizen)
 
   return (
     <>
@@ -83,6 +86,27 @@ export function HomePage() {
           </Card>
         </Container>
       </section>
+
+      {citizen && (
+        <section className="border-b border-border bg-primary/5">
+          <Container className="flex flex-wrap items-center gap-x-4 gap-y-2 py-4">
+            <span className="text-sm font-medium text-navy">
+              {citizen.first_name} {citizen.last_name}
+            </span>
+            <span className="text-sm text-muted-foreground">{citizen.case_label}</span>
+            <Badge
+              variant="outline"
+              className={cn(
+                'bg-background sm:ml-auto',
+                citizen.status === 'przyznane' && 'border-primary/30 text-primary',
+                citizen.status === 'odmowa' && 'border-destructive/40 text-destructive',
+              )}
+            >
+              {citizen.status}
+            </Badge>
+          </Container>
+        </section>
+      )}
 
       <section className="py-16">
         <Container>

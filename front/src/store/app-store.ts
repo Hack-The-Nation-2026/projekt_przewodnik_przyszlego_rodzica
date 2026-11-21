@@ -1,14 +1,15 @@
 import { create } from 'zustand'
+import type { Citizen } from '@/types/api'
 
 interface AppState {
-  // Symulacja logowania przez mObywatel. Prawdziwy przepływ dojdzie po doprecyzowaniu zadania.
-  citizenName: string | null
-  signIn: (name: string) => void
+  // Sesja żyje tylko w pamięci: symulacja logowania, nic nie ląduje w localStorage.
+  citizen: Citizen | null
+  signIn: (citizen: Citizen) => void
   signOut: () => void
 }
 
 export const useAppStore = create<AppState>((set) => ({
-  citizenName: null,
-  signIn: (name) => set({ citizenName: name }),
-  signOut: () => set({ citizenName: null }),
+  citizen: null,
+  signIn: (citizen) => set({ citizen }),
+  signOut: () => set({ citizen: null }),
 }))

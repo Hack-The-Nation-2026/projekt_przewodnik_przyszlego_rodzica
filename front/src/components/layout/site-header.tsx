@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { Compass, Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/layout/container'
@@ -31,9 +31,16 @@ function Wordmark() {
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false)
-  const citizenName = useAppStore((state) => state.citizenName)
-  const signIn = useAppStore((state) => state.signIn)
+  const location = useLocation()
+  const navigate = useNavigate()
+  const citizen = useAppStore((state) => state.citizen)
   const signOut = useAppStore((state) => state.signOut)
+
+  // Wychodzimy na stronę mObywatela i wracamy dokładnie tam, gdzie jesteśmy.
+  function startMobywatelLogin() {
+    const returnTo = `${location.pathname}${location.search}`
+    navigate(`/mobywatel?returnTo=${encodeURIComponent(returnTo)}`)
+  }
 
   return (
     <header className="sticky top-0 z-40">
@@ -74,9 +81,11 @@ export function SiteHeader() {
           </nav>
 
           <div className="flex items-center justify-self-end gap-2">
-            {citizenName ? (
+            {citizen ? (
               <div className="hidden items-center gap-2 sm:flex">
-                <span className="text-sm text-muted-foreground">Zalogowano: {citizenName}</span>
+                <span className="text-sm text-muted-foreground">
+                  {citizen.first_name} {citizen.last_name}
+                </span>
                 <Button variant="outline" size="sm" onClick={signOut}>
                   Wyloguj
                 </Button>
@@ -86,7 +95,7 @@ export function SiteHeader() {
                 variant="gold"
                 size="sm"
                 className="hidden sm:inline-flex"
-                onClick={() => signIn('Anna Kowalska')}
+                onClick={startMobywatelLogin}
               >
                 Zaloguj przez mObywatel
               </Button>
@@ -123,13 +132,13 @@ export function SiteHeader() {
                   {item.label}
                 </NavLink>
               ))}
-              {!citizenName && (
+              {!citizen && (
                 <Button
                   variant="gold"
                   className="mt-2"
                   onClick={() => {
-                    signIn('Anna Kowalska')
                     setOpen(false)
+                    startMobywatelLogin()
                   }}
                 >
                   Zaloguj przez mObywatel

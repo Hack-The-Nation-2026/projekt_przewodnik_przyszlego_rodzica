@@ -43,7 +43,9 @@ Frontend działa na http://localhost:5173, API na http://localhost:8000 (dokumen
 
 ## Co już działa
 
-- Nagłówek z nawigacją i symulowanym logowaniem przez mObywatel (stan trzyma zustand).
+- Logowanie przez symulowanego mObywatela. Przycisk w nagłówku wychodzi na stronę `/mobywatel`,
+  a po zalogowaniu wracamy tam, gdzie przerwaliśmy, i widzimy dane zależne od konta.
+- Nagłówek z nawigacją, nazwą zalogowanej osoby i wylogowaniem (stan trzyma zustand).
 - Strona startowa: sekcja powitalna, kroki, lista świadczeń pobrana z API i skróty.
 - Stopka z informacją o statusie API.
 - Backend: `/api/health` i `/api/benefits`, CORS pod adres frontendu.

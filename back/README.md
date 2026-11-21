@@ -44,7 +44,7 @@ back/
 │   ├── core/config.py     # konfiguracja ze zmiennych środowiskowych
 │   ├── api/
 │   │   ├── router.py      # spina wszystkie routery
-│   │   └── routes/        # endpointy (health, benefits)
+│   │   └── routes/        # endpointy (health, benefits, auth)
 │   ├── schemas/           # modele wejścia i wyjścia (pydantic)
 │   └── services/          # logika domenowa
 └── tests/
@@ -56,3 +56,11 @@ back/
 cd back
 pytest
 ```
+
+## Logowanie przez mObywatel
+
+`POST /api/auth/mobywatel` sprawdza login i hasło, a potem oddaje dane obywatela. Jako login
+przyjmuje też numer PESEL. Hasło do wszystkich kont demonstracyjnych to `demo1234`.
+
+Listę kont zwraca `GET /api/auth/mobywatel/demo-accounts`, żeby frontend miał z czego zrobić
+podpowiedź przy demie. Endpoint odpowiada 404, gdy `ENVIRONMENT=prod`.

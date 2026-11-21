@@ -54,6 +54,23 @@ front/src/
 Paleta nawiązuje do identyfikacji ZUS. Zielony `#007834` jest kolorem głównym, bursztynowy
 `#e8a33d` rezerwujemy dla głównego wezwania do działania. Wszystkie tokeny są w `src/index.css`.
 
+## Logowanie przez mObywatel
+
+Prawdziwego mObywatela nie da się uruchomić na hackathonie, bo wymaga zarejestrowanego klienta
+i certyfikatów, więc przepływ jest symulowany. Przycisk w nagłówku prowadzi na trasę `/mobywatel`,
+która wygląda jak osobny serwis rządowy i celowo nie ma naszego nagłówka ani stopki.
+
+Po zalogowaniu wracamy na stronę, z której użytkownik wyszedł, bo ścieżka powrotu jedzie
+w parametrze `returnTo`. Dane obywatela lądują w zustandzie i pokazują się w nagłówku oraz paskiem
+na stronie startowej.
+
+Konta demonstracyjne wystawia backend, a podpowiedź z ich listą rozwija się pod kartą logowania.
+Każde konto to inna sprawa, więc po powrocie widać inne dane. Hasło do wszystkich kont to
+`demo1234`.
+
+Ekran mObywatela ma własną paletę, żeby wyglądał jak obcy serwis. Tokeny z przedrostkiem `mb-`
+siedzą w `src/index.css` osobno od barw ZUS.
+
 ## Nowe komponenty shadcn
 
 Plik `components.json` jest gotowy, więc kolejne komponenty dodasz jednym poleceniem:

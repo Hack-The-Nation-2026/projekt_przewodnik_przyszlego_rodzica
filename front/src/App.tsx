@@ -2,12 +2,16 @@ import { Route, Routes } from 'react-router-dom'
 import { RootLayout } from '@/components/layout/root-layout'
 import { HomePage } from '@/pages/home-page'
 import { KalkulatorPage } from '@/pages/kalkulator-page'
+import { MobywatelPage } from '@/pages/mobywatel-page'
 import { NotFoundPage } from '@/pages/not-found-page'
 import { PlaceholderPage } from '@/pages/placeholder-page'
 
 export default function App() {
   return (
     <Routes>
+      {/* Logowanie mObywatela ma własny, pełnoekranowy układ, bez naszego nagłówka. */}
+      <Route path="mobywatel" element={<MobywatelPage />} />
+
       <Route element={<RootLayout />}>
         <Route index element={<HomePage />} />
         <Route
