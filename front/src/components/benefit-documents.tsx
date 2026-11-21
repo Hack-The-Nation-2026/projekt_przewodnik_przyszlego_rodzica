@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUpRight, CalendarDays, FileText, MapPin } from 'lucide
 import { ApplicationDraft, DocumentField } from '@/components/application-draft'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { benefitList } from '@/lib/benefit-interview'
 import type { BenefitCode } from '@/lib/benefit-interview'
 import { isFamilyBenefit } from '@/lib/benefit-document-context'
@@ -15,7 +16,6 @@ import {
 import type { Coverage, DocumentOptions, Employment, MaternityCase, PayerSize, Role } from '@/lib/benefit-documents'
 import { cn } from '@/lib/utils'
 
-const selectClass = 'h-10 w-full rounded-md border border-input bg-background px-3 text-sm'
 const benefits = Object.keys(benefitList) as BenefitCode[]
 const ezus = 'https://www.zus.pl/ezus'
 type Step = 'benefit' | 'situation' | 'documents'
@@ -34,9 +34,10 @@ function SelectField<T extends string>({ name, title, value, onChange, children 
 }) {
   return (
     <DocumentField name={name} title={title}>
-      <select className={selectClass} id={name} value={value} onChange={(event) => onChange(event.target.value as T)}>
-        {children}
-      </select>
+      <Select value={value} onValueChange={(selected) => onChange(selected as T)}>
+        <SelectTrigger id={name}><SelectValue /></SelectTrigger>
+        <SelectContent>{children}</SelectContent>
+      </Select>
     </DocumentField>
   )
 }
@@ -208,7 +209,7 @@ export default function BenefitDocuments({
               onBenefitChange?.(value)
               setCoverageOverride(undefined)
             }}>
-              {benefits.map((key) => <option key={key} value={key}>{benefitList[key].name}</option>)}
+              {benefits.map((key) => <SelectItem key={key} value={key}>{benefitList[key].name}</SelectItem>)}
             </SelectField>
             <Button type="button" onClick={() => goToStep(showPayerOptions ? 'situation' : 'documents')}>
               Dalej <ArrowRight aria-hidden="true" />
@@ -226,20 +227,20 @@ export default function BenefitDocuments({
                   setMaternityCase(value === 'father' ? 'takeover' : 'standard')
                   setCoverageOverride(undefined)
                 }}>
-                  {Object.entries(documentRoles).map(([key, name]) => <option key={key} value={key}>{name}</option>)}
+                  {Object.entries(documentRoles).map(([key, name]) => <SelectItem key={key} value={key}>{name}</SelectItem>)}
                 </SelectField>
               )}
               {benefit === 'macierzynski' && role === 'mother' && (
                 <SelectField name="document-maternity-case" title="Wariant macierzyńskiego" value={maternityCase} onChange={setMaternityCase}>
-                  <option value="standard">Od porodu</option>
-                  <option value="before_birth">Część przed porodem</option>
+                  <SelectItem value="standard">Od porodu</SelectItem>
+                  <SelectItem value="before_birth">Część przed porodem</SelectItem>
                 </SelectField>
               )}
               <SelectField name="document-employment" title="Tytuł ubezpieczenia" value={employment} onChange={(value) => {
                 setEmployment(value)
                 setPayerSize('unknown')
               }}>
-                {Object.entries(documentEmployment).map(([key, name]) => <option key={key} value={key}>{name}</option>)}
+                {Object.entries(documentEmployment).map(([key, name]) => <SelectItem key={key} value={key}>{name}</SelectItem>)}
               </SelectField>
             </div>
             <details className="space-y-3 rounded-md border border-border px-3 py-2.5">
@@ -247,15 +248,15 @@ export default function BenefitDocuments({
               <div className="grid gap-4 sm:grid-cols-2">
                 <SelectField name="document-coverage" title="Kiedy przypada wnioskowany okres?" value={coverage}
                   onChange={(value) => setCoverageOverride({ benefit, value })}>
-                  <option value="unknown">Do ustalenia</option>
-                  <option value="active">W czasie ubezpieczenia chorobowego</option>
-                  <option value="ended">Po ustaniu ubezpieczenia</option>
+                  <SelectItem value="unknown">Do ustalenia</SelectItem>
+                  <SelectItem value="active">W czasie ubezpieczenia chorobowego</SelectItem>
+                  <SelectItem value="ended">Po ustaniu ubezpieczenia</SelectItem>
                 </SelectField>
                 {employment !== 'self_employed' && coverage !== 'ended' && (
                   <SelectField name="document-payer" title="Liczba osób u płatnika zgłoszonych do ubezpieczenia chorobowego" value={payerSize} onChange={setPayerSize}>
-                    <option value="unknown">Nie wiem</option>
-                    <option value="up_to_20">Do 20 osób</option>
-                    <option value="over_20">Powyżej 20 osób</option>
+                    <SelectItem value="unknown">Nie wiem</SelectItem>
+                    <SelectItem value="up_to_20">Do 20 osób</SelectItem>
+                    <SelectItem value="over_20">Powyżej 20 osób</SelectItem>
                   </SelectField>
                 )}
               </div>
