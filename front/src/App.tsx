@@ -5,7 +5,6 @@ import { HomePage } from '@/pages/home-page'
 import { KalkulatorPage } from '@/pages/kalkulator-page'
 import { MobywatelPage } from '@/pages/mobywatel-page'
 import { NotFoundPage } from '@/pages/not-found-page'
-import { OProjekciePage } from '@/pages/o-projekcie-page'
 import { PanelPage } from '@/pages/panel-page'
 import { SprawyPage } from '@/pages/sprawy-page'
 import { SwiadczeniaPage } from '@/pages/swiadczenia-page'
@@ -29,7 +28,6 @@ export default function App() {
         <Route path="zus" element={<ZusPage />} />
         <Route path="panel" element={<PanelPage />} />
         <Route path="wsparcie/:topic?" element={<WsparciePage />} />
-        <Route path="o-projekcie" element={<OProjekciePage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

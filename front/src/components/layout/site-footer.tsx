@@ -18,8 +18,6 @@ const COLUMNS = [
   {
     title: 'Informacje',
     links: [
-      { to: '/o-projekcie', label: 'O projekcie' },
-      { to: '/o-projekcie', label: 'Kontakt' },
       { to: '/panel', label: 'Panel administracyjny' },
       { to: 'https://www.zus.pl', label: 'zus.pl' },
       { to: 'https://www.gov.pl/web/rodzina/urlop-rodzicielski', label: 'gov.pl' },

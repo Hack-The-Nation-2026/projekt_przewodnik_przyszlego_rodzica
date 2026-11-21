@@ -17,7 +17,6 @@ const NAV = [
   { to: '/sprawy', label: 'Sprawy' },
   { to: '/zus', label: 'ZUS' },
   { to: '/wsparcie', label: 'Wsparcie' },
-  { to: '/o-projekcie', label: 'O projekcie' },
 ]
 
 /** Znak serwisu: para skrzydeł anioła na białym kaflu. Ten sam rysunek co w favikonie. */
