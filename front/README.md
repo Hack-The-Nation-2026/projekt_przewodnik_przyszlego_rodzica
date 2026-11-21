@@ -61,17 +61,29 @@ Nagłówki i tekst dzielą jeden krój, IBM Plex Sans.
 
 ## Znak
 
-Logo to serce z mniejszym sercem w środku, czyli rodzic i dziecko. Ten sam kształt stoi
-w `public/favicon.svg` i w nagłówku, w `src/components/layout/site-header.tsx`. Mniejsze serce
-jest bursztynowe, więc akcent widać nawet w rozmiarze favikony.
+Logo to kiełek, dwa liście na łodydze, czyli życie i wzrost. Jeden biały kształt na zielonym
+kaflu, bez drugiego koloru. Łodyga jest szeroka u płasko ściętej stopy i z lekko wklęsłymi
+bokami zwęża się ku liściom, więc wygląda jak młody pęd wschodzący z ziemi. Ten sam rysunek
+stoi w `public/favicon.svg` i w nagłówku, w `src/components/layout/site-header.tsx`.
+
+## Układ i skala
+
+Strona główna przewija się jako jeden dokument. Hero ze zdjęciem, potem Jak to działa, lista
+świadczeń, blok wsparcia i wspólna stopka. Każda podstrona działa tak samo. Kontener ma
+`max-w-7xl`, żeby treść wypełniała szeroki ekran.
+
+Przewijanie idzie sekcjami. Jedno kółko dostawia sąsiednią sekcję pod nagłówek, a sekcja
+wyższa od okna przewija się w środku normalnie, więc długa treść na telefonie nie utyka.
+Pilnuje tego efekt w `src/pages/home-page.tsx`, a `scroll-padding-top: 5rem` w `index.css`
+zostawia sekcjom i kotwicom miejsce pod przyklejonym nagłówkiem.
 
 ## Zdjęcie na stronie startowej
 
-Hero otwiera zdjęcie `public/formularz.jpg`: dwoje rodziców wypełnia przy stole wniosek. Autor
-RDNE Stock project, pobrane z Pexels na licencji Pexels, która pozwala używać i przycinać zdjęcie
-także komercyjnie, bez obowiązku podania autora. Plik jest przycięty do 1400 na 1166 pikseli.
-Na szerokich ekranach zdjęcie dochodzi do prawej krawędzi okna i ma skośny lewy brzeg, a na wąskich
-wchodzi pod tekst i domyka sekcję.
+Hero otwiera zdjęcie `public/formularz.jpg`: rodzice wypełniają przy kuchennym stole wniosek.
+Autor Ron Lach, pobrane z Pexels na licencji Pexels, która pozwala używać i przycinać zdjęcie
+także komercyjnie, bez obowiązku podania autora. Plik jest przycięty do 2400 na 1200 pikseli.
+Na szerokich ekranach zdjęcie dochodzi do prawej krawędzi okna, ma skośny lewy brzeg i rzuca cień
+na treść obok, a na wąskich wchodzi pod tekst i domyka sekcję.
 
 ## Logowanie przez mObywatel
 

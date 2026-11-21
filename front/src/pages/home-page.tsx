@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Calculator, FileText, HeartHandshake } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
@@ -7,7 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/layout/container'
-import { SiteFooter } from '@/components/layout/site-footer'
 import { useBenefits } from '@/hooks/use-benefits'
 import { useAppStore } from '@/store/app-store'
 import { cn } from '@/lib/utils'
@@ -33,316 +32,273 @@ const ACTIONS = [
   { to: '/wsparcie', icon: HeartHandshake, title: 'Znajdź wsparcie', body: 'Pomoc w trudnych sytuacjach.' },
 ]
 
-const PANELS = [
-  { id: 'start-panel', label: 'Start' },
-  { id: 'swiadczenia-panel', label: 'Świadczenia' },
-  { id: 'wsparcie-panel', label: 'Dokumenty i wsparcie' },
-]
-
 export function HomePage() {
   const { data, isPending, isError, refetch } = useBenefits()
   const citizen = useAppStore((state) => state.citizen)
-  const panelsRef = useRef<HTMLDivElement>(null)
-  const [activePanel, setActivePanel] = useState(PANELS[0].id)
 
+  // Przewijanie idzie sekcjami: gdy bieżąca sekcja nie ma już zapasu w daną stronę, jedno
+  // kółko dostawia sąsiednią sekcję pod nagłówek. Sekcja wyższa od okna przewija się
+  // w środku normalnie, więc długa treść na telefonie nie utyka.
   useEffect(() => {
-    const scroller = panelsRef.current
-    if (!scroller) return
-
     let lastWheelAt = 0
-    let movement = 0
     let moved = false
 
     function handleWheel(event: WheelEvent) {
-      if (!scroller || event.ctrlKey || event.shiftKey || Math.abs(event.deltaX) >= Math.abs(event.deltaY)) {
-        return
-      }
+      if (event.defaultPrevented || event.ctrlKey || event.shiftKey) return
+      if (Math.abs(event.deltaX) >= Math.abs(event.deltaY)) return
 
-      const now = performance.now()
-      if (now - lastWheelAt > 160) {
-        moved = false
-        movement = 0
-      }
-      lastWheelAt = now
+      const sections = Array.from(document.querySelectorAll<HTMLElement>('main section'))
+      if (sections.length < 2) return
 
-      // A trackpad emits several events per gesture. Advance at most one panel per gesture.
-      if (moved) {
-        event.preventDefault()
-        return
-      }
+      const padding =
+        Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
+      const tops = sections.map(
+        (section) => section.getBoundingClientRect().top + window.scrollY - padding,
+      )
 
-      const sections = [...scroller.querySelectorAll<HTMLElement>(':scope > section')]
-      const nextIndex = sections.findIndex((section) => section.offsetTop > scroller.scrollTop + 1)
-      const index = nextIndex === -1 ? sections.length - 1 : nextIndex - 1
-      const current = sections[index]
-      if (!current) return
+      // Sekcja, pod którą stoi teraz górna krawędź okna.
+      let index = 0
+      tops.forEach((top, position) => {
+        if (window.scrollY >= top - 2) index = position
+      })
 
+      const section = sections[index]
+      const sectionTop = section.getBoundingClientRect().top + window.scrollY
       const goingDown = event.deltaY > 0
-      const roomInPanel = goingDown
-        ? current.offsetTop + current.offsetHeight - scroller.clientHeight - scroller.scrollTop
-        : scroller.scrollTop - current.offsetTop
-      const target = sections[index + (goingDown ? 1 : -1)]
+      const fits = section.offsetHeight <= window.innerHeight - padding + 4
 
-      // Content taller than the viewport can scroll normally within its panel.
-      if (!target || roomInPanel > 1) return
+      // Sekcja mieszcząca się w oknie oddaje kółko od razu. Wyższa od okna najpierw
+      // przewija się do końca, a dopiero potem dostawia sąsiednią.
+      const ready = goingDown
+        ? fits
+          ? window.scrollY >= tops[index] - 4
+          : window.scrollY + window.innerHeight >= sectionTop + section.offsetHeight - 1
+        : fits
+          ? window.scrollY >= tops[index] - 4
+          : window.scrollY <= tops[index] + 4
+
+      if (!ready) return
+
+      const target = tops[index + (goingDown ? 1 : -1)]
+      if (target === undefined) return
 
       event.preventDefault()
-      const units = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? scroller.clientHeight : 1
-      movement += event.deltaY * units
-      if (Math.abs(movement) < 10) return
+
+      // Jedno kółko to jedno dostawienie, dopóki gest trwa.
+      const now = performance.now()
+      if (now - lastWheelAt > 200) moved = false
+      lastWheelAt = now
+      if (moved) return
 
       moved = true
-      scroller.scrollTo({ top: target.offsetTop })
+      window.scrollTo({ top: Math.max(0, target) })
     }
 
-    scroller.addEventListener('wheel', handleWheel, { passive: false })
-    return () => scroller.removeEventListener('wheel', handleWheel)
+    window.addEventListener('wheel', handleWheel, { passive: false })
+    return () => window.removeEventListener('wheel', handleWheel)
   }, [])
 
-  function updateActivePanel() {
-    const scroller = panelsRef.current
-    if (!scroller) return
-
-    const midpoint = scroller.scrollTop + scroller.clientHeight / 2
-    const panel = Array.from(scroller.children).find(
-      (child) => child instanceof HTMLElement && child.offsetTop + child.offsetHeight > midpoint,
-    )
-    if (panel) setActivePanel(panel.id)
-  }
-
-  function goToPanel(id: string) {
-    const scroller = panelsRef.current
-    const panel = document.getElementById(id)
-    if (scroller && panel) scroller.scrollTo({ top: panel.offsetTop })
-  }
-
   return (
-    <div className="flex h-full flex-col">
-      <nav aria-label="Panele strony głównej" className="shrink-0 border-b border-border bg-background">
-        <Container className="flex items-center gap-1 py-1.5 sm:gap-2">
-          {PANELS.map(({ id, label }) => (
-            <button
-              key={id}
-              type="button"
-              aria-controls={id}
-              aria-current={activePanel === id ? 'location' : undefined}
-              onClick={() => goToPanel(id)}
-              className={cn(
-                'min-h-10 rounded-md px-2.5 text-left text-xs font-medium sm:px-3 sm:text-sm',
-                activePanel === id ? 'bg-accent text-accent-foreground' : 'hover:bg-muted',
-              )}
-            >
-              {label}
-            </button>
-          ))}
-        </Container>
-      </nav>
-
-      <div
-        ref={panelsRef}
-        onScroll={updateActivePanel}
-        tabIndex={0}
-        role="region"
-        aria-label="Treść paneli strony głównej"
-        className="relative min-h-0 flex-1 snap-y snap-mandatory overflow-y-auto motion-safe:scroll-smooth"
+    <>
+      <section
+        aria-labelledby="start-title"
+        className="relative isolate overflow-hidden bg-secondary/40"
       >
-        <section
-          id="start-panel"
-          aria-labelledby="start-title"
-          className="flex min-h-full snap-start snap-always flex-col bg-secondary/40"
+        {/* Zdjęcie zajmuje prawy skraj sekcji: dochodzi do krawędzi okna, ma skośny lewy brzeg
+            i rzuca cień na treść obok. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 right-0 hidden lg:block lg:w-[46%] xl:w-[52%] xl:max-w-[60rem]"
         >
-          <div className="relative isolate flex flex-1 flex-col justify-center">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-y-0 right-0 hidden w-[40%] lg:block"
-              style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 16% 100%)' }}
-            >
-              <img src="/formularz.jpg" alt="" className="size-full object-cover" />
-            </div>
-
-            <Container className="relative py-6 sm:py-12">
-              <div className="max-w-2xl lg:max-w-[34rem]">
-                <h1 id="start-title" className="text-3xl font-semibold leading-tight text-navy sm:text-5xl">
-                  Sprawdź, co ci przysługuje w ciąży i po urodzeniu dziecka
-                </h1>
-                <p className="mt-3 max-w-xl text-muted-foreground sm:mt-5 sm:text-lg">
-                  Przewodnik prowadzi przez zasiłek chorobowy, macierzyński i rodzicielski. Policz, kiedy
-                  i ile dostaniesz, oraz zobacz, jakie dokumenty złożyć.
-                </p>
-                <div className="mt-5 flex flex-wrap gap-2 sm:mt-8 sm:gap-3">
-                  <Link to="/kalkulator" className={buttonVariants({ className: 'sm:h-11 sm:px-6 sm:text-base' })}>
-                    Rozpocznij sprawdzenie
-                    <ArrowRight />
-                  </Link>
-                  <Button
-                    variant="outline"
-                    className="sm:h-11 sm:px-6 sm:text-base"
-                    onClick={() => goToPanel('swiadczenia-panel')}
-                  >
-                    Zobacz świadczenia
-                  </Button>
-                </div>
-              </div>
-            </Container>
-
-            <figure
-              className="aspect-[4/3] max-h-[38svh] overflow-hidden lg:hidden"
-              style={{ clipPath: 'polygon(0 12%, 100% 0, 100% 100%, 0 100%)' }}
-            >
+          <div
+            className="size-full"
+            style={{
+              filter:
+                'drop-shadow(-10px 0 14px rgba(29, 43, 58, 0.32)) drop-shadow(-34px 0 46px rgba(29, 43, 58, 0.22))',
+            }}
+          >
+            <div className="size-full" style={{ clipPath: 'polygon(16% 0, 100% 0, 100% 100%, 0 100%)' }}>
               <img
                 src="/formularz.jpg"
-                alt="Dwoje rodziców wypełnia przy stole wniosek o zasiłek."
-                className="size-full object-cover"
+                alt=""
+                className="size-full object-cover object-[50%_38%]"
               />
-            </figure>
+            </div>
           </div>
+        </div>
 
-          {citizen && (
-            <div className="border-y border-border bg-primary/5">
-              <Container className="flex flex-wrap items-center gap-x-4 gap-y-2 py-4">
-                <span className="text-sm font-medium text-navy">
-                  {citizen.first_name} {citizen.last_name}
+        <Container className="relative py-16 sm:py-24">
+          <div className="max-w-2xl lg:max-w-[36rem] xl:max-w-[40rem]">
+            <h1
+              id="start-title"
+              className="text-4xl font-semibold leading-tight text-navy sm:text-5xl lg:text-6xl"
+            >
+              Sprawdź, co ci przysługuje w ciąży i po urodzeniu dziecka
+            </h1>
+            <p className="mt-4 max-w-xl text-lg text-muted-foreground sm:mt-6 sm:text-xl">
+              Przewodnik prowadzi przez zasiłek chorobowy, macierzyński i rodzicielski. Policz, kiedy
+              i ile dostaniesz, oraz zobacz, jakie dokumenty złożyć.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3 sm:mt-10">
+              <Link to="/kalkulator" className={buttonVariants({ size: 'lg' })}>
+                Rozpocznij sprawdzenie
+                <ArrowRight />
+              </Link>
+              <a href="#swiadczenia" className={buttonVariants({ variant: 'outline', size: 'lg' })}>
+                Zobacz świadczenia
+              </a>
+            </div>
+          </div>
+        </Container>
+
+        {/* Na wąskich ekranach to samo zdjęcie wchodzi pod tekst i domyka sekcję, z tym samym skosem. */}
+        <figure className="relative lg:hidden" style={{ clipPath: 'polygon(0 0, 100% 12%, 100% 100%, 0 100%)' }}>
+          <img
+            src="/formularz.jpg"
+            alt="Rodzice wypełniają przy kuchennym stole wniosek o zasiłek."
+            className="aspect-[4/3] w-full object-cover"
+          />
+        </figure>
+      </section>
+
+      {citizen && (
+        <div className="border-b border-border bg-primary/5">
+          <Container className="flex flex-wrap items-center gap-x-4 gap-y-2 py-4">
+            <span className="font-medium text-navy">
+              {citizen.first_name} {citizen.last_name}
+            </span>
+            <span className="text-muted-foreground">{citizen.case_label}</span>
+            <Badge
+              variant="outline"
+              className={cn(
+                'bg-background sm:ml-auto',
+                citizen.status === 'przyznane' && 'border-primary/30 text-primary',
+                citizen.status === 'odmowa' && 'border-destructive/40 text-destructive',
+              )}
+            >
+              {citizen.status}
+            </Badge>
+          </Container>
+        </div>
+      )}
+
+      <section aria-labelledby="jak-to-dziala-title" className="py-14 sm:py-20">
+        <Container>
+          <h2 id="jak-to-dziala-title" className="text-2xl font-semibold text-navy sm:text-3xl">
+            Jak to działa
+          </h2>
+          <ol className="mt-6 grid gap-4 md:grid-cols-3 md:gap-6">
+            {STEPS.map((step, index) => (
+              <li key={step.title} className="rounded-lg border border-border p-5 sm:p-6">
+                <span className="flex size-9 items-center justify-center rounded-md bg-secondary text-base font-semibold text-secondary-foreground">
+                  {index + 1}
                 </span>
-                <span className="text-sm text-muted-foreground">{citizen.case_label}</span>
-                <Badge
-                  variant="outline"
+                <h3 className="mt-4 text-lg font-semibold">{step.title}</h3>
+                <p className="mt-2 text-muted-foreground">{step.body}</p>
+              </li>
+            ))}
+          </ol>
+        </Container>
+      </section>
+
+      <section
+        id="swiadczenia"
+        aria-labelledby="swiadczenia-title"
+        className="border-t border-border bg-secondary/40 py-14 sm:py-20"
+      >
+        <Container>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 id="swiadczenia-title" className="text-2xl font-semibold text-navy sm:text-3xl">
+              Świadczenia
+            </h2>
+            <Link to="/swiadczenia" className={buttonVariants({ variant: 'outline' })}>
+              Wszystkie świadczenia
+              <ArrowRight />
+            </Link>
+          </div>
+          <p className="mt-3 max-w-2xl text-muted-foreground">
+            Katalog obejmuje świadczenia związane z ciążą, porodem, adopcją i opieką nad dzieckiem.
+          </p>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-3 md:gap-6">
+            {isPending &&
+              Array.from({ length: 3 }).map((_, index) => (
+                <Card key={index}>
+                  <CardHeader>
+                    <Skeleton className="h-6 w-40" />
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-4/5" />
+                  </CardContent>
+                </Card>
+              ))}
+
+            {isError && (
+              <Card className="md:col-span-3">
+                <CardHeader>
+                  <CardTitle>Nie udało się pobrać listy świadczeń</CardTitle>
+                  <CardDescription>Spróbuj ponownie za chwilę.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button variant="outline" onClick={() => refetch()}>
+                    Spróbuj ponownie
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+
+            {data?.map((benefit) => (
+              <Card key={benefit.code}>
+                <CardHeader>
+                  <CardTitle className="text-lg">{benefit.name}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>{benefit.description}</CardDescription>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section aria-labelledby="wsparcie-title" className="py-14 sm:py-20">
+        <Container>
+          <div className="grid gap-8 lg:grid-cols-[1fr_1.4fr] lg:items-center">
+            <h2 id="wsparcie-title" className="text-2xl font-semibold text-navy sm:text-3xl">
+              Dokumenty i wsparcie
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-3">
+              {ACTIONS.map((action) => (
+                <Link
+                  key={action.to}
+                  to={action.to}
                   className={cn(
-                    'bg-background sm:ml-auto',
-                    citizen.status === 'przyznane' && 'border-primary/30 text-primary',
-                    citizen.status === 'odmowa' && 'border-destructive/40 text-destructive',
+                    'rounded-lg border border-border p-5 transition-colors',
+                    'hover:border-primary hover:bg-secondary/50',
                   )}
                 >
-                  {citizen.status}
-                </Badge>
-              </Container>
-            </div>
-          )}
-        </section>
-
-        <section
-          id="swiadczenia-panel"
-          aria-labelledby="swiadczenia-title"
-          className="flex min-h-full snap-start snap-always flex-col justify-center gap-5 bg-background py-6 sm:gap-12 sm:py-12"
-        >
-          <Container>
-            <h2 className="text-2xl font-semibold text-navy sm:text-3xl">Jak to działa</h2>
-            <ol className="mt-4 grid gap-2 md:mt-8 md:grid-cols-3 md:gap-6">
-              {STEPS.map((step, index) => (
-                <li key={step.title} className="grid grid-cols-[auto_1fr] items-start gap-3 rounded-lg border border-border p-3 md:block md:p-6">
-                  <span className="flex size-8 items-center justify-center rounded-md bg-secondary text-sm font-semibold text-secondary-foreground">
-                    {index + 1}
-                  </span>
-                  <div>
-                    <h3 className="font-semibold md:mt-4 md:text-lg">{step.title}</h3>
-                    <p className="mt-1 text-sm text-muted-foreground md:mt-2">{step.body}</p>
-                  </div>
-                </li>
+                  <action.icon className="size-6 text-primary" />
+                  <p className="mt-4 font-medium">{action.title}</p>
+                  <p className="mt-1 text-muted-foreground">{action.body}</p>
+                </Link>
               ))}
-            </ol>
-          </Container>
-
-          <Container>
-            <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-4">
-              <h2 id="swiadczenia-title" className="text-2xl font-semibold text-navy sm:text-3xl">
-                Świadczenia
-              </h2>
-              <Link to="/swiadczenia" className={buttonVariants({ variant: 'outline', size: 'sm' })}>
-                Wszystkie świadczenia
-                <ArrowRight />
-              </Link>
             </div>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Katalog obejmuje świadczenia związane z ciążą, porodem, adopcją i opieką nad dzieckiem.
+          </div>
+
+          <div className="mt-10 max-w-3xl border-t border-border pt-8">
+            <h3 className="text-xl font-semibold text-navy sm:text-2xl">Wsparcie, gdy sytuacja jest trudna</h3>
+            <p className="mt-3 text-muted-foreground">
+              Urodzenie martwego dziecka, przedwczesny poród, ciężka choroba dziecka albo rodzica.
+              Zbieramy miejsca i organizacje, które pomagają w takich chwilach.
             </p>
-
-            <div className="mt-4 grid gap-2 md:mt-8 md:grid-cols-3 md:gap-6">
-              {isPending &&
-                Array.from({ length: 3 }).map((_, index) => (
-                  <Card key={index}>
-                    <CardHeader className="px-3 pt-3 pb-2 md:px-6 md:pt-6 md:pb-4">
-                      <Skeleton className="h-5 w-40" />
-                    </CardHeader>
-                    <CardContent className="space-y-2 px-3 pb-3 md:px-6 md:pb-6">
-                      <Skeleton className="h-4 w-full" />
-                      <Skeleton className="h-4 w-4/5" />
-                    </CardContent>
-                  </Card>
-                ))}
-
-              {isError && (
-                <Card className="md:col-span-3">
-                  <CardHeader>
-                    <CardTitle>Nie udało się pobrać listy świadczeń</CardTitle>
-                    <CardDescription>Spróbuj ponownie za chwilę.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Button variant="outline" onClick={() => refetch()}>
-                      Spróbuj ponownie
-                    </Button>
-                  </CardContent>
-                </Card>
-              )}
-
-              {data?.map((benefit) => (
-                <Card key={benefit.code}>
-                  <CardHeader className="px-3 pt-3 pb-1 md:px-6 md:pt-6 md:pb-4">
-                    <CardTitle className="text-base md:text-lg">{benefit.name}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="px-3 pb-3 md:px-6 md:pb-6">
-                    <CardDescription>{benefit.description}</CardDescription>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </Container>
-        </section>
-
-        <section
-          id="wsparcie-panel"
-          aria-labelledby="wsparcie-title"
-          className="flex min-h-full snap-start snap-always flex-col bg-secondary/40"
-        >
-          <Container className="py-8 sm:py-12">
-            <div className="grid gap-8 lg:grid-cols-[1fr_1.4fr] lg:items-center">
-              <div>
-                <h2 id="wsparcie-title" className="text-2xl font-semibold text-navy sm:text-3xl">
-                  Dokumenty i wsparcie
-                </h2>
-              </div>
-              <div className="grid gap-2 sm:grid-cols-3 sm:gap-4">
-                {ACTIONS.map((action) => (
-                  <Link
-                    key={action.to}
-                    to={action.to}
-                    className={cn(
-                      'flex items-center gap-3 rounded-lg border border-border p-3 transition-colors sm:block sm:p-5',
-                      'hover:border-primary hover:bg-secondary/50',
-                    )}
-                  >
-                    <action.icon className="size-6 shrink-0 text-primary" />
-                    <div className="sm:mt-4">
-                      <p className="font-medium">{action.title}</p>
-                      <p className="text-sm text-muted-foreground sm:mt-1">{action.body}</p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <div className="mt-8 max-w-3xl border-t border-border pt-6">
-              <h3 className="text-xl font-semibold text-navy">Wsparcie, gdy sytuacja jest trudna</h3>
-              <p className="mt-2 text-muted-foreground">
-                Urodzenie martwego dziecka, przedwczesny poród, ciężka choroba dziecka albo rodzica.
-                Zbieramy miejsca i organizacje, które pomagają w takich chwilach.
-              </p>
-              <Link to="/wsparcie" className={cn(buttonVariants(), 'mt-4')}>
-                Zobacz miejsca wsparcia
-                <ArrowRight />
-              </Link>
-            </div>
-          </Container>
-          <SiteFooter compact />
-        </section>
-      </div>
-    </div>
+            <Link to="/wsparcie" className={cn(buttonVariants(), 'mt-5')}>
+              Zobacz miejsca wsparcia
+              <ArrowRight />
+            </Link>
+          </div>
+        </Container>
+      </section>
+    </>
   )
 }

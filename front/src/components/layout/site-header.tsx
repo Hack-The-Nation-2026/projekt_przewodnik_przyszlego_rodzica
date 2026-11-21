@@ -15,18 +15,18 @@ const NAV = [
   { to: '/o-projekcie', label: 'O projekcie' },
 ]
 
-/** Znak: duże serce z mniejszym sercem w środku, czyli rodzic i dziecko.
-    Mniejszy kształt jest bursztynowy, więc akcent zostaje widoczny także w favikonie. */
+/** Znak: kiełek, czyli dwa liście na łodydze, symbol życia i wzrostu. Łodyga jest szeroka
+    u płasko ściętej stopy i z lekko wklęsłymi bokami zwęża się ku liściom, więc wygląda jak
+    młody pęd wschodzący z ziemi, a nie jak patyk. Jeden biały kształt, bez drugiego koloru,
+    więc działa tak samo w nagłówku i w favikonie. */
 function LogoMark({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 32 32" className={cn('size-5', className)} aria-hidden focusable="false">
+    <svg viewBox="0 0 32 32" className={cn('size-[26px]', className)} aria-hidden focusable="false">
+      <path d="M15.5 13.5C13 9 10 6 5 4.8 5.5 9.8 9.5 13 15.5 13.5Z" fill="currentColor" />
+      <path d="M16.5 13.5C19 9 22 6 27 4.8 26.5 9.8 22.5 13 16.5 13.5Z" fill="currentColor" />
       <path
-        d="M16 21.6C12.8 18.8 5.4 13.8 5.4 9.5 5.4 6.1 7.9 3.7 10.9 3.7 13.1 3.7 15 5.1 16 7.4 17 5.1 18.9 3.7 21.1 3.7 24.1 3.7 26.6 6.1 26.6 9.5 26.6 13.8 19.2 18.8 16 21.6Z"
+        d="M13.5 28.9C13.5 27.4 13.9 21.4 14.9 14.6 15.1 13.3 16.9 13.3 17.1 14.6 18.1 21.4 18.5 27.4 18.5 28.9 18.5 29.5 17.5 29.9 16 29.9 14.5 29.9 13.5 29.5 13.5 28.9Z"
         fill="currentColor"
-      />
-      <path
-        d="M16 16.2C14.6 15.1 12.1 13.4 12.1 12.1 12.1 10.8 13 9.6 14.2 9.6 15.2 9.6 15.8 10.3 16 11.9 16.2 10.3 16.8 9.6 17.8 9.6 19 9.6 19.9 10.8 19.9 12.1 19.9 13.4 17.4 15.1 16 16.2Z"
-        fill="var(--color-gold)"
       />
     </svg>
   )
