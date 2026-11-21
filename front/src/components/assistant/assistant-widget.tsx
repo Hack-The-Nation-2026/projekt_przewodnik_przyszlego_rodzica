@@ -320,8 +320,10 @@ export function AssistantWidget() {
           aria-controls="asystent-panel"
           aria-label={open ? 'Zamknij asystenta' : 'Otwórz asystenta'}
           className={cn(
-            'flex h-12 items-center gap-2 rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground shadow-lg transition-colors hover:bg-primary/90',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+            // Nad zieloną stopką zielony przycisk by zniknął, więc jest jasny z zieloną
+            // obwódką. Na białym tle trzyma go obwódka i cień.
+            'flex h-12 items-center gap-2 rounded-full border-2 border-primary bg-background px-4 text-sm font-semibold text-primary shadow-xl transition-colors hover:bg-secondary',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
           )}
         >
           <Sparkles className="size-4" aria-hidden="true" />
