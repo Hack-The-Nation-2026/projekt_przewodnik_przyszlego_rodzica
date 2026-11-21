@@ -537,8 +537,8 @@ export function KalkulatorPage() {
             <div ref={documentsPanel} tabIndex={-1} className="scroll-mt-24 focus:outline-none" aria-label="Dokumenty i terminy">
               <Suspense fallback={<p role="status">Wczytujemy dokumenty…</p>}>
                 <BenefitDocuments
+                  key={documentBenefit}
                   benefit={documentBenefit}
-                  onBenefitChange={setDocumentBenefit}
                   onClose={closeDocuments}
                   context={simulation.data.documentContext}
                 />

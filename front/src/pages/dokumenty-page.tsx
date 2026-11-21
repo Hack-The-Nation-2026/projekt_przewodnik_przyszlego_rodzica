@@ -11,7 +11,7 @@ export function DokumentyPage() {
   return (
     <PageContainer className="space-y-8 py-12 sm:py-16">
       <PageHeading title="Dokumenty i wnioski" crumb="Dokumenty"
-        description="Wybierz świadczenie, sprawdź listę załączników i przygotuj szkic wniosku." />
+        description="Sprawdź, który formularz wypełnić, co dołączyć i gdzie złożyć wniosek." />
       <Suspense fallback={<p role="status">Wczytujemy dokumenty…</p>}>
         <BenefitDocuments benefit={benefit} onBenefitChange={setBenefit} />
       </Suspense>

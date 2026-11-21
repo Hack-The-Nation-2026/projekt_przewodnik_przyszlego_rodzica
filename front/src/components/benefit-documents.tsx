@@ -1,6 +1,6 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
-import { ArrowDown, ArrowUpRight, CalendarDays, FileText, MapPin } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, CalendarDays, FileText, MapPin } from 'lucide-react'
 import { ApplicationDraft, DocumentField } from '@/components/application-draft'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -18,6 +18,12 @@ import { cn } from '@/lib/utils'
 const selectClass = 'h-10 w-full rounded-md border border-input bg-background px-3 text-sm'
 const benefits = Object.keys(benefitList) as BenefitCode[]
 const ezus = 'https://www.zus.pl/ezus'
+type Step = 'benefit' | 'situation' | 'documents'
+const stepTitles: Record<Step, string> = {
+  benefit: 'Wybierz świadczenie',
+  situation: 'Dopasuj do swojej sytuacji',
+  documents: 'Co złożyć i gdzie',
+}
 
 function SelectField<T extends string>({ name, title, value, onChange, children }: {
   name: string
@@ -119,19 +125,21 @@ export default function BenefitDocuments({
   benefit, onBenefitChange, context, onClose,
 }: {
   benefit: BenefitCode
-  onBenefitChange: (benefit: BenefitCode) => void
+  onBenefitChange?: (benefit: BenefitCode) => void
   context?: DocumentContext
   onClose?: () => void
 }) {
-  const checklistHeading = useRef<HTMLHeadingElement>(null)
-  const draftDetails = useRef<HTMLDetailsElement>(null)
-  const draftToggle = useRef<HTMLElement>(null)
+  const stepHeading = useRef<HTMLHeadingElement>(null)
+  const draftHeading = useRef<HTMLHeadingElement>(null)
+  const draftTrigger = useRef<HTMLButtonElement>(null)
+  const focusStep = useRef(false)
+  const [step, setStep] = useState<Step>(onBenefitChange ? 'benefit' : 'documents')
   const [role, setRole] = useState<Role>(context?.role ?? 'mother')
   const [employment, setEmployment] = useState<Employment>(context?.employment ?? 'unknown')
   const [payerSize, setPayerSize] = useState<PayerSize>('unknown')
   const [coverageOverride, setCoverageOverride] = useState<{ benefit: BenefitCode; value: Coverage }>()
   const [maternityCase, setMaternityCase] = useState<MaternityCase>(context?.role === 'father' ? 'takeover' : 'standard')
-  const [mode, setMode] = useState<'benefit' | 'leave'>('benefit')
+  const [mode, setMode] = useState<'benefit' | 'leave' | null>(null)
   const scenario = role === context?.role ? context : undefined
   const coverage = coverageOverride?.benefit === benefit ? coverageOverride.value : coverageFromContext(benefit, scenario)
   const options = { role, employment, payerSize, coverage, maternityCase }
@@ -142,146 +150,201 @@ export default function BenefitDocuments({
     ? undefined : scenario?.periods[benefit]
   const rateAvailable = (benefit === 'macierzynski' || benefit === 'rodzicielski') && role !== 'father'
   const showPayerOptions = benefit !== 'w_wysokosci_macierzynskiego'
+  const steps: Step[] = [
+    ...(onBenefitChange ? ['benefit' as const] : []),
+    ...(showPayerOptions ? ['situation' as const] : []),
+    'documents',
+  ]
 
-  function showChecklist() {
-    checklistHeading.current?.focus({ preventScroll: true })
-    checklistHeading.current?.scrollIntoView({ block: 'start' })
+  function goToStep(next: Step) {
+    setMode(null)
+    focusStep.current = true
+    setStep(next)
   }
 
-  function openDraft() {
-    if (draftDetails.current) draftDetails.current.open = true
-    draftToggle.current?.focus({ preventScroll: true })
-    draftToggle.current?.scrollIntoView({ block: 'start' })
+  useEffect(() => {
+    if (!focusStep.current) return
+    focusStep.current = false
+    stepHeading.current?.focus({ preventScroll: true })
+    stepHeading.current?.scrollIntoView({ block: 'start' })
+  }, [step])
+
+  useEffect(() => {
+    if (!mode) return
+    draftHeading.current?.focus({ preventScroll: true })
+    draftHeading.current?.scrollIntoView({ block: 'start' })
+  }, [mode])
+
+  function closeDraft() {
+    setMode(null)
+    draftTrigger.current?.focus()
+  }
+
+  function toggleDraft(next: 'benefit' | 'leave', trigger: HTMLButtonElement) {
+    draftTrigger.current = trigger
+    setMode(mode === next ? null : next)
   }
 
   return (
     <section className="space-y-4" aria-labelledby="documents-title">
       <Card>
-        <CardHeader className="flex-row flex-wrap items-start justify-between gap-3">
-          <h2 id="documents-title" className="text-2xl font-semibold">Co złożyć i gdzie</h2>
-          {onClose && <Button type="button" variant="outline" size="sm" onClick={onClose}>Zamknij dokumenty</Button>}
+        <CardHeader className="gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            {onBenefitChange && <p className="text-sm font-medium text-primary">Krok {steps.indexOf(step) + 1} z {steps.length}</p>}
+            {onClose && (
+              <Button type="button" variant="outline" size="sm" className="ml-auto" onClick={onClose}>
+                Zamknij dokumenty
+              </Button>
+            )}
+          </div>
+          <h2 id="documents-title" ref={stepHeading} tabIndex={-1} className="scroll-mt-24 text-2xl font-semibold focus:outline-none">
+            {stepTitles[step]}
+          </h2>
         </CardHeader>
-        <CardContent className="grid gap-4 sm:grid-cols-2">
-          <SelectField name="document-benefit" title="Świadczenie" value={benefit} onChange={(value) => {
-            onBenefitChange(value)
-            setCoverageOverride(undefined)
-            setMode('benefit')
-          }}>
-            {benefits.map((key) => <option key={key} value={key}>{benefitList[key].name}</option>)}
-          </SelectField>
-          {isFamilyBenefit(benefit) && (
-            <SelectField name="document-role" title="Sytuacja rodzinna" value={role} onChange={(value) => {
-              setRole(value)
-              setMaternityCase(value === 'father' ? 'takeover' : 'standard')
+
+        {step === 'benefit' && (
+          <CardContent className="space-y-5">
+            <SelectField name="document-benefit" title="Świadczenie" value={benefit} onChange={(value) => {
+              onBenefitChange?.(value)
               setCoverageOverride(undefined)
             }}>
-              {Object.entries(documentRoles).map(([key, name]) => <option key={key} value={key}>{name}</option>)}
+              {benefits.map((key) => <option key={key} value={key}>{benefitList[key].name}</option>)}
             </SelectField>
-          )}
-          {benefit === 'macierzynski' && (role === 'mother' || role === 'father') && (
-            <SelectField name="document-maternity-case" title="Wariant macierzyńskiego" value={maternityCase} onChange={setMaternityCase}>
-              {role === 'mother' && <option value="standard">Od porodu</option>}
-              {role === 'mother' && <option value="before_birth">Część przed porodem</option>}
-              {role === 'father' && <option value="takeover">Przejęcie po rezygnacji matki</option>}
-            </SelectField>
-          )}
-          {showPayerOptions && (
-            <SelectField name="document-employment" title="Tytuł ubezpieczenia" value={employment} onChange={(value) => {
-              setEmployment(value)
-              setPayerSize('unknown')
-            }}>
-              {Object.entries(documentEmployment).map(([key, name]) => <option key={key} value={key}>{name}</option>)}
-            </SelectField>
-          )}
-          {showPayerOptions && (
-            <SelectField name="document-coverage" title="Kiedy przypada wnioskowany okres?" value={coverage}
-              onChange={(value) => setCoverageOverride({ benefit, value })}>
-              <option value="unknown">Do ustalenia</option>
-              <option value="active">W czasie ubezpieczenia chorobowego</option>
-              <option value="ended">Po ustaniu ubezpieczenia</option>
-            </SelectField>
-          )}
-          {showPayerOptions && employment !== 'self_employed' && coverage !== 'ended' && (
-            <SelectField name="document-payer" title="Liczba osób u płatnika zgłoszonych do ubezpieczenia chorobowego" value={payerSize} onChange={setPayerSize}>
-              <option value="unknown">Nie wiem</option>
-              <option value="up_to_20">Do 20 osób</option>
-              <option value="over_20">Powyżej 20 osób</option>
-            </SelectField>
-          )}
-          <div className="space-y-3 border-t pt-4 sm:col-span-2">
-            <p className="text-sm" role="status">
-              <strong>Adresat wniosku o świadczenie</strong>
-              <span className="block">{route.addressee || 'Do potwierdzenia u płatnika składek'}</span>
-            </p>
+            <Button type="button" onClick={() => goToStep(showPayerOptions ? 'situation' : 'documents')}>
+              Dalej <ArrowRight aria-hidden="true" />
+            </Button>
+          </CardContent>
+        )}
+
+        {step === 'situation' && (
+          <CardContent className="space-y-5">
+            <p className="text-sm text-muted-foreground">Podaj dane, które znasz. Na ich podstawie dobierzemy załączniki i adresata.</p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {isFamilyBenefit(benefit) && (
+                <SelectField name="document-role" title="Sytuacja rodzinna" value={role} onChange={(value) => {
+                  setRole(value)
+                  setMaternityCase(value === 'father' ? 'takeover' : 'standard')
+                  setCoverageOverride(undefined)
+                }}>
+                  {Object.entries(documentRoles).map(([key, name]) => <option key={key} value={key}>{name}</option>)}
+                </SelectField>
+              )}
+              {benefit === 'macierzynski' && role === 'mother' && (
+                <SelectField name="document-maternity-case" title="Wariant macierzyńskiego" value={maternityCase} onChange={setMaternityCase}>
+                  <option value="standard">Od porodu</option>
+                  <option value="before_birth">Część przed porodem</option>
+                </SelectField>
+              )}
+              <SelectField name="document-employment" title="Tytuł ubezpieczenia" value={employment} onChange={(value) => {
+                setEmployment(value)
+                setPayerSize('unknown')
+              }}>
+                {Object.entries(documentEmployment).map(([key, name]) => <option key={key} value={key}>{name}</option>)}
+              </SelectField>
+            </div>
+            <details className="space-y-3 rounded-md border border-border px-3 py-2.5">
+              <summary className="cursor-pointer text-sm font-medium">Doprecyzuj okres ubezpieczenia i płatnika (opcjonalnie)</summary>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <SelectField name="document-coverage" title="Kiedy przypada wnioskowany okres?" value={coverage}
+                  onChange={(value) => setCoverageOverride({ benefit, value })}>
+                  <option value="unknown">Do ustalenia</option>
+                  <option value="active">W czasie ubezpieczenia chorobowego</option>
+                  <option value="ended">Po ustaniu ubezpieczenia</option>
+                </SelectField>
+                {employment !== 'self_employed' && coverage !== 'ended' && (
+                  <SelectField name="document-payer" title="Liczba osób u płatnika zgłoszonych do ubezpieczenia chorobowego" value={payerSize} onChange={setPayerSize}>
+                    <option value="unknown">Nie wiem</option>
+                    <option value="up_to_20">Do 20 osób</option>
+                    <option value="over_20">Powyżej 20 osób</option>
+                  </SelectField>
+                )}
+              </div>
+            </details>
             <div className="flex flex-wrap gap-2">
+              {onBenefitChange && <Button type="button" variant="outline" onClick={() => goToStep('benefit')}>Wstecz</Button>}
+              <Button type="button" className="h-auto min-h-10 whitespace-normal" onClick={() => goToStep('documents')}>
+                Pokaż dokumenty <ArrowRight aria-hidden="true" />
+              </Button>
+            </div>
+          </CardContent>
+        )}
+
+        {step === 'documents' && (
+          <CardContent className="space-y-5 text-sm">
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold">{benefitList[benefit].name}</h3>
               <a className={cn(buttonVariants(), 'h-auto min-h-10 whitespace-normal')}
                 href={guide.form.url} target="_blank" rel="noreferrer">
                 Otwórz formularz {guide.form.label} na stronie ZUS <ArrowUpRight aria-hidden="true" />
               </a>
-              <Button type="button" variant="outline" className="h-auto min-h-10 whitespace-normal" onClick={showChecklist}>
-                Pokaż dokumenty i terminy <ArrowDown aria-hidden="true" />
+            </div>
+            <div className="space-y-2 rounded-md bg-secondary p-4">
+              <h4 className="flex items-center gap-2 font-semibold"><MapPin className="size-4 text-primary" aria-hidden="true" /> Gdzie złożyć</h4>
+              {route.addressee && <p className="font-medium">{route.addressee}</p>}
+              <p>{route.description}</p>
+              {guide.leave && <p>Wniosek o {guide.leave.title} złóż u pracodawcy, w postaci papierowej lub elektronicznej.</p>}
+              {route.showEzus && <a className="font-medium text-primary underline underline-offset-2" href={ezus}>Zaloguj się do eZUS</a>}
+            </div>
+            <div className="divide-y divide-border rounded-md border border-border">
+              <details name="document-checklist" className="space-y-3 px-4 py-3">
+                <summary className="cursor-pointer font-semibold">
+                  <span className="ml-1 inline-flex items-center gap-2"><FileText className="size-4 text-primary" aria-hidden="true" /> Dokumenty do przygotowania</span>
+                </summary>
+                <ul className="list-disc space-y-1 pl-5">{guide.documents.map((document) => <li key={document}>{document}</li>)}</ul>
+                <div className="flex flex-wrap gap-x-4 gap-y-2">
+                  <a className="text-primary underline underline-offset-2" href={guide.officialGuide.url}>{guide.officialGuide.label}</a>
+                  {guide.leave && <a className="text-primary underline underline-offset-2" href={leaveRegulation.url}>{leaveRegulation.label}</a>}
+                </div>
+              </details>
+              <details name="document-checklist" className="space-y-3 px-4 py-3">
+                <summary className="cursor-pointer font-semibold">
+                  <span className="ml-1 inline-flex items-center gap-2"><CalendarDays className="size-4 text-primary" aria-hidden="true" /> Terminy złożenia</span>
+                </summary>
+                <ul className="list-disc space-y-1 pl-5">{guide.deadlines.map((deadline) => <li key={deadline}>{deadline}</li>)}</ul>
+                {scenario && <DateHints benefit={benefit} options={options} context={scenario} />}
+              </details>
+              {showPayerOptions && employment !== 'self_employed' && coverage !== 'ended' && (
+                <details name="document-checklist" className="space-y-3 px-4 py-3">
+                  <summary className="cursor-pointer font-semibold">Jak ustalić płatnika?</summary>
+                  <p>Sprawdź liczbę zgłoszonych na 30 listopada poprzedniego roku, a gdy tego dnia płatnik nikogo nie zgłaszał, w pierwszym miesiącu zgłoszeń. ZUS kontynuuje rozpoczętą wypłatę przez przełom roku. Szczególne tytuły mogą oznaczać wypłatę przez ZUS.</p>
+                  <a className="inline-block text-primary underline underline-offset-2" href={payerSource}>Zasady ustalania płatnika w ZUS</a>
+                </details>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {showPayerOptions && <Button type="button" variant="outline" onClick={() => goToStep('situation')}>Zmień dane</Button>}
+              {onBenefitChange && <Button type="button" variant="outline" onClick={() => goToStep('benefit')}>Zmień świadczenie</Button>}
+            </div>
+            <div className="flex flex-wrap gap-x-4 gap-y-2 border-t pt-4">
+              {guide.leave && (
+                <Button type="button" variant="link" className="h-auto p-0 whitespace-normal" aria-expanded={mode === 'leave'}
+                  onClick={(event) => toggleDraft('leave', event.currentTarget)}>
+                  Przygotuj szkic wniosku urlopowego
+                </Button>
+              )}
+              <Button type="button" variant="link" className="h-auto p-0 whitespace-normal" aria-expanded={mode === 'benefit'}
+                onClick={(event) => toggleDraft('benefit', event.currentTarget)}>
+                Pomoc w wypełnieniu formularza ZUS
               </Button>
             </div>
-          </div>
-        </CardContent>
+          </CardContent>
+        )}
       </Card>
 
-      <Card>
-        <CardHeader>
-          <h3 ref={checklistHeading} tabIndex={-1} className="scroll-mt-24 text-xl font-semibold focus:outline-none">
-            {benefitList[benefit].name}
-          </h3>
-        </CardHeader>
-        <CardContent className="space-y-5 text-sm">
-          <div className="space-y-2">
-            <h4 className="flex items-center gap-2 font-semibold"><MapPin className="size-4 text-primary" aria-hidden="true" /> Gdzie złożyć</h4>
-            <p>{route.description}</p>
-            {guide.leave && <p>Wniosek o {guide.leave.title} złóż u pracodawcy, w postaci papierowej lub elektronicznej.</p>}
-            {route.showEzus && <a className="font-medium text-primary underline underline-offset-2" href={ezus}>Przejdź do eZUS</a>}
-            {showPayerOptions && employment !== 'self_employed' && coverage !== 'ended' && (
-              <details>
-                <summary className="w-fit cursor-pointer font-medium text-primary">Jak ustalić liczbę i płatnika?</summary>
-                <p className="mt-1">Sprawdź liczbę zgłoszonych na 30 listopada poprzedniego roku, a gdy tego dnia płatnik nikogo nie zgłaszał, w pierwszym miesiącu zgłoszeń. ZUS kontynuuje rozpoczętą wypłatę przez przełom roku. Szczególne tytuły mogą oznaczać wypłatę przez ZUS.</p>
-                <a className="mt-1 inline-block text-primary underline underline-offset-2" href={payerSource}>Zasady ustalania płatnika w ZUS</a>
-              </details>
-            )}
-          </div>
-          <div className="space-y-2 border-t pt-4">
-            <h4 className="flex items-center gap-2 font-semibold"><CalendarDays className="size-4 text-primary" aria-hidden="true" /> Kiedy złożyć</h4>
-            <ul className="list-disc space-y-1 pl-5">{guide.deadlines.map((deadline) => <li key={deadline}>{deadline}</li>)}</ul>
-            {scenario && <DateHints benefit={benefit} options={options} context={scenario} />}
-          </div>
-          <div className="space-y-2 border-t pt-4">
-            <h4 className="flex items-center gap-2 font-semibold"><FileText className="size-4 text-primary" aria-hidden="true" /> Co przygotować</h4>
-            <ul className="list-disc space-y-1 pl-5">{guide.documents.map((document) => <li key={document}>{document}</li>)}</ul>
-            <div className="flex flex-wrap gap-x-4 gap-y-2 pt-2">
-              <a className="text-primary underline underline-offset-2" href={guide.officialGuide.url}>{guide.officialGuide.label}</a>
-              {guide.leave && <a className="text-primary underline underline-offset-2" href={leaveRegulation.url}>{leaveRegulation.label}</a>}
-            </div>
-          </div>
-          <Button type="button" variant="outline" className="h-auto min-h-10 whitespace-normal" onClick={openDraft}>
-            Przygotuj szkic wniosku <ArrowDown aria-hidden="true" />
-          </Button>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader><h3 className="text-xl font-semibold">Przygotuj szkic</h3></CardHeader>
-        <CardContent>
-          <details key={benefit} ref={draftDetails} className="space-y-4">
-            <summary ref={draftToggle} className="w-fit cursor-pointer scroll-mt-24 font-medium text-primary">Otwórz symulację wypełniania wniosku</summary>
-            {guide.leave && (
-              <SelectField name="document-mode" title="Rodzaj wniosku" value={mode} onChange={setMode}>
-                <option value="benefit">Wniosek o świadczenie ({guide.form.label})</option>
-                <option value="leave">Wniosek o urlop do pracodawcy</option>
-              </SelectField>
-            )}
-            <ApplicationDraft key={[benefit, role, maternityCase, coverage, employment, useLeave ? 'leave' : 'benefit'].join('-')}
-              benefit={benefit} guide={guide} options={options} mode={useLeave ? 'leave' : 'benefit'}
+      {step === 'documents' && mode && (
+        <Card>
+          <CardHeader className="flex-row flex-wrap items-start justify-between gap-3">
+            <h3 ref={draftHeading} tabIndex={-1} className="scroll-mt-24 text-xl font-semibold focus:outline-none">
+              {useLeave ? 'Szkic wniosku urlopowego' : 'Dane do formularza ' + guide.form.label}
+            </h3>
+            <Button type="button" variant="outline" size="sm" onClick={closeDraft}>Zamknij szkic</Button>
+          </CardHeader>
+          <CardContent>
+            <ApplicationDraft key={mode} benefit={benefit} guide={guide} options={options} mode={useLeave ? 'leave' : 'benefit'}
               addressee={useLeave ? '' : route.addressee} period={period} rateAvailable={rateAvailable} />
-          </details>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </section>
   )
 }
