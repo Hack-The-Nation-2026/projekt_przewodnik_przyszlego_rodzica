@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { ArrowRight, ArrowUpRight, CalendarDays, FileText, MapPin } from 'lucide-react'
 import { ApplicationDraft, DocumentField } from '@/components/application-draft'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -243,24 +244,26 @@ export default function BenefitDocuments({
                 {Object.entries(documentEmployment).map(([key, name]) => <SelectItem key={key} value={key}>{name}</SelectItem>)}
               </SelectField>
             </div>
-            <details className="space-y-3 rounded-md border border-border px-3 py-2.5">
-              <summary className="cursor-pointer text-sm font-medium">Doprecyzuj okres ubezpieczenia i płatnika (opcjonalnie)</summary>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <SelectField name="document-coverage" title="Kiedy przypada wnioskowany okres?" value={coverage}
-                  onChange={(value) => setCoverageOverride({ benefit, value })}>
-                  <SelectItem value="unknown">Do ustalenia</SelectItem>
-                  <SelectItem value="active">W czasie ubezpieczenia chorobowego</SelectItem>
-                  <SelectItem value="ended">Po ustaniu ubezpieczenia</SelectItem>
-                </SelectField>
-                {employment !== 'self_employed' && coverage !== 'ended' && (
-                  <SelectField name="document-payer" title="Liczba osób u płatnika zgłoszonych do ubezpieczenia chorobowego" value={payerSize} onChange={setPayerSize}>
-                    <SelectItem value="unknown">Nie wiem</SelectItem>
-                    <SelectItem value="up_to_20">Do 20 osób</SelectItem>
-                    <SelectItem value="over_20">Powyżej 20 osób</SelectItem>
+            <Accordion type="single" collapsible className="rounded-md border border-border">
+              <AccordionItem value="insurance">
+                <AccordionTrigger>Doprecyzuj okres ubezpieczenia i płatnika (opcjonalnie)</AccordionTrigger>
+                <AccordionContent className="grid gap-4 sm:grid-cols-2">
+                  <SelectField name="document-coverage" title="Kiedy przypada wnioskowany okres?" value={coverage}
+                    onChange={(value) => setCoverageOverride({ benefit, value })}>
+                    <SelectItem value="unknown">Do ustalenia</SelectItem>
+                    <SelectItem value="active">W czasie ubezpieczenia chorobowego</SelectItem>
+                    <SelectItem value="ended">Po ustaniu ubezpieczenia</SelectItem>
                   </SelectField>
-                )}
-              </div>
-            </details>
+                  {employment !== 'self_employed' && coverage !== 'ended' && (
+                    <SelectField name="document-payer" title="Liczba osób u płatnika zgłoszonych do ubezpieczenia chorobowego" value={payerSize} onChange={setPayerSize}>
+                      <SelectItem value="unknown">Nie wiem</SelectItem>
+                      <SelectItem value="up_to_20">Do 20 osób</SelectItem>
+                      <SelectItem value="over_20">Powyżej 20 osób</SelectItem>
+                    </SelectField>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
             <div className="flex flex-wrap gap-2">
               {onBenefitChange && <Button type="button" variant="outline" onClick={() => goToStep('benefit')}>Wstecz</Button>}
               <Button type="button" className="h-auto min-h-10 whitespace-normal" onClick={() => goToStep('documents')}>
@@ -286,32 +289,38 @@ export default function BenefitDocuments({
               {guide.leave && <p>Wniosek o {guide.leave.title} złóż u pracodawcy, w postaci papierowej lub elektronicznej.</p>}
               {route.showEzus && <a className="font-medium text-primary underline underline-offset-2" href={ezus}>Zaloguj się do eZUS</a>}
             </div>
-            <div className="divide-y divide-border rounded-md border border-border">
-              <details name="document-checklist" className="space-y-3 px-4 py-3">
-                <summary className="cursor-pointer font-semibold">
-                  <span className="ml-1 inline-flex items-center gap-2"><FileText className="size-4 text-primary" aria-hidden="true" /> Dokumenty do przygotowania</span>
-                </summary>
-                <ul className="list-disc space-y-1 pl-5">{guide.documents.map((document) => <li key={document}>{document}</li>)}</ul>
-                <div className="flex flex-wrap gap-x-4 gap-y-2">
-                  <a className="text-primary underline underline-offset-2" href={guide.officialGuide.url}>{guide.officialGuide.label}</a>
-                  {guide.leave && <a className="text-primary underline underline-offset-2" href={leaveRegulation.url}>{leaveRegulation.label}</a>}
-                </div>
-              </details>
-              <details name="document-checklist" className="space-y-3 px-4 py-3">
-                <summary className="cursor-pointer font-semibold">
-                  <span className="ml-1 inline-flex items-center gap-2"><CalendarDays className="size-4 text-primary" aria-hidden="true" /> Terminy złożenia</span>
-                </summary>
-                <ul className="list-disc space-y-1 pl-5">{guide.deadlines.map((deadline) => <li key={deadline}>{deadline}</li>)}</ul>
-                {scenario && <DateHints benefit={benefit} options={options} context={scenario} />}
-              </details>
+            <Accordion type="single" collapsible className="rounded-md border border-border">
+              <AccordionItem value="attachments">
+                <AccordionTrigger>
+                  <span className="flex items-center gap-2"><FileText className="size-4 shrink-0 text-primary" aria-hidden="true" /> Dokumenty do przygotowania</span>
+                </AccordionTrigger>
+                <AccordionContent className="space-y-3">
+                  <ul className="list-disc space-y-1 pl-5">{guide.documents.map((document) => <li key={document}>{document}</li>)}</ul>
+                  <div className="flex flex-wrap gap-x-4 gap-y-2">
+                    <a className="text-primary underline underline-offset-2" href={guide.officialGuide.url}>{guide.officialGuide.label}</a>
+                    {guide.leave && <a className="text-primary underline underline-offset-2" href={leaveRegulation.url}>{leaveRegulation.label}</a>}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="deadlines">
+                <AccordionTrigger>
+                  <span className="flex items-center gap-2"><CalendarDays className="size-4 shrink-0 text-primary" aria-hidden="true" /> Terminy złożenia</span>
+                </AccordionTrigger>
+                <AccordionContent className="space-y-3">
+                  <ul className="list-disc space-y-1 pl-5">{guide.deadlines.map((deadline) => <li key={deadline}>{deadline}</li>)}</ul>
+                  {scenario && <DateHints benefit={benefit} options={options} context={scenario} />}
+                </AccordionContent>
+              </AccordionItem>
               {showPayerOptions && employment !== 'self_employed' && coverage !== 'ended' && (
-                <details name="document-checklist" className="space-y-3 px-4 py-3">
-                  <summary className="cursor-pointer font-semibold">Jak ustalić płatnika?</summary>
-                  <p>Sprawdź liczbę zgłoszonych na 30 listopada poprzedniego roku, a gdy tego dnia płatnik nikogo nie zgłaszał, w pierwszym miesiącu zgłoszeń. ZUS kontynuuje rozpoczętą wypłatę przez przełom roku. Szczególne tytuły mogą oznaczać wypłatę przez ZUS.</p>
-                  <a className="inline-block text-primary underline underline-offset-2" href={payerSource}>Zasady ustalania płatnika w ZUS</a>
-                </details>
+                <AccordionItem value="payer">
+                  <AccordionTrigger>Jak ustalić płatnika?</AccordionTrigger>
+                  <AccordionContent className="space-y-3">
+                    <p>Sprawdź liczbę zgłoszonych na 30 listopada poprzedniego roku, a gdy tego dnia płatnik nikogo nie zgłaszał, w pierwszym miesiącu zgłoszeń. ZUS kontynuuje rozpoczętą wypłatę przez przełom roku. Szczególne tytuły mogą oznaczać wypłatę przez ZUS.</p>
+                    <a className="inline-block text-primary underline underline-offset-2" href={payerSource}>Zasady ustalania płatnika w ZUS</a>
+                  </AccordionContent>
+                </AccordionItem>
               )}
-            </div>
+            </Accordion>
             <div className="flex flex-wrap gap-2">
               {showPayerOptions && <Button type="button" variant="outline" onClick={() => goToStep('situation')}>Zmień dane</Button>}
               {onBenefitChange && <Button type="button" variant="outline" onClick={() => goToStep('benefit')}>Zmień świadczenie</Button>}
