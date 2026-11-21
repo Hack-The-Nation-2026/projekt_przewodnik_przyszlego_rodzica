@@ -34,8 +34,13 @@ function ScrollToTop() {
 const LIGHT_TICK_MAX_DELTA = 160
 // Drugi ruch kółka w tym czasie znaczy „kręcę dalej”, nie „stuknąłem raz”.
 const GESTURE_CONFIRM_MS = 70
-// Po skoku czekamy, aż gest się wypali, żeby rozmach nie przeskoczył dwóch sekcji.
-const JUMP_COOLDOWN_MS = 400
+// Płynny przejazd do sekcji trwa kilkaset milisekund. Przez ten czas kółko nie może
+// przerwać animacji w połowie, bo wtedy strona staje między sekcjami.
+const JUMP_ANIMATION_MS = 520
+// Gdy sekcja jest wyższa niż ekran, muśnięcie i tak jedzie najwyżej jeden ekran.
+const MIN_JUMP_SPAN = 320
+// Tyle pikseli przy granicy sekcji traktujemy jak stanie na niej.
+const BOUNDARY_TOLERANCE = 32
 // Cisza, po której uznajemy gest za zakończony.
 const GESTURE_IDLE_MS = 200
 
@@ -69,33 +74,42 @@ function WheelSectionJump() {
     let pendingDirection = 0
     let pendingDelta = 0
     let freeGesture = false
-    let cooldownUntil = 0
+    let jumpUntil = 0
 
     const scrollToSection = (direction: number) => {
       const sections = Array.from(
         document.querySelectorAll<HTMLElement>('[data-scroll-section]'),
       )
-      if (sections.length === 0) return
+      if (sections.length === 0) return false
 
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
       const behavior: ScrollBehavior = reduced ? 'auto' : 'smooth'
       const padding =
         Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
-      const edge = window.scrollY + padding + 4
+      const here = window.scrollY
+
+      const tops = sections.map((section) =>
+        Math.round(section.getBoundingClientRect().top + here - padding),
+      )
 
       let current = 0
-      sections.forEach((section, index) => {
-        if (section.getBoundingClientRect().top + window.scrollY <= edge) current = index
+      tops.forEach((top, index) => {
+        if (top <= here + BOUNDARY_TOLERANCE) current = index
       })
 
+      const bottom = Math.max(0, document.documentElement.scrollHeight - window.innerHeight)
       const next = current + direction
-      if (next < 0) {
-        window.scrollTo({ top: 0, behavior })
-      } else if (next >= sections.length) {
-        window.scrollTo({ top: document.documentElement.scrollHeight, behavior })
-      } else {
-        sections[next].scrollIntoView({ behavior, block: 'start' })
-      }
+      let target = next < 0 ? 0 : next >= sections.length ? bottom : tops[next]
+
+      // Jedno muśnięcie nie przewozi dalej niż jeden ekran, nawet gdy sekcja jest długa.
+      const span = Math.max(MIN_JUMP_SPAN, window.innerHeight * 0.9)
+      target = direction > 0 ? Math.min(target, here + span) : Math.max(target, here - span)
+      target = Math.min(bottom, Math.max(0, target))
+
+      if (Math.abs(target - here) < 2) return false
+      window.scrollTo({ top: target, behavior })
+      // Przy ograniczonym ruchu przejazd jest natychmiastowy, więc nie ma czego chronić.
+      return behavior === 'smooth'
     }
 
     const onWheel = (event: WheelEvent) => {
@@ -112,12 +126,19 @@ function WheelSectionJump() {
 
       const now = performance.now()
 
+      if (now < jumpUntil) {
+        // Trwa płynny przejazd. Zdarzenia z tego samego gestu go nie przerywają,
+        // bo właśnie takie przerwanie zostawiało stronę w połowie drogi.
+        event.preventDefault()
+        return
+      }
+
       window.clearTimeout(idleTimer)
       idleTimer = window.setTimeout(() => {
         freeGesture = false
       }, GESTURE_IDLE_MS)
 
-      if (now < cooldownUntil || freeGesture) return
+      if (freeGesture) return
 
       if (jumpTimer !== undefined) {
         // Drugie zdarzenie w tym samym geście: to przewijanie, nie stuknięcie.
@@ -141,8 +162,8 @@ function WheelSectionJump() {
       jumpTimer = window.setTimeout(() => {
         jumpTimer = undefined
         pendingDelta = 0
-        scrollToSection(pendingDirection)
-        cooldownUntil = performance.now() + JUMP_COOLDOWN_MS
+        const animated = scrollToSection(pendingDirection)
+        jumpUntil = animated ? performance.now() + JUMP_ANIMATION_MS : 0
       }, GESTURE_CONFIRM_MS)
     }
 
