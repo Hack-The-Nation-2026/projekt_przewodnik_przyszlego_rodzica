@@ -4,14 +4,22 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import type { ReactNode } from 'react'
 import { ArrowRight, Loader2, LogOut, Smartphone } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { BackLink } from '@/components/layout/back-link'
 import { Container } from '@/components/layout/container'
+import { PageHeading } from '@/components/layout/page-heading'
 import { api } from '@/lib/api'
 import { useAppStore } from '@/store/app-store'
 import type { Citizen, ManualEntry } from '@/types/api'
@@ -33,30 +41,7 @@ function describeFailure(error: unknown) {
   return typeof detail === 'string' ? detail : 'Sprawdź wpisane dane i spróbuj ponownie.'
 }
 
-function Field({
-  label,
-  htmlFor,
-  hint,
-  error,
-  children,
-}: {
-  label: string
-  htmlFor: string
-  hint?: string
-  error?: string
-  children: ReactNode
-}) {
-  return (
-    <div className="space-y-1.5">
-      <label htmlFor={htmlFor} className="text-sm font-medium">
-        {label}
-      </label>
-      {children}
-      {hint && !error && <p className="text-xs text-muted-foreground">{hint}</p>}
-      {error && <p className="text-sm text-destructive">{error}</p>}
-    </div>
-  )
-}
+
 
 function DataRow({ label, value }: { label: string; value: string }) {
   return (
@@ -116,11 +101,10 @@ function SessionCard() {
 function MethodChooser() {
   const signIn = useAppStore((state) => state.signIn)
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormValues>({ resolver: zodResolver(schema) })
+  const form = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: { firstName: '', lastName: '', pesel: '', caseLabel: '' },
+  })
 
   const manual = useMutation({
     mutationFn: async (values: FormValues) => {
@@ -139,82 +123,101 @@ function MethodChooser() {
   const failure = manual.isError ? describeFailure(manual.error) : null
 
   return (
-    <div className="space-y-8">
-      <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
-        <Card className="flex flex-col">
-          <CardHeader>
-            <div className="flex flex-wrap items-center gap-2">
-              <CardTitle>Zaloguj przez mObywatel</CardTitle>
-              <Badge className="bg-primary text-primary-foreground">Zalecane</Badge>
-            </div>
-            <CardDescription>
-              Najkrótsza droga. Dane i status sprawy wczytamy z twojego konta, więc nie musisz
-              niczego przepisywać.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Link
-              to="/mobywatel?returnTo=/wejscie"
-              className={cn(buttonVariants({ variant: 'mobywatel', size: 'lg' }), 'w-full')}
-            >
-              <Smartphone />
-              Zaloguj przez mObywatel
-            </Link>
-          </CardContent>
-        </Card>
+    <div className="grid gap-4 lg:grid-cols-2">
+      <Card className="flex flex-col">
+        <CardHeader>
+          <div className="flex flex-wrap items-center gap-2">
+            <CardTitle>Zaloguj przez mObywatel</CardTitle>
+            <Badge className="bg-primary text-primary-foreground">Zalecane</Badge>
+          </div>
+          <CardDescription>
+            Najkrótsza droga. Dane i status sprawy wczytamy z twojego konta, więc nie musisz
+            niczego przepisywać.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="mt-auto space-y-4">
+          <Link
+            to="/mobywatel?returnTo=/wejscie"
+            className={cn(buttonVariants({ variant: 'mobywatel', size: 'lg' }), 'w-full')}
+          >
+            <Smartphone />
+            Zaloguj przez mObywatel
+          </Link>
+        </CardContent>
+      </Card>
 
-        <Card className="flex flex-col">
-          <CardHeader>
-            <CardTitle>Wpisz dane ręcznie</CardTitle>
-            <CardDescription>
-              Nie masz mObywatela albo wolisz się nie logować? Wystarczy imię, nazwisko i PESEL.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form className="space-y-4" noValidate onSubmit={handleSubmit((values) => manual.mutate(values))}>
+      <Card className="flex flex-col">
+        <CardHeader>
+          <CardTitle>Wpisz dane ręcznie</CardTitle>
+          <CardDescription>
+            Nie masz mObywatela albo wolisz się nie logować? Wystarczy imię, nazwisko i PESEL.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              className="space-y-5"
+              noValidate
+              onSubmit={form.handleSubmit((values) => manual.mutate(values))}
+            >
               <div className="grid gap-4 sm:grid-cols-2">
-                <Field label="Imię" htmlFor="first-name" error={errors.firstName?.message}>
-                  <Input
-                    id="first-name"
-                    autoComplete="given-name"
-                    aria-invalid={Boolean(errors.firstName)}
-                    {...register('firstName')}
-                  />
-                </Field>
-                <Field label="Nazwisko" htmlFor="last-name" error={errors.lastName?.message}>
-                  <Input
-                    id="last-name"
-                    autoComplete="family-name"
-                    aria-invalid={Boolean(errors.lastName)}
-                    {...register('lastName')}
-                  />
-                </Field>
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Imię</FormLabel>
+                      <FormControl>
+                        <Input autoComplete="given-name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nazwisko</FormLabel>
+                      <FormControl>
+                        <Input autoComplete="family-name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
 
-              <Field
-                label="PESEL"
-                htmlFor="pesel"
-                hint="11 cyfr, na przykład 44051401359."
-                error={errors.pesel?.message}
-              >
-                <Input
-                  id="pesel"
-                  inputMode="numeric"
-                  maxLength={11}
-                  autoComplete="off"
-                  aria-invalid={Boolean(errors.pesel)}
-                  {...register('pesel')}
-                />
-              </Field>
+              <FormField
+                control={form.control}
+                name="pesel"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>PESEL</FormLabel>
+                    <FormControl>
+                      <Input inputMode="numeric" maxLength={11} autoComplete="off" {...field} />
+                    </FormControl>
+                    <FormDescription>11 cyfr.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              <Field
-                label="Sytuacja (opcjonalnie)"
-                htmlFor="case-label"
-                hint="Krótko, na przykład: ciąża, jeden poród."
-                error={errors.caseLabel?.message}
-              >
-                <Input id="case-label" {...register('caseLabel')} />
-              </Field>
+              <FormField
+                control={form.control}
+                name="caseLabel"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Sytuacja (opcjonalnie)</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormDescription>Krótko, na przykład: ciąża, jeden poród.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               {failure && (
                 <p role="alert" className="rounded-md bg-destructive/8 p-3 text-sm text-destructive">
@@ -227,9 +230,9 @@ function MethodChooser() {
                 {manual.isPending ? 'Zapisuję…' : 'Wejdź z tymi danymi'}
               </Button>
             </form>
-          </CardContent>
-        </Card>
-      </div>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   )
 }
@@ -238,22 +241,20 @@ export function WejsciePage() {
   const citizen = useAppStore((state) => state.citizen)
 
   return (
-    <Container className="max-w-4xl py-14 sm:py-20">
-      <div className="flex items-start gap-3">
-        <BackLink to="/" label="Wróć na stronę startową" />
-        <div className="min-w-0 flex-1">
-          <h1 className="font-display text-3xl font-semibold text-navy sm:text-4xl">
-            {citizen ? 'Jesteś w środku' : 'Wejdź do Przewodnika'}
-          </h1>
-          <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
-            {citizen
-              ? 'Znamy twoje dane. Sprawdź je i przejdź do kalkulatora, który policzy, co ci przysługuje.'
-              : 'Wybierz, jak chcesz zacząć. mObywatel wypełnia dane za ciebie, a ręczne wpisanie wystarczy, żeby policzyć świadczenia.'}
-          </p>
+    <Container className="max-w-3xl py-14 sm:py-20">
+      <PageHeading
+        title={citizen ? 'Jesteś w środku' : 'Wejdź do Przewodnika'}
+        description={
+          citizen
+            ? 'Znamy twoje dane. Sprawdź je i przejdź do kalkulatora, który policzy, co ci przysługuje.'
+            : 'Wybierz, jak chcesz zacząć. mObywatel wypełnia dane za ciebie, a ręczne wpisanie wystarczy, żeby policzyć świadczenia.'
+        }
+        crumb="Wejście"
+        backTo="/"
+        backLabel="Wróć na stronę startową"
+      />
 
-          <div className="mt-8">{citizen ? <SessionCard /> : <MethodChooser />}</div>
-        </div>
-      </div>
+      <div className="mt-8">{citizen ? <SessionCard /> : <MethodChooser />}</div>
     </Container>
   )
 }

@@ -31,6 +31,7 @@ export default function App() {
           element={
             <PlaceholderPage
               title="Dokumenty i wnioski"
+              crumb="Dokumenty"
               description="Lista dokumentów, terminy i informacja, gdzie je złożyć: u pracodawcy albo w ZUS."
             />
           }
@@ -40,6 +41,7 @@ export default function App() {
           element={
             <PlaceholderPage
               title="Wsparcie w trudnych sytuacjach"
+              crumb="Wsparcie"
               description="Miejsca i organizacje, które pomagają po stracie dziecka, przy wcześniaku i w ciężkiej chorobie."
             />
           }

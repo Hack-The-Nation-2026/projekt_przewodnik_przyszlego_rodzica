@@ -4,9 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { BackLink } from '@/components/layout/back-link'
 import { Container } from '@/components/layout/container'
+import { PageHeading } from '@/components/layout/page-heading'
 
 // Formularz zbiera przewidywaną datę porodu: od niej liczą się terminy urlopów i zasiłków.
 const schema = z.object({
@@ -20,59 +21,56 @@ type FormValues = z.infer<typeof schema>
 
 export function KalkulatorPage() {
   const [submitted, setSubmitted] = useState<FormValues | null>(null)
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormValues>({ resolver: zodResolver(schema) })
+  const form = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: { dueDate: '' },
+  })
 
   return (
-    <Container className="max-w-2xl py-16">
-      <div className="flex items-start gap-3">
-        <BackLink to="/wejscie" label="Wróć do wejścia" />
-        <div className="min-w-0 flex-1">
-          <h1 className="font-display text-3xl font-semibold text-navy">Kalkulator zasiłku</h1>
-          <p className="mt-3 text-muted-foreground">
-            Policz zasiłek chorobowy, macierzyński i rodzicielski. Zacznij od przewidywanej daty
-            porodu.
-          </p>
+    <Container className="max-w-3xl py-16">
+      <PageHeading
+        title="Kalkulator zasiłku"
+        description="Policz zasiłek chorobowy, macierzyński i rodzicielski. Zacznij od przewidywanej daty porodu."
+        crumb="Kalkulator"
+        backTo="/wejscie"
+        backLabel="Wróć do wejścia"
+      />
 
-          <Card className="mt-8">
-            <CardHeader>
-              <CardTitle>Twoja sytuacja</CardTitle>
-              <CardDescription>
-                Data porodu wyznacza początek urlopu macierzyńskiego i okres, za który należy się
-                zasiłek.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form className="space-y-5" onSubmit={handleSubmit((values) => setSubmitted(values))}>
-                <div className="space-y-2">
-                  <label htmlFor="dueDate" className="text-sm font-medium">
-                    Przewidywana data porodu
-                  </label>
-                  <Input
-                    id="dueDate"
-                    type="date"
-                    aria-invalid={Boolean(errors.dueDate)}
-                    {...register('dueDate')}
-                  />
-                  {errors.dueDate && (
-                    <p className="text-sm text-destructive">{errors.dueDate.message}</p>
-                  )}
-                </div>
-                <Button type="submit">Policz</Button>
-              </form>
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle>Twoja sytuacja</CardTitle>
+          <CardDescription>
+            Data porodu wyznacza początek urlopu macierzyńskiego i okres, za który należy się
+            zasiłek.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form className="space-y-5" onSubmit={form.handleSubmit((values) => setSubmitted(values))}>
+              <FormField
+                control={form.control}
+                name="dueDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Przewidywana data porodu</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Policz</Button>
+            </form>
+          </Form>
 
-              {submitted && (
-                <p className="mt-6 rounded-md border border-border bg-muted p-4 text-sm">
-                  Termin porodu: {submitted.dueDate}.
-                </p>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+          {submitted && (
+            <p className="mt-6 rounded-md bg-neutral-100 p-4 text-sm">
+              Termin porodu: {submitted.dueDate}.
+            </p>
+          )}
+        </CardContent>
+      </Card>
     </Container>
   )
 }
