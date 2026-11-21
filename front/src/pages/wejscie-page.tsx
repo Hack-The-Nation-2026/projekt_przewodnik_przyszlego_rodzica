@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { BackLink } from '@/components/layout/back-link'
 import { Container } from '@/components/layout/container'
 import { api } from '@/lib/api'
 import { useAppStore } from '@/store/app-store'
@@ -248,16 +249,21 @@ export function WejsciePage() {
 
   return (
     <Container className="max-w-4xl py-14 sm:py-20">
-      <h1 className="font-display text-3xl font-semibold text-navy sm:text-4xl">
-        {citizen ? 'Jesteś w środku' : 'Wejdź do Przewodnika'}
-      </h1>
-      <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
-        {citizen
-          ? 'Znamy twoje dane. Sprawdź je i przejdź do kalkulatora, który policzy, co ci przysługuje.'
-          : 'Wybierz, jak chcesz zacząć. mObywatel wypełnia dane za ciebie, a ręczne wpisanie wystarczy, żeby policzyć świadczenia.'}
-      </p>
+      <div className="flex items-start gap-3">
+        <BackLink to="/" label="Wróć na stronę startową" />
+        <div className="min-w-0 flex-1">
+          <h1 className="font-display text-3xl font-semibold text-navy sm:text-4xl">
+            {citizen ? 'Jesteś w środku' : 'Wejdź do Przewodnika'}
+          </h1>
+          <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
+            {citizen
+              ? 'Znamy twoje dane. Sprawdź je i przejdź do kalkulatora, który policzy, co ci przysługuje.'
+              : 'Wybierz, jak chcesz zacząć. mObywatel wypełnia dane za ciebie, a ręczne wpisanie wystarczy, żeby policzyć świadczenia.'}
+          </p>
 
-      <div className="mt-8">{citizen ? <SessionCard /> : <MethodChooser />}</div>
+          <div className="mt-8">{citizen ? <SessionCard /> : <MethodChooser />}</div>
+        </div>
+      </div>
     </Container>
   )
 }
