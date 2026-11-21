@@ -7,12 +7,14 @@
   "title": "Zasiłek macierzyński",
   "facts": "Zasiłek macierzyński za okres urlopu macierzyńskiego. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "W sprawie ustalono uprawnienia do zasiłku chorobowego dla kobiety w ciąży oraz zasiłku macierzyńskiego - wypłacono świadczenia",
+  "evidence": "W sprawie ustalono uprawnienia do zasiłku chorobowego dla kobiety w ciąży oraz zasiłku macierzyńskiego - wypłacono świadczenia Rzeczpospolita Polska EEE ED EGAFETEEKETESZE] Qabpis skroconv aktu uroazenia zo i a POAWOWIRO SEDNA | 2 PRADU: nr DAP 1 PZ ; Ż mm ZIREZIEPTY zx CZE GH \"ZE = | CZMEER ERSETE = o ŚL 00 2 PARE ——— - .",
   "benefits": [
    "macierzynski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -39,7 +41,14 @@
    "wczesniak",
    "decyzja_przyznajaca"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "ZAS-12",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie o pobycie dziecka w szpitalu",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -57,13 +66,17 @@
   "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
   "facts": "Zasiłek macierzyński łączenie urlopu rodzicielskiego z pracą. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "W sprawie została dokonana wypłata: - zasitku macierzyńskiego za okres od 22-11-2023 to i Z wykonywanieni pracy na 4 etatu), - od 01-02-2025 wypłata zasiłku macierzyńskiego zósta z wnioskiem ubezpieczonej, - w Sprawie zostało wypłacone podwyższenie zasiłku” ma świadczenia rodzicielskiego za okres od 01-05-2024 do 3",
+  "evidence": "W sprawie została dokonana wypłata: - zasitku macierzyńskiego za okres od 22-11-2023 to i Z wykonywanieni pracy na 4 etatu), - od 01-02-2025 wypłata zasiłku macierzyńskiego zósta z wnioskiem ubezpieczonej, - w Sprawie zostało wypłacone podwyższenie zasiłku” ma świadczenia rodzicielskiego za okres od 01-05-2024 do 3 a 12.12.2023r.",
   "benefits": [
    "macierzynski",
    "rodzicielski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "Z-3",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -79,7 +92,7 @@
   "file_name": "Agnieszka War_02_zas. macierzyński - przyjęcie dziecka na wychowanie.pdf",
   "pages": 16,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński. Przyjęcie dziecka na wychowanie. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek macierzyński. Przyjęcie dziecka na wychowanie. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
@@ -88,7 +101,11 @@
   "tags": [
    "przyjecie_na_wychowanie"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -113,6 +130,7 @@
   ],
   "tags": [],
   "forms": [
+   "ZAM",
    "Z-3",
    "Zaświadczenie płatnika składek"
   ],
@@ -133,13 +151,19 @@
   "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
   "facts": "Zasiłek chorobowy i macierzyński. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "DECYZJA PRZYZNAJĄCA ZASIŁEK CHOROBOWY ZA OKRES CIĄŻY ORAZ DECYZJA PRZYZNAJĄCA ZASIŁEK MACIERZYŃSKI",
+  "evidence": "DECYZJA PRZYZNAJĄCA ZASIŁEK CHOROBOWY ZA OKRES CIĄŻY ORAZ DECYZJA PRZYZNAJĄCA ZASIŁEK MACIERZYŃSKI | ś iż R © LJ Rzeczpospolita Polska Rd Odpis skrócony aktu urodzenia Bl: O REEZNNNNNNEE imie pierwsze Imię drugie Imiona kolejne Nazwisko * Płeć Data urodzenia Miejsce urodzenia kraj urodzeni GII 2 DBĘódźCÓW | o...",
   "benefits": [
    "chorobowy_w_ciazy",
    "macierzynski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "ZAS-12",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -155,8 +179,8 @@
   "file_name": "Alina Wa I_1_zas. mac. martwe urodzenie.pdf",
   "pages": 14,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński martwe urodzenie. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński martwe urodzenie. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski"
@@ -165,6 +189,7 @@
    "martwe_urodzenie"
   ],
   "forms": [
+   "ZAM",
    "Z-3",
    "Zaświadczenie płatnika składek"
   ],
@@ -183,7 +208,7 @@
   "file_name": "Andrzej El_5_zas. macierzyński za część urlopu rodzicielskiego - 9 tygodni.pdf",
   "pages": 14,
   "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek macierzyński za część urlopu rodzicielskiego. 9 tygodni. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek macierzyński za część urlopu rodzicielskiego. 9 tygodni. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
@@ -193,7 +218,12 @@
   "tags": [
    "dziewiec_tygodni"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3b",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "father",
   "applicant": {
    "label": "Ojciec",
@@ -209,14 +239,17 @@
   "file_name": "Andrzej No_1_zas. macierzyński.pdf",
   "pages": 12,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Odpis aktu urodzenia"
+  ],
   "role": "father",
   "applicant": {
    "label": "Ojciec",
@@ -232,14 +265,18 @@
   "file_name": "Anna Ko_4_zas. chorobowy w ciąży.pdf",
   "pages": 38,
   "title": "Zasiłek chorobowy w ciąży",
-  "facts": "Zasiłek chorobowyobowy w ciąży. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek chorobowy w ciąży. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "chorobowy_w_ciazy"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -255,7 +292,7 @@
   "file_name": "Anna Le_zas. chorobowy w ciąży.pdf",
   "pages": 12,
   "title": "Zasiłek chorobowy w ciąży",
-  "facts": "Zasiłek chorobowyobowy w ciąży. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek chorobowy w ciąży. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
@@ -280,7 +317,7 @@
   "file_name": "Anna Lu_2_zas. mac. za okres urlopu macierzyńskiego, uzupełniającego url. mac., rodzicielskiego.pdf",
   "pages": 42,
   "title": "Zasiłek macierzyński, uzupełniający urlop macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek macierzyński za okres urlopu macierzyńskiego, uzupełniającego url. macierzyński, rodzicielskiego. ZUS przyznał świadczenie.",
+  "facts": "Zasiłek macierzyński za okres urlopu macierzyńskiego, uzupełniającego urlop macierzyński, rodzicielskiego. ZUS przyznał świadczenie.",
   "outcome": "granted",
   "evidence": "",
   "benefits": [
@@ -289,7 +326,12 @@
    "rodzicielski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -305,8 +347,8 @@
   "file_name": "Anna No_3_zas. chorobowy i macierzyński.pdf",
   "pages": 52,
   "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
-  "facts": "Zasiłek chorobowyobowy i macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek chorobowy i macierzyński. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "chorobowy_w_ciazy",
@@ -314,7 +356,9 @@
   ],
   "tags": [],
   "forms": [
-   "Odpis aktu urodzenia"
+   "ZAM",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
   "applicant": {
@@ -331,7 +375,7 @@
   "file_name": "Anna Ol_2_zas. mac. - 9 tygodni urlopu rodzicielskiego dla ojca.pdf",
   "pages": 16,
   "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek macierzyński. 9 tygodni urlopu rodzicielskiego dla ojca. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek macierzyński. 9 tygodni urlopu rodzicielskiego dla ojca. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
@@ -341,10 +385,14 @@
   "tags": [
    "dziewiec_tygodni"
   ],
-  "forms": [],
-  "role": "mother",
+  "forms": [
+   "Z-3b",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
+  "role": "father",
   "applicant": {
-   "label": "Matka",
+   "label": "Ojciec",
    "employment": "employee",
    "insured": null,
    "insurance_kind": null
@@ -357,7 +405,7 @@
   "file_name": "Anna Ra_1_zas. mac. za urlop macierzyński rodzicielski.pdf",
   "pages": 20,
   "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek macierzyński za urlop macierzyński rodzicielski. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek macierzyński za urlop macierzyński rodzicielski. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
@@ -365,7 +413,10 @@
    "rodzicielski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Odpis aktu urodzenia"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -383,14 +434,16 @@
   "title": "Zasiłek macierzyński",
   "facts": "Zasiłek macierzyński, martwe urodzenie. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "W sprawie została dokonana wypłata zasiłku macierzyńs od 14-09-2026 do 08-11-2026 s 8 ie p 1 R: it lzy |-ż D f jo oż 1) LE l KA i i x i i [ i Ń t | rę H",
+  "evidence": "W sprawie została dokonana wypłata zasiłku macierzyńs od 14-09-2026 do 08-11-2026 s 8 ie p 1 R: it lzy |-ż D f jo oż 1) LE l KA i i x i i [ i Ń t | rę H Bist GB\" -— adres pracownika i Na a SER | POARARU DOMEK SEA EZ wniosek o udzielenie urlopu mówi | | PISZ 2 ggadńiaci aj 186 A kodeksu pracy zwracam się 2 walosiiśij 6: Udzielenie mi rio ; inacierzyńskiegójw wymiar gd dnia porodu, przystigującą ky:",
   "benefits": [
    "macierzynski"
   ],
   "tags": [
    "martwe_urodzenie"
   ],
-  "forms": [],
+  "forms": [
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -406,14 +459,18 @@
   "file_name": "Anna Wro_6_zas. w wysokości zasiłku macierzyńskiego.pdf",
   "pages": 34,
   "title": "Zasiłek w wysokości zasiłku macierzyńskiego",
-  "facts": "Zasiłek w wysokości zasiłku macierzyńskiego. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek w wysokości zasiłku macierzyńskiego. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "w_wysokosci_macierzynskiego"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -429,7 +486,7 @@
   "file_name": "Anna Łó 5_zas. macierzyński.pdf",
   "pages": 20,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek macierzyński. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
@@ -437,6 +494,9 @@
   ],
   "tags": [],
   "forms": [
+   "ZAM",
+   "Z-3",
+   "Zaświadczenie o pobycie dziecka w szpitalu",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -454,7 +514,7 @@
   "file_name": "Barbara Ra_4_zas. mac._rezygnacja po 14 tyg..pdf",
   "pages": 22,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński, rezygnacja po 14 tyg. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek macierzyński, rezygnacja po 14 tyg. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
@@ -464,7 +524,10 @@
    "rezygnacja_z_urlopu"
   ],
   "forms": [
-   "Odpis aktu urodzenia"
+   "ZAM",
+   "Z-3b",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
   "applicant": {
@@ -481,8 +544,8 @@
   "file_name": "Cecylia By_zas. macierzyński za okres urlopu macierzyńskiego i rodzicielskiego w trakcie zatrudnienia.pdf",
   "pages": 30,
   "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek macierzyński za okres urlopu macierzyńskiego i rodzicielskiego w trakcie zatrudnienia. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński za okres urlopu macierzyńskiego i rodzicielskiego w trakcie zatrudnienia. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski",
@@ -490,7 +553,9 @@
   ],
   "tags": [],
   "forms": [
+   "ZAM",
    "Z-3",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -519,6 +584,7 @@
    "decyzja_odmowna"
   ],
   "forms": [
+   "ZAM",
    "Z-3",
    "Zaświadczenie płatnika składek"
   ],
@@ -545,7 +611,10 @@
    "ojcowski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "father",
   "applicant": {
    "label": "Ojciec",
@@ -569,7 +638,10 @@
    "ojcowski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "father",
   "applicant": {
    "label": "Ojciec",
@@ -585,15 +657,20 @@
   "file_name": "Dariusz Łód_4_zas. macierzyński za rodzicielski dla ojca_matka nieubezpieczona.pdf",
   "pages": 16,
   "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek macierzyński za rodzicielski dla ojca, matka nieubezpieczona. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński za rodzicielski dla ojca, matka nieubezpieczona. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski",
    "rodzicielski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "father",
   "applicant": {
    "label": "Ojciec",
@@ -609,14 +686,15 @@
   "file_name": "Dorota Wa I_3_zasiłek w wysokości zasiłku macierzyńskiego.pdf",
   "pages": 22,
   "title": "Zasiłek w wysokości zasiłku macierzyńskiego",
-  "facts": "Zasiłek w wysokości zasiłku macierzyńskiego. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek w wysokości zasiłku macierzyńskiego. ZUS odmówił prawa do świadczenia.",
+  "outcome": "denied",
   "evidence": "",
   "benefits": [
    "w_wysokosci_macierzynskiego"
   ],
   "tags": [],
   "forms": [
+   "Z-3",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -634,7 +712,7 @@
   "file_name": "Ewa Ko_1_zas. mac..pdf",
   "pages": 30,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek macierzyński. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
@@ -643,6 +721,8 @@
   "tags": [],
   "forms": [
    "Z-3",
+   "Z-3b",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -660,15 +740,17 @@
   "file_name": "Ewa No_2_zas. macierzyński.pdf",
   "pages": 16,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski"
   ],
   "tags": [],
   "forms": [
+   "ZAM",
    "Z-3",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -686,8 +768,8 @@
   "file_name": "Ewa Wro_5_zas. macierzyński_martwe urodzenie.pdf",
   "pages": 16,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński, martwe urodzenie. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński, martwe urodzenie. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski"
@@ -696,6 +778,7 @@
    "martwe_urodzenie"
   ],
   "forms": [
+   "ZAM",
    "Z-3",
    "Zaświadczenie płatnika składek"
   ],
@@ -714,7 +797,7 @@
   "file_name": "Ewa Łó 6_zas. macierzyński.pdf",
   "pages": 20,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek macierzyński. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
@@ -722,7 +805,9 @@
   ],
   "tags": [],
   "forms": [
-   "ZAM"
+   "ZAM",
+   "Z-3b",
+   "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
   "applicant": {
@@ -750,7 +835,11 @@
    "brak_ubezpieczenia",
    "decyzja_odmowna"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Odpis aktu urodzenia"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -776,7 +865,9 @@
    "brak_ubezpieczenia",
    "decyzja_odmowna"
   ],
-  "forms": [],
+  "forms": [
+   "Odpis aktu urodzenia"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -802,7 +893,12 @@
   "tags": [
    "urlop_ojcowski"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "father",
   "applicant": {
    "label": "Ojciec",
@@ -818,8 +914,8 @@
   "file_name": "Jan Zie_5_zas. macierzyński_urlop ojcowski.pdf",
   "pages": 16,
   "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
-  "facts": "Zasiłek macierzyński, urlop ojcowski. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński, urlop ojcowski. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski",
@@ -828,7 +924,12 @@
   "tags": [
    "urlop_ojcowski"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "father",
   "applicant": {
    "label": "Ojciec",
@@ -844,14 +945,16 @@
   "file_name": "Jan Łó 2_zasiłek macierzyński u. rodz..pdf",
   "pages": 12,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński u. rodzicielski. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek macierzyński urlop rodzicielski. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
    "macierzynski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "Odpis aktu urodzenia"
+  ],
   "role": "father",
   "applicant": {
    "label": "Ojciec",
@@ -877,6 +980,8 @@
    "podwyzszenie_swiadczenia"
   ],
   "forms": [
+   "Z-3b",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -894,14 +999,19 @@
   "file_name": "Joanna El_1_zas. macierzyński.pdf",
   "pages": 20,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek macierzyński. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
    "macierzynski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3b",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -917,7 +1027,7 @@
   "file_name": "Joanna Rze_2_zas. chorobowy i macierzyński.pdf",
   "pages": 26,
   "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
-  "facts": "Zasiłek chorobowyobowy i macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek chorobowy i macierzyński. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
@@ -926,6 +1036,9 @@
   ],
   "tags": [],
   "forms": [
+   "ZAM",
+   "Z-3b",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -955,7 +1068,10 @@
    "decyzja_odmowna"
   ],
   "forms": [
+   "ZAM",
    "Z-3",
+   "Z-3b",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -973,7 +1089,7 @@
   "file_name": "Joanna Łód_3_Zasiłek w wysokości zas. mac. i macierzyński z powodu likwidacji - przyznanie prawa.pdf",
   "pages": 20,
   "title": "Zasiłek w wysokości zasiłku macierzyńskiego, zasiłek macierzyński",
-  "facts": "Zasiłek w wysokości zasiłek macierzyński i macierzyński z powodu likwidacji. Przyznanie prawa. ZUS przyznał świadczenie.",
+  "facts": "Zasiłek w wysokości zasiłku macierzyńskiego i macierzyński z powodu likwidacji. Przyznanie prawa. ZUS przyznał świadczenie.",
   "outcome": "granted",
   "evidence": "",
   "benefits": [
@@ -983,7 +1099,13 @@
   "tags": [
    "likwidacja_pracodawcy"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "ZAS-12",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -999,9 +1121,9 @@
   "file_name": "Jolanta Go_5_zas. mac.-przyjęcia dziecka w wychowaniu_rodzina zastępcza.pdf",
   "pages": 18,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek mac.-przyjęcia dziecka w wychowaniu, rodzina zastępcza. ZUS przyznał świadczenie.",
+  "facts": "Zasiłek macierzyński-przyjęcia dziecka w wychowaniu, rodzina zastępcza. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "W sprawie ustalono uprawnienia do zasiłku macierzyńskiego -wypłacono świadczenie",
+  "evidence": "W sprawie ustalono uprawnienia do zasiłku macierzyńskiego -wypłacono świadczenie ZAKŁAD ULEZFIECZEŃ = | SPOŁECZNI LH z 3b „> ZAŚWIADCZENIE PŁATNIKA SKŁADEK Instrukcja wypełniania wypełnij to zaświadczenie i przekaż je do nas, jeżeli: — prowadzisz pozarolniczą działalność, — współpracujesz z osobą prowadzącą pozarolniczą działalność, — współpracujesz z osobą fizyczną, o której mowa w art.",
   "benefits": [
    "macierzynski"
   ],
@@ -1009,7 +1131,11 @@
    "przyjecie_na_wychowanie",
    "rodzina_zastepcza"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3b",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -1025,8 +1151,8 @@
   "file_name": "Jolanta Ko_2_zas. mac. martwe urodzenie.pdf",
   "pages": 10,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński martwe urodzenie. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński martwe urodzenie. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski"
@@ -1034,7 +1160,10 @@
   "tags": [
    "martwe_urodzenie"
   ],
-  "forms": [],
+  "forms": [
+   "Z-3",
+   "ZAS-12"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -1050,8 +1179,8 @@
   "file_name": "Jolanta Pi_2_zas. chorobowy i mac._urlop mac., urlop rodzicielski_zaświadczenie za życiem.pdf",
   "pages": 74,
   "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek chorobowyobowy i macierzyński, urlop macierzyński, urlop rodzicielski, zaświadczenie za życiem. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek chorobowy i macierzyński, urlop macierzyński, urlop rodzicielski, zaświadczenie za życiem. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "chorobowy_w_ciazy",
@@ -1062,7 +1191,12 @@
    "zaswiadczenie_za_zyciem"
   ],
   "forms": [
-   "Z-3"
+   "ZAM",
+   "Z-3",
+   "ZAS-12",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie o pobycie dziecka w szpitalu",
+   "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
   "applicant": {
@@ -1079,7 +1213,7 @@
   "file_name": "Jolanta Poz_9_ zas. mac. - url. mac. i rodz., 3 dzieci, 1 martwourodzone, 1 za życiem, łącznie urlop rodz. z pracą - decyzja przyznająca.pdf",
   "pages": 40,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński. Url. macierzyński i rodzicielski, 3 dzieci, 1 martwourodzone, 1 za życiem, łącznie urlop rodzicielski z pracą. Decyzja przyznająca. ZUS przyznał świadczenie.",
+  "facts": "Zasiłek macierzyński. Urlop macierzyński i rodzicielski, 3 dzieci, 1 martwourodzone, 1 za życiem, łącznie urlop rodzicielski z pracą. Decyzja przyznająca. ZUS przyznał świadczenie.",
   "outcome": "granted",
   "evidence": "",
   "benefits": [
@@ -1091,7 +1225,12 @@
    "laczenie_z_praca",
    "decyzja_przyznajaca"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -1107,7 +1246,7 @@
   "file_name": "Julia Gd._01_zas. macierzyński_przyjęcie dziecka na wychowanie_przysposobienie.pdf",
   "pages": 16,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński, przyjęcie dziecka na wychowanie, przysposobienie. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek macierzyński, przyjęcie dziecka na wychowanie, przysposobienie. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
@@ -1117,7 +1256,10 @@
    "przyjecie_na_wychowanie",
    "przysposobienie"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Odpis aktu urodzenia"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -1133,14 +1275,17 @@
   "file_name": "Julia No_4_zas. macierzyński.pdf",
   "pages": 10,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński. ZUS odmówił prawa do świadczenia.",
+  "outcome": "denied",
   "evidence": "",
   "benefits": [
    "macierzynski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Odpis aktu urodzenia"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -1156,7 +1301,7 @@
   "file_name": "Justyna Gd_3_zas. chorobowy w ciąży oraz zas. mac._bliźnięta.pdf",
   "pages": 62,
   "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
-  "facts": "Zasiłek chorobowyobowy w ciąży oraz zasiłek macierzyński, bliźnięta. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek chorobowy w ciąży oraz zasiłek macierzyński, bliźnięta. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
@@ -1167,6 +1312,8 @@
    "bliznieta"
   ],
   "forms": [
+   "ZAM",
+   "Z-3b",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -1184,8 +1331,8 @@
   "file_name": "Justyna Toruńska_5_zas. macierzyński, bliźnięta, wcześniaki, zaśw. za życiem.pdf",
   "pages": 46,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński, bliźnięta, wcześniaki, zaśw. za życiem. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński, bliźnięta, wcześniaki, zaśw. za życiem. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski"
@@ -1195,7 +1342,12 @@
    "bliznieta",
    "zaswiadczenie_za_zyciem"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie o pobycie dziecka w szpitalu",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -1211,7 +1363,7 @@
   "file_name": "Justyna Wa I_4_zas. chorobowy w ciąży, osoba współpracująca, odmowa, zadłużenie z tytułu składek.pdf",
   "pages": 16,
   "title": "Zasiłek chorobowy w ciąży",
-  "facts": "Zasiłek chorobowyobowy w ciąży, osoba współpracująca, odmowa, zadłużenie z tytułu składek. ZUS odmówił prawa do świadczenia.",
+  "facts": "Zasiłek chorobowy w ciąży, osoba współpracująca, odmowa, zadłużenie z tytułu składek. ZUS odmówił prawa do świadczenia.",
   "outcome": "denied",
   "evidence": "",
   "benefits": [
@@ -1241,15 +1393,20 @@
   "file_name": "Józef Lu_3_zas. mac. za okres urlopu ojcowskiego.pdf",
   "pages": 16,
   "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
-  "facts": "Zasiłek macierzyński za okres urlopu ojcowskiego. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński za okres urlopu ojcowskiego. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski",
    "ojcowski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "father",
   "applicant": {
    "label": "Ojciec",
@@ -1267,14 +1424,18 @@
   "title": "Zasiłek macierzyński",
   "facts": "Zasiłek macierzyński za 9 tygodni urlopu macierzyńskiego dla ojca. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "W sprawie ustalono uprawnienia do zasiłku macierzyńskiego -wypłacono świadczenie",
+  "evidence": "W sprawie ustalono uprawnienia do zasiłku macierzyńskiego -wypłacono świadczenie p = | ZAKŁAD | UBEZPIECZEŃ Ż-3b = SPOŁECZNYCH L | Zaświadczenie płatnika składek Piecz”t: młetin=\"ulLK IE.",
   "benefits": [
    "macierzynski"
   ],
   "tags": [
    "dziewiec_tygodni"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3b",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "father",
   "applicant": {
    "label": "Ojciec",
@@ -1290,8 +1451,8 @@
   "file_name": "Karolina Ra_2_zas. macierzyński za urlop macierzyński, uzupełniający urlop macierzyński, rodzicielski.pdf",
   "pages": 38,
   "title": "Zasiłek macierzyński, uzupełniający urlop macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek macierzyński za urlop macierzyński, uzupełniający urlop macierzyński, rodzicielski. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński za urlop macierzyński, uzupełniający urlop macierzyński, rodzicielski. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski",
@@ -1300,7 +1461,9 @@
   ],
   "tags": [],
   "forms": [
+   "ZAM",
    "Z-3b",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -1327,7 +1490,10 @@
   "tags": [
    "decyzja_odmowna"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Odpis aktu urodzenia"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -1343,14 +1509,19 @@
   "file_name": "Katarzyna Łó 4_zasiłek w wysokości zasiłku macierzyńskiego.pdf",
   "pages": 14,
   "title": "Zasiłek w wysokości zasiłku macierzyńskiego",
-  "facts": "Zasiłek w wysokości zasiłku macierzyńskiego. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek w wysokości zasiłku macierzyńskiego. ZUS odmówił prawa do świadczenia.",
+  "outcome": "denied",
   "evidence": "",
   "benefits": [
    "w_wysokosci_macierzynskiego"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "ZAS-12",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -1366,7 +1537,7 @@
   "file_name": "Kinga Wro_4_zas. macierzyński, za część.pdf",
   "pages": 22,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński, za część. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek macierzyński, za część. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
@@ -1374,7 +1545,9 @@
   ],
   "tags": [],
   "forms": [
+   "ZAM",
    "Z-3b",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -1392,8 +1565,8 @@
   "file_name": "Konrad Wa I_2_zas. mac. za okres urlopu ojcowskiego.pdf",
   "pages": 16,
   "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
-  "facts": "Zasiłek macierzyński za okres urlopu ojcowskiego. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński za okres urlopu ojcowskiego. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski",
@@ -1401,7 +1574,9 @@
   ],
   "tags": [],
   "forms": [
+   "ZAM",
    "Z-3",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "father",
@@ -1419,8 +1594,8 @@
   "file_name": "Krystyna Poz_1_zas. mac. - martwe urodzenie.pdf",
   "pages": 24,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński. Martwe urodzenie. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński. Martwe urodzenie. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski"
@@ -1429,6 +1604,7 @@
    "martwe_urodzenie"
   ],
   "forms": [
+   "ZAM",
    "Z-3",
    "Zaświadczenie płatnika składek"
   ],
@@ -1457,7 +1633,12 @@
    "umowa_pozorna",
    "decyzja_odmowna"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -1481,7 +1662,12 @@
    "rodzicielski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -1497,8 +1683,8 @@
   "file_name": "Marek Wro_3_zas. macierzyński za część urlopu rodzicielskiego - 9 tyg.pdf",
   "pages": 20,
   "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek macierzyński za część urlopu rodzicielskiego. 9 tyg. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński za część urlopu rodzicielskiego. 9 tyg. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski",
@@ -1508,7 +1694,9 @@
    "dziewiec_tygodni"
   ],
   "forms": [
+   "ZAM",
    "Z-3",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "father",
@@ -1537,7 +1725,11 @@
    "umowa_zlecenie",
    "decyzja_odmowna"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "ZAS-12",
+   "Odpis aktu urodzenia"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -1553,8 +1745,8 @@
   "file_name": "Natalia Chrz_4_za. mac. za okres urlopu macierzyńskiego, uzupełniającego, rodzicielskiego.pdf",
   "pages": 22,
   "title": "Zasiłek macierzyński, uzupełniający urlop macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Za. macierzyński za okres urlopu macierzyńskiego, uzupełniającego, rodzicielskiego. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Za. macierzyński za okres urlopu macierzyńskiego, uzupełniającego, rodzicielskiego. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski",
@@ -1563,7 +1755,9 @@
   ],
   "tags": [],
   "forms": [
+   "ZAM",
    "Z-3b",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -1581,8 +1775,8 @@
   "file_name": "Natalia Ko_5_zas. mac. w tym przed przewidywaną datą porodu.pdf",
   "pages": 22,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński w tym przed przewidywaną datą porodu. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński w tym przed przewidywaną datą porodu. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski"
@@ -1591,7 +1785,9 @@
    "przed_terminem"
   ],
   "forms": [
+   "ZAM",
    "Z-3",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -1609,15 +1805,20 @@
   "file_name": "Natalia Kr_2_zas. mac. za okres urlopu rodzicielskiego.pdf",
   "pages": 30,
   "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek macierzyński za okres urlopu rodzicielskiego. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński za okres urlopu rodzicielskiego. ZUS odmówił prawa do świadczenia.",
+  "outcome": "denied",
   "evidence": "",
   "benefits": [
    "macierzynski",
    "rodzicielski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3b",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -1633,14 +1834,19 @@
   "file_name": "Natalia Zi_2_zas. macierzyński.pdf",
   "pages": 20,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -1656,14 +1862,17 @@
   "file_name": "Natalia Łó 3_zas. macierzyński.pdf",
   "pages": 28,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -1679,7 +1888,7 @@
   "file_name": "Paulina Po_7_zas. chorobowy i mac. matka za okres url. mac. rodz. - nie podlega ubezpieczeniom - decyzja odmowna.pdf",
   "pages": 46,
   "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
-  "facts": "Zasiłek chorobowyobowy i macierzyński matka za okres url. macierzyński rodzicielski. Nie podlega ubezpieczeniom. Decyzja odmowna. ZUS odmówił prawa do świadczenia.",
+  "facts": "Zasiłek chorobowy i macierzyński matka za okres urlop macierzyński rodzicielski. Nie podlega ubezpieczeniom. Decyzja odmowna. ZUS odmówił prawa do świadczenia.",
   "outcome": "denied",
   "evidence": "",
   "benefits": [
@@ -1691,7 +1900,10 @@
    "decyzja_odmowna"
   ],
   "forms": [
+   "ZAM",
    "Z-3",
+   "ZAS-12",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -1709,7 +1921,7 @@
   "file_name": "Paulina Rze_5_zas. macierzyński, uzupełniający, rodzicielski.pdf",
   "pages": 30,
   "title": "Zasiłek macierzyński, uzupełniający urlop macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek macierzyński, uzupełniający, rodzicielski. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek macierzyński, uzupełniający, rodzicielski. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
@@ -1718,7 +1930,11 @@
    "rodzicielski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Odpis aktu urodzenia"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -1744,7 +1960,9 @@
   "tags": [
    "decyzja_odmowna"
   ],
-  "forms": [],
+  "forms": [
+   "Z-3b"
+  ],
   "role": "father",
   "applicant": {
    "label": "Ojciec",
@@ -1760,8 +1978,8 @@
   "file_name": "Piotr Rze_1_zas. macierzyński - urlop ojcowski.pdf",
   "pages": 12,
   "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
-  "facts": "Zasiłek macierzyński. Urlop ojcowski. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński. Urlop ojcowski. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski",
@@ -1770,7 +1988,11 @@
   "tags": [
    "urlop_ojcowski"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "father",
   "applicant": {
    "label": "Ojciec",
@@ -1788,7 +2010,7 @@
   "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
   "facts": "Zasiłek macierzyński, urlop ojcowski. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "DECYZJA PRZYZNAJĄCA ZASIŁEK MACIERZYŃSKI ZA OKRES URLOPU OJCOWSKIEGO",
+  "evidence": "DECYZJA PRZYZNAJĄCA ZASIŁEK MACIERZYŃSKI ZA OKRES URLOPU OJCOWSKIEGO NL cz ZZ Z Zz ti I | PALI i | | j f EJ) M: R ł Bi IB agar 8.",
   "benefits": [
    "macierzynski",
    "ojcowski"
@@ -1796,7 +2018,12 @@
   "tags": [
    "urlop_ojcowski"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "father",
   "applicant": {
    "label": "Ojciec",
@@ -1812,8 +2039,8 @@
   "file_name": "Pola Rze_4_zas. chorobowy w ciąży i zas. macierzyński.pdf",
   "pages": 28,
   "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
-  "facts": "Zasiłek chorobowyobowy w ciąży i zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek chorobowy w ciąży i zasiłek macierzyński. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "chorobowy_w_ciazy",
@@ -1821,7 +2048,9 @@
   ],
   "tags": [],
   "forms": [
+   "ZAM",
    "Z-3",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -1839,8 +2068,8 @@
   "file_name": "Ryszard Ra_5_zas. macierzyński za okres urlopu rodzicielskiego-9 tyg..pdf",
   "pages": 18,
   "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek macierzyński za okres urlopu rodzicielskiego-9 tyg. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński za okres urlopu rodzicielskiego-9 tyg. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski",
@@ -1849,7 +2078,10 @@
   "tags": [
    "dziewiec_tygodni"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Odpis aktu urodzenia"
+  ],
   "role": "father",
   "applicant": {
    "label": "Ojciec",
@@ -1865,15 +2097,19 @@
   "file_name": "Sylwia Ol_4_zas. mac. za okres urlopu mac. i rodzicielskiego.pdf",
   "pages": 16,
   "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek macierzyński za okres urlopu macierzyński i rodzicielskiego. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński za okres urlopu macierzyński i rodzicielskiego. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski",
    "rodzicielski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -1889,8 +2125,8 @@
   "file_name": "Teresa No_5_zas. chorobowy i macierzyński.pdf",
   "pages": 56,
   "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
-  "facts": "Zasiłek chorobowyobowy i macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek chorobowy i macierzyński. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "chorobowy_w_ciazy",
@@ -1898,7 +2134,11 @@
   ],
   "tags": [],
   "forms": [
-   "Odpis aktu urodzenia"
+   "ZAM",
+   "Z-3",
+   "ZAS-12",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
   "applicant": {
@@ -1915,9 +2155,9 @@
   "file_name": "Teresa Ta_zas. chorobowy i macierzyński_umowa zlecenie.pdf",
   "pages": 44,
   "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
-  "facts": "Zasiłek chorobowyobowy i macierzyński, umowa zlecenie. ZUS przyznał świadczenie.",
+  "facts": "Zasiłek chorobowy i macierzyński, umowa zlecenie. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "DECYZJA PRZYZNAJĄCA ZASIŁEK CHOROBOWY ZA OKRES CIĄŻY ORAZ DEZYCJA PRZYZNAJĄCA ZASIŁEK MACIERZYŃSKI",
+  "evidence": "DECYZJA PRZYZNAJĄCA ZASIŁEK CHOROBOWY ZA OKRES CIĄŻY ORAZ DEZYCJA PRZYZNAJĄCA ZASIŁEK MACIERZYŃSKI  \"SESS k | Hi | IE LB, NTT TT \"A | pl gi BAB [MI |OONEM BLUIB EJ = BN E (i NME KONNE ssa fg  oe Rzeczpospolita Polska LL.",
   "benefits": [
    "chorobowy_w_ciazy",
    "macierzynski"
@@ -1925,7 +2165,11 @@
   "tags": [
    "umowa_zlecenie"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -1966,7 +2210,7 @@
   "file_name": "Wojciech Lu_4_zas. mac. za okres urlopu rodzicielskiego.pdf",
   "pages": 14,
   "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek macierzyński za okres urlopu rodzicielskiego. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek macierzyński za okres urlopu rodzicielskiego. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
@@ -1974,7 +2218,11 @@
    "rodzicielski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3b",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "father",
   "applicant": {
    "label": "Ojciec",
@@ -1990,8 +2238,8 @@
   "file_name": "Zofia By_1_Zas. macierzyński za ookres urlopu macierzyńskiego i rodzicielskiego w trakcie zatrudnienia.pdf",
   "pages": 30,
   "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zas. macierzyński za ookres urlopu macierzyńskiego i rodzicielskiego w trakcie zatrudnienia. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński za ookres urlopu macierzyńskiego i rodzicielskiego w trakcie zatrudnienia. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski",
@@ -1999,6 +2247,9 @@
   ],
   "tags": [],
   "forms": [
+   "ZAM",
+   "Z-3",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -2016,14 +2267,16 @@
   "file_name": "Zofia Le_zas. mac. za okres u. mac. i rodz..pdf",
   "pages": 16,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński za okres u. macierzyński i rodzicielski. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński za okres urlop macierzyński i rodzicielski. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski"
   ],
   "tags": [],
   "forms": [
+   "Z-3",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -2041,8 +2294,8 @@
   "file_name": "Zofia Lu_1_zas. mac. za okres urlopu macierzyńskiego i rodzicielskiego.pdf",
   "pages": 18,
   "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek macierzyński za okres urlopu macierzyńskiego i rodzicielskiego. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński za okres urlopu macierzyńskiego i rodzicielskiego. ZUS odmówił prawa do świadczenia.",
+  "outcome": "denied",
   "evidence": "",
   "benefits": [
    "macierzynski",
@@ -2050,6 +2303,8 @@
   ],
   "tags": [],
   "forms": [
+   "Z-3b",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -2067,8 +2322,8 @@
   "file_name": "Zofia Zi_4_zas. macierzyński po ustaniu ubezp._zatrudnienie do dnia porodu.pdf",
   "pages": 20,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński po ustaniu ubezpieczenie, zatrudnienie do dnia porodu. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński po ustaniu ubezpieczenie, zatrudnienie do dnia porodu. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski"
@@ -2078,7 +2333,10 @@
    "zatrudnienie_do_dnia_porodu"
   ],
   "forms": [
-   "Odpis aktu urodzenia"
+   "ZAM",
+   "Z-3",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
   "applicant": {
@@ -2095,8 +2353,8 @@
   "file_name": "Zuzanna Cho._zas. mac. za okres urlopu macierzyńskiego i rodzicielskiego, umowa zlecenie.pdf",
   "pages": 14,
   "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek macierzyński za okres urlopu macierzyńskiego i rodzicielskiego, umowa zlecenie. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek macierzyński za okres urlopu macierzyńskiego i rodzicielskiego, umowa zlecenie. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski",
@@ -2105,7 +2363,10 @@
   "tags": [
    "umowa_zlecenie"
   ],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "ZAS-12"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -2121,16 +2382,21 @@
   "file_name": "Zuzanna Go_4_zas. chorobowy w ciąży, zas. mac. za okres urlopu mac. i rodzicielskiego.pdf",
   "pages": 30,
   "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek chorobowyobowy w ciąży, zasiłek macierzyński za okres urlopu macierzyński i rodzicielskiego. ZUS przyznał świadczenie.",
+  "facts": "Zasiłek chorobowy w ciąży, zasiłek macierzyński za okres urlopu macierzyński i rodzicielskiego. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "W sprawie ustalono uprawnienia do zasiłku chorobowego dla kobiety w ciąży oraz zasiłku macierzyńskiego - wypłacono świadczenia",
+  "evidence": "W sprawie ustalono uprawnienia do zasiłku chorobowego dla kobiety w ciąży oraz zasiłku macierzyńskiego - wypłacono świadczenia ZAKŁAD 8 s s 5 ZUS |tee 0000 cza po, SPOŁECZNYCH ; 3 RA a M SN j ——=—,) JĄ, DL OOO O ND Zaświadczenie płatnika składek [I wniosek pierwszorazowy wniosek o kontynuację świadczenia Instrukcja wypełniania NA.",
   "benefits": [
    "chorobowy_w_ciazy",
    "macierzynski",
    "rodzicielski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -2146,15 +2412,17 @@
   "file_name": "Zuzanna Ko_3_zac. mac..pdf",
   "pages": 38,
   "title": "Zasiłek macierzyński",
-  "facts": "Zac. macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zac. macierzyński. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "macierzynski"
   ],
   "tags": [],
   "forms": [
+   "ZAM",
    "Z-3",
+   "Odpis aktu urodzenia",
    "Zaświadczenie płatnika składek"
   ],
   "role": "mother",
@@ -2172,14 +2440,17 @@
   "file_name": "Zuzanna Le_zas. chorobowy w ciąży.pdf",
   "pages": 14,
   "title": "Zasiłek chorobowy w ciąży",
-  "facts": "Zasiłek chorobowyobowy w ciąży. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
+  "facts": "Zasiłek chorobowy w ciąży. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "chorobowy_w_ciazy"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -2195,16 +2466,22 @@
   "file_name": "Zuzanna Wa_03_zas. mac. za urlop macierzyński, uzupełniający, rodzicielski.pdf",
   "pages": 16,
   "title": "Zasiłek macierzyński, uzupełniający urlop macierzyński, zasiłek za urlop rodzicielski",
-  "facts": "Zasiłek macierzyński za urlop macierzyński, uzupełniający, rodzicielski. Wyniku nie da się odczytać z okładki zestawu.",
-  "outcome": "unknown",
-  "evidence": "W sprawie została dokonana wypłata: - zasiłku macierzyńskiego za okres od 02-05-2026 do 18-0 - zasiłku uzupełniającego za okres od 19-09-2026 do 25- - zasiłku rodzicielskiego za okres od 26-09-2026 do 07: 1 4 EJ + H ż i i ę t H",
+  "facts": "Zasiłek macierzyński za urlop macierzyński, uzupełniający, rodzicielski. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "W sprawie została dokonana wypłata: - zasiłku macierzyńskiego za okres od 02-05-2026 do 18-0 - zasiłku uzupełniającego za okres od 19-09-2026 do 25- - zasiłku rodzicielskiego za okres od 26-09-2026 do 07: 1 4 EJ + H ż i i ę t H e Rzeczpospolita Polska L RK | | Odpis skrócony aktu urodzenia JA i.",
   "benefits": [
    "macierzynski",
    "uzupelniajacy",
    "rodzicielski"
   ],
   "tags": [],
-  "forms": [],
+  "forms": [
+   "ZAM",
+   "Z-3",
+   "Odpis aktu urodzenia",
+   "Zaświadczenie o pobycie dziecka w szpitalu",
+   "Zaświadczenie płatnika składek"
+  ],
   "role": "mother",
   "applicant": {
    "label": "Matka",
@@ -2220,7 +2497,7 @@
   "file_name": "Zuzanna Wro_2_zas. macierzyński.pdf",
   "pages": 20,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński. Wyniku nie da się odczytać z okładki zestawu.",
+  "facts": "Zasiłek macierzyński. Wynik sprawy nie jest zapisany w zestawie.",
   "outcome": "unknown",
   "evidence": "",
   "benefits": [
@@ -2228,7 +2505,10 @@
   ],
   "tags": [],
   "forms": [
-   "Z-3b"
+   "ZAM",
+   "Z-3",
+   "Z-3b",
+   "Odpis aktu urodzenia"
   ],
   "role": "mother",
   "applicant": {

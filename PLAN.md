@@ -392,12 +392,18 @@ Brief, pkt 4 oraz pkt 6.
   Gdy kalkulator zwróci kilka części jednego świadczenia, porównanie sumuje je do wiersza
   decyzji. Pozycja policzona, ale nieobecna w decyzji, trafia do `unexpected` i psuje zgodność,
   zamiast zniknąć.
+- `back/tests/test_zus_samples.py` sprawdza, że lista ma 87 spraw, każdy odcisk jest poprawny,
+  rozpoznanie trafia we właściwą sprawę, obcy plik dostaje komunikat, a powtórka zestawu jest
+  oznaczona jako `duplicate_of`.
 
 ### Stan testu na sprawach
 
 - Dziesięć spraw z zestawu: 10/10 zgodnych, kwoty i statusy co do grosza.
-- 209 testów backendu przechodzi, 32 są pominięte (18 reguł poza silnikiem, 14 porównań z
+- 362 testy backendu przechodzą, 32 są pominięte (18 reguł poza silnikiem, 14 porównań z
   lokalnym zestawem ZUS).
+- Rozpoznanie zestawu przykładowego: 87/87 spraw, 69 ma wynik odczytany z materiału (53
+  przyznane, 16 odmów), 18 nie ma zapisanego wyniku na żadnej czytelnej stronie. Wzory formularzy
+  rozpoznane w 86 zestawach.
 - Pełny przebieg na `PRZYKLADY/` jest częściowy. 87 PDF-ów to zdjęcia formularzy i decyzji: brak
   warstwy tekstowej, pismo odręczne, dane zaczernione. `pdftotext` nic nie daje, a OCR czyta
   nagłówki i okładkę zestawu, nie kwoty. Dlatego rozpoznajemy komplet 87 spraw, ale kwot

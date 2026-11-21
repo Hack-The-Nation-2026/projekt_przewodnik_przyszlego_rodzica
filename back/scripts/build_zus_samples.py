@@ -77,18 +77,28 @@ TAGS = [
 ]
 
 ABBREVIATIONS = [
-    (r"\bzas\.\s*mac\.?(?=\s|,|$)", "zasiłek macierzyński"),
-    (r"\bzas\.\s*chor\.?", "zasiłek chorobowy"),
-    (r"\bzas\.", "zasiłek"),
-    (r"\bmac\.(?=\s|,|$)", "macierzyński"),
-    (r"\bur\.\s*mac\.", "urlop macierzyński"),
-    (r"\bur\.\s*rodz\.", "urlop rodzicielski"),
-    (r"\burl\.\s*mac\.", "urlop macierzyński"),
-    (r"\burl\.\s*rodz\.", "urlop rodzicielski"),
-    (r"\brodz\.(?=\s|,|$)", "rodzicielski"),
-    (r"\buzup\.", "uzupełniający"),
-    (r"\bubezp\.", "ubezpieczenie"),
-    (r"\błęczenie\b", "łączenie"),
+    ("w wysokości zas. mac.", "w wysokości zasiłku macierzyńskiego"),
+    ("w wysokości zas.mac.", "w wysokości zasiłku macierzyńskiego"),
+    ("zas.mac.", "zasiłek macierzyński"),
+    ("zas. mac.", "zasiłek macierzyński"),
+    ("zas.chorobowy", "zasiłek chorobowy"),
+    ("zas. chorobowy", "zasiłek chorobowy"),
+    ("zas.chor.", "zasiłek chorobowy"),
+    ("zas. chor.", "zasiłek chorobowy"),
+    ("zas.", "zasiłek"),
+    ("url.mac.", "urlop macierzyński"),
+    ("url. mac.", "urlop macierzyński"),
+    ("ur. mac.", "urlop macierzyński"),
+    ("url.rodz.", "urlop rodzicielski"),
+    ("url. rodz.", "urlop rodzicielski"),
+    ("ur. rodz.", "urlop rodzicielski"),
+    ("u. mac.", "urlop macierzyński"),
+    ("u. rodz.", "urlop rodzicielski"),
+    ("uzup.", "uzupełniający"),
+    ("mac.", "macierzyński"),
+    ("rodz.", "rodzicielski"),
+    ("ubezp.", "ubezpieczenie"),
+    ("łęczenie", "łączenie"),
 ]
 
 FORM_PATTERNS = [
@@ -169,7 +179,13 @@ def strip_prefix(stem: str) -> str:
 
 
 def person(stem: str) -> tuple[str, str]:
+    """Imię decyduje o płci sprawy, ale opis może ją odwrócić: „dla ojca”, „matka nieubezpieczona”."""
     first = stem.split()[0]
+    lowered = stem.lower()
+    if "dla ojca" in lowered or "ojca" in lowered.split("_")[-1]:
+        return "Ojciec", "father"
+    if "matka" in lowered and "nieubezpieczona matka" not in lowered:
+        return "Matka", "mother"
     if first in FEMALE:
         return "Matka", "mother"
     return "Ojciec", "father"
@@ -231,25 +247,24 @@ def evidence_of(ocr_text: str) -> str:
 
 
 def facts_of(description: str, outcome: str) -> str:
-    text = description.replace("_", ", ").replace(", ,", ",")
+    text = description.replace("_", ", ").replace(", ,", ",").lower()
     for pattern, replacement in ABBREVIATIONS:
-        text = re.sub(pattern, replacement, text)
+        text = text.replace(pattern, replacement)
     parts = [part.strip(" .,") for part in re.split(r"\s+-\s+", text) if part.strip(" .,")]
     sentences: list[str] = []
     for part in parts:
         if not part:
             continue
-        sentence = part[0].upper() + part[1:] if part else part
-        sentences.append(sentence + ".")
+        sentences.append(part[0].upper() + part[1:] + ".")
         if len(" ".join(sentences)) > 420:
             break
     outcome_sentence = {
         "granted": "ZUS przyznał świadczenie.",
         "denied": "ZUS odmówił prawa do świadczenia.",
         "partially_granted": "ZUS przyznał świadczenie częściowo.",
-        "unknown": "Wyniku nie da się odczytać z okładki zestawu.",
+        "unknown": "Wynik sprawy nie jest zapisany w zestawie.",
     }[outcome]
-    if outcome_sentence not in sentences:
+    if outcome == "unknown" or outcome_sentence not in sentences:
         sentences.append(outcome_sentence)
     return " ".join(sentences)[:600]
 

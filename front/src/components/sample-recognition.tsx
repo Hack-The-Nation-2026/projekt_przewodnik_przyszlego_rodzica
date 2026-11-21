@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react'
-import { BadgeCheck, FileText, FileUp, ScanLine, X } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { ArrowRight, BadgeCheck, FileText, FileUp, ScanLine, X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -85,6 +86,7 @@ function SampleSimulation({ sample, onResult }: { sample: ZusSample; onResult: (
   const rest = selected.slice(1)
   const [eventDate, setEventDate] = useState('')
   const [basis, setBasis] = useState('6000')
+  const [insuredDays, setInsuredDays] = useState('365')
   const [employment, setEmployment] = useState<SampleEmployment>(
     sample.applicant.employment === 'none' ? 'employee' : sample.applicant.employment,
   )
@@ -112,7 +114,7 @@ function SampleSimulation({ sample, onResult }: { sample: ZusSample; onResult: (
           employment,
           insured: insured === 'unknown' ? null : insured === 'yes',
           insurance_kind: null,
-          insured_days: null,
+          insured_days: Number(insuredDays) > 0 ? Math.round(Number(insuredDays)) : null,
           waiting_period_exempt: false,
           contribution_arrears: null,
           employment_ended_in_pregnancy: false,
@@ -203,6 +205,15 @@ function SampleSimulation({ sample, onResult }: { sample: ZusSample; onResult: (
             </SelectContent>
           </Select>
         </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="sample-insured-days">Okres ubezpieczenia (dni)</Label>
+          <Input
+            id="sample-insured-days"
+            inputMode="numeric"
+            value={insuredDays}
+            onChange={(event) => setInsuredDays(event.target.value)}
+          />
+        </div>
       </div>
       <p className="text-sm text-muted-foreground">
         Liczone świadczenie: {primary.replaceAll('_', ' ')}
@@ -275,7 +286,24 @@ function SampleCard({ sample, onResult }: { sample: ZusSample; onResult: (result
             To powtórka zestawu {sample.duplicate_of}, więc liczymy go raz.
           </p>
         )}
-        <SampleSimulation sample={sample} onResult={onResult} />
+        {sample.benefits.some((code) => (familyBenefits as readonly string[]).includes(code)) ? (
+          <SampleSimulation sample={sample} onResult={onResult} />
+        ) : (
+          <div className="space-y-2 rounded-lg border border-neutral-200 p-4">
+            <p className="font-semibold">Ta sprawa dotyczy zasiłku chorobowego</p>
+            <p className="text-sm text-muted-foreground">
+              Zestaw nie zawiera wniosku o urlop, więc nie ma czego rozdzielać. Niezdolność do pracy
+              policzysz w kalkulatorze, podając okres zwolnienia.
+            </p>
+            <Link
+              to="/kalkulator"
+              className={cn(buttonVariants({ variant: 'outline' }), 'h-auto min-h-10 whitespace-normal')}
+            >
+              Przejdź do kalkulatora
+              <ArrowRight className="size-4" aria-hidden />
+            </Link>
+          </div>
+        )}
       </CardContent>
     </Card>
   )
@@ -338,26 +366,27 @@ export function SampleRecognition({ onResult }: { onResult: (result: CaseResult)
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="grid gap-3 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
           <Button type="button" variant="outline" onClick={() => input.current?.click()}>
             <FileUp className="size-4" aria-hidden />
             Wgraj PDF z zestawu
           </Button>
           {samples.data && (
-            <div className="min-w-0 flex-1 sm:max-w-md">
-              <Select onValueChange={(value) => void chooseSample(value)}>
-                <SelectTrigger aria-label="Wybierz sprawę z zestawu przykładowego">
-                  <SelectValue placeholder="albo wybierz sprawę z listy" />
-                </SelectTrigger>
-                <SelectContent className="max-h-80">
-                  {samples.data.map((item) => (
-                    <SelectItem key={item.id} value={item.id}>
-                      {item.id} · {item.title}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <Select onValueChange={(value) => void chooseSample(value)}>
+              <SelectTrigger
+                aria-label="Wybierz sprawę z zestawu przykładowego"
+                className="w-full [&>span]:truncate"
+              >
+                <SelectValue placeholder="albo wybierz sprawę z listy" />
+              </SelectTrigger>
+              <SelectContent className="max-h-80">
+                {samples.data.map((item) => (
+                  <SelectItem key={item.id} value={item.id}>
+                    {item.id} · {item.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           )}
         </div>
         <input
