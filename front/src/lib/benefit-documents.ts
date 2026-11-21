@@ -3,7 +3,6 @@ import type { DocumentContext } from '@/lib/benefit-document-context'
 import type { InterviewValues } from '@/lib/interview-form'
 
 const zus = 'https://www.zus.pl'
-const forms = '/wzory-formularzy/zasilki/'
 const maternitySource = zus + '/pl/swiadczenia/zasilki/zasilek-macierzynski/niezbedne-dokumenty'
 const leaveSource = 'https://eli.gov.pl/eli/DU/2025/322/ogl'
 export const payerSource = zus + '/swiadczenia/zasilki/zasilek-macierzynski/postepowanie-w-sprawie-zasilkow/platnicy-zasilku'
@@ -97,7 +96,7 @@ export function getDocumentGuide(benefit: BenefitCode, options: DocumentOptions,
 
   if (benefit === 'chorobowy_w_ciazy') {
     return {
-      form: { label: 'ZAS-53', url: zus + forms + 'zasilek-chorobowy' },
+      form: { label: 'ZAS-53', url: zus + '/pl/-/zaswiadczenie-zas-53?redirect=%2Fpl%2Fwzory-formularzy%2Fzasilki%2Fzasilek-chorobowy' },
       officialGuide: { label: 'Lista dokumentów ZUS', url: zus + '/pl/swiadczenia/zasilki/zasilek-chorobowy/z-ubezpieczenia-chorobowego/niezbedne-dokumenty' },
       documents: [
         'e-ZLA z kodem B albo e-ZLA i odrębne zaświadczenie potwierdzające ciążę. Jeśli zwolnienie jest tylko na papierze, przekaż je płatnikowi.',
@@ -110,7 +109,7 @@ export function getDocumentGuide(benefit: BenefitCode, options: DocumentOptions,
   }
   if (benefit === 'rehabilitacyjne') {
     return {
-      form: { label: 'ZNp-7', url: zus + forms + 'swiadczenie-rehabilitacyjne' },
+      form: { label: 'ZNp-7', url: zus + '/-/oswiadczenie-zus-np-7' },
       officialGuide: { label: 'Lista dokumentów ZUS', url: zus + '/swiadczenia/zasilki/swiadczenie-rehabilitacyjne/z-ubezpieczenia-chorobowego/niezbedne-dokumenty' },
       documents: [
         'Wniosek ZNp-7 oraz OL-9 od lekarza leczącego.',
@@ -123,7 +122,7 @@ export function getDocumentGuide(benefit: BenefitCode, options: DocumentOptions,
   }
   if (benefit === 'w_wysokosci_macierzynskiego') {
     return {
-      form: { label: 'ZAS-55', url: zus + forms + 'zasilek-macierzynski' },
+      form: { label: 'ZAS-55', url: zus + '/-/wnioski-zas-55' },
       officialGuide: { label: 'Instrukcja złożenia w ZUS', url: zus + '/-/jak-uzyskac-zasilek-w-wysokosci-zasilku-macierzynskiego' },
       documents: [
         'Wniosek ZAS-55 z oświadczeniem o braku zapewnionego innego zatrudnienia.',

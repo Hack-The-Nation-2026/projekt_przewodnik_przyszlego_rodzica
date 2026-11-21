@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { ArrowDown, ArrowUpRight, CalendarDays, FileText, MapPin } from 'lucide-react'
 import { ApplicationDraft, DocumentField } from '@/components/application-draft'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { benefitList } from '@/lib/benefit-interview'
 import type { BenefitCode } from '@/lib/benefit-interview'
@@ -13,6 +13,7 @@ import {
   leaveRegulation, payerSource, shiftDate,
 } from '@/lib/benefit-documents'
 import type { Coverage, DocumentOptions, Employment, MaternityCase, PayerSize, Role } from '@/lib/benefit-documents'
+import { cn } from '@/lib/utils'
 
 const selectClass = 'h-10 w-full rounded-md border border-input bg-background px-3 text-sm'
 const benefits = Object.keys(benefitList) as BenefitCode[]
@@ -212,9 +213,15 @@ export default function BenefitDocuments({
               <strong>Adresat wniosku o świadczenie</strong>
               <span className="block">{route.addressee || 'Do potwierdzenia u płatnika składek'}</span>
             </p>
-            <Button type="button" className="h-auto min-h-10 whitespace-normal" onClick={showChecklist}>
-              Pokaż dokumenty i terminy <ArrowDown aria-hidden="true" />
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <a className={cn(buttonVariants(), 'h-auto min-h-10 whitespace-normal')}
+                href={guide.form.url} target="_blank" rel="noreferrer">
+                Otwórz formularz {guide.form.label} na stronie ZUS <ArrowUpRight aria-hidden="true" />
+              </a>
+              <Button type="button" variant="outline" className="h-auto min-h-10 whitespace-normal" onClick={showChecklist}>
+                Pokaż dokumenty i terminy <ArrowDown aria-hidden="true" />
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -248,10 +255,6 @@ export default function BenefitDocuments({
             <h4 className="flex items-center gap-2 font-semibold"><FileText className="size-4 text-primary" aria-hidden="true" /> Co przygotować</h4>
             <ul className="list-disc space-y-1 pl-5">{guide.documents.map((document) => <li key={document}>{document}</li>)}</ul>
             <div className="flex flex-wrap gap-x-4 gap-y-2 pt-2">
-              <a className="inline-flex items-center gap-1 font-semibold text-primary underline underline-offset-2"
-                href={guide.form.url} target="_blank" rel="noreferrer">
-                Pobierz aktualny {guide.form.label} z ZUS <ArrowUpRight className="size-4" aria-hidden="true" />
-              </a>
               <a className="text-primary underline underline-offset-2" href={guide.officialGuide.url}>{guide.officialGuide.label}</a>
               {guide.leave && <a className="text-primary underline underline-offset-2" href={leaveRegulation.url}>{leaveRegulation.label}</a>}
             </div>
