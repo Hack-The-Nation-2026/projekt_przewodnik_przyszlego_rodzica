@@ -29,20 +29,18 @@ function ScrollToTop() {
   return null
 }
 
-// Jeden lekki ruch kółka ma jeszcze przenosić o sekcję. Więcej niż tyle pikseli
-// w jednym geście to już świadome przewijanie, więc oddajemy je przeglądarce.
+// Jeden lekki ruch kółka przenosi z ekranu powitalnego do treści. Więcej niż tyle
+// pikseli w jednym geście to już świadome przewijanie, więc oddajemy je przeglądarce.
 const LIGHT_TICK_MAX_DELTA = 160
 // Drugi ruch kółka w tym czasie znaczy „kręcę dalej”, nie „stuknąłem raz”.
 const GESTURE_CONFIRM_MS = 70
-// Płynny przejazd do sekcji trwa kilkaset milisekund. Przez ten czas kółko nie może
-// przerwać animacji w połowie, bo wtedy strona staje między sekcjami.
+// Płynny przejazd z hero trwa kilkaset milisekund. Przez ten czas kółko nie może
+// przerwać animacji w połowie.
 const JUMP_ANIMATION_MS = 520
-// Gdy sekcja jest wyższa niż ekran, muśnięcie i tak jedzie najwyżej jeden ekran.
-const MIN_JUMP_SPAN = 320
-// Tyle pikseli przy granicy sekcji traktujemy jak stanie na niej.
-const BOUNDARY_TOLERANCE = 32
 // Cisza, po której uznajemy gest za zakończony.
 const GESTURE_IDLE_MS = 200
+// Tylko na samej górze strony kółko robi coś więcej niż przewijanie.
+const HERO_EDGE = 8
 
 function isInsideScrollable(target: EventTarget | null) {
   let node = target instanceof Element ? target : null
@@ -56,57 +54,42 @@ function isInsideScrollable(target: EventTarget | null) {
 }
 
 /**
- * Lekki ruch kółka przenosi o sekcję, a zwykłe przewijanie zostaje swobodne.
+ * Lekki ruch kółka na ekranie powitalnym przenosi do pierwszej sekcji pod hero.
  *
- * Jedno stuknięcie kółkiem to jedno zdarzenie `wheel` i skok do sąsiedniej sekcji
- * (znacznik `data-scroll-section` mają wszystkie sekcje strony głównej).
- * Gdy w tym samym geście przyleci drugie zdarzenie albo pierwsze jest już duże —
- * czyli użytkownik naprawdę kręci, a nie musnął rolki — przestajemy się wtrącać
- * i strona przewija się normalnie, piksel po pikselu, do końca gestu.
- *
- * Pasek przewijania, klawiatura i trackpad nie mają tu nic do rzeczy: trackpad
- * wysyła strumień drobnych zdarzeń, więc zawsze trafia w tryb swobodny.
+ * To jedyne miejsce, w którym kółko robi coś więcej niż przewijanie. Jedno stuknięcie
+ * rolką to jedno zdarzenie `wheel` i przejazd do treści. Gdy w tym samym geście
+ * przyleci drugie zdarzenie albo pierwsze jest już duże, czyli ktoś naprawdę kręci,
+ * przestajemy się wtrącać i strona przewija się swobodnie. Poza samą górą strony
+ * kółko zawsze zostaje przy przeglądarce.
  */
-function WheelSectionJump() {
+function WheelPastHero() {
   useEffect(() => {
     let jumpTimer: number | undefined
     let idleTimer: number | undefined
-    let pendingDirection = 0
     let pendingDelta = 0
     let freeGesture = false
     let jumpUntil = 0
 
-    const scrollToSection = (direction: number) => {
+    const scrollPastHero = () => {
+      const here = window.scrollY
+      // Poza samą górą strony nie ma czego przeskakiwać.
+      if (here > HERO_EDGE) return false
+
       const sections = Array.from(
         document.querySelectorAll<HTMLElement>('[data-scroll-section]'),
       )
-      if (sections.length === 0) return false
+      if (sections.length < 2) return false
+
+      const padding =
+        Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
+      const target = Math.max(
+        0,
+        Math.round(sections[1].getBoundingClientRect().top + here - padding),
+      )
+      if (target <= here) return false
 
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
       const behavior: ScrollBehavior = reduced ? 'auto' : 'smooth'
-      const padding =
-        Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
-      const here = window.scrollY
-
-      const tops = sections.map((section) =>
-        Math.round(section.getBoundingClientRect().top + here - padding),
-      )
-
-      let current = 0
-      tops.forEach((top, index) => {
-        if (top <= here + BOUNDARY_TOLERANCE) current = index
-      })
-
-      const bottom = Math.max(0, document.documentElement.scrollHeight - window.innerHeight)
-      const next = current + direction
-      let target = next < 0 ? 0 : next >= sections.length ? bottom : tops[next]
-
-      // Jedno muśnięcie nie przewozi dalej niż jeden ekran, nawet gdy sekcja jest długa.
-      const span = Math.max(MIN_JUMP_SPAN, window.innerHeight * 0.9)
-      target = direction > 0 ? Math.min(target, here + span) : Math.max(target, here - span)
-      target = Math.min(bottom, Math.max(0, target))
-
-      if (Math.abs(target - here) < 2) return false
       window.scrollTo({ top: target, behavior })
       // Przy ograniczonym ruchu przejazd jest natychmiastowy, więc nie ma czego chronić.
       return behavior === 'smooth'
@@ -115,6 +98,8 @@ function WheelSectionJump() {
     const onWheel = (event: WheelEvent) => {
       if (event.ctrlKey) return
       if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return
+      // W górę kółko zawsze zostaje przy przeglądarce.
+      if (event.deltaY <= 0) return
       if (isInsideScrollable(event.target)) return
       // Panel asystenta ma własne przewijanie i nie ma ciągnąć za sobą strony. Nad treścią,
       // która się nie przewija, kółko nie robi nic.
@@ -132,6 +117,10 @@ function WheelSectionJump() {
         event.preventDefault()
         return
       }
+
+      // Poza samą górą strony nie ma czego przeskakiwać, więc kółko zostaje przy
+      // przeglądarce. Bez tego warunku lekkie muśnięcie w środku strony ginęło.
+      if (window.scrollY > HERO_EDGE) return
 
       window.clearTimeout(idleTimer)
       idleTimer = window.setTimeout(() => {
@@ -157,12 +146,11 @@ function WheelSectionJump() {
       }
 
       event.preventDefault()
-      pendingDirection = event.deltaY > 0 ? 1 : -1
       pendingDelta = event.deltaY
       jumpTimer = window.setTimeout(() => {
         jumpTimer = undefined
         pendingDelta = 0
-        const animated = scrollToSection(pendingDirection)
+        const animated = scrollPastHero()
         jumpUntil = animated ? performance.now() + JUMP_ANIMATION_MS : 0
       }, GESTURE_CONFIRM_MS)
     }
@@ -195,7 +183,7 @@ export function RootLayout() {
   return (
     <div className="flex min-h-dvh flex-col">
       <ScrollToTop />
-      <WheelSectionJump />
+      <WheelPastHero />
       <a
         href="#tresc"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
