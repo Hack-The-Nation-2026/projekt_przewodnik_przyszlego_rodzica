@@ -57,3 +57,56 @@ def test_demo_accounts_are_available_in_dev() -> None:
     assert response.status_code == 200
     identifiers = {account["identifier"] for account in response.json()}
     assert {"anna.k", "justyna.t"} <= identifiers
+
+
+def test_mobywatel_login_marks_the_source() -> None:
+    response = client.post(
+        "/api/auth/mobywatel",
+        json={"identifier": "anna.k", "password": DEMO_PASSWORD},
+    )
+    assert response.status_code == 200
+    assert response.json()["source"] == "mobywatel"
+
+
+def test_manual_entry_returns_citizen() -> None:
+    response = client.post(
+        "/api/auth/manual",
+        json={
+            "first_name": "Katarzyna",
+            "last_name": "N.",
+            "pesel": "44051401359",
+            "case_label": "Ciąża, jeden poród",
+        },
+    )
+    assert response.status_code == 200
+    citizen = response.json()
+    assert citizen["first_name"] == "Katarzyna"
+    assert citizen["case_label"] == "Ciąża, jeden poród"
+    assert citizen["source"] == "manual"
+
+
+def test_manual_entry_without_label_gets_a_default() -> None:
+    response = client.post(
+        "/api/auth/manual",
+        json={"first_name": "Jan", "last_name": "K.", "pesel": "44051401359"},
+    )
+    assert response.status_code == 200
+    citizen = response.json()
+    assert citizen["case_code"] == "WPISANE-RECZNIE"
+    assert citizen["case_label"] == "Sytuacja opisana ręcznie"
+
+
+def test_manual_entry_rejects_a_pesel_that_is_not_eleven_digits() -> None:
+    response = client.post(
+        "/api/auth/manual",
+        json={"first_name": "Jan", "last_name": "K.", "pesel": "12345"},
+    )
+    assert response.status_code == 422
+
+
+def test_manual_entry_rejects_a_blank_name() -> None:
+    response = client.post(
+        "/api/auth/manual",
+        json={"first_name": "   ", "last_name": "K.", "pesel": "44051401359"},
+    )
+    assert response.status_code == 422
