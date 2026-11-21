@@ -1,0 +1,5 @@
+# Zależności potrzebne tylko przy pracy z kodem i testach.
+-r requirements.txt
+pytest>=8.3
+httpx>=0.27
+ruff>=0.7

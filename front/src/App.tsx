@@ -1,0 +1,54 @@
+import { Route, Routes } from 'react-router-dom'
+import { RootLayout } from '@/components/layout/root-layout'
+import { HomePage } from '@/pages/home-page'
+import { KalkulatorPage } from '@/pages/kalkulator-page'
+import { NotFoundPage } from '@/pages/not-found-page'
+import { PlaceholderPage } from '@/pages/placeholder-page'
+
+export default function App() {
+  return (
+    <Routes>
+      <Route element={<RootLayout />}>
+        <Route index element={<HomePage />} />
+        <Route
+          path="swiadczenia"
+          element={
+            <PlaceholderPage
+              title="Świadczenia"
+              description="Katalog świadczeń z filtrami dla sytuacji: ciąża, poród, adopcja, rodzina zastępcza."
+            />
+          }
+        />
+        <Route path="kalkulator" element={<KalkulatorPage />} />
+        <Route
+          path="dokumenty"
+          element={
+            <PlaceholderPage
+              title="Dokumenty i wnioski"
+              description="Lista dokumentów, terminy i informacja, gdzie je złożyć: u pracodawcy albo w ZUS."
+            />
+          }
+        />
+        <Route
+          path="wsparcie"
+          element={
+            <PlaceholderPage
+              title="Wsparcie w trudnych sytuacjach"
+              description="Miejsca i organizacje, które pomagają po stracie dziecka, przy wcześniaku i w ciężkiej chorobie."
+            />
+          }
+        />
+        <Route
+          path="o-projekcie"
+          element={
+            <PlaceholderPage
+              title="O projekcie"
+              description="Cel narzędzia, użyte technologie i informacja, które funkcje działają ze wsparciem AI."
+            />
+          }
+        />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
+  )
+}

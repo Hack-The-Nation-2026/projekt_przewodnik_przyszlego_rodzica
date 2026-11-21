@@ -1,0 +1,24 @@
+# Materiały ZUS udostępnione wyłącznie na potrzeby HackNation.
+# Regulamin zadania nie pozwala ich kopiować ani rozpowszechniać, więc zostają lokalnie.
+OPIS/
+
+# Node / frontend
+node_modules/
+dist/
+.env
+.env.local
+*.tsbuildinfo
+
+# Python / backend
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# Systemy i edytory
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
