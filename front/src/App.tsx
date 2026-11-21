@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import { RootLayout } from '@/components/layout/root-layout'
+import { DokumentyPage } from '@/pages/dokumenty-page'
 import { HomePage } from '@/pages/home-page'
 import { KalkulatorPage } from '@/pages/kalkulator-page'
 import { MobywatelPage } from '@/pages/mobywatel-page'
@@ -26,16 +27,7 @@ export default function App() {
           }
         />
         <Route path="kalkulator" element={<KalkulatorPage />} />
-        <Route
-          path="dokumenty"
-          element={
-            <PlaceholderPage
-              title="Dokumenty i wnioski"
-              crumb="Dokumenty"
-              description="Lista dokumentów, terminy i informacja, gdzie je złożyć: u pracodawcy albo w ZUS."
-            />
-          }
-        />
+        <Route path="dokumenty" element={<DokumentyPage />} />
         <Route
           path="wsparcie"
           element={

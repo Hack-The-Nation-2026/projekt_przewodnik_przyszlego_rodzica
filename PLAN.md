@@ -42,7 +42,7 @@ ich kopiować ani rozpowszechniać.
 - [x] Krok 4. Wejście i logowanie
 - [x] Krok 5. Wywiad i ustalanie uprawnień
 - [x] Krok 6. Kalkulator na ekranie
-- [ ] Krok 7. Dokumenty, terminy i miejsce złożenia
+- [x] Krok 7. Dokumenty, terminy i miejsce złożenia
 - [ ] Krok 8. Symulacje ZUS
 - [ ] Krok 9. Ryzyka i ostrzeżenia
 - [ ] Krok 10. Trudne sytuacje i wsparcie

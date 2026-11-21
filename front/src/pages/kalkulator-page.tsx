@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
 import { Check, CircleAlert, CircleHelp, FlaskConical, Minus, Pencil, X } from 'lucide-react'
@@ -13,12 +13,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form } from '@/components/ui/form'
 import { InfoHint } from '@/components/ui/info-hint'
 import { api } from '@/lib/api'
+import { contextFromInterview } from '@/lib/benefit-document-context'
 import { benefitList, buildInterview } from '@/lib/benefit-interview'
 import type { Assessment, BenefitCode, ParentalPlan, ParentalPool, SimulationResponse } from '@/lib/benefit-interview'
 import { asBoolean, interviewDefaults, interviewSchema, parseNumber } from '@/lib/interview-form'
 import type { InterviewValues } from '@/lib/interview-form'
 import { getInterviewSteps } from '@/lib/interview-steps'
 import { cn } from '@/lib/utils'
+
+const BenefitDocuments = lazy(() => import('@/components/benefit-documents'))
 
 const currency = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' })
 const date = new Intl.DateTimeFormat('pl-PL', { dateStyle: 'medium', timeZone: 'UTC' })
@@ -95,6 +98,7 @@ async function simulate({ values, plan }: { values: InterviewValues; plan: Paren
 
   return {
     assessments,
+    documentContext: contextFromInterview(values, results),
     expected,
     returnDate,
     separatePaternity: !!paternityRequest,
@@ -171,7 +175,11 @@ function buildPlan(
   }
 }
 
-function BenefitCard({ assessment }: { assessment: Assessment }) {
+function BenefitCard({ assessment, documentsOpen, onShowDocuments }: {
+  assessment: Assessment
+  documentsOpen: boolean
+  onShowDocuments: (benefit: BenefitCode) => void
+}) {
   const { name, what, sources } = benefitList[assessment.benefit]
   const active = statusesWithPayment.has(assessment.status)
   const { label, icon: StatusIcon, color } = benefitStatuses[assessment.status]
@@ -257,6 +265,10 @@ function BenefitCard({ assessment }: { assessment: Assessment }) {
             ))}
           </ul>
         </div>
+        <Button type="button" variant="link" className="h-auto p-0" aria-label={`Dokumenty i terminy — ${name}`}
+          aria-expanded={documentsOpen} onClick={() => onShowDocuments(assessment.benefit)}>
+          Dokumenty i terminy
+        </Button>
       </CardContent>
     </Card>
   )
@@ -265,12 +277,15 @@ function BenefitCard({ assessment }: { assessment: Assessment }) {
 export function KalkulatorPage() {
   const resultHeading = useRef<HTMLHeadingElement>(null)
   const stepHeading = useRef<HTMLHeadingElement>(null)
+  const documentsPanel = useRef<HTMLDivElement>(null)
+  const focusDocuments = useRef(false)
   const focusNextStep = useRef(false)
   const scrolledFor = useRef<InterviewValues | null>(null)
   const [stepId, setStepId] = useState('role')
   const [sent, setSent] = useState('')
   const [submitted, setSubmitted] = useState<InterviewValues | null>(null)
   const [secondShareDays, setSecondShareDays] = useState(0)
+  const [documentBenefit, setDocumentBenefit] = useState<BenefitCode | null>(null)
   const form = useForm<InterviewValues>({
     resolver: zodResolver(interviewSchema),
     defaultValues: interviewDefaults,
@@ -296,9 +311,26 @@ export function KalkulatorPage() {
 
   function editAnswers() {
     goToStep(steps[0].id)
+    setDocumentBenefit(null)
     setSubmitted(null)
     setSecondShareDays(0)
     simulation.reset()
+  }
+
+  function showDocuments(benefit: BenefitCode) {
+    if (documentBenefit === benefit) {
+      documentsPanel.current?.focus({ preventScroll: true })
+      documentsPanel.current?.scrollIntoView({ block: 'start' })
+      return
+    }
+    focusDocuments.current = true
+    setDocumentBenefit(benefit)
+  }
+
+  function closeDocuments() {
+    setDocumentBenefit(null)
+    resultHeading.current?.focus({ preventScroll: true })
+    resultHeading.current?.scrollIntoView({ block: 'start' })
   }
 
   function submitAnswers(data: InterviewValues) {
@@ -335,6 +367,14 @@ export function KalkulatorPage() {
     resultHeading.current?.focus({ preventScroll: true })
     resultHeading.current?.scrollIntoView({ block: 'start' })
   }, [simulation.data, submitted])
+
+  useEffect(() => {
+    if (documentBenefit && focusDocuments.current && documentsPanel.current) {
+      focusDocuments.current = false
+      documentsPanel.current?.focus({ preventScroll: true })
+      documentsPanel.current?.scrollIntoView({ block: 'start' })
+    }
+  }, [documentBenefit])
 
   // Każda zmiana suwaka przelicza wynik, ale dopiero po krótkiej pauzie w przeciąganiu.
   useEffect(() => {
@@ -483,11 +523,28 @@ export function KalkulatorPage() {
           </p>
           <div className="grid gap-3 md:grid-cols-2">
             {(Object.keys(benefitList) as BenefitCode[]).map((benefit) => (
-              <BenefitCard key={benefit} assessment={simulation.data.assessments.get(benefit) ?? {
-                benefit, status: 'missing_data', reason: 'Dla tego świadczenia brakuje wyniku symulacji.',
-              }} />
+              <BenefitCard
+                key={benefit}
+                assessment={simulation.data.assessments.get(benefit) ?? {
+                  benefit, status: 'missing_data', reason: 'Dla tego świadczenia brakuje wyniku symulacji.',
+                }}
+                documentsOpen={documentBenefit === benefit}
+                onShowDocuments={showDocuments}
+              />
             ))}
           </div>
+          {documentBenefit && (
+            <div ref={documentsPanel} tabIndex={-1} className="scroll-mt-24 focus:outline-none" aria-label="Dokumenty i terminy">
+              <Suspense fallback={<p role="status">Wczytujemy dokumenty…</p>}>
+                <BenefitDocuments
+                  benefit={documentBenefit}
+                  onBenefitChange={setDocumentBenefit}
+                  onClose={closeDocuments}
+                  context={simulation.data.documentContext}
+                />
+              </Suspense>
+            </div>
+          )}
         </section>
       )}
     </PageContainer>
