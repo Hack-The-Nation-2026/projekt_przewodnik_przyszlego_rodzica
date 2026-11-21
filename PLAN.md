@@ -35,7 +35,7 @@ ich kopiować ani rozpowszechniać.
 
 ## Postęp
 
-- [ ] Krok 0. Reguły zasiłków na papierze
+- [x] Krok 0. Reguły zasiłków na papierze
 - [ ] Krok 1. Zestaw testowy z PRZYKLADY
 - [ ] Krok 2. Model danych i API
 - [ ] Krok 3. Silnik uprawnień i kalkulatory
@@ -85,6 +85,12 @@ z czego liczyć.
   dobrowolnym.
 
 Gotowe, gdy istnieje tabela reguł z odesłaniem do przepisu albo strony materiału.
+
+Zrobione 21.11. Tabela stoi w `RULES.md`, w 12 sekcjach od A do L, 80 reguł z identyfikatorami.
+Każdy wiersz ma odesłanie do artykułu ustawy zasiłkowej albo Kodeksu pracy, a obok miejsce
+w załączniku lub strona Poradnika. Na końcu pliku jest lista czterech rzeczy, których materiały
+nie podają, w tym wartości minimalnej podstawy wymiaru na 2026 rok, bo załącznik je zapowiada,
+a potem ich nie wypisuje.
 
 Brief, pkt 3 a, b, c, d, e, f, j oraz pkt 7.
 
