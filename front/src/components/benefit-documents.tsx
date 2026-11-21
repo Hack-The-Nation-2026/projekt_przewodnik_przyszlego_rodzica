@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
-import { ArrowRight, ArrowUpRight, CalendarDays, FileText, MapPin } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Building2, CalendarDays, FileText, MapPin } from 'lucide-react'
 import { ApplicationDraft, DocumentField } from '@/components/application-draft'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -26,16 +26,17 @@ const stepTitles: Record<Step, string> = {
   documents: 'Co złożyć i gdzie',
 }
 
-function SelectField<T extends string>({ name, title, value, onChange, children }: {
+function SelectField<T extends string>({ name, title, value, onChange, disabled, children }: {
   name: string
   title: string
   value: T
   onChange: (value: T) => void
+  disabled?: boolean
   children: ReactNode
 }) {
   return (
     <DocumentField name={name} title={title}>
-      <Select value={value} onValueChange={(selected) => onChange(selected as T)}>
+      <Select value={value} disabled={disabled} onValueChange={(selected) => onChange(selected as T)}>
         <SelectTrigger id={name}><SelectValue /></SelectTrigger>
         <SelectContent>{children}</SelectContent>
       </Select>
@@ -152,6 +153,7 @@ export default function BenefitDocuments({
     ? undefined : scenario?.periods[benefit]
   const rateAvailable = (benefit === 'macierzynski' || benefit === 'rodzicielski') && role !== 'father'
   const showPayerOptions = benefit !== 'w_wysokosci_macierzynskiego'
+  const payerSizeApplies = employment !== 'self_employed' && coverage !== 'ended'
   const steps: Step[] = [
     ...(onBenefitChange ? ['benefit' as const] : []),
     ...(showPayerOptions ? ['situation' as const] : []),
@@ -244,26 +246,32 @@ export default function BenefitDocuments({
                 {Object.entries(documentEmployment).map(([key, name]) => <SelectItem key={key} value={key}>{name}</SelectItem>)}
               </SelectField>
             </div>
-            <Accordion type="single" collapsible className="rounded-md border border-border">
-              <AccordionItem value="insurance">
-                <AccordionTrigger>Doprecyzuj okres ubezpieczenia i płatnika (opcjonalnie)</AccordionTrigger>
-                <AccordionContent className="grid gap-4 sm:grid-cols-2">
-                  <SelectField name="document-coverage" title="Kiedy przypada wnioskowany okres?" value={coverage}
-                    onChange={(value) => setCoverageOverride({ benefit, value })}>
-                    <SelectItem value="unknown">Do ustalenia</SelectItem>
-                    <SelectItem value="active">W czasie ubezpieczenia chorobowego</SelectItem>
-                    <SelectItem value="ended">Po ustaniu ubezpieczenia</SelectItem>
-                  </SelectField>
-                  {employment !== 'self_employed' && coverage !== 'ended' && (
-                    <SelectField name="document-payer" title="Liczba osób u płatnika zgłoszonych do ubezpieczenia chorobowego" value={payerSize} onChange={setPayerSize}>
+            <fieldset className="min-w-0 rounded-md border border-border px-4 pb-4">
+              <legend className="px-2 text-sm font-semibold">
+                Okres ubezpieczenia i płatnik <span className="font-normal text-muted-foreground">(opcjonalnie)</span>
+              </legend>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <SelectField name="document-coverage" title="Kiedy przypada wnioskowany okres?" value={coverage}
+                  onChange={(value) => setCoverageOverride({ benefit, value })}>
+                  <SelectItem value="unknown">Do ustalenia</SelectItem>
+                  <SelectItem value="active">W czasie ubezpieczenia chorobowego</SelectItem>
+                  <SelectItem value="ended">Po ustaniu ubezpieczenia</SelectItem>
+                </SelectField>
+                <SelectField name="document-payer" title="Liczba osób u płatnika zgłoszonych do ubezpieczenia chorobowego"
+                  value={payerSizeApplies ? payerSize : 'not_applicable'} disabled={!payerSizeApplies}
+                  onChange={(value) => {
+                    if (value !== 'not_applicable') setPayerSize(value)
+                  }}>
+                  {payerSizeApplies ? (
+                    <>
                       <SelectItem value="unknown">Nie wiem</SelectItem>
                       <SelectItem value="up_to_20">Do 20 osób</SelectItem>
                       <SelectItem value="over_20">Powyżej 20 osób</SelectItem>
-                    </SelectField>
-                  )}
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+                    </>
+                  ) : <SelectItem value="not_applicable">Nie dotyczy</SelectItem>}
+                </SelectField>
+              </div>
+            </fieldset>
             <div className="flex flex-wrap gap-2">
               {onBenefitChange && <Button type="button" variant="outline" onClick={() => goToStep('benefit')}>Wstecz</Button>}
               <Button type="button" className="h-auto min-h-10 whitespace-normal" onClick={() => goToStep('documents')}>
@@ -289,8 +297,8 @@ export default function BenefitDocuments({
               {guide.leave && <p>Wniosek o {guide.leave.title} złóż u pracodawcy, w postaci papierowej lub elektronicznej.</p>}
               {route.showEzus && <a className="font-medium text-primary underline underline-offset-2" href={ezus}>Zaloguj się do eZUS</a>}
             </div>
-            <Accordion type="single" collapsible className="rounded-md border border-border">
-              <AccordionItem value="attachments">
+            <Accordion type="single" collapsible className="rounded-md border-2 border-primary/40">
+              <AccordionItem value="attachments" className="border-primary/35">
                 <AccordionTrigger>
                   <span className="flex items-center gap-2"><FileText className="size-4 shrink-0 text-primary" aria-hidden="true" /> Dokumenty do przygotowania</span>
                 </AccordionTrigger>
@@ -302,7 +310,7 @@ export default function BenefitDocuments({
                   </div>
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="deadlines">
+              <AccordionItem value="deadlines" className="border-primary/35">
                 <AccordionTrigger>
                   <span className="flex items-center gap-2"><CalendarDays className="size-4 shrink-0 text-primary" aria-hidden="true" /> Terminy złożenia</span>
                 </AccordionTrigger>
@@ -311,9 +319,11 @@ export default function BenefitDocuments({
                   {scenario && <DateHints benefit={benefit} options={options} context={scenario} />}
                 </AccordionContent>
               </AccordionItem>
-              {showPayerOptions && employment !== 'self_employed' && coverage !== 'ended' && (
-                <AccordionItem value="payer">
-                  <AccordionTrigger>Jak ustalić płatnika?</AccordionTrigger>
+              {showPayerOptions && payerSizeApplies && (
+                <AccordionItem value="payer" className="border-primary/35">
+                  <AccordionTrigger>
+                    <span className="flex items-center gap-2"><Building2 className="size-4 shrink-0 text-primary" aria-hidden="true" /> Jak ustalić płatnika?</span>
+                  </AccordionTrigger>
                   <AccordionContent className="space-y-3">
                     <p>Sprawdź liczbę zgłoszonych na 30 listopada poprzedniego roku, a gdy tego dnia płatnik nikogo nie zgłaszał, w pierwszym miesiącu zgłoszeń. ZUS kontynuuje rozpoczętą wypłatę przez przełom roku. Szczególne tytuły mogą oznaczać wypłatę przez ZUS.</p>
                     <a className="inline-block text-primary underline underline-offset-2" href={payerSource}>Zasady ustalania płatnika w ZUS</a>
