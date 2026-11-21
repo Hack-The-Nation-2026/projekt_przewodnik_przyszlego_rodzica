@@ -127,12 +127,14 @@ function DateHints({ benefit, options, context }: { benefit: BenefitCode; option
 }
 
 export default function BenefitDocuments({
-  benefit, onBenefitChange, context, onClose,
+  benefit, onBenefitChange, context, onClose, plain = false,
 }: {
   benefit: BenefitCode
   onBenefitChange?: (benefit: BenefitCode) => void
   context?: DocumentContext
   onClose?: () => void
+  /** Wersja bez szarej karty i paddingu, żeby treść leżała w białym oknie dialogowym. */
+  plain?: boolean
 }) {
   const stepHeading = useRef<HTMLHeadingElement>(null)
   const draftHeading = useRef<HTMLHeadingElement>(null)
@@ -195,8 +197,8 @@ export default function BenefitDocuments({
 
   return (
     <section className="space-y-4" aria-labelledby="documents-title">
-      <Card>
-        <CardHeader className="gap-3">
+      <Card className={cn(plain && 'bg-transparent')}>
+        <CardHeader className={cn('gap-3', plain && 'px-0 pt-0 pb-4')}>
           <div className="flex flex-wrap items-center justify-between gap-2">
             {onBenefitChange && <p className="text-sm font-medium text-primary">Krok {steps.indexOf(step) + 1} z {steps.length}</p>}
             {onClose && (
@@ -211,7 +213,7 @@ export default function BenefitDocuments({
         </CardHeader>
 
         {step === 'benefit' && (
-          <CardContent className="space-y-5">
+          <CardContent className={cn('space-y-5', plain && 'px-0 pb-0')}>
             <SelectField name="document-benefit" title="Świadczenie" value={benefit} onChange={(value) => {
               onBenefitChange?.(value)
               setCoverageOverride(undefined)
@@ -225,7 +227,7 @@ export default function BenefitDocuments({
         )}
 
         {step === 'situation' && (
-          <CardContent className="space-y-5">
+          <CardContent className={cn('space-y-5', plain && 'px-0 pb-0')}>
             <p className="text-sm text-muted-foreground">Podaj dane, które znasz. Na ich podstawie dobierzemy załączniki i adresata.</p>
             <div className="grid gap-4 sm:grid-cols-2">
               {showFamilyRole && (
@@ -289,7 +291,7 @@ export default function BenefitDocuments({
         )}
 
         {step === 'documents' && (
-          <CardContent className="space-y-5 text-sm">
+          <CardContent className={cn('space-y-5 text-sm', plain && 'px-0 pb-0')}>
             <div className="space-y-3">
               <h3 className="text-lg font-semibold">{benefitList[benefit].name}</h3>
               <a className={cn(buttonVariants(), 'h-auto min-h-10 whitespace-normal')}
@@ -359,14 +361,14 @@ export default function BenefitDocuments({
       </Card>
 
       {step === 'documents' && mode && (
-        <Card>
-          <CardHeader className="flex-row flex-wrap items-start justify-between gap-3">
+        <Card className={cn(plain && 'border-t bg-transparent pt-4')}>
+          <CardHeader className={cn('flex-row flex-wrap items-start justify-between gap-3', plain && 'px-0 pt-0')}>
             <h3 ref={draftHeading} tabIndex={-1} className="scroll-mt-24 text-xl font-semibold focus:outline-none">
               {useLeave ? 'Szkic wniosku urlopowego' : 'Dane do formularza ' + guide.form.label}
             </h3>
             <Button type="button" variant="outline" size="sm" onClick={closeDraft}>Zamknij szkic</Button>
           </CardHeader>
-          <CardContent>
+          <CardContent className={cn(plain && 'px-0 pb-0')}>
             <ApplicationDraft key={mode} benefit={benefit} guide={guide} options={options} mode={useLeave ? 'leave' : 'benefit'}
               addressee={useLeave ? '' : route.addressee} period={period} rateAvailable={rateAvailable} />
           </CardContent>

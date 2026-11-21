@@ -1,7 +1,7 @@
 import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
-import { Check, CircleAlert, CircleHelp, FlaskConical, Minus, Pencil, X } from 'lucide-react'
+import { Check, CircleAlert, CircleHelp, ClipboardList, FlaskConical, Minus, Pencil, X } from 'lucide-react'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { BenefitWarnings } from '@/components/benefit-warnings'
@@ -11,6 +11,7 @@ import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Dialog } from '@/components/ui/dialog'
 import { Form } from '@/components/ui/form'
 import { InfoHint } from '@/components/ui/info-hint'
 import { api } from '@/lib/api'
@@ -178,9 +179,8 @@ function buildPlan(
   }
 }
 
-function BenefitCard({ assessment, documentsOpen, onShowDocuments }: {
+function BenefitCard({ assessment, onShowDocuments }: {
   assessment: Assessment
-  documentsOpen: boolean
   onShowDocuments: (benefit: BenefitCode) => void
 }) {
   const { name, what, sources } = benefitList[assessment.benefit]
@@ -270,8 +270,15 @@ function BenefitCard({ assessment, documentsOpen, onShowDocuments }: {
             ))}
           </ul>
         </div>
-        <Button type="button" variant="link" className="h-auto p-0" aria-label={`Dokumenty i terminy — ${name}`}
-          aria-expanded={documentsOpen} onClick={() => onShowDocuments(assessment.benefit)}>
+        <Button
+          type="button"
+          variant="ghost"
+          aria-haspopup="dialog"
+          aria-label={`Dokumenty i terminy — ${name}`}
+          onClick={() => onShowDocuments(assessment.benefit)}
+          className="mt-1 w-full font-semibold text-primary hover:bg-primary/10 hover:text-primary"
+        >
+          <ClipboardList aria-hidden="true" />
           Dokumenty i terminy
         </Button>
       </CardContent>
@@ -282,8 +289,6 @@ function BenefitCard({ assessment, documentsOpen, onShowDocuments }: {
 export function KalkulatorPage() {
   const resultHeading = useRef<HTMLHeadingElement>(null)
   const stepHeading = useRef<HTMLHeadingElement>(null)
-  const documentsPanel = useRef<HTMLDivElement>(null)
-  const focusDocuments = useRef(false)
   const focusNextStep = useRef(false)
   const scrolledFor = useRef<InterviewValues | null>(null)
   const [stepId, setStepId] = useState('role')
@@ -328,19 +333,11 @@ export function KalkulatorPage() {
   }
 
   function showDocuments(benefit: BenefitCode) {
-    if (documentBenefit === benefit) {
-      documentsPanel.current?.focus({ preventScroll: true })
-      documentsPanel.current?.scrollIntoView({ block: 'start' })
-      return
-    }
-    focusDocuments.current = true
     setDocumentBenefit(benefit)
   }
 
   function closeDocuments() {
     setDocumentBenefit(null)
-    resultHeading.current?.focus({ preventScroll: true })
-    resultHeading.current?.scrollIntoView({ block: 'start' })
   }
 
   function submitAnswers(data: InterviewValues) {
@@ -377,14 +374,6 @@ export function KalkulatorPage() {
     resultHeading.current?.focus({ preventScroll: true })
     resultHeading.current?.scrollIntoView({ block: 'start' })
   }, [result, submitted])
-
-  useEffect(() => {
-    if (documentBenefit && focusDocuments.current && documentsPanel.current) {
-      focusDocuments.current = false
-      documentsPanel.current?.focus({ preventScroll: true })
-      documentsPanel.current?.scrollIntoView({ block: 'start' })
-    }
-  }, [documentBenefit])
 
   // Każda zmiana suwaka przelicza wynik, ale dopiero po krótkiej pauzie w przeciąganiu.
   useEffect(() => {
@@ -537,23 +526,26 @@ export function KalkulatorPage() {
                 assessment={result.assessments.get(benefit) ?? {
                   benefit, status: 'missing_data', reason: 'Dla tego świadczenia brakuje wyniku symulacji.',
                 }}
-                documentsOpen={documentBenefit === benefit}
                 onShowDocuments={showDocuments}
               />
             ))}
           </div>
-          {documentBenefit && (
-            <div ref={documentsPanel} tabIndex={-1} className="scroll-mt-24 focus:outline-none" aria-label="Dokumenty i terminy">
-              <Suspense fallback={<p role="status">Wczytujemy dokumenty…</p>}>
+          <Dialog
+            open={documentBenefit !== null}
+            onClose={closeDocuments}
+            title={documentBenefit ? `Dokumenty i terminy — ${benefitList[documentBenefit].name}` : 'Dokumenty i terminy'}
+          >
+            {documentBenefit && (
+              <Suspense fallback={<p role="status" className="py-8 text-center text-sm">Wczytujemy dokumenty…</p>}>
                 <BenefitDocuments
                   key={documentBenefit}
                   benefit={documentBenefit}
-                  onClose={closeDocuments}
                   context={result.documentContext}
+                  plain
                 />
               </Suspense>
-            </div>
-          )}
+            )}
+          </Dialog>
         </section>
       )}
     </PageContainer>
