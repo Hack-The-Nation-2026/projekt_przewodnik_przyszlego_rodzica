@@ -123,7 +123,7 @@ function MethodChooser() {
   const failure = manual.isError ? describeFailure(manual.error) : null
 
   return (
-    <div className="grid gap-4 lg:grid-cols-2">
+    <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
       <Card className="flex flex-col">
         <CardHeader>
           <div className="flex flex-wrap items-center gap-2">
@@ -135,7 +135,7 @@ function MethodChooser() {
             niczego przepisywać.
           </CardDescription>
         </CardHeader>
-        <CardContent className="mt-auto space-y-4">
+        <CardContent className="space-y-4">
           <Link
             to="/mobywatel?returnTo=/wejscie"
             className={cn(buttonVariants({ variant: 'mobywatel', size: 'lg' }), 'w-full')}
