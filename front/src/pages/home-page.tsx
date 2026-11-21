@@ -100,46 +100,35 @@ export function HomePage() {
 
   return (
     <>
-      <section
-        aria-labelledby="start-title"
-        className="relative isolate overflow-hidden bg-secondary/40"
-      >
-        {/* Zdjęcie zajmuje prawy skraj sekcji: dochodzi do krawędzi okna, ma skośny lewy brzeg
-            i rzuca cień na treść obok. */}
+      <section aria-labelledby="start-title" className="relative isolate overflow-hidden">
+        {/* Jedno duże zdjęcie przez całą szerokość, a na nim kwadracik z informacją. */}
+        <img
+          src="/formularz.jpg"
+          alt="Rodzice wypełniają przy kuchennym stole wniosek o zasiłek."
+          className="absolute inset-0 size-full object-cover object-[50%_38%]"
+        />
+        {/* Przyciemnienie od lewej przykrywa zdjęcie, więc biały kwadracik ma kontrast. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 right-0 hidden lg:block lg:w-[46%] xl:w-[52%] xl:max-w-[60rem]"
-        >
-          <div
-            className="size-full"
-            style={{
-              filter:
-                'drop-shadow(-10px 0 14px rgba(29, 43, 58, 0.32)) drop-shadow(-34px 0 46px rgba(29, 43, 58, 0.22))',
-            }}
-          >
-            <div className="size-full" style={{ clipPath: 'polygon(16% 0, 100% 0, 100% 100%, 0 100%)' }}>
-              <img
-                src="/formularz.jpg"
-                alt=""
-                className="size-full object-cover object-[50%_38%]"
-              />
-            </div>
-          </div>
-        </div>
-
-        <Container className="relative py-16 sm:py-24">
-          <div className="max-w-2xl lg:max-w-[36rem] xl:max-w-[40rem]">
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(to right, rgba(29, 43, 58, 0.78), rgba(29, 43, 58, 0.46) 48%, rgba(29, 43, 58, 0.14))',
+          }}
+        />
+        <Container className="relative flex min-h-[26rem] items-center py-12 sm:min-h-[30rem] lg:min-h-[34rem]">
+          <div className="w-full max-w-xl rounded-lg bg-background/95 p-6 shadow-2xl ring-1 ring-black/5 backdrop-blur-sm sm:p-8">
             <h1
               id="start-title"
-              className="text-4xl font-semibold leading-tight text-navy sm:text-5xl lg:text-6xl"
+              className="text-3xl font-semibold leading-tight text-navy sm:text-4xl lg:text-5xl"
             >
               Sprawdź, co ci przysługuje w ciąży i po urodzeniu dziecka
             </h1>
-            <p className="mt-4 max-w-xl text-lg text-muted-foreground sm:mt-6 sm:text-xl">
+            <p className="mt-4 text-base text-muted-foreground sm:text-lg">
               Przewodnik prowadzi przez zasiłek chorobowy, macierzyński i rodzicielski. Policz, kiedy
               i ile dostaniesz, oraz zobacz, jakie dokumenty złożyć.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3 sm:mt-10">
+            <div className="mt-6 flex flex-wrap gap-3">
               <Link to="/kalkulator" className={buttonVariants({ size: 'lg' })}>
                 Rozpocznij sprawdzenie
                 <ArrowRight />
@@ -150,15 +139,6 @@ export function HomePage() {
             </div>
           </div>
         </Container>
-
-        {/* Na wąskich ekranach to samo zdjęcie wchodzi pod tekst i domyka sekcję, z tym samym skosem. */}
-        <figure className="relative lg:hidden" style={{ clipPath: 'polygon(0 0, 100% 12%, 100% 100%, 0 100%)' }}>
-          <img
-            src="/formularz.jpg"
-            alt="Rodzice wypełniają przy kuchennym stole wniosek o zasiłek."
-            className="aspect-[4/3] w-full object-cover"
-          />
-        </figure>
       </section>
 
       {citizen && (

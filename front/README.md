@@ -84,8 +84,9 @@ zostawia sekcjom i kotwicom miejsce pod przyklejonym nagłówkiem.
 Hero otwiera zdjęcie `public/formularz.jpg`: rodzice wypełniają przy kuchennym stole wniosek.
 Autor Ron Lach, pobrane z Pexels na licencji Pexels, która pozwala używać i przycinać zdjęcie
 także komercyjnie, bez obowiązku podania autora. Plik jest przycięty do 2400 na 1200 pikseli.
-Na szerokich ekranach zdjęcie dochodzi do prawej krawędzi okna, ma skośny lewy brzeg i rzuca cień
-na treść obok, a na wąskich wchodzi pod tekst i domyka sekcję.
+Zdjęcie zajmuje całą szerokość sekcji, a na nim stoi kwadracik z nagłówkiem, opisem i przyciskami.
+Od lewej przykrywa zdjęcie przyciemnienie, żeby kwadracik miał na nim kontrast. Ten sam układ
+działa na telefonie, tylko kwadracik zwęża się do szerokości ekranu.
 
 ## Logowanie przez mObywatel
 
