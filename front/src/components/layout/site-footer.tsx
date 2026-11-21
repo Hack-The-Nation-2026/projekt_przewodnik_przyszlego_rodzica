@@ -9,6 +9,7 @@ const COLUMNS = [
       { to: '/swiadczenia', label: 'Świadczenia' },
       { to: '/kalkulator', label: 'Kalkulator' },
       { to: '/dokumenty', label: 'Dokumenty' },
+      { to: '/zus', label: 'Symulacja ZUS' },
       { to: '/wsparcie', label: 'Wsparcie' },
     ],
   },

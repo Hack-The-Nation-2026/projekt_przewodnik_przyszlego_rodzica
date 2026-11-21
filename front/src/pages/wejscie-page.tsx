@@ -88,6 +88,9 @@ function SessionCard() {
             Przejdź dalej
             <ArrowRight />
           </Link>
+          <Link to="/zus" className={buttonVariants({ variant: 'outline', size: 'lg' })}>
+            Zobacz dane z ZUS
+          </Link>
           <Button variant="outline" size="lg" onClick={signOut}>
             <LogOut />
             Wyloguj

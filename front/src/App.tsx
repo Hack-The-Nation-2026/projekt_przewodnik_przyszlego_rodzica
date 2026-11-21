@@ -7,6 +7,7 @@ import { MobywatelPage } from '@/pages/mobywatel-page'
 import { NotFoundPage } from '@/pages/not-found-page'
 import { PlaceholderPage } from '@/pages/placeholder-page'
 import { WejsciePage } from '@/pages/wejscie-page'
+import { ZusPage } from '@/pages/zus-page'
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
         />
         <Route path="kalkulator" element={<KalkulatorPage />} />
         <Route path="dokumenty" element={<DokumentyPage />} />
+        <Route path="zus" element={<ZusPage />} />
         <Route
           path="wsparcie"
           element={

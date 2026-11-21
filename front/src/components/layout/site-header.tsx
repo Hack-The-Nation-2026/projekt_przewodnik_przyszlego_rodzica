@@ -13,6 +13,7 @@ const NAV = [
   { to: '/swiadczenia', label: 'Świadczenia' },
   { to: '/kalkulator', label: 'Kalkulator' },
   { to: '/dokumenty', label: 'Dokumenty' },
+  { to: '/zus', label: 'ZUS' },
   { to: '/wsparcie', label: 'Wsparcie' },
   { to: '/o-projekcie', label: 'O projekcie' },
 ]
