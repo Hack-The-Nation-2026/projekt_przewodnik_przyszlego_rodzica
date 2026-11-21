@@ -18,8 +18,8 @@ function initials(firstName: string, lastName: string) {
 /**
  * Menu konta w nagłówku. Zamiast wypisanego imienia i osobnego przycisku wylogowania
  * pokazujemy jeden przycisk z krążkiem, a pod nim skróty do danych, kalkulatora i wyjścia.
- * Imię stoi po lewej, a za nim strzałka i krążek, więc przycisk kończy się tym samym
- * znakiem co reszta prawej krawędzi nagłówka.
+ * Strzałka stoi przed imieniem i mówi, że pod przyciskiem otwiera się menu, a krążek
+ * zamyka go z prawej, na końcu nagłówka.
  */
 export function ProfileMenu() {
   const citizen = useAppStore((state) => state.citizen)
@@ -36,10 +36,10 @@ export function ProfileMenu() {
         aria-label={`Menu konta, ${fullName}`}
         className="flex items-center gap-2 rounded-md py-1 pl-1 pr-1 text-primary-foreground transition-colors hover:bg-primary-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/60 sm:pl-3"
       >
+        <ChevronDown className="hidden size-4 opacity-80 sm:block" aria-hidden />
         <span className="hidden max-w-[9rem] truncate text-sm font-medium sm:inline">
           {citizen.first_name}
         </span>
-        <ChevronDown className="hidden size-4 opacity-80 sm:block" aria-hidden />
         <span
           aria-hidden
           className="flex size-8 items-center justify-center rounded-full bg-primary-foreground text-sm font-semibold text-primary"

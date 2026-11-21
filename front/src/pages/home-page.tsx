@@ -2,13 +2,11 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Calculator, FileText, HeartHandshake } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/layout/container'
 import { useBenefits } from '@/hooks/use-benefits'
-import { useAppStore } from '@/store/app-store'
 import { cn } from '@/lib/utils'
 
 const STEPS = [
@@ -34,7 +32,6 @@ const ACTIONS = [
 
 export function HomePage() {
   const { data, isPending, isError, refetch } = useBenefits()
-  const citizen = useAppStore((state) => state.citizen)
 
   // Przewijanie idzie sekcjami: gdy bieżąca sekcja nie ma już zapasu w daną stronę, jedno
   // kółko dostawia sąsiednią sekcję pod nagłówek. Sekcja wyższa od okna przewija się
@@ -137,27 +134,6 @@ export function HomePage() {
           </div>
         </Container>
       </section>
-
-      {citizen && (
-        <div className="border-b border-border bg-primary/5">
-          <Container className="flex flex-wrap items-center gap-x-4 gap-y-2 py-4">
-            <Link to="/wejscie" className="font-medium text-navy hover:underline">
-              {citizen.first_name} {citizen.last_name}
-            </Link>
-            <span className="text-muted-foreground">{citizen.case_label}</span>
-            <Badge
-              variant="outline"
-              className={cn(
-                'bg-background sm:ml-auto',
-                citizen.status === 'przyznane' && 'border-primary/30 text-primary',
-                citizen.status === 'odmowa' && 'border-destructive/40 text-destructive',
-              )}
-            >
-              {citizen.status}
-            </Badge>
-          </Container>
-        </div>
-      )}
 
       <section aria-labelledby="jak-to-dziala-title" className="py-14 sm:py-20">
         <Container>
