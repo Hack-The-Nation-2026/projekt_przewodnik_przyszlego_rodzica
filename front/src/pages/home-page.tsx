@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Calculator, ChevronDown, FileText, HeartHandshake } from 'lucide-react'
+import { ArrowRight, Calculator, ChevronDown, FileText, HeartHandshake, Sparkles } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -119,6 +119,18 @@ export function HomePage() {
               </li>
             ))}
           </ol>
+
+          {/* Skrót dla kogoś, kto nie wie, od czego zacząć. Nawigacja wyżej zostaje bez zmian. */}
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border px-5 py-4 sm:px-6">
+            <div className="flex items-start gap-3">
+              <Sparkles className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+              <p>Nie wiesz, gdzie szukać? Asystent wskaże właściwą stronę.</p>
+            </div>
+            <Link to="/asystent" className={buttonVariants({ variant: 'outline', size: 'sm' })}>
+              Zapytaj asystenta
+              <ArrowRight />
+            </Link>
+          </div>
         </Container>
       </section>
 

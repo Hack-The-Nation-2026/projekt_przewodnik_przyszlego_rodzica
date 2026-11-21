@@ -240,3 +240,25 @@ export interface CaseApplication {
   request: Record<string, unknown>
   expected: CaseExpectedRow[]
 }
+
+/** Miejsce, do którego odsyła asystent: nasza podstrona albo strona instytucji. */
+export interface AssistantLink {
+  label: string
+  href: string
+  kind: 'page' | 'external'
+  description: string | null
+}
+
+/** Gotowe pytanie pokazywane jako podpowiedź pod rozmową. */
+export interface AssistantTopic {
+  id: string
+  question: string
+}
+
+/** Odpowiedź asystenta: co powiedzieć i gdzie odesłać. Kwot nie ma. */
+export interface AssistantAnswer {
+  topic: string | null
+  answer: string
+  links: AssistantLink[]
+  suggestions: AssistantTopic[]
+}

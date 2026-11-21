@@ -49,7 +49,7 @@ ich kopiować ani rozpowszechniać.
 - [x] Krok 11. Panel administracyjny
 - [x] Krok 12. Wygląd i responsywność
 - [ ] Krok 13. Testy na sprawach i upload wniosków
-- [ ] Krok 14. Asystent z AI
+- [x] Krok 14. Asystent z AI
 - [ ] Krok 15. Materiały do oddania
 - [ ] Krok 16. Weryfikacja przed oddaniem
 
@@ -423,6 +423,27 @@ Gotowe, gdy asystent działa bez klucza, prowadzi do właściwej podstrony i ża
 nie zawiera wyliczonej kwoty.
 
 Brief, pkt 4, pkt 9 oraz lista symulacji w pkt 3.
+
+Zrobione 21.11. Asystent stoi na `GET /api/assistant/topics` i `POST /api/assistant/ask`, a strona
+na `/asystent`.
+
+### Co jest
+
+- Katalog dziewiętnastu tematów w `back/app/services/assistant_service.py`. Każdy ma gotowe pytanie,
+  odpowiedź nawigacyjną i linki, czyli podstronę serwisu albo stronę ZUS, ministerstwa rodziny
+  i PIP.
+- Dopasowanie jest deterministyczne i działa bez klucza API. Pytanie jest normalizowane (małe
+  litery, bez ogonków), a temat wygrywa na frazach i rdzeniach słów, więc "łączyć pracę" i
+  "laczyc prace" trafiają w to samo. Nieznane pytanie dostaje odesłania do trzech instytucji
+  i podpowiedzi, a nie wymyśloną odpowiedź.
+- Strona `/asystent`: podpowiedzi na start, rozmowa, karty linków zewnętrznych i wewnętrznych,
+  przycisk "Wyczyść". Wejście jest w nagłówku, w stopce i w sekcji "Jak to działa" na stronie
+  głównej, więc zwykła nawigacja zostaje nietknięta.
+- Asystent nie podaje kwot, tygodni ani terminów. `back/tests/test_assistant.py` sprawdza, że
+  w żadnej odpowiedzi, pytaniu ani etykiecie linku nie ma cyfry, oraz że każda podstrona, do której
+  odsyła, ma trasę w `front/src/App.tsx`.
+- Pytanie nie opuszcza serwera: nie ma wywołania zewnętrznego modelu. Strona mówi wprost, że to
+  nawigacja, a nie doradca prawny, i że kwoty liczy kalkulator.
 
 ## Krok 15. Materiały do oddania
 

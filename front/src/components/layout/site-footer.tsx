@@ -8,6 +8,7 @@ const COLUMNS = [
     title: 'Nawigacja',
     links: [
       { to: '/wejscie', label: 'Wejście i logowanie' },
+      { to: '/asystent', label: 'Asystent' },
       { to: '/swiadczenia', label: 'Świadczenia' },
       { to: '/kalkulator', label: 'Kalkulator' },
       { to: '/dokumenty', label: 'Dokumenty' },
