@@ -12,7 +12,7 @@ a potem dostaje dokumenty, terminy i miejsce złożenia wniosku.
 - **Podział urlopu** na jednym ekranie: wspólna pula, po dziewięć nieprzenoszalnych tygodni dla
   każdego rodzica i osobny wynik dla obojga.
 - **Dokumenty i wnioski** (`/dokumenty`): formularz, załączniki, termin i miejsce złożenia dla
-  każdego świadczenia. Do tego szkic wniosku do pobrania.
+  każdego świadczenia. Do tego szkic wniosku do pobrania i plik `.ics` z terminami do kalendarza.
 - **Sprawy** (`/sprawy`): dziesięć scenariuszy demonstracyjnych i własny wniosek w formacie JSON.
   Strona pokazuje weryfikację ubezpieczenia, wyliczenie i porównanie z oczekiwanym wynikiem.
 - **Symulacja ZUS** (`/zus`): ubezpieczenie, zadłużenie, e-ZLA, PUE/eZUS i wniosek o odpis aktu

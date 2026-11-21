@@ -226,6 +226,90 @@ export function getDocumentGuide(benefit: BenefitCode, options: DocumentOptions,
 export const formatDocumentDate = (value: string) =>
   new Intl.DateTimeFormat('pl-PL', { timeZone: 'UTC', dateStyle: 'long' }).format(new Date(value + 'T00:00:00Z'))
 
+/** Jedno zadanie z datą, które można wrzucić do kalendarza rodzica. */
+export interface CalendarEvent {
+  date: string
+  title: string
+  description: string
+  url: string
+  /** To samo zadanie jako zdanie na stronie, żeby tekst i plik nie rozjechały się. */
+  hint: string
+}
+
+/**
+ * Terminy, które da się wyliczyć z okresów symulacji. Reszta wskazówek w
+ * `deadlines` nie ma konkretnej daty, więc nie trafia do kalendarza.
+ */
+export function getCalendarEvents(
+  benefit: BenefitCode,
+  options: DocumentOptions,
+  context?: DocumentContext,
+): CalendarEvent[] {
+  if (!context) return []
+  const events: CalendarEvent[] = []
+  const form = getDocumentGuide(benefit, options, context).form
+  const period = context.periods[benefit]
+  const add = (date: string, title: string, description: string, hint: string) => {
+    const note = context.forecast ? ' Data orientacyjna, policzona od przewidywanej daty porodu.' : ''
+    events.push({ date, title, description: description + note, url: form.url, hint })
+  }
+
+  if (
+    (benefit === 'macierzynski' || benefit === 'rodzicielski') &&
+    (options.role === 'mother' || options.role === 'foster')
+  ) {
+    const date = shiftDate(context.eventDate, 21)
+    add(
+      date,
+      'Złóż wniosek o zasiłek w stawce 81,5%',
+      'Wniosek złożony w ciągu 21 dni od porodu daje stawkę 81,5% za cały okres urlopu.',
+      '21. dzień od zdarzenia dla wniosku o 81,5% wypada ' + formatDocumentDate(date) + '.',
+    )
+  }
+
+  if (options.employment === 'employee' && options.coverage !== 'ended') {
+    if (benefit === 'macierzynski' && options.maternityCase === 'takeover' && context.takeoverDate) {
+      const date = shiftDate(context.takeoverDate, -14)
+      add(
+        date,
+        'Złóż wniosek o przejęcie urlopu przez ojca',
+        'Wniosek o przejęcie urlopu złóż co najmniej 14 dni przed przejęciem.',
+        'Wniosek ojca o przejęcie urlopu złóż do ' + formatDocumentDate(date) + '.',
+      )
+    }
+    if (benefit === 'rodzicielski' && period) {
+      const date = shiftDate(period.start, -21)
+      add(
+        date,
+        'Złóż wniosek o urlop rodzicielski',
+        'Wniosek złóż pracodawcy co najmniej 21 dni przed początkiem danej części urlopu.',
+        'Wniosek o urlop rodzicielski złóż do ' + formatDocumentDate(date) + '.',
+      )
+    }
+    if (benefit === 'ojcowski' && period) {
+      const date = shiftDate(period.start, -7)
+      add(
+        date,
+        'Złóż wniosek o urlop ojcowski',
+        'Wniosek złóż pracodawcy co najmniej 7 dni przed rozpoczęciem urlopu.',
+        'Dla początku ojcowskiego z symulacji termin wniosku wypada ' + formatDocumentDate(date) + '.',
+      )
+    }
+    const end = context.periods.macierzynski?.end
+    if (benefit === 'uzupelniajacy' && end) {
+      const date = shiftDate(end, -21)
+      add(
+        date,
+        'Złóż wniosek o uzupełniający urlop macierzyński',
+        'Wniosek złóż pracodawcy co najmniej 21 dni przed końcem urlopu macierzyńskiego.',
+        'Wniosek o urlop uzupełniający złóż do ' + formatDocumentDate(date) + '.',
+      )
+    }
+  }
+
+  return events
+}
+
 export function shiftDate(value: string, days: number) {
   const date = new Date(value + 'T00:00:00Z')
   date.setUTCDate(date.getUTCDate() + days)

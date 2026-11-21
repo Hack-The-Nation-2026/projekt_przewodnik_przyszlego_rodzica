@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
-import { ArrowRight, ArrowUpRight, Building2, CalendarDays, FileText, MapPin } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Building2, CalendarDays, CalendarPlus, FileText, MapPin } from 'lucide-react'
 import { ApplicationDraft, DocumentField } from '@/components/application-draft'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -11,10 +11,11 @@ import type { BenefitCode } from '@/lib/benefit-interview'
 import { isFamilyBenefit } from '@/lib/benefit-document-context'
 import type { DocumentContext } from '@/lib/benefit-document-context'
 import {
-  documentEmployment, documentRoles, formatDocumentDate, getBenefitPayer, getDocumentGuide,
-  leaveRegulation, payerSource, shiftDate,
+  documentEmployment, documentRoles, getBenefitPayer, getCalendarEvents, getDocumentGuide,
+  leaveRegulation, payerSource,
 } from '@/lib/benefit-documents'
 import type { Coverage, DocumentOptions, Employment, MaternityCase, PayerSize, Role } from '@/lib/benefit-documents'
+import { downloadIcs } from '@/lib/calendar'
 import { cn } from '@/lib/utils'
 
 const benefits = Object.keys(benefitList) as BenefitCode[]
@@ -95,32 +96,12 @@ function coverageFromContext(benefit: BenefitCode, context?: DocumentContext): C
 }
 
 function DateHints({ benefit, options, context }: { benefit: BenefitCode; options: DocumentOptions; context: DocumentContext }) {
-  const hints: string[] = []
-  const period = context.periods[benefit]
-  if ((benefit === 'macierzynski' || benefit === 'rodzicielski') && (options.role === 'mother' || options.role === 'foster')) {
-    hints.push('21. dzień od zdarzenia dla wniosku o 81,5% wypada ' + formatDocumentDate(shiftDate(context.eventDate, 21)) + '.')
-  }
-  if (options.employment === 'employee' && options.coverage !== 'ended') {
-    if (benefit === 'macierzynski' && options.maternityCase === 'takeover' && context.takeoverDate) {
-      hints.push('Wniosek ojca o przejęcie urlopu złóż do ' + formatDocumentDate(shiftDate(context.takeoverDate, -14)) + '.')
-    }
-    if (benefit === 'rodzicielski' && period) {
-      hints.push('Wniosek o urlop rodzicielski złóż do ' + formatDocumentDate(shiftDate(period.start, -21)) + '.')
-    }
-    if (benefit === 'ojcowski' && period) {
-      hints.push('Dla początku ojcowskiego z symulacji termin wniosku wypada ' + formatDocumentDate(shiftDate(period.start, -7)) + '.')
-    }
-    const end = context.periods.macierzynski?.end
-    if (benefit === 'uzupelniajacy' && end) {
-      hints.push('Wniosek o urlop uzupełniający złóż do ' + formatDocumentDate(shiftDate(end, -21)) + '.')
-    }
-  }
-
-  if (!hints.length) return null
+  const events = getCalendarEvents(benefit, options, context)
+  if (!events.length) return null
   return (
     <div className="space-y-1 rounded-md bg-secondary p-3">
       <p className="font-semibold">{context.forecast ? 'Daty orientacyjne z wywiadu' : 'Daty według okresów z symulacji'}</p>
-      <ul className="list-disc space-y-1 pl-5">{hints.map((hint) => <li key={hint}>{hint}</li>)}</ul>
+      <ul className="list-disc space-y-1 pl-5">{events.map((event) => <li key={event.hint}>{event.hint}</li>)}</ul>
       <p className="text-muted-foreground">To przesunięcia kalendarzowe bez korekt za dni wolne. Przy zmianie okresu przelicz termin.</p>
     </div>
   )
@@ -152,6 +133,7 @@ export default function BenefitDocuments({
   const coverage = coverageOverride?.benefit === benefit ? coverageOverride.value : coverageFromContext(benefit, scenario)
   const options = { role, employment, payerSize, coverage, maternityCase }
   const guide = getDocumentGuide(benefit, options, scenario)
+  const calendarEvents = scenario ? getCalendarEvents(benefit, options, scenario) : []
   const route = routeFor(benefit, options)
   const period = isFamilyBenefit(benefit) && (scenario?.forecast || (benefit === 'macierzynski' && maternityCase === 'before_birth'))
     ? undefined : scenario?.periods[benefit]
@@ -288,10 +270,28 @@ export default function BenefitDocuments({
           <CardContent className={cn('space-y-5 text-sm', plain && 'px-0 pb-0')}>
             <div className="space-y-3">
               <h3 className="text-lg font-semibold">{benefitList[benefit].name}</h3>
-              <a className={cn(buttonVariants(), 'h-auto min-h-10 whitespace-normal')}
-                href={guide.form.url} target="_blank" rel="noreferrer">
-                Otwórz formularz {guide.form.label} na stronie ZUS <ArrowUpRight aria-hidden="true" />
-              </a>
+              <div className="flex flex-wrap gap-2">
+                <a className={cn(buttonVariants(), 'h-auto min-h-10 whitespace-normal')}
+                  href={guide.form.url} target="_blank" rel="noreferrer">
+                  Otwórz formularz {guide.form.label} na stronie ZUS <ArrowUpRight aria-hidden="true" />
+                </a>
+                {calendarEvents.length > 0 && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="h-auto min-h-10 whitespace-normal"
+                    onClick={() => downloadIcs(calendarEvents, `terminy-${benefit}.ics`)}
+                  >
+                    <CalendarPlus aria-hidden="true" />
+                    Dodaj terminy do mojego kalendarza
+                  </Button>
+                )}
+              </div>
+              {calendarEvents.length > 0 && (
+                <p className="text-xs text-muted-foreground">
+                  Plik .ics otworzysz w kalendarzu telefonu. Terminy są orientacyjne, bez korekt za dni wolne.
+                </p>
+              )}
             </div>
             <div className="space-y-2 rounded-md bg-secondary p-4">
               <h4 className="flex items-center gap-2 font-semibold"><MapPin className="size-4 text-primary" aria-hidden="true" /> Gdzie złożyć</h4>

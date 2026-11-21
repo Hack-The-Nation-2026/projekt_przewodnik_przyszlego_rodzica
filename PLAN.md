@@ -238,6 +238,14 @@ Gotowe, gdy dla każdego świadczenia widać komplet dokumentów, termin i adres
 
 Brief, pkt 3 g oraz lista symulacji.
 
+### Co jest
+
+- Dla każdego świadczenia okno prowadzi od wyboru świadczenia przez sytuację do dokumentów,
+  terminu i adresata. Płatnika wybiera się po liczbie ubezpieczonych.
+- Daty terminów liczy `getCalendarEvents` z okresów symulacji. Ten sam zestaw zasila przycisk
+  „Dodaj terminy do mojego kalendarza”: plik `.ics` ma nazwę czynności, datę całodniową, link
+  do formularza i przypomnienie dzień wcześniej.
+
 ## Krok 8. Symulacje ZUS
 
 Wszystko to jest udawane i brief mówi o tym wprost, ale musi być widoczne.
