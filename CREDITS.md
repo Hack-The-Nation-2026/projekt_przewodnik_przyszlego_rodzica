@@ -25,6 +25,16 @@ Każde polecenie zaczynało się tym samym opisem.
 - `krok-wyniki.webp` — Two parents, one in ochre and one in dark forest green, reviewing a small results sheet together with an abstract three-bar chart and a checkmark; a short leafy sprig alongside.
 - `krok-dokumenty.webp` — A parent's hands placing two ivory application sheets into an ochre folder, with simple green checkmarks and a short leafy sprig alongside.
 
+### Polecenia do usunięcia ornamentów
+
+Wbudowany imagegen otrzymał każdą z trzech ilustracji jako obraz do edycji.
+
+> Edit the attached small 4:3 spot illustration. Remove folk ornament and botanical decoration only. Keep the existing subject, approximate pose, composition, palette, delicate dark green outlines and lightly textured illustrated finish. Use truly transparent background outside the artwork. No new decorations, text, watermarks, or background.
+
+- `krok-wywiad.webp` — Remove the leafy border at the bottom, the sprig by the laptop, and every decorative floral print from dress and cup. Fill the recovered spaces with plain ochre clothing and plain tabletop/cup where appropriate. Keep the seated woman, open laptop with checkmarks, and the two question bubbles.
+- `krok-wyniki.webp` — Remove the garland at the bottom and sides, flowers, leaves, and printed motifs on the sleeves. Keep the same two parents, expressions, pointing gesture and report with three bars and a checkmark, using plain solid clothing.
+- `krok-dokumenty.webp` — Remove the decorative floral emblem on the ochre folder, the external leafy sprig and all leaf details on both cuffs. Keep the same two hands, plain green cuffs, plain ochre folder and the two checked ivory pages.
+
 ## Krój pisma
 
 IBM Plex Sans z Google Fonts, licencja SIL Open Font License 1.1. `front/index.html` wczytuje
