@@ -114,6 +114,9 @@ FORM_PATTERNS = [
 ]
 
 OUTCOME_FROM_TEXT = [
+    ("denied", r"w sprawie odm\u00f3wiono|odm\u00f3wiono przyznania|odmowiono przyznania"),
+    ("granted", r"w sprawie przyznano zasi\u0142ek|zasi\u0142ek przyznano|"
+                r"przyznano prawo do zasi\u0142ku|przyznano prawo do zasilku"),
     ("denied", r"odmow|nie przys\u0142uguje|brak prawa|nie podlega ubezpieczeniu chorobowemu"),
     ("granted", r"wyp\u0142acono \u015bwiadczenia|wyp\u0142ata zasi\u0142ku|wyp\u0142acony|przyznano prawo|"
                 r"decyzja przyznaj\u0105ca|ustalono uprawnienia"),
@@ -236,13 +239,44 @@ def forms_of(ocr_text: str) -> list[str]:
     return forms
 
 
+STRONG_EVIDENCE = [
+    r"w sprawie przyznano zasi\u0142ek[^.!|\u2014-]{0,40}",
+    r"zasi\u0142ek przyznano",
+    r"przyznano prawo do zasi\u0142ku[^.!|]{0,70}",
+    r"decyzja przyznaj\u0105ca zasi\u0142ek[^.!|]{0,120}",
+    r"w sprawie odm\u00f3wiono[^.!|\u2014-]{0,70}",
+    r"nie podlega ubezpieczeniu chorobowemu",
+]
+
+
 def evidence_of(ocr_text: str) -> str:
-    """Pierwsze zdanie okładki, jeżeli mówi o wyniku sprawy."""
-    head = ocr_text[:400]
-    for sentence in re.split(r"(?<=[.!])\s+", head):
-        if re.search(r"wyp\u0142acono|odmow|przyznaj|ustalono uprawnienia|wyp\u0142ata", sentence,
-                     re.IGNORECASE):
-            return sentence.strip()[:400]
+    """Zdanie z materiału, które mówi o wyniku sprawy.
+
+    OCR skanów czyta formularze raz lepiej, raz gorzej, więc bierzemy tylko frazy, które
+    da się rozpoznać jednoznacznie, i odrzucamy resztki, w których przeważa szum.
+    """
+    lowered = ocr_text.lower()
+    for pattern in STRONG_EVIDENCE:
+        match = re.search(pattern, lowered)
+        if not match:
+            continue
+        snippet = re.sub(r"\s+", " ", ocr_text[match.start():match.end()]).strip(" .,|;:-")
+        following = ocr_text[match.end():match.end() + 1]
+        if following.isalpha():
+            snippet = snippet.rsplit(" ", 1)[0]
+        words = snippet.split()
+        while words and (
+            len(words[-1]) <= 2
+            or re.fullmatch(r"[\d\-–]+", words[-1])
+            or words[-1].endswith(":")
+            or re.search(r"[^0-9A-Za-zĄ-ż\-]", words[-1])
+        ):
+            words.pop()
+        snippet = " ".join(words).strip(" .,|;:-\u2014")
+        letters = sum(char.isalpha() or char.isspace() for char in snippet)
+        if len(snippet) < 20 or letters / len(snippet) < 0.85:
+            continue
+        return snippet[:400]
     return ""
 
 

@@ -401,9 +401,9 @@ Brief, pkt 4 oraz pkt 6.
 - Dziesięć spraw z zestawu: 10/10 zgodnych, kwoty i statusy co do grosza.
 - 362 testy backendu przechodzą, 32 są pominięte (18 reguł poza silnikiem, 14 porównań z
   lokalnym zestawem ZUS).
-- Rozpoznanie zestawu przykładowego: 87/87 spraw, 69 ma wynik odczytany z materiału (53
-  przyznane, 16 odmów), 18 nie ma zapisanego wyniku na żadnej czytelnej stronie. Wzory formularzy
-  rozpoznane w 86 zestawach.
+- Rozpoznanie zestawu przykładowego: 87/87 spraw, 71 ma wynik odczytany z materiału (56
+  przyznanych, 15 odmów), 16 nie ma zapisanego wyniku na żadnej czytelnej stronie. Wzory
+  formularzy rozpoznane w 86 zestawach, cytat z decyzji w 10.
 - Pełny przebieg na `PRZYKLADY/` jest częściowy. 87 PDF-ów to zdjęcia formularzy i decyzji: brak
   warstwy tekstowej, pismo odręczne, dane zaczernione. `pdftotext` nic nie daje, a OCR czyta
   nagłówki i okładkę zestawu, nie kwoty. Dlatego rozpoznajemy komplet 87 spraw, ale kwot

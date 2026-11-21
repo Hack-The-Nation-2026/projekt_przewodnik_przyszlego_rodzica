@@ -256,7 +256,7 @@ function SampleCard({ sample, onResult }: { sample: ZusSample; onResult: (result
         <p className="text-muted-foreground">{sample.facts}</p>
         {sample.evidence && (
           <blockquote className="border-l-2 border-primary/40 pl-3 text-sm text-muted-foreground">
-            Zapis na okładce zestawu: „{sample.evidence}”
+            Zapis w materiale: „{sample.evidence}”
           </blockquote>
         )}
         {sample.forms.length > 0 && (

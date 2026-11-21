@@ -7,7 +7,7 @@
   "title": "Zasiłek macierzyński",
   "facts": "Zasiłek macierzyński za okres urlopu macierzyńskiego. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "W sprawie ustalono uprawnienia do zasiłku chorobowego dla kobiety w ciąży oraz zasiłku macierzyńskiego - wypłacono świadczenia Rzeczpospolita Polska EEE ED EGAFETEEKETESZE] Qabpis skroconv aktu uroazenia zo i a POAWOWIRO SEDNA | 2 PRADU: nr DAP 1 PZ ; Ż mm ZIREZIEPTY zx CZE GH \"ZE = | CZMEER ERSETE = o ŚL 00 2 PARE ——— - .",
+  "evidence": "",
   "benefits": [
    "macierzynski"
   ],
@@ -66,7 +66,7 @@
   "title": "Zasiłek macierzyński, zasiłek za urlop rodzicielski",
   "facts": "Zasiłek macierzyński łączenie urlopu rodzicielskiego z pracą. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "W sprawie została dokonana wypłata: - zasitku macierzyńskiego za okres od 22-11-2023 to i Z wykonywanieni pracy na 4 etatu), - od 01-02-2025 wypłata zasiłku macierzyńskiego zósta z wnioskiem ubezpieczonej, - w Sprawie zostało wypłacone podwyższenie zasiłku” ma świadczenia rodzicielskiego za okres od 01-05-2024 do 3 a 12.12.2023r.",
+  "evidence": "",
   "benefits": [
    "macierzynski",
    "rodzicielski"
@@ -151,7 +151,7 @@
   "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
   "facts": "Zasiłek chorobowy i macierzyński. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "DECYZJA PRZYZNAJĄCA ZASIŁEK CHOROBOWY ZA OKRES CIĄŻY ORAZ DECYZJA PRZYZNAJĄCA ZASIŁEK MACIERZYŃSKI | ś iż R © LJ Rzeczpospolita Polska Rd Odpis skrócony aktu urodzenia Bl: O REEZNNNNNNEE imie pierwsze Imię drugie Imiona kolejne Nazwisko * Płeć Data urodzenia Miejsce urodzenia kraj urodzeni GII 2 DBĘódźCÓW | o...",
+  "evidence": "DECYZJA PRZYZNAJĄCA ZASIŁEK CHOROBOWY ZA OKRES CIĄŻY ORAZ DECYZJA PRZYZNAJĄCA ZASIŁEK MACIERZYŃSKI",
   "benefits": [
    "chorobowy_w_ciazy",
    "macierzynski"
@@ -267,7 +267,7 @@
   "title": "Zasiłek chorobowy w ciąży",
   "facts": "Zasiłek chorobowy w ciąży. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "",
+  "evidence": "W sprawie przyznano zasiłek chorobowy",
   "benefits": [
    "chorobowy_w_ciazy"
   ],
@@ -292,8 +292,8 @@
   "file_name": "Anna Le_zas. chorobowy w ciąży.pdf",
   "pages": 12,
   "title": "Zasiłek chorobowy w ciąży",
-  "facts": "Zasiłek chorobowy w ciąży. Wynik sprawy nie jest zapisany w zestawie.",
-  "outcome": "unknown",
+  "facts": "Zasiłek chorobowy w ciąży. ZUS przyznał świadczenie.",
+  "outcome": "granted",
   "evidence": "",
   "benefits": [
    "chorobowy_w_ciazy"
@@ -319,7 +319,7 @@
   "title": "Zasiłek macierzyński, uzupełniający urlop macierzyński, zasiłek za urlop rodzicielski",
   "facts": "Zasiłek macierzyński za okres urlopu macierzyńskiego, uzupełniającego urlop macierzyński, rodzicielskiego. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "",
+  "evidence": "przyznano prawo do zasiłku macierzyńskiego za okres urlopu podstawowego, uzupełniającego",
   "benefits": [
    "macierzynski",
    "uzupelniajacy",
@@ -434,7 +434,7 @@
   "title": "Zasiłek macierzyński",
   "facts": "Zasiłek macierzyński, martwe urodzenie. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "W sprawie została dokonana wypłata zasiłku macierzyńs od 14-09-2026 do 08-11-2026 s 8 ie p 1 R: it lzy |-ż D f jo oż 1) LE l KA i i x i i [ i Ń t | rę H Bist GB\" -— adres pracownika i Na a SER | POARARU DOMEK SEA EZ wniosek o udzielenie urlopu mówi | | PISZ 2 ggadńiaci aj 186 A kodeksu pracy zwracam się 2 walosiiśij 6: Udzielenie mi rio ; inacierzyńskiegójw wymiar gd dnia porodu, przystigującą ky:",
+  "evidence": "",
   "benefits": [
    "macierzynski"
   ],
@@ -605,7 +605,7 @@
   "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
   "facts": "Zasiłek macierzyński za okres urlopu ojcowskiego (1). ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "W sprawie ustalono uprawnienia do zasiłku macierzyńskiego za okres urlopu 2a ABD ojcowskiego 9411 do 17 maja 2026 r.",
+  "evidence": "",
   "benefits": [
    "macierzynski",
    "ojcowski"
@@ -632,7 +632,7 @@
   "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
   "facts": "Ten sam zestaw co ZUS-022.",
   "outcome": "granted",
-  "evidence": "W sprawie ustalono uprawnienia do zasiłku macierzyńskiego za okres urlopu 2a ABD ojcowskiego 9411 do 17 maja 2026 r.",
+  "evidence": "",
   "benefits": [
    "macierzynski",
    "ojcowski"
@@ -712,9 +712,9 @@
   "file_name": "Ewa Ko_1_zas. mac..pdf",
   "pages": 30,
   "title": "Zasiłek macierzyński",
-  "facts": "Zasiłek macierzyński. Wynik sprawy nie jest zapisany w zestawie.",
-  "outcome": "unknown",
-  "evidence": "",
+  "facts": "Zasiłek macierzyński. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "W sprawie przyznano zasiłek macierzyński",
   "benefits": [
    "macierzynski"
   ],
@@ -885,7 +885,7 @@
   "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
   "facts": "Zasiłek macierzyński, urlop ojcowski. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "W sprawie została dokonana wypłata zasiłku macierzyńs ojcowskiego od 14-09-2026 do 27-09-2026 a'okres urlopu $ .",
+  "evidence": "",
   "benefits": [
    "macierzynski",
    "ojcowski"
@@ -1123,7 +1123,7 @@
   "title": "Zasiłek macierzyński",
   "facts": "Zasiłek macierzyński-przyjęcia dziecka w wychowaniu, rodzina zastępcza. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "W sprawie ustalono uprawnienia do zasiłku macierzyńskiego -wypłacono świadczenie ZAKŁAD ULEZFIECZEŃ = | SPOŁECZNI LH z 3b „> ZAŚWIADCZENIE PŁATNIKA SKŁADEK Instrukcja wypełniania wypełnij to zaświadczenie i przekaż je do nas, jeżeli: — prowadzisz pozarolniczą działalność, — współpracujesz z osobą prowadzącą pozarolniczą działalność, — współpracujesz z osobą fizyczną, o której mowa w art.",
+  "evidence": "",
   "benefits": [
    "macierzynski"
   ],
@@ -1153,7 +1153,7 @@
   "title": "Zasiłek macierzyński",
   "facts": "Zasiłek macierzyński martwe urodzenie. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "",
+  "evidence": "W sprawie przyznano zasiłek macierzyński",
   "benefits": [
    "macierzynski"
   ],
@@ -1424,7 +1424,7 @@
   "title": "Zasiłek macierzyński",
   "facts": "Zasiłek macierzyński za 9 tygodni urlopu macierzyńskiego dla ojca. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "W sprawie ustalono uprawnienia do zasiłku macierzyńskiego -wypłacono świadczenie p = | ZAKŁAD | UBEZPIECZEŃ Ż-3b = SPOŁECZNYCH L | Zaświadczenie płatnika składek Piecz”t: młetin=\"ulLK IE.",
+  "evidence": "",
   "benefits": [
    "macierzynski"
   ],
@@ -1509,9 +1509,9 @@
   "file_name": "Katarzyna Łó 4_zasiłek w wysokości zasiłku macierzyńskiego.pdf",
   "pages": 14,
   "title": "Zasiłek w wysokości zasiłku macierzyńskiego",
-  "facts": "Zasiłek w wysokości zasiłku macierzyńskiego. ZUS odmówił prawa do świadczenia.",
-  "outcome": "denied",
-  "evidence": "",
+  "facts": "Zasiłek w wysokości zasiłku macierzyńskiego. ZUS przyznał świadczenie.",
+  "outcome": "granted",
+  "evidence": "Przyznano prawo do zasiłku w wysokości zasiłku macierzyńskiego",
   "benefits": [
    "w_wysokosci_macierzynskiego"
   ],
@@ -1777,7 +1777,7 @@
   "title": "Zasiłek macierzyński",
   "facts": "Zasiłek macierzyński w tym przed przewidywaną datą porodu. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "",
+  "evidence": "W sprawie przyznano zasiłek macierzyński",
   "benefits": [
    "macierzynski"
   ],
@@ -2010,7 +2010,7 @@
   "title": "Zasiłek macierzyński, zasiłek za urlop ojcowski",
   "facts": "Zasiłek macierzyński, urlop ojcowski. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "DECYZJA PRZYZNAJĄCA ZASIŁEK MACIERZYŃSKI ZA OKRES URLOPU OJCOWSKIEGO NL cz ZZ Z Zz ti I | PALI i | | j f EJ) M: R ł Bi IB agar 8.",
+  "evidence": "DECYZJA PRZYZNAJĄCA ZASIŁEK MACIERZYŃSKI ZA OKRES URLOPU OJCOWSKIEGO",
   "benefits": [
    "macierzynski",
    "ojcowski"
@@ -2157,7 +2157,7 @@
   "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński",
   "facts": "Zasiłek chorobowy i macierzyński, umowa zlecenie. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "DECYZJA PRZYZNAJĄCA ZASIŁEK CHOROBOWY ZA OKRES CIĄŻY ORAZ DEZYCJA PRZYZNAJĄCA ZASIŁEK MACIERZYŃSKI  \"SESS k | Hi | IE LB, NTT TT \"A | pl gi BAB [MI |OONEM BLUIB EJ = BN E (i NME KONNE ssa fg  oe Rzeczpospolita Polska LL.",
+  "evidence": "DECYZJA PRZYZNAJĄCA ZASIŁEK CHOROBOWY ZA OKRES CIĄŻY ORAZ DEZYCJA PRZYZNAJĄCA ZASIŁEK MACIERZYŃSKI",
   "benefits": [
    "chorobowy_w_ciazy",
    "macierzynski"
@@ -2384,7 +2384,7 @@
   "title": "Zasiłek chorobowy w ciąży, zasiłek macierzyński, zasiłek za urlop rodzicielski",
   "facts": "Zasiłek chorobowy w ciąży, zasiłek macierzyński za okres urlopu macierzyński i rodzicielskiego. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "W sprawie ustalono uprawnienia do zasiłku chorobowego dla kobiety w ciąży oraz zasiłku macierzyńskiego - wypłacono świadczenia ZAKŁAD 8 s s 5 ZUS |tee 0000 cza po, SPOŁECZNYCH ; 3 RA a M SN j ——=—,) JĄ, DL OOO O ND Zaświadczenie płatnika składek [I wniosek pierwszorazowy wniosek o kontynuację świadczenia Instrukcja wypełniania NA.",
+  "evidence": "",
   "benefits": [
    "chorobowy_w_ciazy",
    "macierzynski",
@@ -2414,7 +2414,7 @@
   "title": "Zasiłek macierzyński",
   "facts": "Zac. macierzyński. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "",
+  "evidence": "W sprawie przyznano zasiłek macierzyński",
   "benefits": [
    "macierzynski"
   ],
@@ -2468,7 +2468,7 @@
   "title": "Zasiłek macierzyński, uzupełniający urlop macierzyński, zasiłek za urlop rodzicielski",
   "facts": "Zasiłek macierzyński za urlop macierzyński, uzupełniający, rodzicielski. ZUS przyznał świadczenie.",
   "outcome": "granted",
-  "evidence": "W sprawie została dokonana wypłata: - zasiłku macierzyńskiego za okres od 02-05-2026 do 18-0 - zasiłku uzupełniającego za okres od 19-09-2026 do 25- - zasiłku rodzicielskiego za okres od 26-09-2026 do 07: 1 4 EJ + H ż i i ę t H e Rzeczpospolita Polska L RK | | Odpis skrócony aktu urodzenia JA i.",
+  "evidence": "",
   "benefits": [
    "macierzynski",
    "uzupelniajacy",
