@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { SiteFooter } from '@/components/layout/site-footer'
 import { SiteHeader } from '@/components/layout/site-header'
+import { AssistantWidget } from '@/components/assistant/assistant-widget'
 
 /**
  * Po każdej zmianie adresu nowy ekran startuje od góry.
@@ -101,6 +102,12 @@ function WheelSectionJump() {
       if (event.ctrlKey) return
       if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return
       if (isInsideScrollable(event.target)) return
+      // Panel asystenta ma własne przewijanie i nie ma ciągnąć za sobą strony. Nad treścią,
+      // która się nie przewija, kółko nie robi nic.
+      if (event.target instanceof Element && event.target.closest('[data-scroll-ignore]')) {
+        event.preventDefault()
+        return
+      }
       if (document.querySelector('[data-scroll-section]') === null) return
 
       const now = performance.now()
@@ -179,6 +186,7 @@ export function RootLayout() {
         <Outlet />
       </main>
       <SiteFooter />
+      <AssistantWidget />
     </div>
   )
 }

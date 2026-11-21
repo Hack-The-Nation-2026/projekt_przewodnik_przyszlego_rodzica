@@ -424,8 +424,8 @@ nie zawiera wyliczonej kwoty.
 
 Brief, pkt 4, pkt 9 oraz lista symulacji w pkt 3.
 
-Zrobione 21.11. Asystent stoi na `GET /api/assistant/topics` i `POST /api/assistant/ask`, a strona
-na `/asystent`.
+Zrobione 21.11. Asystent stoi na `GET /api/assistant/topics` i `POST /api/assistant/ask`, a na stronie
+działa jako panel w prawym dolnym rogu.
 
 ### Co jest
 
@@ -436,9 +436,12 @@ na `/asystent`.
   litery, bez ogonków), a temat wygrywa na frazach i rdzeniach słów, więc "łączyć pracę" i
   "laczyc prace" trafiają w to samo. Nieznane pytanie dostaje odesłania do trzech instytucji
   i podpowiedzi, a nie wymyśloną odpowiedź.
-- Strona `/asystent`: podpowiedzi na start, rozmowa, karty linków zewnętrznych i wewnętrznych,
-  przycisk "Wyczyść". Wejście jest w nagłówku, w stopce i w sekcji "Jak to działa" na stronie
-  głównej, więc zwykła nawigacja zostaje nietknięta.
+- Asystent siedzi w prawym dolnym rogu jako przycisk, nie jako osobna podstrona. Po chwili
+  pokazuje się raz na sesję zaproszenie ("Masz pytanie? Napisz..."), a kliknięcie otwiera panel
+  z rozmową, podpowiedziami i kartami linków. Escape i krzyżyk zamykają panel.
+- Panel jest zamontowany w `RootLayout`, więc działa na każdej podstronie serwisu. Na ekranie
+  logowania mObywatela go nie ma, bo ten ekran ma własny układ. Nagłówek i stopka zostają bez
+  zmian, więc zwykła nawigacja jest nietknięta.
 - Asystent nie podaje kwot, tygodni ani terminów. `back/tests/test_assistant.py` sprawdza, że
   w żadnej odpowiedzi, pytaniu ani etykiecie linku nie ma cyfry, oraz że każda podstrona, do której
   odsyła, ma trasę w `front/src/App.tsx`.
@@ -449,7 +452,7 @@ na `/asystent`.
   dostawca padnie, strona działa dalej, tylko z katalogu.
 - Do modelu idzie wyłącznie treść pytania i lista tematów. Nie wysyłamy danych osobowych ani
   materiałów ZUS. Bez klucza nic nie wychodzi poza serwer i cała aplikacja działa offline.
-  Strona mówi wprost, że to nawigacja, a nie doradca prawny, i że kwoty liczy kalkulator.
+  Panel pisze wprost, że to nawigacja, a nie doradca prawny, i że kwoty liczy kalkulator.
 
 ## Krok 15. Materiały do oddania
 

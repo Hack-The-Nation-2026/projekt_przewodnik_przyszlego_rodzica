@@ -11,7 +11,6 @@ import { useFeature } from '@/hooks/use-settings'
 
 const NAV = [
   { to: '/', label: 'Start', end: true },
-  { to: '/asystent', label: 'Asystent' },
   { to: '/swiadczenia', label: 'Świadczenia' },
   { to: '/kalkulator', label: 'Kalkulator' },
   { to: '/dokumenty', label: 'Dokumenty' },
@@ -81,7 +80,7 @@ export function SiteHeader() {
           <Wordmark />
 
           <nav
-            className="hidden flex-1 items-center justify-center gap-0 2xl:gap-0.5 xl:flex xl:px-1"
+            className="hidden flex-1 items-center justify-center gap-0.5 xl:flex xl:px-1"
             aria-label="Nawigacja główna"
           >
             {nav.map((item) => (
@@ -91,7 +90,7 @@ export function SiteHeader() {
                 end={item.end}
                 className={({ isActive }) =>
                   cn(
-                    'rounded-md px-1.5 py-2 text-sm font-medium whitespace-nowrap transition-colors 2xl:px-2',
+                    'rounded-md px-2 py-2 text-sm font-medium whitespace-nowrap transition-colors',
                     isActive
                       ? 'bg-primary-foreground/10 text-primary-foreground'
                       : 'text-primary-foreground/95 hover:bg-primary-foreground/10 hover:text-primary-foreground',

@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
 import { RootLayout } from '@/components/layout/root-layout'
-import { AsystentPage } from '@/pages/asystent-page'
 import { DokumentyPage } from '@/pages/dokumenty-page'
 import { HomePage } from '@/pages/home-page'
 import { KalkulatorPage } from '@/pages/kalkulator-page'
@@ -22,7 +21,6 @@ export default function App() {
       <Route element={<RootLayout />}>
         <Route index element={<HomePage />} />
         <Route path="wejscie" element={<WejsciePage />} />
-        <Route path="asystent" element={<AsystentPage />} />
         <Route path="swiadczenia" element={<SwiadczeniaPage />} />
         <Route path="kalkulator" element={<KalkulatorPage />} />
         <Route path="dokumenty" element={<DokumentyPage />} />
