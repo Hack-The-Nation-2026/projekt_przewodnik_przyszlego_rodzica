@@ -137,9 +137,6 @@ export function HomePage() {
                 Zobacz świadczenia
               </a>
             </div>
-            <p className="mt-4 text-sm text-muted-foreground">
-              Wejdziesz przez mObywatel albo wpiszesz dane ręcznie.
-            </p>
           </div>
         </Container>
       </section>
