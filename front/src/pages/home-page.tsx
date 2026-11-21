@@ -98,19 +98,18 @@ export function HomePage() {
   return (
     <>
       <section aria-labelledby="start-title" className="relative isolate overflow-hidden bg-foreground">
-        <picture>
-          {/* Na telefonie kadr jest ciaśniejszy i wyśrodkowany na rodzinie, bo szeroki
-              kadr ze zdjęcia obcinałby rodziców albo kołyskę. */}
-          <source media="(min-width: 640px)" srcSet="/rodzice-kolyska.jpg" />
-          <img
-            src="/rodzice-kolyska-mobile.jpg"
-            alt="Rodzice leżą wieczorem na łóżku obok kołyski z dzieckiem."
-            className="absolute inset-0 size-full object-cover object-[50%_50%] sm:object-[50%_45%]"
-          />
-        </picture>
-        <div aria-hidden className="home-hero-shade absolute inset-0" />
-        <Container className="relative flex min-h-[30rem] items-center py-14 sm:min-h-[36rem] sm:py-16 lg:min-h-[44rem]">
-          <div className="w-full max-w-[39rem] text-primary-foreground [--ring:var(--primary-foreground)]">
+        {/* Jedno zdjęcie w proporcji 2:1 na każdym ekranie, bez przycinania. Na szerokim
+            leży pod tekstem, na wąskim stoi nad nim, więc wszędzie widać dokładnie ten sam
+            kadr. Osobny kadr mobilny nie jest już potrzebny. */}
+        <img
+          src="/rodzice-kolyska.jpg"
+          alt="Mama i tata leżą z niemowlakiem na łóżku w jasnej sypialni."
+          fetchPriority="high"
+          className="aspect-[2/1] w-full object-cover"
+        />
+        <div aria-hidden className="home-hero-shade absolute inset-0 hidden lg:block" />
+        <Container className="relative py-10 sm:py-12 lg:absolute lg:inset-0 lg:flex lg:items-center lg:py-0">
+          <div className="w-full max-w-[39rem] text-primary-foreground [--ring:var(--primary-foreground)] lg:max-w-[32rem]">
             <h1
               id="start-title"
               className="text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl"

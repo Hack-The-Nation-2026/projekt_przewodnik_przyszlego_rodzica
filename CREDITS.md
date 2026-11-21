@@ -8,7 +8,7 @@ które wnoszą grafikę.
 
 | Plik | Co przedstawia | Autor i źródło | Licencja |
 | --- | --- | --- | --- |
-| `front/public/rodzice-kolyska.jpg` | Rodzice leżą wieczorem na łóżku obok kołyski z dzieckiem. Zdjęcie w sekcji startowej, odbite lustrem, żeby para trafiła na prawą stronę, przycięte do 2400 na 1602 pikseli. | Pavel Danilyuk, Pexels, https://www.pexels.com/photo/7938080/ | Licencja Pexels. Pozwala używać, zmieniać i przycinać zdjęcie także komercyjnie, bez obowiązku podania autora. Autora podajemy i tak. |
+| `front/public/rodzice-kolyska.jpg` | Mama i tata z niemowlakiem na łóżku w jasnej sypialni. Zdjęcie w sekcji startowej, odbite lustrem, żeby rodzina trafiła na prawą stronę, przycięte do 1920 na 960 pikseli (2:1). | Yan Krukau, Pexels, https://www.pexels.com/photo/6209463/ | Licencja Pexels. Pozwala używać, zmieniać i przycinać zdjęcie także komercyjnie, bez obowiązku podania autora. Autora podajemy i tak. |
 | `front/public/favicon.svg` i znak w nagłówku oraz w stopce | Para pierzastych skrzydeł, narysowana w `front/src/components/brand/wing-mark.tsx`. Z ikony zostały same skrzydła, bez stojącej między nimi postaci. | Ikona `angel-wings`, autor Lorc, https://game-icons.net. | CC BY 3.0. Użycie komercyjne dozwolone, wymaga podania autora, licencji i informacji o zmianach. Autora i licencję podajemy w stopce serwisu oraz tutaj. |
 | `front/public/cover.png` | Bocian z rozłożonymi skrzydłami nad rodziną w gnieździe, w sekcji „Jak to działa”. Tło wycięte, plik ma przezroczystość. | Nie mamy zapisanego źródła. Do uzupełnienia. | Do uzupełnienia. |
 | `front/public/orzel.png` | Orzeł Biały obok napisu na przycisku logowania przez mObywatela. | Nie mamy zapisanego źródła. Do uzupełnienia. | Do uzupełnienia. |

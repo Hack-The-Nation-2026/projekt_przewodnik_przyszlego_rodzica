@@ -103,12 +103,6 @@
   );
 }
 
-@media (width < 72rem) {
-  .home-hero-shade {
-    background: linear-gradient(100deg, rgb(3 24 15 / 90%), rgb(3 24 15 / 52%));
-  }
-}
-
 @layer base {
   * {
     border-color: var(--border);
