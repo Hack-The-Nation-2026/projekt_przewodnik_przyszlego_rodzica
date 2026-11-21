@@ -71,7 +71,8 @@ export function SiteFooter() {
       </Container>
 
       <div className="border-t border-primary-foreground/15">
-        <Container className="flex flex-col gap-2 py-4 text-xs text-primary-foreground/95 sm:flex-row sm:items-center sm:justify-between">
+        {/* Zapas na dole, żeby przycisk asystenta nie zasłaniał stopki. */}
+        <Container className="flex flex-col gap-2 pt-4 pb-20 text-xs text-primary-foreground/95 sm:flex-row sm:items-center sm:justify-between">
           <p>
             Serwis niezależny od Zakładu Ubezpieczeń Społecznych. Znak skrzydeł:{' '}
             <a
