@@ -70,8 +70,8 @@ export function ParentalPlanCard({
   const totalDays = pool.total_days
 
   const rows = [
-    { parent: 'first_parent' as const, label: 'Pierwszy rodzic', days: firstDays, dot: 'bg-primary' },
-    { parent: 'second_parent' as const, label: 'Drugi rodzic', days: secondDays, dot: 'bg-gold' },
+    { parent: 'first_parent' as const, label: 'Pierwszy rodzic', days: firstDays, exclusiveColor: 'bg-primary', sharedColor: 'bg-primary/40' },
+    { parent: 'second_parent' as const, label: 'Drugi rodzic', days: secondDays, exclusiveColor: 'bg-gold/40', sharedColor: 'bg-gold' },
   ]
   const differs = averaged.gross !== flat.gross
   const limitOne = zaZyciem ? 130 : 82
@@ -102,8 +102,8 @@ export function ParentalPlanCard({
             każdego.
           </CardDescription>
           <InfoHint label="Jak czytać pasek podziału">
-            Pełny kolor to 9 tygodni zarezerwowanych dla jednego rodzica. Jaśniejszy to tygodnie
-            z wspólnej puli, które przesuwa suwak.
+            Pierwszy odcinek każdego paska oznacza 9 tygodni zarezerwowanych dla danego rodzica.
+            Następny odcinek to tygodnie ze wspólnej puli, które przesuwa suwak.
           </InfoHint>
         </div>
       </CardHeader>
@@ -153,7 +153,7 @@ export function ParentalPlanCard({
         )}
 
         <div className="flex flex-col gap-3 sm:flex-row sm:gap-1">
-          {rows.map(({ parent, label, days, dot }, index) => {
+          {rows.map(({ parent, label, days, exclusiveColor, sharedColor }, index) => {
             const result = averaged.byParent[parent]
             const granted = result?.status === 'granted' || result?.status === 'partially_granted'
             const shared = Math.max(days - exclusive, 0)
@@ -173,8 +173,8 @@ export function ParentalPlanCard({
                   )}
                 </div>
                 <div className="flex h-3 overflow-hidden rounded-full" aria-hidden="true">
-                  <div className={dot} style={{ width: `${(exclusive / days) * 100}%` }} />
-                  <div className={cn(dot, 'opacity-40')} style={{ width: `${(shared / days) * 100}%` }} />
+                  <div className={exclusiveColor} style={{ width: `${(exclusive / days) * 100}%` }} />
+                  <div className={sharedColor} style={{ width: `${(shared / days) * 100}%` }} />
                 </div>
                 <div className={cn('mt-1.5 text-sm', end && 'sm:text-right')}>
                   <span className="block text-base font-semibold">{weeks(days)} tyg.</span>

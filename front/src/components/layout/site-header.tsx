@@ -107,7 +107,7 @@ export function SiteHeader() {
               <ProfileMenu />
             ) : (
               <Button
-                variant="mobywatel"
+                variant="mobywatelHeader"
                 size="sm"
                 className="hidden sm:inline-flex"
                 onClick={startMobywatelLogin}
@@ -153,7 +153,7 @@ export function SiteHeader() {
               {!citizen && (
                 <>
                   <Button
-                    variant="mobywatel"
+                    variant="mobywatelHeader"
                     className="mt-2"
                     onClick={() => {
                       setOpen(false)
