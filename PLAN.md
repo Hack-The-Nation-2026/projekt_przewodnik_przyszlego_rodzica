@@ -37,13 +37,13 @@ ich kopiować ani rozpowszechniać.
 
 - [x] Krok 0. Reguły zasiłków na papierze
 - [x] Krok 1. Zestaw testowy z PRZYKLADY
-- [ ] Krok 2. Model danych i API
-- [ ] Krok 3. Silnik uprawnień i kalkulatory
+- [x] Krok 2. Model danych i API
+- [x] Krok 3. Silnik uprawnień i kalkulatory
 - [x] Krok 4. Wejście i logowanie
 - [x] Krok 5. Wywiad i ustalanie uprawnień
 - [x] Krok 6. Kalkulator na ekranie
 - [x] Krok 7. Dokumenty, terminy i miejsce złożenia
-- [ ] Krok 8. Symulacje ZUS
+- [x] Krok 8. Symulacje ZUS
 - [ ] Krok 9. Ryzyka i ostrzeżenia
 - [ ] Krok 10. Trudne sytuacje i wsparcie
 - [ ] Krok 11. Panel administracyjny
@@ -128,6 +128,10 @@ Ustalamy, co aplikacja przyjmuje i co zwraca, żeby front i backend nie rozjecha
 
 Gotowe, gdy `pytest` przechodzi, a `/docs` pokazuje komplet endpointów.
 
+Zrobione 21.11. Schematy siedzą w `back/app/schemas/`, endpointy w `back/app/api/routes/`, a reguły
+w `back/app/services/`. Pod `/api` stoją `health`, `benefits`, `auth` i `zus`, więc `/docs` pokazuje
+cały kontrakt, na którym pracuje frontend.
+
 Brief, pkt 3 oraz pkt 5.
 
 ## Krok 3. Silnik uprawnień i kalkulatory
@@ -146,7 +150,7 @@ Serce projektu i największa część punktów za związek z wyzwaniem.
 
 Gotowe, gdy wynik zgadza się z zestawem testowym z kroku 1 dla każdej wybranej sprawy.
 
-Silnik i `POST /api/benefits/simulate` działają. Testy porównują 14 scenariuszy zapisanych
+Zrobione 21.11. Silnik i `POST /api/benefits/simulate` działają. Testy porównują 14 scenariuszy zapisanych
 lokalnie w `PRZYKLADY/krok-3-symulacje.json`. Pełną zgodność części scenariuszy nadal trzeba
 potwierdzić z ZUS. W materiałach brakuje m.in. dat przyjęcia dzieci do pieczy, pełnych rozliczeń
 oraz miesięcznych kwot po PIT potrzebnych do weryfikacji podwyższenia. Jeden skan zawiera różne
@@ -246,6 +250,13 @@ Wszystko to jest udawane i brief mówi o tym wprost, ale musi być widoczne.
 - Przekierowania do ZUS, MRPiPS i PIP.
 
 Gotowe, gdy każdy punkt z listy ma swój ekran albo przycisk, który coś pokazuje.
+
+Zrobione 21.11. Ekran `/zus` zbiera wszystkie symulacje: stan ubezpieczenia z przełącznikiem na brak
+ubezpieczenia i ręcznie wpisaną podstawą, zadłużenie ze składek na wybrany dzień, podgląd
+zaświadczeń e-ZLA, sesję wglądu w PUE/eZUS z okresami ubezpieczenia, wniosek o odpis aktu urodzenia
+oraz przekierowania do ZUS, MRPiPS i PIP. Dane liczy `back/app/services/zus_service.py` i wystawia
+je `back/app/api/routes/zus.py`. Testy w `back/tests/test_zus_simulations.py` pilnują kwot, dat i
+pustych wariantów.
 
 Brief, pkt 3, lista symulacji.
 

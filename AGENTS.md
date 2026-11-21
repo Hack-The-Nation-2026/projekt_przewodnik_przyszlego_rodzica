@@ -19,6 +19,12 @@ Workspace rules — sources, skills, playbook upkeep — live in `../AGENTS.md`.
 - Two layouts stand outside the rule: the home page, a wide marketing grid on `max-w-7xl`, and the
   mObywatel login screen, a full-screen simulation with its own palette.
 
+## Plan
+
+`PLAN.md` is the checklist for the challenge. When a step is finished, tick it in the "Postęp"
+list and add a short "Zrobione" paragraph under that step saying what exists and where. Do it in
+the same commit as the work, so the plan never trails behind the code.
+
 ## Commands
 
 ```bash
