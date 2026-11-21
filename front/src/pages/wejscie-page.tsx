@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Container } from '@/components/layout/container'
+import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
 import { api } from '@/lib/api'
 import { useAppStore } from '@/store/app-store'
@@ -241,7 +241,7 @@ export function WejsciePage() {
   const citizen = useAppStore((state) => state.citizen)
 
   return (
-    <Container className="max-w-3xl py-14 sm:py-20">
+    <PageContainer className="py-14 sm:py-20">
       <PageHeading
         title={citizen ? 'Jesteś w środku' : 'Wejdź do Przewodnika'}
         description={
@@ -255,6 +255,6 @@ export function WejsciePage() {
       />
 
       <div className="mt-8">{citizen ? <SessionCard /> : <MethodChooser />}</div>
-    </Container>
+    </PageContainer>
   )
 }

@@ -10,6 +10,15 @@ Workspace rules — sources, skills, playbook upkeep — live in `../AGENTS.md`.
 - `OPIS/`, `PRZYKLADY/` — ZUS materials. Gitignored. Never commit them, never copy them out of
   this repo; the challenge Regulamin forbids distributing them.
 
+## Frontend layout
+
+- Every page under the site header renders inside `PageContainer` from
+  `front/src/components/layout/page-container.tsx`. It holds one content width (`max-w-4xl`), so a
+  card keeps its size when the user moves between the entry screen, the calculator, the benefits
+  list and the rest. Pass padding and flex classes through `className`, never another `max-w-*`.
+- Two layouts stand outside the rule: the home page, a wide marketing grid on `max-w-7xl`, and the
+  mObywatel login screen, a full-screen simulation with its own palette.
+
 ## Commands
 
 ```bash

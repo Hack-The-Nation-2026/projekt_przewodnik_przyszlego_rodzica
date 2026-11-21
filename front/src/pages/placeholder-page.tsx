@@ -1,4 +1,4 @@
-import { Container } from '@/components/layout/container'
+import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
 
 export function PlaceholderPage({
@@ -11,8 +11,8 @@ export function PlaceholderPage({
   crumb?: string
 }) {
   return (
-    <Container className="max-w-3xl py-16">
+    <PageContainer className="py-16">
       <PageHeading title={title} description={description} crumb={crumb} />
-    </Container>
+    </PageContainer>
   )
 }

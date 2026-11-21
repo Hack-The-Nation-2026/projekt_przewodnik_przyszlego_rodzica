@@ -4,7 +4,7 @@ import { isAxiosError } from 'axios'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FamilyFields, EmploymentFields, PregnancyFields } from '@/components/benefit-interview-fields'
-import { Container } from '@/components/layout/container'
+import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -123,7 +123,7 @@ export function KalkulatorPage() {
   }, [simulation.data])
 
   return (
-    <Container className="max-w-5xl py-12 sm:py-16">
+    <PageContainer className="py-12 sm:py-16">
       <PageHeading
         title="Kalkulator zasiłków"
         description="Odpowiedz na pytania i sprawdź, jakie świadczenia mogą Ci przysługiwać, przez ile dni i w jakiej kwocie."
@@ -192,6 +192,6 @@ export function KalkulatorPage() {
           </div>
         </section>
       )}
-    </Container>
+    </PageContainer>
   )
 }
