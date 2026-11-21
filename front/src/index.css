@@ -14,32 +14,31 @@
   --popover: #ffffff;
   --popover-foreground: #1d2b3a;
 
-  --primary: #007834;
+  --brand-green: #007834;
+  --primary: var(--brand-green);
   --primary-foreground: #ffffff;
 
-  --secondary: #eef6f0;
-  --secondary-foreground: #00531f;
+  --secondary: color-mix(in srgb, var(--brand-green) 7%, var(--background));
+  --secondary-foreground: var(--brand-green);
 
-  --muted: #f4f6f5;
+  --muted: color-mix(in srgb, var(--brand-green) 4%, var(--background));
   --muted-foreground: #5b6a63;
 
-  --accent: #eef6f0;
-  --accent-foreground: #00531f;
+  --accent: var(--secondary);
+  --accent-foreground: var(--secondary-foreground);
 
   --destructive: #c1121f;
   --destructive-foreground: #ffffff;
 
-  --border: #e3e8e5;
-  --input: #d3dbd6;
-  --ring: #007834;
+  --border: color-mix(in srgb, var(--brand-green) 11%, var(--background));
+  --input: color-mix(in srgb, var(--brand-green) 20%, var(--background));
+  --ring: var(--brand-green);
 
   /* barwy spoza standardu shadcn, wzorowane na identyfikacji ZUS */
   --gold: #e8a33d;
   --gold-dark: #cf8a1f;
   --gold-foreground: #3a2a06;
   --navy: #1d2b3a;
-  --green-deep: #00431f;
-  --green-ink: #00531f;
 
   /* Biel i czerwień godła, do przycisku mObywatela w nagłówku. */
   --pl-red: #d22630;
@@ -70,8 +69,6 @@
   --color-gold-dark: var(--gold-dark);
   --color-gold-foreground: var(--gold-foreground);
   --color-navy: var(--navy);
-  --color-green-deep: var(--green-deep);
-  --color-green-ink: var(--green-ink);
   --color-pl-red: var(--pl-red);
 
   /* Ekran mObywatela ma własną, celowo obcą paletę: użytkownik ma poczuć, że
@@ -91,6 +88,27 @@
   --radius-sm: calc(var(--radius) - 2px);
   --radius-md: var(--radius);
   --radius-lg: calc(var(--radius) + 2px);
+}
+
+.home-hero {
+  --hero-shade: color-mix(in srgb, var(--brand-green) 35%, black);
+  --hero-shade-left: 46%;
+  --hero-shade-middle: 18%;
+  --hero-shade-right: 4%;
+  --hero-card-shadow: 0 16px 40px rgb(0 0 0 / 20%);
+}
+
+.home-hero-shade {
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--hero-shade) var(--hero-shade-left), transparent),
+    color-mix(in srgb, var(--hero-shade) var(--hero-shade-middle), transparent) 54%,
+    color-mix(in srgb, var(--hero-shade) var(--hero-shade-right), transparent)
+  );
+}
+
+.home-hero-card {
+  box-shadow: var(--hero-card-shadow);
 }
 
 @layer base {

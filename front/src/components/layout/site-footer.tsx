@@ -24,11 +24,11 @@ const COLUMNS = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-20 bg-green-deep text-primary-foreground">
+    <footer className="mt-20 bg-primary text-primary-foreground [--ring:var(--primary-foreground)]">
       <Container className="grid gap-10 py-12 md:grid-cols-[1.5fr_1fr_1fr]">
         <div>
           <p className="font-display text-lg font-semibold">Zasiłkowy Przewodnik Przyszłego Rodzica</p>
-          <p className="mt-3 max-w-sm text-sm text-primary-foreground/80">
+          <p className="mt-3 max-w-sm text-sm text-primary-foreground/95">
             Zasiłki, terminy i dokumenty związane z ciążą i urodzeniem dziecka w jednym miejscu.
             Liczymy na podstawie ustawy zasiłkowej i Kodeksu pracy.
           </p>
@@ -37,7 +37,7 @@ export function SiteFooter() {
         {COLUMNS.map((column) => (
           <div key={column.title}>
             <p className="text-sm font-semibold">{column.title}</p>
-            <ul className="mt-3 space-y-2 text-sm text-primary-foreground/80">
+            <ul className="mt-3 space-y-2 text-sm text-primary-foreground/95">
               {column.links.map((link) => (
                 <li key={link.label + link.to}>
                   {link.to.startsWith('http') ? (
@@ -57,7 +57,7 @@ export function SiteFooter() {
       </Container>
 
       <div className="border-t border-primary-foreground/15">
-        <Container className="flex flex-col gap-2 py-4 text-xs text-primary-foreground/70 sm:flex-row sm:items-center sm:justify-between">
+        <Container className="flex flex-col gap-2 py-4 text-xs text-primary-foreground/95 sm:flex-row sm:items-center sm:justify-between">
           <p>Serwis niezależny od Zakładu Ubezpieczeń Społecznych.</p>
           <p>HackNation 2026</p>
         </Container>

@@ -100,24 +100,15 @@ export function HomePage() {
 
   return (
     <>
-      <section aria-labelledby="start-title" className="relative isolate overflow-hidden">
-        {/* Jedno duże zdjęcie przez całą szerokość, a na nim kwadracik z informacją. */}
+      <section aria-labelledby="start-title" className="home-hero relative isolate overflow-hidden">
         <img
           src="/formularz.jpg"
           alt="Rodzice wypełniają przy kuchennym stole wniosek o zasiłek."
           className="absolute inset-0 size-full object-cover object-[50%_38%]"
         />
-        {/* Przyciemnienie od lewej przykrywa zdjęcie, więc biały kwadracik ma kontrast. */}
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(to right, rgba(29, 43, 58, 0.78), rgba(29, 43, 58, 0.46) 48%, rgba(29, 43, 58, 0.14))',
-          }}
-        />
+        <div aria-hidden className="home-hero-shade absolute inset-0" />
         <Container className="relative flex min-h-[30rem] items-center py-14 sm:min-h-[36rem] sm:py-16 lg:min-h-[44rem]">
-          <div className="w-full max-w-xl rounded-lg bg-background/95 p-6 shadow-2xl ring-1 ring-black/5 backdrop-blur-sm sm:p-8">
+          <div className="home-hero-card w-full max-w-xl rounded-lg bg-card p-6 ring-1 ring-primary/10 sm:p-8">
             <h1
               id="start-title"
               className="text-3xl font-semibold leading-tight text-navy sm:text-4xl lg:text-5xl"

@@ -43,7 +43,7 @@ function Wordmark() {
         <span className="font-display text-lg font-semibold text-primary-foreground">
           Przewodnik Rodzica
         </span>
-        <span className="mt-0.5 text-[11px] text-primary-foreground/80">
+        <span className="mt-0.5 text-[11px] text-primary-foreground/95">
           co ci przysługuje i jak to załatwić
         </span>
       </span>
@@ -82,7 +82,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 shrink-0">
-      <div className="border-b border-primary-foreground/15 bg-primary text-primary-foreground shadow-sm">
+      <div className="border-b border-primary-foreground/15 bg-primary text-primary-foreground shadow-sm [--ring:var(--primary-foreground)]">
         <Container className="grid h-16 grid-cols-[auto_1fr_auto] items-center gap-4">
           <Wordmark />
 
@@ -96,8 +96,8 @@ export function SiteHeader() {
                   cn(
                     'rounded-md px-3 py-2 text-sm font-medium transition-colors',
                     isActive
-                      ? 'bg-primary-foreground/15 text-primary-foreground'
-                      : 'text-primary-foreground/85 hover:bg-primary-foreground/10 hover:text-primary-foreground',
+                      ? 'bg-primary-foreground/10 text-primary-foreground'
+                      : 'text-primary-foreground/95 hover:bg-primary-foreground/10 hover:text-primary-foreground',
                   )
                 }
               >
@@ -109,13 +109,13 @@ export function SiteHeader() {
           <div className="flex items-center justify-self-end gap-2">
             {citizen ? (
               <div className="hidden items-center gap-2 sm:flex">
-                <span className="text-sm text-primary-foreground/80">
+                <span className="text-sm text-primary-foreground/95">
                   {citizen.first_name} {citizen.last_name}
                 </span>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 hover:text-primary-foreground"
+                  className="border-primary-foreground/30 bg-primary text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
                   onClick={signOut}
                 >
                   Wyloguj
@@ -158,8 +158,8 @@ export function SiteHeader() {
                     cn(
                       'rounded-md px-3 py-2.5 text-sm font-medium',
                       isActive
-                        ? 'bg-primary-foreground/15 text-primary-foreground'
-                        : 'text-primary-foreground/85 hover:bg-primary-foreground/10',
+                        ? 'bg-primary-foreground/10 text-primary-foreground'
+                        : 'text-primary-foreground/95 hover:bg-primary-foreground/10 hover:text-primary-foreground',
                     )
                   }
                 >
