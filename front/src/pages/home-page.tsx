@@ -12,14 +12,17 @@ const STEPS = [
   {
     title: 'Opisz swoją sytuację',
     body: 'Odpowiadasz na kilka pytań o pracę, ubezpieczenie i przewidywany termin porodu.',
+    image: '/krok-wywiad.webp',
   },
   {
     title: 'Zobacz, co ci przysługuje',
     body: 'Liczymy zasiłki, terminy i kwoty dla Twojego przypadku, także w sytuacjach nietypowych.',
+    image: '/krok-wyniki.webp',
   },
   {
     title: 'Wiedz, co dalej',
     body: 'Dostajesz listę dokumentów i informację, gdzie je złożyć: u pracodawcy albo w ZUS.',
+    image: '/krok-dokumenty.webp',
   },
 ]
 
@@ -96,7 +99,7 @@ export function HomePage() {
         className="py-14 sm:py-20"
       >
         <Container>
-          <div className="flex flex-wrap items-center justify-between gap-6">
+          <div className="flex items-center justify-between gap-4">
             <h2 id="jak-to-dziala-title" className="text-2xl font-semibold text-navy sm:text-3xl">
               Jak to działa
             </h2>
@@ -105,17 +108,33 @@ export function HomePage() {
               src="/cover.png"
               alt="Bocian rozkłada skrzydła nad rodziną siedzącą w gnieździe."
               loading="lazy"
-              className="w-52 shrink-0 sm:w-72"
+              className="w-24 shrink-0 sm:w-36"
             />
           </div>
-          <ol className="mt-6 grid gap-4 md:grid-cols-3 md:gap-6">
+          <ol role="list" className="mt-6 space-y-4 sm:space-y-6">
             {STEPS.map((step, index) => (
-              <li key={step.title} className="rounded-lg border border-border p-5 sm:p-6">
-                <span className="flex size-9 items-center justify-center rounded-md bg-secondary text-base font-semibold text-secondary-foreground">
+              <li key={step.title} className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 sm:gap-6">
+                <span
+                  aria-hidden="true"
+                  className="mt-1 flex size-9 items-center justify-center self-start rounded-full bg-primary text-base font-semibold text-primary-foreground sm:mt-0 sm:size-12 sm:self-center sm:text-lg"
+                >
                   {index + 1}
                 </span>
-                <h3 className="mt-4 text-lg font-semibold">{step.title}</h3>
-                <p className="mt-2 text-muted-foreground">{step.body}</p>
+                <div className="overflow-hidden rounded-lg border border-border sm:grid sm:grid-cols-[2fr_3fr]">
+                  <div className="relative aspect-[2/1] sm:aspect-auto sm:min-h-44 lg:min-h-52">
+                    <img
+                      src={step.image}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      className="absolute inset-0 size-full object-cover"
+                    />
+                  </div>
+                  <div className="self-center p-4 sm:p-6 lg:p-8">
+                    <h3 className="text-lg font-semibold text-navy sm:text-xl">{step.title}</h3>
+                    <p className="mt-2 text-muted-foreground">{step.body}</p>
+                  </div>
+                </div>
               </li>
             ))}
           </ol>
