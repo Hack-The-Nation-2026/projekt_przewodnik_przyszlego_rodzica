@@ -1,0 +1,5 @@
+node_modules/
+
+# Nagrania źródłowe i klatki kontrolne: odtwarzalne skryptami z scripts/.
+public/clips/
+out/check/
