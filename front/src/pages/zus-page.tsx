@@ -90,6 +90,8 @@ function InsuranceSection({
   onWithDebtChange,
   basis,
   onBasisChange,
+  asOf,
+  onAsOfChange,
   loading,
 }: {
   profile: ZusProfile | undefined
@@ -99,6 +101,8 @@ function InsuranceSection({
   onWithDebtChange: (value: boolean) => void
   basis: string
   onBasisChange: (value: string) => void
+  asOf: string
+  onAsOfChange: (value: string) => void
   loading: boolean
 }) {
   return (
@@ -150,18 +154,34 @@ function InsuranceSection({
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="zus-basis">Podstawa wymiaru w zł, wpisana ręcznie</Label>
-          <Input
-            id="zus-basis"
-            inputMode="decimal"
-            value={basis}
-            onChange={(event) => onBasisChange(event.target.value)}
-            className="max-w-48"
-          />
-          <p className="text-xs text-muted-foreground">
-            Z niej liczymy składki i podstawę zasiłku. Nic nie jest wysyłane do ZUS.
-          </p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="zus-basis">Podstawa wymiaru w zł, wpisana ręcznie</Label>
+            <Input
+              id="zus-basis"
+              inputMode="decimal"
+              value={basis}
+              onChange={(event) => onBasisChange(event.target.value)}
+              className="max-w-48"
+            />
+            <p className="text-xs text-muted-foreground">
+              Z niej liczymy składki i podstawę zasiłku. Nic nie jest wysyłane do ZUS.
+            </p>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="zus-as-of">Dzień, na który liczymy stan</Label>
+            <Input
+              id="zus-as-of"
+              type="date"
+              value={asOf}
+              onChange={(event) => onAsOfChange(event.target.value)}
+              className="max-w-48"
+            />
+            <p className="text-xs text-muted-foreground">
+              Ustaw dzień powstania prawa do świadczenia, żeby zobaczyć ubezpieczenie i zadłużenie
+              właśnie na ten dzień. Puste pole znaczy dziś.
+            </p>
+          </div>
         </div>
 
         {profile ? (
@@ -543,6 +563,9 @@ export function ZusPage() {
   const [withDebt, setWithDebt] = useState(false)
   const [basisInput, setBasisInput] = useState('8000')
   const [basisGrosze, setBasisGrosze] = useState(800_000)
+  // Dzień, na który liczymy stan. Puste pole znaczy dziś, więc użytkownik
+  // ustawia tu dzień powstania prawa do świadczenia tylko wtedy, gdy chce.
+  const [asOf, setAsOf] = useState('')
 
   // Pole przyjmuje kwotę po polsku: przecinek i spacje z grupowaniem tysięcy.
   function applyBasis(value: string) {
@@ -553,13 +576,13 @@ export function ZusPage() {
     }
   }
 
-  const query = { insured, with_debt: withDebt, monthly_basis_grosze: basisGrosze }
+  const query = { insured, with_debt: withDebt, monthly_basis_grosze: basisGrosze, as_of: asOf || null }
   const profile = useQuery({
-    queryKey: ['zus-profile', insured, withDebt, basisGrosze],
+    queryKey: ['zus-profile', insured, withDebt, basisGrosze, asOf],
     queryFn: async () => (await api.post<ZusProfile>('/zus/profile', query)).data,
   })
   const ezla = useQuery({
-    queryKey: ['zus-ezla', insured, basisGrosze],
+    queryKey: ['zus-ezla', insured, basisGrosze, asOf],
     queryFn: async () =>
       (await api.post<EzlaCertificate[]>('/zus/ezla', query)).data,
   })
@@ -611,6 +634,8 @@ export function ZusPage() {
           onWithDebtChange={setWithDebt}
           basis={basisInput}
           onBasisChange={applyBasis}
+          asOf={asOf}
+          onAsOfChange={setAsOf}
           loading={profile.isFetching}
         />
         <EzlaSection certificates={ezla.data} loading={ezla.isFetching} />
