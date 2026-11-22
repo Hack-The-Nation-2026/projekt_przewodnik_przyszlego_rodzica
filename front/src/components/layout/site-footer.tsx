@@ -11,6 +11,12 @@ const COLUMNS = [
       { to: '/swiadczenia', label: 'Świadczenia' },
       { to: '/kalkulator', label: 'Kalkulator' },
       { to: '/dokumenty', label: 'Dokumenty' },
+      // Te ekrany nie mieszczą się już w nagłówku, więc prowadzi do nich stopka.
+      { to: '/urlop', label: 'Jestem w trakcie urlopu' },
+      { to: '/planowanie', label: 'Planujesz dziecko?' },
+      { to: '/wnioski', label: 'Kreator wniosku urlopowego' },
+      { to: '/karta', label: 'Karta uprawnień' },
+      { to: '/sprawy', label: 'Sprawy' },
       { to: '/zus', label: 'Symulacja ZUS', feature: 'zus_simulations' as const },
       { to: '/wsparcie', label: 'Wsparcie' },
     ],

@@ -120,50 +120,40 @@ export function HomePage() {
         className="py-14 sm:py-20"
       >
         <Container>
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] lg:gap-16">
-            <h2 id="jak-to-dziala-title" className="text-2xl font-semibold text-navy sm:text-3xl">
-              Jak to działa
-            </h2>
+          <h2 id="jak-to-dziala-title" className="text-2xl font-semibold text-navy sm:text-3xl">
+            Jak to działa
+          </h2>
+          <p className="mt-3 max-w-2xl text-muted-foreground">
+            Trzy kroki: opisujesz sytuację, dostajesz wyliczenia i wiesz, co złożyć.
+          </p>
 
-            {/* Pionowa oś czasu: numer kroku na linii, obok mała ilustracja i opis.
-                Linia rysuje się tylko między krokami, nigdy pod ostatnim. */}
-            <ol role="list">
-              {STEPS.map((step, index) => (
-                <li
-                  key={step.title}
-                  className="relative grid grid-cols-[auto_minmax(0,1fr)] gap-4 pb-7 last:pb-0 sm:gap-5 sm:pb-9"
-                >
-                  {index < STEPS.length - 1 && (
-                    <span
-                      aria-hidden="true"
-                      className="absolute top-10 bottom-0 left-5 w-0.5 -translate-x-1/2 bg-primary/30 sm:top-12 sm:left-6"
-                    />
-                  )}
+          {/* Trzy kroki obok siebie, żeby ilustracje były duże. Na węższych ekranach
+              układają się w kolumnę i zdjęcie zajmuje całą szerokość. */}
+          <ol role="list" className="mt-10 grid gap-8 md:grid-cols-3 md:gap-6 lg:gap-10">
+            {STEPS.map((step, index) => (
+              <li key={step.title} className="flex flex-col">
+                <img
+                  src={step.image}
+                  alt=""
+                  width={800}
+                  height={800}
+                  loading="lazy"
+                  decoding="async"
+                  className="aspect-square w-full rounded-lg object-cover"
+                />
+                <div className="mt-5 flex items-center gap-3">
                   <span
                     aria-hidden="true"
-                    className="relative z-10 flex size-10 shrink-0 items-center justify-center self-start rounded-full bg-primary text-sm font-semibold text-primary-foreground ring-4 ring-background sm:size-12 sm:text-base"
+                    className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground"
                   >
                     {index + 1}
                   </span>
-                  <div className="flex min-w-0 items-start gap-4 sm:gap-5">
-                    <img
-                      src={step.image}
-                      alt=""
-                      width={800}
-                      height={800}
-                      loading="lazy"
-                      decoding="async"
-                      className="h-auto w-16 shrink-0 rounded sm:w-20 lg:w-24"
-                    />
-                    <div className="min-w-0 max-w-xl pt-0.5">
-                      <h3 className="text-base font-semibold text-navy sm:text-lg">{step.title}</h3>
-                      <p className="mt-1 text-sm text-muted-foreground sm:text-base">{step.body}</p>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
+                  <h3 className="text-lg font-semibold text-navy">{step.title}</h3>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground sm:text-base">{step.body}</p>
+              </li>
+            ))}
+          </ol>
         </Container>
       </section>
 
