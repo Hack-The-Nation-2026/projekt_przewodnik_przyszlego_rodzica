@@ -705,13 +705,14 @@ if (TAKE === 'all' || TAKE === 'panel') {
     }
 
     // Przywracamy domyślne, żeby nagranie nie zostawiło w aplikacji zmienionej stopy.
+    // Brak przycisku przerywa ujęcie, bo cicha pominięta zmiana wracałaby do filmu
+    // jako kwota liczona od obcej stopy.
     const reset = page.getByRole('button', { name: /Przywróć domyślne/i }).first()
-    if (await reset.count()) {
-      await reset.scrollIntoViewIfNeeded()
-      await settle(page, 700)
-      await clickAt(page, reset, { x: 0, y: 0 }, 1800)
-      await settle(page, 1200)
-    }
+    if (!(await reset.count())) throw new Error('Brak przycisku „Przywróć domyślne” w panelu.')
+    await reset.scrollIntoViewIfNeeded()
+    await settle(page, 700)
+    await clickAt(page, reset, { x: 0, y: 0 }, 1800)
+    await settle(page, 1200)
     await moveTo(page, 900, 520, { pause: 700 })
   })
 }
