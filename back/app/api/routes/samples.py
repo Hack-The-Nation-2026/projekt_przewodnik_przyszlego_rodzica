@@ -1,4 +1,4 @@
-"""Zestaw przykładowy ZUS: lista spraw i rozpoznanie wgranego PDF-a po odcisku."""
+"""Dokumenty z ZUS: lista spraw i rozpoznanie wgranego PDF-a po odcisku."""
 
 from fastapi import APIRouter, HTTPException
 
@@ -10,13 +10,13 @@ router = APIRouter(prefix="/samples", tags=["samples"])
 
 @router.get("", response_model=list[ZusSampleSummary])
 def list_samples() -> list[ZusSampleSummary]:
-    """Sprawy z zestawu przykładowego. Wybór z listy albo rozpoznanie po pliku."""
+    """Lista znanych dokumentów. Rozpoznanie idzie osobno, po odcisku pliku."""
     return sample_summaries()
 
 
 @router.post("/recognize", response_model=ZusRecognition)
 def recognize_sample(payload: DigestRequest) -> ZusRecognition:
-    """Dopasowuje SHA-256 pliku do zestawu. Przeglądarka liczy odcisk lokalnie."""
+    """Dopasowuje SHA-256 pliku do znanego dokumentu. Odcisk liczy przeglądarka."""
     return recognize(payload.sha256, payload.file_name)
 
 
@@ -24,5 +24,5 @@ def recognize_sample(payload: DigestRequest) -> ZusRecognition:
 def read_sample(sample_id: str) -> ZusSample:
     sample = find_sample(sample_id)
     if sample is None:
-        raise HTTPException(status_code=404, detail="Nie ma takiej sprawy w zestawie przykładowym.")
+        raise HTTPException(status_code=404, detail="Nie znaleziono takiego dokumentu.")
     return sample

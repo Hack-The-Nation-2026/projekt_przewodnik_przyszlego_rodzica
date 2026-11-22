@@ -355,7 +355,7 @@ Brief, pkt 4 i pkt 5.
 
 Jury weźmie niektóre wnioski i sprawdzi wyliczenia, więc strona musi umieć je przyjąć.
 
-- Upload albo wybór wniosku z zestawu na stronie.
+- Upload dokumentu z ZUS na stronie.
 - Weryfikacja, czy osoba z wniosku podlega ubezpieczeniu.
 - Sprawdzenie kalkulatora na tej samej sprawie.
 - Testy automatyczne w `back/tests/` dla reguł z kroku 0.
@@ -377,16 +377,17 @@ Brief, pkt 4 oraz pkt 6.
   `back/scripts/build_zus_samples.py`: odcisk pliku, wzory formularzy, rodzaj świadczeń, wynik
   z okładki zestawu i opis stanu faktycznego. Treści skanów nie kopiujemy.
 - Sprawy leżą w `back/app/data/demo-cases.json` i jadą z kodem. Regulamin nie pozwala
-  rozpowszechniać skanów ZUS, więc dane są wymyślone, a strona mówi o tym wprost.
-- Strona `/sprawy`: kafle spraw, wgrywanie pliku JSON, weryfikacja ubezpieczenia z podstawą
-  prawną, wyliczenie i porównanie z zapisaną decyzją. Wgrany wniosek z błędną decyzją pokazuje
-  różnicę na czerwono.
-- Sekcja „Zestaw przykładowy ZUS” na `/sprawy`: wgranie PDF-a albo wybór sprawy z listy. Po
-  rozpoznaniu widać opis sprawy, wzory formularzy i wynik zapisany w materiale, a krótki formularz
-  przyjmuje datę i podstawę wymiaru, których skan nie podaje. Kalkulator liczy wtedy świadczenie
-  główne i porównuje status z rozpoznaną sprawą.
-- Nieznany plik dostaje komunikat, że nie jest z zestawu, i wskaźnik na formularz ręczny.
-  Rozpoznanie nie udaje odczytu treści: 87 zestawów to skany bez warstwy tekstowej, z zamazanymi
+  rozpowszechniać skanów ZUS, więc dane są wymyślone.
+- Strona `/sprawy` ma jedno wgranie dokumentu, PDF z ZUS albo z PUE. Rozpoznanie idzie po
+  odcisku pliku, a po trafieniu widać opis sprawy, wzory formularzy i zapisany wynik. Krótki
+  formularz przyjmuje datę i podstawę wymiaru, których skan nie podaje, i wtedy kalkulator liczy
+  świadczenie główne oraz porównuje status z rozpoznaną sprawą. Pod spodem stoi weryfikacja
+  ubezpieczenia z podstawą prawną i wyliczenie, a różnica wobec decyzji jest na czerwono.
+- Lista spraw demonstracyjnych, wgrywanie pliku JSON i sekcja „Zestaw przykładowy ZUS” zniknęły
+  z ekranu, żeby strona czytała się jak zwykły produkt, w którym wgrywa się jeden dokument.
+  `GET /api/cases` i `POST /api/cases/simulate` zostają dla testów, ale UI ich nie pokazuje.
+- Nieznany plik dostaje komunikat, że go nie rozpoznaliśmy, i wskaźnik na formularz kalkulatora.
+  Rozpoznanie nie udaje odczytu treści: 87 dokumentów to skany bez warstwy tekstowej, z zamazanymi
   danymi osobowymi i pismem odręcznym.
 - `back/tests/test_rules.py` mapuje wszystkie 85 identyfikatorów z `RULES.md` na scenariusz
   albo na wpis „poza silnikiem” z powodem. Nowa reguła w `RULES.md` bez wpisu wywala test.

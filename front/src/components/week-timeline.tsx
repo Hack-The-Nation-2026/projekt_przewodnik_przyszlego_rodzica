@@ -101,8 +101,8 @@ function LaneAgenda({ lane, data }: { lane: WeekTimelineData['lanes'][number]; d
                 {formatDocumentDate(start.toISOString().slice(0, 10))} – {formatDocumentDate(end.toISOString().slice(0, 10))}
               </span>
               <span className="block text-xs opacity-90">
-                {block.days} dni{block.rate ? ` · ${block.rate}% podstawy` : ''}
-                {block.gross != null ? ` · ${currency.format(block.gross / 100)}` : ''}
+                {block.days} dni{block.rate ? `, ${block.rate}% podstawy` : ''}
+                {block.gross != null ? `, ${currency.format(block.gross / 100)}` : ''}
               </span>
               {block.exclusiveDays > 0 && (
                 <span className="mt-0.5 block text-xs font-medium">
@@ -117,21 +117,39 @@ function LaneAgenda({ lane, data }: { lane: WeekTimelineData['lanes'][number]; d
   )
 }
 
+/**
+ * Znaczniki na taśmie: poród, dzisiejsza data i terminy wniosków.
+ *
+ * Cieńsza kreska ginęła na tle pasm, więc każdy znacznik ma teraz dwa piksele
+ * (poród trzy) i kropkę u góry, żeby dało się go znaleźć wzrokiem.
+ */
 function Markers({ data }: { data: WeekTimelineData }) {
   return (
     <>
-      {data.markers.map((marker) => (
-        <span
-          key={`${marker.kind}-${marker.date}`}
-          aria-hidden
-          style={{ left: `${pct(marker.day, data)}%` }}
-          className={cn(
-            'absolute inset-y-0 w-px',
-            marker.kind === 'birth' ? 'bg-navy' : marker.missed ? 'bg-destructive' : 'bg-primary',
-            marker.kind === 'today' && 'border-l border-dashed bg-transparent',
-          )}
-        />
-      ))}
+      {data.markers.map((marker) => {
+        const today = marker.kind === 'today'
+        const tone =
+          marker.kind === 'birth' ? 'bg-navy' : marker.missed ? 'bg-destructive' : 'bg-primary'
+        return (
+          <span
+            key={`${marker.kind}-${marker.date}`}
+            aria-hidden
+            style={{ left: `${pct(marker.day, data)}%` }}
+            className={cn(
+              'absolute inset-y-0 -translate-x-1/2',
+              today ? 'w-[2px] border-l-2 border-dashed border-primary' : cn('w-[2px]', tone),
+              marker.kind === 'birth' && 'w-[3px]',
+            )}
+          >
+            <span
+              className={cn(
+                'absolute -top-1.5 left-1/2 size-2.5 -translate-x-1/2 rounded-full ring-2 ring-background',
+                today ? 'border-2 border-primary bg-background' : tone,
+              )}
+            />
+          </span>
+        )
+      })}
     </>
   )
 }
@@ -204,6 +222,8 @@ export function WeekTimeline({
   className?: string
 }) {
   const missed = data.markers.filter((marker) => marker.kind === 'deadline' && marker.missed)
+  const hasToday = data.markers.some((marker) => marker.kind === 'today')
+  const hasUpcoming = data.markers.some((marker) => marker.kind === 'deadline' && !marker.missed)
   return (
     <section className={cn('space-y-4', className)} aria-label="Oś czasu tygodni">
       <div className="space-y-2">
@@ -241,6 +261,29 @@ export function WeekTimeline({
             </span>
             <Term name="tygodnie_niezbywalne">tygodnie niezbywalne</Term>
           </span>
+          {/* Znaczniki taśmy: pokazujemy tylko te, które naprawdę są na osi. */}
+          <span className="flex items-center gap-1.5">
+            <span aria-hidden className="h-3.5 w-[3px] rounded-full bg-navy" />
+            poród
+          </span>
+          {hasToday && (
+            <span className="flex items-center gap-1.5">
+              <span aria-hidden className="h-3.5 w-[2px] border-l-2 border-dashed border-primary" />
+              dziś
+            </span>
+          )}
+          {hasUpcoming && (
+            <span className="flex items-center gap-1.5">
+              <span aria-hidden className="h-3.5 w-[2px] rounded-full bg-primary" />
+              termin wniosku
+            </span>
+          )}
+          {missed.length > 0 && (
+            <span className="flex items-center gap-1.5">
+              <span aria-hidden className="h-3.5 w-[2px] rounded-full bg-destructive" />
+              termin miniony
+            </span>
+          )}
         </div>
       </div>
 

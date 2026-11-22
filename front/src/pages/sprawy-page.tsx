@@ -1,14 +1,9 @@
-import { useRef, useState } from 'react'
-import { isAxiosError } from 'axios'
-import { Check, CircleAlert, CircleHelp, Download, FileUp, ShieldCheck, ShieldX, X } from 'lucide-react'
+import { useState } from 'react'
+import { Check, CircleAlert, CircleHelp, ShieldCheck, ShieldX, X } from 'lucide-react'
 import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
 import { SampleRecognition } from '@/components/sample-recognition'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
-import { useCase, useCases, useSimulateCase } from '@/hooks/use-cases'
-import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import type { CaseAssessment, CaseParent, CaseResult, CaseStatus } from '@/types/api'
 
@@ -88,12 +83,12 @@ function StatusBadge({ status }: { status: CaseStatus }) {
   )
 }
 
-/** Jedno zdanie o tym, czy wniosek przeszedł tak, jak mówi decyzja. */
+/** Jedno zdanie o tym, czy wyliczenie zgadza się z decyzją zapisaną w dokumencie. */
 function Verdict({ result }: { result: CaseResult }) {
   if (result.matches === null) {
     return (
       <p className="text-muted-foreground">
-        Ten wniosek nie ma zapisanej decyzji, więc pokazujemy tylko wyliczenie.
+        W tym dokumencie nie ma zapisanej decyzji, więc pokazujemy samo wyliczenie.
       </p>
     )
   }
@@ -101,9 +96,9 @@ function Verdict({ result }: { result: CaseResult }) {
     <div className="flex items-start gap-3 rounded-lg border border-primary/30 bg-primary/5 p-4">
       <ShieldCheck className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden />
       <div>
-        <p className="font-semibold text-primary">Wynik zgadza się z decyzją</p>
+        <p className="font-semibold text-primary">Wyliczenie zgadza się z decyzją</p>
         <p className="mt-1 text-muted-foreground">
-          Weryfikacja ubezpieczenia i kalkulator dają to samo, co zapisano dla tej sprawy.
+          Weryfikacja ubezpieczenia i kalkulator dają to samo, co zapisano w dokumencie.
         </p>
       </div>
     </div>
@@ -111,7 +106,7 @@ function Verdict({ result }: { result: CaseResult }) {
     <div className="flex items-start gap-3 rounded-lg border border-red-300 bg-red-50 p-4">
       <ShieldX className="mt-0.5 size-5 shrink-0 text-red-700" aria-hidden />
       <div>
-        <p className="font-semibold text-red-800">Wynik różni się od decyzji</p>
+        <p className="font-semibold text-red-800">Wyliczenie różni się od decyzji</p>
         <p className="mt-1 text-red-900/80">
           Sprawdź wiersze oznaczone na czerwono w porównaniu poniżej.
         </p>
@@ -193,7 +188,7 @@ function AssessmentsList({ assessments }: { assessments: CaseAssessment[] }) {
             <p className="font-medium">{benefitLabel(row.benefit)}</p>
             <p className="text-sm text-muted-foreground">
               {parentLabels[row.person]}
-              {row.denied_days > 0 && ` · poza limitem: ${row.denied_days} dni`}
+              {row.denied_days > 0 && `, poza limitem: ${row.denied_days} dni`}
             </p>
           </div>
           <StatusBadge status={row.status} />
@@ -231,7 +226,7 @@ function ComparisonList({ result }: { result: CaseResult }) {
           key={`${row.benefit}-${row.person}`}
           className={cn(
             'rounded-md border p-4',
-            row.matches ? 'border-neutral-200' : 'border-red-300 bg-red-50',
+            row.matches ? 'border-border' : 'border-red-300 bg-red-50',
           )}
         >
           <p className="font-medium">{benefitLabel(row.benefit)}</p>
@@ -264,14 +259,13 @@ function ComparisonList({ result }: { result: CaseResult }) {
   )
 }
 
-function ResultView({ result, source }: { result: CaseResult; source: string }) {
+function ResultView({ result }: { result: CaseResult }) {
   return (
     <section aria-labelledby="case-result" className="space-y-6">
       <div>
         <h2 id="case-result" className="font-display text-2xl font-semibold text-navy">
           {result.title}
         </h2>
-        <p className="mt-1 text-sm text-muted-foreground">Źródło: {source}</p>
         <p className="mt-3 max-w-2xl text-muted-foreground">{result.facts}</p>
       </div>
 
@@ -283,7 +277,7 @@ function ResultView({ result, source }: { result: CaseResult; source: string }) 
           <CardHeader>
             <CardTitle>Porównanie z decyzją</CardTitle>
             <CardDescription>
-              Po lewej to, co zapisano dla sprawy. Po prawej wynik kalkulatora na tych samych
+              Po lewej to, co zapisano w dokumencie. Po prawej wynik kalkulatora na tych samych
               danych.
             </CardDescription>
           </CardHeader>
@@ -339,209 +333,19 @@ function ResultView({ result, source }: { result: CaseResult; source: string }) 
   )
 }
 
-/** Odczyt pliku JSON i wysłanie go na ten sam endpoint co wnioski z zestawu. */
-function UploadCard({
-  onDownload,
-  onResult,
-}: {
-  onDownload: (() => void) | null
-  onResult: (result: CaseResult) => void
-}) {
-  const input = useRef<HTMLInputElement>(null)
-  const simulate = useSimulateCase()
-  const [error, setError] = useState<string | null>(null)
-
-  async function handleFile(file: File) {
-    setError(null)
-    try {
-      const text = await file.text()
-      const parsed: unknown = JSON.parse(text)
-      simulate.mutate(parsed as Parameters<typeof simulate.mutate>[0], {
-        onSuccess: onResult,
-        onError: (mutationError) => {
-          if (isAxiosError(mutationError)) {
-            const detail = mutationError.response?.data?.detail
-            setError(
-              typeof detail === 'string'
-                ? detail
-                : 'Plik nie ma kształtu wniosku, którego oczekuje kalkulator.',
-            )
-            return
-          }
-          setError('Nie udało się odczytać pliku.')
-        },
-      })
-    } catch {
-      setError('Plik nie jest poprawnym JSON-em.')
-    }
-  }
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Wgraj własny wniosek</CardTitle>
-        <CardDescription>
-          Plik JSON w tym samym formacie, co wnioski z zestawu. Nic nie zapisujemy na serwerze.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex flex-wrap gap-3">
-          <Button type="button" variant="outline" onClick={() => input.current?.click()}>
-            <FileUp className="size-4" aria-hidden />
-            Wybierz plik JSON
-          </Button>
-          {onDownload && (
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={onDownload}
-              aria-label="Pobierz wybrany wniosek jako plik JSON"
-            >
-              <Download className="size-4" aria-hidden />
-              Pobierz wniosek
-            </Button>
-          )}
-        </div>
-        <input
-          ref={input}
-          type="file"
-          accept="application/json,.json"
-          className="sr-only"
-          aria-label="Plik JSON z wnioskiem"
-          onChange={(event) => {
-            const file = event.target.files?.[0]
-            if (file) void handleFile(file)
-            event.target.value = ''
-          }}
-        />
-        {simulate.isPending && <p className="text-muted-foreground">Liczę wgrany wniosek…</p>}
-        {error && (
-          <p role="alert" className="rounded-md bg-red-50 p-3 text-red-800">
-            {error}
-          </p>
-        )}
-      </CardContent>
-    </Card>
-  )
-}
-
 export function SprawyPage() {
-  const cases = useCases()
-  const [chosenId, setChosenId] = useState<string | null>(null)
-  const [uploaded, setUploaded] = useState<CaseResult | null>(null)
-  const [sourceLabel, setSourceLabel] = useState('zestaw demonstracyjny')
-  const [downloadError, setDownloadError] = useState<string | null>(null)
-  const selectedId = chosenId ?? cases.data?.[0]?.id ?? null
-  const selected = useCase(selectedId)
-
-  async function downloadApplication() {
-    if (!selectedId) return
-    setDownloadError(null)
-    try {
-      const { data } = await api.get(`/cases/${selectedId}/application`)
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `${selectedId}.json`
-      link.click()
-      URL.revokeObjectURL(url)
-    } catch {
-      setDownloadError('Nie udało się przygotować pliku do pobrania.')
-    }
-  }
-
-  const source = uploaded ? sourceLabel : 'zestaw demonstracyjny'
+  const [result, setResult] = useState<CaseResult | null>(null)
 
   return (
     <PageContainer className="space-y-8 py-10">
       <PageHeading
         title="Sprawy"
-        description="Wgraj PDF z zestawu przykładowego ZUS albo wybierz wniosek z zestawu. Najpierw sprawdzamy ubezpieczenie, potem liczymy świadczenia na tych samych danych."
+        description="Wgraj dokument z ZUS, a sprawdzimy ubezpieczenie i policzymy świadczenia na danych z pisma."
       />
 
-      <SampleRecognition onResult={(result) => {
-        setSourceLabel('zestaw przykładowy ZUS')
-        setUploaded(result)
-      }} />
+      <SampleRecognition onResult={setResult} />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Wnioski w zestawie</CardTitle>
-          <CardDescription>
-            Dziesięć spraw z różnymi tytułami ubezpieczenia. Każda ma zapisaną decyzję, z którą
-            porównujemy wyliczenie.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {cases.isPending && <Skeleton className="h-24 w-full" />}
-          {cases.isError && (
-            <p role="alert" className="text-red-800">
-              Nie udało się wczytać listy wniosków. Sprawdź, czy backend działa.
-            </p>
-          )}
-          {cases.data && (
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {cases.data.map((item) => {
-                const active = item.id === selectedId && !uploaded
-                return (
-                  <li key={item.id}>
-                    <button
-                      type="button"
-                      aria-pressed={active}
-                      onClick={() => {
-                        setUploaded(null)
-                        setChosenId(item.id)
-                      }}
-                      className={cn(
-                        'flex h-full w-full flex-col gap-1 rounded-lg border p-4 text-left transition-colors',
-                        'hover:border-primary/60 hover:bg-primary/5',
-                        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-                        active ? 'border-primary bg-primary/5' : 'border-neutral-200 bg-background',
-                      )}
-                    >
-                      <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                        {item.id} · {item.applicant_label}
-                      </span>
-                      <span className="font-semibold">{item.title}</span>
-                      <span className="text-sm text-muted-foreground">{item.facts}</span>
-                    </button>
-                  </li>
-                )
-              })}
-            </ul>
-          )}
-        </CardContent>
-      </Card>
-
-      <UploadCard
-        onDownload={selectedId ? downloadApplication : null}
-        onResult={(result) => {
-          setSourceLabel('wgrany plik JSON')
-          setUploaded(result)
-        }}
-      />
-      {downloadError && (
-        <p role="alert" className="text-red-800">
-          {downloadError}
-        </p>
-      )}
-
-      {uploaded && <ResultView result={uploaded} source={source} />}
-
-      {!uploaded && selected.isPending && <Skeleton className="h-64 w-full" />}
-      {!uploaded && selected.isError && (
-        <p role="alert" className="text-red-800">
-          Nie udało się policzyć wybranego wniosku.
-        </p>
-      )}
-      {!uploaded && selected.data && <ResultView result={selected.data} source={source} />}
-
-      <p className="max-w-2xl text-sm text-muted-foreground">
-        Wnioski demonstracyjne są wymyślone. Zestaw przykładowy ZUS rozpoznajemy po odcisku pliku i
-        pokazujemy z niego tylko opis sprawy oraz wzory formularzy, bo regulamin zadania zabrania
-        publikowania samych dokumentów. Kwoty i daty wpisujesz ze swojego pliku.
-      </p>
+      {result && <ResultView result={result} />}
     </PageContainer>
   )
 }

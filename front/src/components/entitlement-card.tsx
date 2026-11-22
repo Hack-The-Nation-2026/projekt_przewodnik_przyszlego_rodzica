@@ -124,7 +124,7 @@ export function EntitlementCard({
             <p className="text-xs font-semibold tracking-wide text-primary uppercase">Skrzydła Rodzica</p>
             <h1 className="font-display text-xl font-semibold">Karta uprawnień</h1>
             <p className="text-sm text-muted-foreground">
-              {data.role} · karta z {formatDocumentDate(data.generatedAt)}
+              {data.role}, karta z {formatDocumentDate(data.generatedAt)}
             </p>
           </div>
           <p className="max-w-xs rounded-lg bg-secondary p-3 text-xs font-medium" data-read>

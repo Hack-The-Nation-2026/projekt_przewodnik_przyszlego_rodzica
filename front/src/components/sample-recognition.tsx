@@ -7,9 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { useRecognizeSample, useSamples } from '@/hooks/use-samples'
+import { benefitList } from '@/lib/benefit-interview'
+import { useRecognizeSample } from '@/hooks/use-samples'
 import { useSimulateCase } from '@/hooks/use-cases'
-import { api } from '@/lib/api'
 import { sha256Hex } from '@/lib/sha256'
 import { cn } from '@/lib/utils'
 import type { CaseResult, ZusOutcome, ZusSample } from '@/types/api'
@@ -18,10 +18,10 @@ const familyBenefits = ['macierzynski', 'uzupelniajacy', 'rodzicielski', 'ojcows
 type FamilyBenefit = (typeof familyBenefits)[number]
 
 const outcomeCopy: Record<ZusOutcome, { label: string; tone: string }> = {
-  granted: { label: 'W zestawie przyznano prawo', tone: 'bg-primary text-primary-foreground' },
-  denied: { label: 'W zestawie odmowa', tone: 'bg-red-600 text-white' },
-  partially_granted: { label: 'W zestawie częściowo', tone: 'bg-blue-600 text-white' },
-  unknown: { label: 'Wynik nie jest zapisany', tone: 'bg-neutral-200 text-neutral-800' },
+  granted: { label: 'Przyznano prawo', tone: 'bg-primary text-primary-foreground' },
+  denied: { label: 'Odmowa', tone: 'bg-red-600 text-white' },
+  partially_granted: { label: 'Przyznano częściowo', tone: 'bg-blue-600 text-white' },
+  unknown: { label: 'W dokumencie nie ma decyzji', tone: 'bg-neutral-200 text-neutral-800' },
 }
 
 const tagLabels: Record<string, string> = {
@@ -56,6 +56,10 @@ const simulationEmployment = {
 
 type SampleEmployment = keyof typeof simulationEmployment
 
+function benefitName(code: string) {
+  return benefitList[code as FamilyBenefit]?.name ?? code.replaceAll('_', ' ')
+}
+
 function tagLabel(tag: string) {
   return tagLabels[tag] ?? tag.replaceAll('_', ' ')
 }
@@ -70,7 +74,7 @@ function OutcomeBadge({ outcome }: { outcome: ZusOutcome }) {
   )
 }
 
-/** Formularz nad brakującymi liczbami: rozpoznanie mówi co to za sprawa, nie zgaduje kwot. */
+/** Rozpoznanie mówi, co to za sprawa, ale kwot nie zgaduje. O nie prosi w formularzu. */
 function SampleSimulation({ sample, onResult }: { sample: ZusSample; onResult: (result: CaseResult) => void }) {
   const simulate = useSimulateCase()
   const claims = sample.benefits.filter((code): code is FamilyBenefit =>
@@ -79,7 +83,7 @@ function SampleSimulation({ sample, onResult }: { sample: ZusSample; onResult: (
   const selected = claims.length ? claims : (['macierzynski'] as FamilyBenefit[])
   /*
    * Liczymy świadczenie główne, bo tylko o nim wiemy, czy sprawa skończyła się
-   * przyznaniem. Pozostałe z zestawu wymagają danych, których skan nie podaje
+   * przyznaniem. Pozostałe wymagają danych, których sam dokument nie podaje
    * (choćby pobytu w szpitalu przy wcześniaku), więc byłyby zgadywaniem.
    */
   const primary = selected[0]
@@ -152,12 +156,12 @@ function SampleSimulation({ sample, onResult }: { sample: ZusSample; onResult: (
   }
 
   return (
-    <div className="space-y-4 rounded-lg border border-neutral-200 p-4">
+    <div className="space-y-4 rounded-lg border border-border p-4">
       <div>
-        <p className="font-semibold">Dopisz brakujące liczby</p>
+        <p className="font-semibold">Uzupełnij dane, których potrzebuje wyliczenie</p>
         <p className="text-sm text-muted-foreground">
-          Skan nie podaje podstawy wymiaru ani daty porodu, więc wpisz je ze swojego dokumentu.
-          Wyliczenie ruszy dopiero na tych danych.
+          Rozpoznanie mówi, jakiej sprawy dotyczy dokument. Datę i podstawę wymiaru wpisz z pisma,
+          żeby wyliczenie ruszyło na Twoich danych.
         </p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
@@ -216,12 +220,8 @@ function SampleSimulation({ sample, onResult }: { sample: ZusSample; onResult: (
         </div>
       </div>
       <p className="text-sm text-muted-foreground">
-        Liczone świadczenie: {primary.replaceAll('_', ' ')}
-        {rest.length > 0 && (
-          <>
-            {' · '}w zestawie są też: {rest.map((code) => code.replaceAll('_', ' ')).join(', ')}
-          </>
-        )}
+        Liczone świadczenie: {benefitName(primary)}
+        {rest.length > 0 && `. W dokumencie są też: ${rest.map(benefitName).join(', ')}.`}
       </p>
       <div className="flex flex-wrap items-center gap-3">
         <Button type="button" onClick={submit} disabled={!eventDate || simulate.isPending}>
@@ -246,7 +246,7 @@ function SampleCard({ sample, onResult }: { sample: ZusSample; onResult: (result
           <div>
             <CardTitle>{sample.title}</CardTitle>
             <CardDescription className="mt-1">
-              {sample.id} · {sample.file_name} · {sample.pages} stron
+              {sample.file_name}, {sample.pages} stron
             </CardDescription>
           </div>
           <OutcomeBadge outcome={sample.outcome} />
@@ -256,12 +256,12 @@ function SampleCard({ sample, onResult }: { sample: ZusSample; onResult: (result
         <p className="text-muted-foreground">{sample.facts}</p>
         {sample.evidence && (
           <blockquote className="border-l-2 border-primary/40 pl-3 text-sm text-muted-foreground">
-            Zapis w materiale: „{sample.evidence}”
+            Zapis w dokumencie: „{sample.evidence}”
           </blockquote>
         )}
         {sample.forms.length > 0 && (
           <div className="space-y-2">
-            <p className="text-sm font-medium">Wzory formularzy w zestawie</p>
+            <p className="text-sm font-medium">Formularze z dokumentu</p>
             <div className="flex flex-wrap gap-2">
               {sample.forms.map((form) => (
                 <Badge key={form} variant="outline">
@@ -283,17 +283,17 @@ function SampleCard({ sample, onResult }: { sample: ZusSample; onResult: (result
         )}
         {sample.duplicate_of && (
           <p className="text-sm text-muted-foreground">
-            To powtórka zestawu {sample.duplicate_of}, więc liczymy go raz.
+            Ten dokument występuje w kilku wersjach, więc liczymy go raz.
           </p>
         )}
         {sample.benefits.some((code) => (familyBenefits as readonly string[]).includes(code)) ? (
           <SampleSimulation sample={sample} onResult={onResult} />
         ) : (
-          <div className="space-y-2 rounded-lg border border-neutral-200 p-4">
-            <p className="font-semibold">Ta sprawa dotyczy zasiłku chorobowego</p>
+          <div className="space-y-2 rounded-lg border border-border p-4">
+            <p className="font-semibold">Ten dokument dotyczy zasiłku chorobowego</p>
             <p className="text-sm text-muted-foreground">
-              Zestaw nie zawiera wniosku o urlop, więc nie ma czego rozdzielać. Niezdolność do pracy
-              policzysz w kalkulatorze, podając okres zwolnienia.
+              Dokument nie zawiera wniosku o urlop, więc nie ma czego rozdzielać. Niezdolność do
+              pracy policzysz w kalkulatorze, podając okres zwolnienia.
             </p>
             <Link
               to="/kalkulator"
@@ -310,11 +310,10 @@ function SampleCard({ sample, onResult }: { sample: ZusSample; onResult: (result
 }
 
 /**
- * Rozpoznanie zestawu przykładowego: wgranie PDF-a albo wybór z listy.
- * PDF zostaje na urządzeniu, do backendu idzie tylko odcisk SHA-256.
+ * Rozpoznanie dokumentu: wgranie PDF-a z ZUS. Odcisk SHA-256 liczy przeglądarka,
+ * więc do backendu idzie tylko skrót, a sam dokument zostaje na urządzeniu.
  */
 export function SampleRecognition({ onResult }: { onResult: (result: CaseResult) => void }) {
-  const samples = useSamples()
   const recognize = useRecognizeSample()
   const input = useRef<HTMLInputElement>(null)
   const [sample, setSample] = useState<ZusSample | null>(null)
@@ -342,71 +341,43 @@ export function SampleRecognition({ onResult }: { onResult: (result: CaseResult)
     }
   }
 
-  async function chooseSample(sampleId: string) {
-    setError(null)
-    setMessage(null)
-    setSample(null)
-    try {
-      const { data } = await api.get<ZusSample>(`/samples/${sampleId}`)
-      setSample(data)
-      setMessage(`Wybrano zestaw ${data.id}: ${data.file_name}`)
-    } catch {
-      setError('Nie udało się wczytać tej sprawy.')
-    }
-  }
-
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <ScanLine className="size-5" aria-hidden />
-          Zestaw przykładowy ZUS
+          Wgraj dokument z ZUS
         </CardTitle>
         <CardDescription>
-          Wgraj PDF z zestawu przykładowego albo wybierz sprawę z listy. Odcisk liczymy w
-          przeglądarce, więc dokument nie opuszcza urządzenia. Rozpoznajemy {samples.data?.length ?? 87}{' '}
-          zestawów.
+          Wgraj PDF z ZUS albo z PUE. Odcisk pliku liczymy w przeglądarce, więc dokument nie
+          opuszcza urządzenia.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid gap-3 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
-          <Button type="button" variant="outline" onClick={() => input.current?.click()}>
-            <FileUp className="size-4" aria-hidden />
-            Wgraj PDF z zestawu
-          </Button>
-          {samples.data && (
-            <Select onValueChange={(value) => void chooseSample(value)}>
-              <SelectTrigger
-                aria-label="Wybierz sprawę z zestawu przykładowego"
-                className="w-full [&>span]:truncate"
-              >
-                <SelectValue placeholder="albo wybierz sprawę z listy" />
-              </SelectTrigger>
-              <SelectContent className="max-h-80">
-                {samples.data.map((item) => (
-                  <SelectItem key={item.id} value={item.id}>
-                    {item.id} · {item.title}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
-        </div>
+        <Button type="button" variant="outline" onClick={() => input.current?.click()}>
+          <FileUp className="size-4" aria-hidden />
+          Wgraj PDF
+        </Button>
         <input
           ref={input}
           type="file"
           accept="application/pdf,.pdf"
           className="sr-only"
-          aria-label="PDF z zestawu przykładowego ZUS"
+          aria-label="PDF z ZUS"
           onChange={(event) => {
             const file = event.target.files?.[0]
             if (file) void handleFile(file)
             event.target.value = ''
           }}
         />
-        {recognize.isPending && <p className="text-muted-foreground">Rozpoznaję plik…</p>}
+        {recognize.isPending && <p className="text-muted-foreground">Rozpoznaję dokument…</p>}
         {message && (
-          <p className={cn('rounded-md bg-secondary p-3 text-sm', !sample && 'text-muted-foreground')}>
+          <p
+            className={cn(
+              'rounded-md p-3 text-sm',
+              sample ? 'bg-secondary' : 'border border-amber-300 bg-amber-50 text-amber-950',
+            )}
+          >
             {message}
           </p>
         )}

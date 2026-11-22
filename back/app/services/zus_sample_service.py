@@ -1,4 +1,4 @@
-"""Zestaw przykładowy ZUS: lista spraw, wyszukanie po odcisku i rozpoznanie pliku.
+"""Dokumenty z ZUS: lista spraw, wyszukanie po odcisku i rozpoznanie pliku.
 
 Plik `app/data/zus-samples.json` powstaje ze skanów z `PRZYKLADY/` skryptem
 `scripts/build_zus_samples.py`. Skanów nie ma w repozytorium, więc w kodzie zostaje
@@ -13,8 +13,8 @@ from app.schemas.zus_samples import ZusRecognition, ZusSample, ZusSampleSummary
 
 SAMPLES_PATH = Path(__file__).resolve().parents[1] / "data" / "zus-samples.json"
 UNKNOWN_HINT = (
-    "Ten plik nie jest jednym z zestawów przykładowych ZUS. Wpisz dane z dokumentu "
-    "w formularzu obok albo wybierz sprawę z listy."
+    "Nie rozpoznaliśmy tego dokumentu. Serwis czyta pisma z ZUS. Jeśli to inny plik, "
+    "wpisz dane w formularzu kalkulatora."
 )
 
 
@@ -47,8 +47,8 @@ def find_sample(sample_id: str) -> ZusSample | None:
 def recognize(digest: str, file_name: str | None = None) -> ZusRecognition:
     """Dopasowanie po SHA-256. Ten sam plik daje ten sam odcisk, więc wynik jest pewny.
 
-    Dwa zestawy mogą być tym samym plikiem. Wtedy rozpoznajemy pierwszy z nich, a drugi
-    ma w danych `duplicate_of`, żeby lista nie pokazywała tej samej sprawy dwa razy.
+    Dwa dokumenty mogą być tym samym plikiem. Wtedy rozpoznajemy pierwszy z nich, a drugi
+    ma w danych `duplicate_of`, żeby ta sama sprawa nie pojawiała się dwa razy.
 
     Gdy odcisk nie pasuje, próbujemy jeszcze nazwy pliku. Wtedy treść mogła się zmienić,
     więc komunikat mówi, że dopasowanie jest po nazwie i dane trzeba sprawdzić.
@@ -59,7 +59,7 @@ def recognize(digest: str, file_name: str | None = None) -> ZusRecognition:
             sha256=digest,
             matched=True,
             sample=sample,
-            hint=f"Rozpoznano zestaw {sample.id}: {sample.file_name}",
+            hint=f"Rozpoznaliśmy dokument: {sample.file_name}",
         )
     if file_name:
         wanted = file_name.strip().casefold()
@@ -72,7 +72,7 @@ def recognize(digest: str, file_name: str | None = None) -> ZusRecognition:
                 matched=True,
                 sample=sample,
                 hint=(
-                    f"Rozpoznano zestaw {sample.id} po nazwie pliku, bo odcisk się nie zgadza. "
+                    "Rozpoznaliśmy dokument po nazwie pliku, bo odcisk się nie zgadza. "
                     "Sprawdź, czy to ten sam dokument."
                 ),
             )
