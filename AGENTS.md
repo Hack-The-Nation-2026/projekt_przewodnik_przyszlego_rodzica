@@ -39,16 +39,18 @@ and stop anything you started before you finish.
 
 ## Deployment
 
-The front runs on Vercel and the API on FastAPI Cloud. Neither deploys itself from a push, so a
-change that should be live has to be released by hand:
+The API deploys itself. A push to `main` runs `.github/workflows/deploy.yml`, which deploys `back/`
+to FastAPI Cloud with the repository secrets `FASTAPI_CLOUD_TOKEN` and `FASTAPI_CLOUD_APP_ID`.
+The front on Vercel is released by hand:
 
 ```bash
-cd back  && fastapi deploy
-cd front && vercel deploy --prod --project skrzydla-rodzica
+cd front && vercel deploy --prod --yes --project skrzydla-rodzica
 ```
 
-Addresses and the rest of the setup are in the "Wdrożenie" section of `README.md`. `VITE_API_URL`
-is baked in at build time, so changing the API address means rebuilding the front.
+Do not use the workflow for the front: it lives in `front/`, so the Vercel project needs its root
+directory set to that folder rather than the repository root. Addresses and the rest of the setup
+are in the "Wdrożenie" section of `README.md`. `VITE_API_URL` is baked in at build time, so changing
+the API address means rebuilding the front.
 
 ## Git
 

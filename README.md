@@ -127,6 +127,11 @@ fastapi cloud env set CORS_ORIGINS "https://skrzydla-rodzica.vercel.app"
 `fastapi cloud apps create` i `vercel project create` uruchamia się raz. Kolejne wdrożenia to
 `fastapi deploy` w `back/` i `vercel deploy --prod --project skrzydla-rodzica` w `front/`.
 
+API wdraża się samo. Push na `main` uruchamia `.github/workflows/deploy.yml`, który robi to samo,
+co `fastapi deploy` w `back/`. Identyfikator aplikacji i token wdrożeniowy siedzą w sekretach
+repozytorium jako `FASTAPI_CLOUD_APP_ID` i `FASTAPI_CLOUD_TOKEN`, a ustawia je
+`fastapi cloud setup-ci`. Front na razie wypuszczamy ręcznie.
+
 Adres aplikacji wypisuje `fastapi deploy`, a adres frontu `vercel deploy`. Wstaw je w miejsce
 przykładów powyżej, jeśli wyjdą inne. Stan konta sprawdzisz przez `fastapi cloud whoami`,
 a logi z chmury przez `fastapi cloud logs`.
