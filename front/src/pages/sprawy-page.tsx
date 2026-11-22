@@ -1,9 +1,8 @@
-import { useState } from 'react'
+import { type ReactNode, useState } from 'react'
 import { Check, CircleAlert, CircleHelp, ShieldCheck, ShieldX, X } from 'lucide-react'
 import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
 import { SampleRecognition } from '@/components/sample-recognition'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import type { CaseAssessment, CaseParent, CaseResult, CaseStatus } from '@/types/api'
 
@@ -83,12 +82,35 @@ function StatusBadge({ status }: { status: CaseStatus }) {
   )
 }
 
+/** Sekcja wyniku oddzielona kreską, żeby całość czytała się jak jedno pismo, nie stos kart. */
+function Panel({
+  title,
+  description,
+  children,
+  className,
+}: {
+  title: string
+  description?: string
+  children: ReactNode
+  className?: string
+}) {
+  return (
+    <section className={cn('space-y-3 border-t border-border pt-6', className)}>
+      <div className="space-y-1">
+        <h3 className="font-semibold">{title}</h3>
+        {description && <p className="text-sm text-muted-foreground">{description}</p>}
+      </div>
+      {children}
+    </section>
+  )
+}
+
 /** Jedno zdanie o tym, czy wyliczenie zgadza się z decyzją zapisaną w dokumencie. */
 function Verdict({ result }: { result: CaseResult }) {
   if (result.matches === null) {
     return (
       <p className="text-muted-foreground">
-        W tym dokumencie nie ma zapisanej decyzji, więc pokazujemy samo wyliczenie.
+        Dokument nie zawiera decyzji, więc pokazujemy samo wyliczenie.
       </p>
     )
   }
@@ -115,15 +137,14 @@ function Verdict({ result }: { result: CaseResult }) {
   )
 }
 
-function InsuranceCard({ result }: { result: CaseResult }) {
+function InsurancePanel({ result }: { result: CaseResult }) {
   const { covered, reason, rule_ids } = result.insurance
   const tone =
     covered === true
-      ? 'border-primary/30 bg-primary/5'
+      ? 'bg-primary/10 text-primary'
       : covered === false
-        ? 'border-red-300 bg-red-50'
-        : 'border-amber-300 bg-amber-50'
-  const Icon = covered === false ? ShieldX : ShieldCheck
+        ? 'bg-red-100 text-red-800'
+        : 'bg-amber-100 text-amber-900'
   const label =
     covered === true
       ? 'Osoba podlega ubezpieczeniu chorobowemu'
@@ -132,47 +153,43 @@ function InsuranceCard({ result }: { result: CaseResult }) {
         : 'Nie da się tego rozstrzygnąć z danych'
 
   return (
-    <Card className={cn('border', tone)}>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Icon className="size-5" aria-hidden />
-          Weryfikacja ubezpieczenia
-        </CardTitle>
-        <CardDescription className="text-base">{result.applicant.label}</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        <p className="text-lg font-medium">{label}</p>
-        <p className="text-muted-foreground">{reason}</p>
-        <dl className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-          <div className="flex gap-2">
-            <dt className="text-muted-foreground">Tytuł</dt>
-            <dd className="font-medium">
-              {employmentLabels[result.applicant.employment] ?? result.applicant.employment}
-            </dd>
-          </div>
+    <Panel title="Weryfikacja ubezpieczenia">
+      <span className={cn('inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-sm font-medium', tone)}>
+        {label}
+      </span>
+      <p className="text-muted-foreground">{reason}</p>
+      <dl className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+        <div className="flex gap-2">
+          <dt className="text-muted-foreground">Osoba</dt>
+          <dd className="font-medium">{result.applicant.label}</dd>
+        </div>
+        <div className="flex gap-2">
+          <dt className="text-muted-foreground">Tytuł</dt>
+          <dd className="font-medium">
+            {employmentLabels[result.applicant.employment] ?? result.applicant.employment}
+          </dd>
+        </div>
+        {result.applicant.insurance_kind && (
           <div className="flex gap-2">
             <dt className="text-muted-foreground">Rodzaj ubezpieczenia</dt>
             <dd className="font-medium">
-              {result.applicant.insurance_kind
-                ? (insuranceKindLabels[result.applicant.insurance_kind] ??
-                  result.applicant.insurance_kind)
-                : 'nie podano'}
+              {insuranceKindLabels[result.applicant.insurance_kind] ?? result.applicant.insurance_kind}
             </dd>
           </div>
-          <div className="flex gap-2">
-            <dt className="text-muted-foreground">Okres ubezpieczenia</dt>
-            <dd className="font-medium">
-              {result.applicant.insured_days === null
-                ? 'nie podano'
-                : `${number.format(result.applicant.insured_days)} dni`}
-            </dd>
-          </div>
-        </dl>
-        {rule_ids.length > 0 && (
-          <p className="text-sm text-muted-foreground">Podstawa: {rule_ids.join(', ')}</p>
         )}
-      </CardContent>
-    </Card>
+        <div className="flex gap-2">
+          <dt className="text-muted-foreground">Okres ubezpieczenia</dt>
+          <dd className="font-medium">
+            {result.applicant.insured_days === null
+              ? 'nie podano'
+              : `${number.format(result.applicant.insured_days)} dni`}
+          </dd>
+        </div>
+      </dl>
+      {rule_ids.length > 0 && (
+        <p className="text-sm text-muted-foreground">Reguły ubezpieczenia: {rule_ids.join(', ')}</p>
+      )}
+    </Panel>
   )
 }
 
@@ -218,26 +235,27 @@ function Figure({ label, status, amount }: { label: string; status: CaseStatus; 
 }
 
 function ComparisonList({ result }: { result: CaseResult }) {
-  if (result.comparison.length === 0) return null
   return (
-    <ul className="space-y-3">
+    <ul className="divide-y">
       {result.comparison.map((row) => (
         <li
           key={`${row.benefit}-${row.person}`}
           className={cn(
-            'rounded-md border p-4',
-            row.matches ? 'border-border' : 'border-red-300 bg-red-50',
+            'space-y-3 border-l-2 py-4 pl-4 first:pt-0 last:pb-0',
+            row.matches ? 'border-transparent' : 'border-red-400',
           )}
         >
-          <p className="font-medium">{benefitLabel(row.benefit)}</p>
-          <p className="text-sm text-muted-foreground">{parentLabels[row.person]}</p>
-          <div className="mt-3 grid gap-4 sm:grid-cols-2">
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <p className="font-medium">{benefitLabel(row.benefit)}</p>
+            <p className="text-sm text-muted-foreground">{parentLabels[row.person]}</p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
             <Figure label="Decyzja" status={row.expected_status} amount={row.expected_gross_grosze} />
             <Figure label="Kalkulator" status={row.status} amount={row.gross_grosze} />
           </div>
           <p
             className={cn(
-              'mt-3 inline-flex items-center gap-1.5 text-sm font-medium',
+              'inline-flex items-center gap-1.5 text-sm font-medium',
               row.matches ? 'text-primary' : 'text-red-700',
             )}
           >
@@ -260,75 +278,56 @@ function ComparisonList({ result }: { result: CaseResult }) {
 }
 
 function ResultView({ result }: { result: CaseResult }) {
+  /* Bez decyzji w dokumencie nie ma z czym porównywać, więc zostaje samo wyliczenie. */
+  const hasDecision = result.comparison.length > 0
   return (
     <section aria-labelledby="case-result" className="space-y-6">
-      <div>
-        <h2 id="case-result" className="font-display text-2xl font-semibold text-navy">
-          {result.title}
+      <div className="space-y-3">
+        <h2 id="case-result" className="font-display text-xl font-semibold text-navy">
+          Wynik sprawdzenia
         </h2>
-        <p className="mt-3 max-w-2xl text-muted-foreground">{result.facts}</p>
+        <Verdict result={result} />
       </div>
 
-      <Verdict result={result} />
-      <InsuranceCard result={result} />
+      <InsurancePanel result={result} />
 
-      {result.comparison.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Porównanie z decyzją</CardTitle>
-            <CardDescription>
-              Po lewej to, co zapisano w dokumencie. Po prawej wynik kalkulatora na tych samych
-              danych.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ComparisonList result={result} />
-          </CardContent>
-        </Card>
+      {hasDecision && (
+        <Panel
+          title="Porównanie z decyzją"
+          description="Po lewej to, co zapisano w dokumencie. Po prawej wynik kalkulatora na tych samych danych."
+        >
+          <ComparisonList result={result} />
+        </Panel>
       )}
 
-      {result.unexpected.length > 0 && (
-        <Card className="border border-amber-300 bg-amber-50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CircleAlert className="size-5" aria-hidden />
-              Kalkulator policzył więcej niż decyzja
-            </CardTitle>
-            <CardDescription className="text-base text-amber-900/80">
-              Te pozycje nie mają odpowiednika w zapisanej decyzji, więc wynik nie jest zgodny.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-2">
-              {result.unexpected.map((row) => (
-                <li
-                  key={`${row.benefit}-${row.person}`}
-                  className="flex flex-wrap items-baseline gap-x-3 gap-y-1"
-                >
-                  <span className="font-medium">{benefitLabel(row.benefit)}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {parentLabels[row.person]}
-                  </span>
-                  <StatusBadge status={row.status} />
-                  <span className="tabular-nums">{money(row.gross_grosze)}</span>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+      {hasDecision && result.unexpected.length > 0 && (
+        <section className="space-y-3 rounded-lg border border-amber-300 bg-amber-50 p-4">
+          <h3 className="flex items-center gap-2 font-semibold text-amber-950">
+            <CircleAlert className="size-5" aria-hidden />
+            Kalkulator policzył więcej niż decyzja
+          </h3>
+          <p className="text-sm text-amber-900/80">
+            Te pozycje nie mają odpowiednika w zapisanej decyzji, więc wynik nie jest zgodny.
+          </p>
+          <ul className="space-y-2">
+            {result.unexpected.map((row) => (
+              <li
+                key={`${row.benefit}-${row.person}`}
+                className="flex flex-wrap items-baseline gap-x-3 gap-y-1"
+              >
+                <span className="font-medium">{benefitLabel(row.benefit)}</span>
+                <span className="text-sm text-muted-foreground">{parentLabels[row.person]}</span>
+                <StatusBadge status={row.status} />
+                <span className="tabular-nums">{money(row.gross_grosze)}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Świadczenia z kalkulatora</CardTitle>
-          <CardDescription>
-            Kwoty brutto. Okresy liczone w dniach kalendarzowych.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <AssessmentsList assessments={result.assessments} />
-        </CardContent>
-      </Card>
+      <Panel title="Świadczenia z kalkulatora" description="Kwoty brutto. Okresy liczone w dniach kalendarzowych.">
+        <AssessmentsList assessments={result.assessments} />
+      </Panel>
     </section>
   )
 }

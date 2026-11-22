@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, BadgeCheck, FileText, FileUp, ScanLine, X } from 'lucide-react'
+import { ArrowRight, BadgeCheck, CircleAlert, CircleHelp, FileText, FileUp, ScanLine, X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -17,11 +17,22 @@ import type { CaseResult, ZusOutcome, ZusSample } from '@/types/api'
 const familyBenefits = ['macierzynski', 'uzupelniajacy', 'rodzicielski', 'ojcowski'] as const
 type FamilyBenefit = (typeof familyBenefits)[number]
 
-const outcomeCopy: Record<ZusOutcome, { label: string; tone: string }> = {
-  granted: { label: 'Przyznano prawo', tone: 'bg-primary text-primary-foreground' },
-  denied: { label: 'Odmowa', tone: 'bg-red-600 text-white' },
-  partially_granted: { label: 'Przyznano częściowo', tone: 'bg-blue-600 text-white' },
-  unknown: { label: 'W dokumencie nie ma decyzji', tone: 'bg-neutral-200 text-neutral-800' },
+const outcomeCopy: Record<
+  ZusOutcome,
+  { label: string; tone: string; icon: typeof BadgeCheck }
+> = {
+  granted: { label: 'Przyznano prawo', tone: 'bg-primary text-primary-foreground', icon: BadgeCheck },
+  denied: { label: 'Odmowa', tone: 'bg-red-600 text-white', icon: X },
+  partially_granted: {
+    label: 'Przyznano częściowo',
+    tone: 'bg-blue-600 text-white',
+    icon: CircleAlert,
+  },
+  unknown: {
+    label: 'W dokumencie nie ma decyzji',
+    tone: 'bg-neutral-200 text-neutral-800',
+    icon: CircleHelp,
+  },
 }
 
 const tagLabels: Record<string, string> = {
@@ -65,16 +76,16 @@ function tagLabel(tag: string) {
 }
 
 function OutcomeBadge({ outcome }: { outcome: ZusOutcome }) {
-  const { label, tone } = outcomeCopy[outcome]
+  const { label, tone, icon: Icon } = outcomeCopy[outcome]
   return (
     <span className={cn('inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-sm font-medium', tone)}>
-      <BadgeCheck className="size-4" aria-hidden />
+      <Icon className="size-4" aria-hidden />
       {label}
     </span>
   )
 }
 
-/** Rozpoznanie mówi, co to za sprawa, ale kwot nie zgaduje. O nie prosi w formularzu. */
+/** Pola, których dokument nie podaje, więc kalkulator musi je dostać od użytkownika. */
 function SampleSimulation({ sample, onResult }: { sample: ZusSample; onResult: (result: CaseResult) => void }) {
   const simulate = useSimulateCase()
   const claims = sample.benefits.filter((code): code is FamilyBenefit =>
@@ -156,12 +167,12 @@ function SampleSimulation({ sample, onResult }: { sample: ZusSample; onResult: (
   }
 
   return (
-    <div className="space-y-4 rounded-lg border border-border p-4">
-      <div>
-        <p className="font-semibold">Uzupełnij dane, których potrzebuje wyliczenie</p>
+    <div className="space-y-4">
+      <div className="space-y-1">
+        <p className="font-medium">Uzupełnij dane, których potrzebuje wyliczenie</p>
         <p className="text-sm text-muted-foreground">
-          Rozpoznanie mówi, jakiej sprawy dotyczy dokument. Datę i podstawę wymiaru wpisz z pisma,
-          żeby wyliczenie ruszyło na Twoich danych.
+          Dokument nie podaje daty ani podstawy wymiaru. Wpisz je z pisma, żebyśmy policzyli
+          świadczenie.
         </p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
@@ -220,7 +231,7 @@ function SampleSimulation({ sample, onResult }: { sample: ZusSample; onResult: (
         </div>
       </div>
       <p className="text-sm text-muted-foreground">
-        Liczone świadczenie: {benefitName(primary)}
+        Policzmy świadczenie: {benefitName(primary)}
         {rest.length > 0 && `. W dokumencie są też: ${rest.map(benefitName).join(', ')}.`}
       </p>
       <div className="flex flex-wrap items-center gap-3">
@@ -230,7 +241,7 @@ function SampleSimulation({ sample, onResult }: { sample: ZusSample; onResult: (
         {!eventDate && <span className="text-sm text-muted-foreground">Podaj datę, żeby policzyć.</span>}
       </div>
       {error && (
-        <p role="alert" className="rounded-md bg-red-50 p-3 text-red-800">
+        <p role="alert" className="rounded-md bg-red-50 p-3 text-sm text-red-800">
           {error}
         </p>
       )}
@@ -238,59 +249,53 @@ function SampleSimulation({ sample, onResult }: { sample: ZusSample; onResult: (
   )
 }
 
-function SampleCard({ sample, onResult }: { sample: ZusSample; onResult: (result: CaseResult) => void }) {
+/** Rozpoznany dokument: co to za pismo i co z niego policzymy. */
+function RecognizedDocument({ sample, onResult }: { sample: ZusSample; onResult: (result: CaseResult) => void }) {
+  const familyClaim = sample.benefits.some((code) => (familyBenefits as readonly string[]).includes(code))
+  const facts = sample.facts.trim()
+  /* Gdy opis sprawy powtarza sam tytuł, nie ma czego pokazywać. */
+  const showFacts = facts.length > 0 && facts.replace(/\.$/, '').toLowerCase() !== sample.title.toLowerCase()
   return (
-    <Card className="border-primary/40">
-      <CardHeader>
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <CardTitle>{sample.title}</CardTitle>
-            <CardDescription className="mt-1">
-              {sample.file_name}, {sample.pages} stron
-            </CardDescription>
-          </div>
-          <OutcomeBadge outcome={sample.outcome} />
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-muted-foreground">{sample.facts}</p>
-        {sample.evidence && (
-          <blockquote className="border-l-2 border-primary/40 pl-3 text-sm text-muted-foreground">
-            Zapis w dokumencie: „{sample.evidence}”
-          </blockquote>
-        )}
-        {sample.forms.length > 0 && (
-          <div className="space-y-2">
-            <p className="text-sm font-medium">Formularze z dokumentu</p>
-            <div className="flex flex-wrap gap-2">
-              {sample.forms.map((form) => (
-                <Badge key={form} variant="outline">
-                  <FileText className="size-3.5" aria-hidden />
-                  {form}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        )}
-        {sample.tags.length > 0 && (
+    <div className="space-y-5">
+      {showFacts && <p className="text-muted-foreground">{facts}</p>}
+      {sample.evidence && (
+        <blockquote className="border-l-2 border-primary/40 pl-3 text-sm text-muted-foreground">
+          Zapis w dokumencie: „{sample.evidence}”
+        </blockquote>
+      )}
+      {sample.forms.length > 0 && (
+        <div className="space-y-2">
+          <p className="text-sm font-medium">Formularze z dokumentu</p>
           <div className="flex flex-wrap gap-2">
-            {sample.tags.map((tag) => (
-              <Badge key={tag} variant="outline">
-                {tagLabel(tag)}
+            {sample.forms.map((form) => (
+              <Badge key={form} variant="outline">
+                <FileText className="size-3.5" aria-hidden />
+                {form}
               </Badge>
             ))}
           </div>
-        )}
-        {sample.duplicate_of && (
-          <p className="text-sm text-muted-foreground">
-            Ten dokument występuje w kilku wersjach, więc liczymy go raz.
-          </p>
-        )}
-        {sample.benefits.some((code) => (familyBenefits as readonly string[]).includes(code)) ? (
+        </div>
+      )}
+      {sample.tags.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {sample.tags.map((tag) => (
+            <Badge key={tag} variant="outline">
+              {tagLabel(tag)}
+            </Badge>
+          ))}
+        </div>
+      )}
+      {sample.duplicate_of && (
+        <p className="text-sm text-muted-foreground">
+          Ten dokument występuje w kilku wersjach, więc liczymy go raz.
+        </p>
+      )}
+      <div className="border-t border-border pt-5">
+        {familyClaim ? (
           <SampleSimulation sample={sample} onResult={onResult} />
         ) : (
-          <div className="space-y-2 rounded-lg border border-border p-4">
-            <p className="font-semibold">Ten dokument dotyczy zasiłku chorobowego</p>
+          <div className="space-y-3">
+            <p className="font-medium">Ten dokument dotyczy zasiłku chorobowego</p>
             <p className="text-sm text-muted-foreground">
               Dokument nie zawiera wniosku o urlop, więc nie ma czego rozdzielać. Niezdolność do
               pracy policzysz w kalkulatorze, podając okres zwolnienia.
@@ -304,8 +309,8 @@ function SampleCard({ sample, onResult }: { sample: ZusSample; onResult: (result
             </Link>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }
 
@@ -317,12 +322,12 @@ export function SampleRecognition({ onResult }: { onResult: (result: CaseResult)
   const recognize = useRecognizeSample()
   const input = useRef<HTMLInputElement>(null)
   const [sample, setSample] = useState<ZusSample | null>(null)
-  const [message, setMessage] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   async function handleFile(file: File) {
     setError(null)
-    setMessage(null)
+    setNotice(null)
     setSample(null)
     try {
       const digest = await sha256Hex(file)
@@ -330,8 +335,8 @@ export function SampleRecognition({ onResult }: { onResult: (result: CaseResult)
         { sha256: digest, file_name: file.name },
         {
           onSuccess: (data) => {
-            setSample(data.sample)
-            setMessage(data.hint)
+            if (data.sample) setSample(data.sample)
+            else setNotice(data.hint)
           },
           onError: () => setError('Nie udało się sprawdzić pliku. Sprawdź, czy backend działa.'),
         },
@@ -344,20 +349,35 @@ export function SampleRecognition({ onResult }: { onResult: (result: CaseResult)
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <ScanLine className="size-5" aria-hidden />
-          Wgraj dokument z ZUS
-        </CardTitle>
-        <CardDescription>
-          Wgraj PDF z ZUS albo z PUE. Odcisk pliku liczymy w przeglądarce, więc dokument nie
-          opuszcza urządzenia.
-        </CardDescription>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="min-w-0 space-y-1">
+            <CardTitle className="flex items-center gap-2">
+              {!sample && <ScanLine className="size-5" aria-hidden />}
+              {sample ? sample.title : 'Wgraj dokument z ZUS'}
+            </CardTitle>
+            <CardDescription>
+              {sample
+                ? `${sample.file_name}, ${sample.pages} stron`
+                : 'Wgraj PDF z ZUS albo z PUE. Odcisk pliku liczymy w przeglądarce, więc dokument nie opuszcza urządzenia.'}
+            </CardDescription>
+          </div>
+          {sample && (
+            <div className="flex flex-wrap items-center gap-2">
+              <OutcomeBadge outcome={sample.outcome} />
+              <Button type="button" variant="ghost" size="sm" onClick={() => input.current?.click()}>
+                Wgraj inny dokument
+              </Button>
+            </div>
+          )}
+        </div>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <Button type="button" variant="outline" onClick={() => input.current?.click()}>
-          <FileUp className="size-4" aria-hidden />
-          Wgraj PDF
-        </Button>
+      <CardContent className="space-y-5">
+        {!sample && (
+          <Button type="button" onClick={() => input.current?.click()} disabled={recognize.isPending}>
+            <FileUp className="size-4" aria-hidden />
+            {recognize.isPending ? 'Rozpoznaję…' : 'Wgraj PDF'}
+          </Button>
+        )}
         <input
           ref={input}
           type="file"
@@ -370,29 +390,19 @@ export function SampleRecognition({ onResult }: { onResult: (result: CaseResult)
             event.target.value = ''
           }}
         />
-        {recognize.isPending && <p className="text-muted-foreground">Rozpoznaję dokument…</p>}
-        {message && (
-          <p
-            className={cn(
-              'rounded-md p-3 text-sm',
-              sample ? 'bg-secondary' : 'border border-amber-300 bg-amber-50 text-amber-950',
-            )}
-          >
-            {message}
+        {notice && (
+          <p className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-950">
+            {notice}
           </p>
         )}
         {error && (
-          <p role="alert" className="rounded-md bg-red-50 p-3 text-red-800">
+          <p role="alert" className="rounded-md bg-red-50 p-3 text-sm text-red-800">
             <X className="mr-1 inline size-4 align-[-2px]" aria-hidden />
             {error}
           </p>
         )}
+        {sample && <RecognizedDocument sample={sample} onResult={onResult} />}
       </CardContent>
-      {sample && (
-        <CardContent>
-          <SampleCard sample={sample} onResult={onResult} />
-        </CardContent>
-      )}
     </Card>
   )
 }

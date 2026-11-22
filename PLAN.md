@@ -375,14 +375,17 @@ Brief, pkt 4 oraz pkt 6.
   wyłącznie skrót.
 - Dane rozpoznawcze leżą w `back/app/data/zus-samples.json` i powstają skryptem
   `back/scripts/build_zus_samples.py`: odcisk pliku, wzory formularzy, rodzaj świadczeń, wynik
-  z okładki zestawu i opis stanu faktycznego. Treści skanów nie kopiujemy.
+  z okładki zestawu i opis stanu faktycznego. Treści skanów nie kopiujemy. Opis nie dopisuje
+  zdania o wyniku, gdy decyzji w dokumencie nie ma, bo wystarczy plakietka przy tytule.
 - Sprawy leżą w `back/app/data/demo-cases.json` i jadą z kodem. Regulamin nie pozwala
   rozpowszechniać skanów ZUS, więc dane są wymyślone.
 - Strona `/sprawy` ma jedno wgranie dokumentu, PDF z ZUS albo z PUE. Rozpoznanie idzie po
-  odcisku pliku, a po trafieniu widać opis sprawy, wzory formularzy i zapisany wynik. Krótki
-  formularz przyjmuje datę i podstawę wymiaru, których skan nie podaje, i wtedy kalkulator liczy
-  świadczenie główne oraz porównuje status z rozpoznaną sprawą. Pod spodem stoi weryfikacja
-  ubezpieczenia z podstawą prawną i wyliczenie, a różnica wobec decyzji jest na czerwono.
+  odcisku pliku i nic o sobie nie melduje, a po trafieniu na wierzchu widać tytuł pisma, nazwę
+  pliku, plakietkę z wynikiem i wzory formularzy. Niżej, pod kreską, krótki formularz przyjmuje
+  datę i podstawę wymiaru, których skan nie podaje, i wtedy kalkulator liczy świadczenie główne
+  oraz porównuje status z rozpoznaną sprawą. Wynik to jedna sekcja cięta kreskami, nie stos kart:
+  weryfikacja ubezpieczenia, porównanie z decyzją, wyliczenie. Gdy w dokumencie nie ma decyzji,
+  nie ma też porównania ani ostrzeżenia o nadmiarowych pozycjach, bo nie ma z czym porównywać.
 - Lista spraw demonstracyjnych, wgrywanie pliku JSON i sekcja „Zestaw przykładowy ZUS” zniknęły
   z ekranu, żeby strona czytała się jak zwykły produkt, w którym wgrywa się jeden dokument.
   `GET /api/cases` i `POST /api/cases/simulate` zostają dla testów, ale UI ich nie pokazuje.

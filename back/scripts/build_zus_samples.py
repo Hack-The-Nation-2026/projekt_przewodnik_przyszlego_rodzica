@@ -300,13 +300,15 @@ def facts_of(description: str, outcome: str) -> str:
         sentences.append(part[0].upper() + part[1:] + ".")
         if len(" ".join(sentences)) > 420:
             break
+    # Bez decyzji w dokumencie nie dopisujemy zdania o wyniku: mówi o tym plakietka
+    # „W dokumencie nie ma decyzji”, a opis sprawy zostaje przy samym stanie faktycznym.
     outcome_sentence = {
         "granted": "ZUS przyznał świadczenie.",
         "denied": "ZUS odmówił prawa do świadczenia.",
         "partially_granted": "ZUS przyznał świadczenie częściowo.",
-        "unknown": "Wynik sprawy nie jest zapisany w zestawie.",
+        "unknown": None,
     }[outcome]
-    if outcome == "unknown" or outcome_sentence not in sentences:
+    if outcome_sentence and outcome_sentence not in sentences:
         sentences.append(outcome_sentence)
     return " ".join(sentences)[:600]
 
@@ -365,7 +367,6 @@ def build(cover_dir: Path | None, pages_dir: Path | None) -> list[dict]:
         base = re.sub(r"\s*\(\d+\)$", "", stem)
         if base in by_name:
             entry["duplicate_of"] = by_name[base]
-            entry["facts"] = "Ten sam zestaw co " + by_name[base] + "."
         else:
             by_name[base] = sample_id
         entries.append(entry)
