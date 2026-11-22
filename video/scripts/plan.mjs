@@ -18,7 +18,7 @@ import { readFile, writeFile } from 'node:fs/promises'
 
 // prettier-ignore
 const PLAN = [
-  // ── Wejście, logowanie i dane ────────────────────────────────────────
+  // Wejście, logowanie i dane
   { id: 'home', clip: '01-main', mark: 'start', until: 'wejscie', tail: 2.9, rate: 1.5,
     camera: [{ t: 0, z: 1, x: 960, y: 540 }, { t: 3, z: 1.05, x: 940, y: 500 }, { t: 6.6, z: 1.02, x: 950, y: 540 }] },
   { id: 'wejscie', clip: '01-main', mark: 'wejscie', lead: -2.5, until: 'mobywatel', tail: 3.6, rate: 1.5,
@@ -28,7 +28,7 @@ const PLAN = [
   { id: 'dane', clip: '01-main', mark: 'dane', until: 'wywiad', tail: 4.2, rate: 1.6,
     camera: [{ t: 0, z: 1.03, x: 960, y: 520 }, { t: 2.4, z: 1.3, x: 1350, y: 300 }, { t: 4.4, z: 1.3, x: 1350, y: 300 }, { t: 6.2, z: 1.04, x: 960, y: 560 }] },
 
-  // ── Wywiad: trzy pytania z listą wyboru ──────────────────────────────
+  // Wywiad: trzy pytania z listą wyboru
   // Każde ujęcie startuje chwilę przed otwarciem listy, więc widać i pytanie,
   // i rozwijane opcje. Znaczniki stawia sam recorder, tuż przed kliknięciem.
   { id: 'wywiad-role', clip: '01-main', mark: 'wyb-rola', lead: -0.7, seconds: 3.4, rate: 1.25,
@@ -38,7 +38,7 @@ const PLAN = [
   { id: 'wywiad-rodzic', clip: '01-main', mark: 'wyb-rodzic', lead: -0.7, seconds: 3.4, rate: 1.25,
     camera: [{ t: 0, z: 1.04, x: 900, y: 470 }, { t: 0.7, z: 1.3, x: 760, y: 490 }, { t: 2.6, z: 1.3, x: 760, y: 490 }, { t: 3.4, z: 1.06, x: 900, y: 510 }] },
 
-  // ── Wynik, uzasadnienie, podział urlopu ──────────────────────────────
+  // Wynik, uzasadnienie, podział urlopu
   { id: 'wynik', clip: '01-main', mark: 'wynik', until: 'why', tail: 0.6, rate: 1.4,
     camera: [{ t: 0, z: 1, x: 960, y: 540 }, { t: 2.4, z: 1.06, x: 960, y: 430 }, { t: 5.2, z: 1.04, x: 960, y: 450 }] },
   { id: 'dlaczego', clip: '01-main', mark: 'why', lead: 0.9, until: 'slider', tail: 2.6, rate: 1.5,
@@ -46,7 +46,7 @@ const PLAN = [
   { id: 'podzial', clip: '01-main', mark: 'slider', lead: -0.5, until: 'dokumenty-dialog', tail: 1.6, rate: 1.25,
     camera: [{ t: 0, z: 1.03, x: 960, y: 470 }, { t: 2.4, z: 1.13, x: 960, y: 460 }, { t: 4.2, z: 1.15, x: 960, y: 470 }, { t: 6.2, z: 1.05, x: 960, y: 540 }] },
 
-  // ── Dokumenty z karty, dostępność i karta uprawnień ──────────────────
+  // Dokumenty z karty, dostępność i karta uprawnień
   { id: 'dokumenty-karta', clip: '01-main', mark: 'dokumenty-dialog', lead: 1.4, until: 'a11y', tail: 4.2, rate: 1.5,
     camera: [{ t: 0, z: 1, x: 960, y: 540 }, { t: 1.8, z: 1.1, x: 960, y: 470 }, { t: 5, z: 1.08, x: 960, y: 510 }] },
   { id: 'dostepnosc', clip: '01-main', mark: 'a11y', lead: -0.6, until: 'czytanie', tail: 3.3, rate: 1.6,
@@ -54,61 +54,61 @@ const PLAN = [
   { id: 'karta', clip: '01-main', mark: 'karta', lead: 2.2, until: '__koniec', tail: 2.6, rate: 1.6,
     camera: [{ t: 0, z: 1, x: 960, y: 540 }, { t: 2.2, z: 1.05, x: 900, y: 470 }, { t: 5, z: 1.03, x: 900, y: 500 }, { t: 7.6, z: 1, x: 960, y: 540 }] },
 
-  // ── Kreator wniosku ──────────────────────────────────────────────────
+  // Kreator wniosku
   { id: 'wnioski-lista', clip: '02-wnioski', mark: 'body', lead: 2.2, seconds: 4.6, rate: 1.5,
     camera: [{ t: 0, z: 1.02, x: 960, y: 500 }, { t: 2.2, z: 1.06, x: 900, y: 520 }, { t: 4.6, z: 1.03, x: 900, y: 520 }] },
   { id: 'wnioski-pismo', clip: '02-wnioski', mark: 'body', lead: 9.6, seconds: 5, rate: 1.6,
     camera: [{ t: 0, z: 1.02, x: 960, y: 470 }, { t: 2.4, z: 1.08, x: 960, y: 450 }, { t: 5, z: 1.04, x: 960, y: 490 }] },
 
-  // ── Kreator dokumentów: lista świadczeń i kroki ──────────────────────
+  // Kreator dokumentów: lista świadczeń i kroki
   { id: 'dokumenty-lista', clip: '03-dokumenty', mark: 'body', lead: 2.4, seconds: 4.8, rate: 1.5,
     camera: [{ t: 0, z: 1.03, x: 960, y: 470 }, { t: 1.3, z: 1.35, x: 960, y: 620 }, { t: 3.4, z: 1.35, x: 960, y: 620 }, { t: 4.8, z: 1.05, x: 960, y: 500 }] },
   { id: 'dokumenty-kroki', clip: '03-dokumenty', mark: 'body', lead: 10.6, seconds: 5.2, rate: 1.75,
     camera: [{ t: 0, z: 1.02, x: 960, y: 470 }, { t: 2.6, z: 1.08, x: 960, y: 450 }, { t: 5.2, z: 1.03, x: 960, y: 490 }] },
 
-  // ── Sprawy: zestaw przykładowy ZUS i porównanie z decyzją ────────────
-  { id: 'sprawy-skan', clip: '04-sprawy', mark: 'body', lead: 2.4, seconds: 7, rate: 1.6,
-    camera: [{ t: 0, z: 1.02, x: 960, y: 460 }, { t: 2.2, z: 1.3, x: 1080, y: 650 }, { t: 4.8, z: 1.3, x: 1080, y: 650 }, { t: 7, z: 1.04, x: 960, y: 520 }] },
-  { id: 'sprawy-porownanie', clip: '05-sprawy-porownanie', mark: 'body', lead: 2.6, seconds: 5.4, rate: 1.6,
-    camera: [{ t: 0, z: 1.02, x: 960, y: 480 }, { t: 2.6, z: 1.08, x: 960, y: 460 }, { t: 5.4, z: 1.03, x: 960, y: 500 }] },
+  // Sprawy: zestaw przykładowy ZUS i porównanie z decyzją
+  { id: 'sprawy-skan', clip: '04-sprawy', mark: 'body', lead: 2.4, seconds: 6, rate: 1.6,
+    camera: [{ t: 0, z: 1.02, x: 960, y: 460 }, { t: 2.2, z: 1.3, x: 1080, y: 650 }, { t: 4.8, z: 1.3, x: 1080, y: 650 }, { t: 6, z: 1.04, x: 960, y: 520 }] },
+  { id: 'sprawy-porownanie', clip: '05-sprawy-porownanie', mark: 'body', lead: 2.6, seconds: 4.6, rate: 1.6,
+    camera: [{ t: 0, z: 1.02, x: 960, y: 480 }, { t: 2.6, z: 1.08, x: 960, y: 460 }, { t: 4.6, z: 1.03, x: 960, y: 500 }] },
 
-  // ── ZUS: odpis aktu urodzenia ────────────────────────────────────────
+  // ZUS: odpis aktu urodzenia
   { id: 'zus-odpis', clip: '06-zus', mark: 'body', lead: 23, seconds: 4.4, rate: 1.55,
     camera: [{ t: 0, z: 1.03, x: 960, y: 500 }, { t: 1.2, z: 1.45, x: 1190, y: 530 }, { t: 3.2, z: 1.45, x: 1190, y: 530 }, { t: 4.4, z: 1.06, x: 960, y: 520 }] },
 
-  // ── Planowanie ciąży: pytania i lista przygotowań ────────────────────
-  { id: 'planowanie', clip: '07-planowanie', mark: 'body', lead: 2.2, seconds: 7, rate: 1.8,
-    camera: [{ t: 0, z: 1.02, x: 960, y: 470 }, { t: 3.2, z: 1.09, x: 960, y: 450 }, { t: 5.2, z: 1.04, x: 960, y: 480 }, { t: 7, z: 1.03, x: 960, y: 500 }] },
+  // Planowanie ciąży: pytania i lista przygotowań
+  { id: 'planowanie', clip: '07-planowanie', mark: 'body', lead: 2.2, seconds: 6, rate: 1.8,
+    camera: [{ t: 0, z: 1.02, x: 960, y: 470 }, { t: 3.2, z: 1.09, x: 960, y: 450 }, { t: 5.2, z: 1.04, x: 960, y: 480 }, { t: 6, z: 1.03, x: 960, y: 500 }] },
 
-  // ── Urlop w trakcie: formularz i postęp ──────────────────────────────
+  // Urlop w trakcie: formularz i postęp
   { id: 'urlop-formularz', clip: '08-urlop', mark: 'body', lead: 2.4, seconds: 4.6, rate: 1.7,
     camera: [{ t: 0, z: 1.02, x: 960, y: 470 }, { t: 2.4, z: 1.09, x: 960, y: 450 }, { t: 4.6, z: 1.03, x: 960, y: 490 }] },
-  { id: 'urlop-postep', clip: '08-urlop', mark: 'body', lead: 15.8, seconds: 5, rate: 1.8,
-    camera: [{ t: 0, z: 1.02, x: 960, y: 470 }, { t: 2.6, z: 1.08, x: 960, y: 450 }, { t: 5, z: 1.03, x: 960, y: 490 }] },
+  { id: 'urlop-postep', clip: '08-urlop', mark: 'body', lead: 15.8, seconds: 4.4, rate: 1.8,
+    camera: [{ t: 0, z: 1.02, x: 960, y: 470 }, { t: 2.6, z: 1.08, x: 960, y: 450 }, { t: 4.4, z: 1.03, x: 960, y: 490 }] },
 
-  // ── Odwołanie: decyzja i zarzuty ─────────────────────────────────────
+  // Odwołanie: decyzja i zarzuty
   { id: 'odwolanie-decyzja', clip: '09-odwolanie', mark: 'body', lead: 2.4, seconds: 4.8, rate: 1.7,
     camera: [{ t: 0, z: 1.02, x: 960, y: 470 }, { t: 2.4, z: 1.09, x: 960, y: 450 }, { t: 4.8, z: 1.03, x: 960, y: 490 }] },
   { id: 'odwolanie-zarzuty', clip: '09-odwolanie', mark: 'body', lead: 14.6, seconds: 5.2, rate: 1.8,
     camera: [{ t: 0, z: 1.02, x: 960, y: 480 }, { t: 2.6, z: 1.08, x: 960, y: 460 }, { t: 5.2, z: 1.03, x: 960, y: 500 }] },
 
-  // ── Wsparcie: miejsca pomocy ─────────────────────────────────────────
+  // Wsparcie: miejsca pomocy
   { id: 'wsparcie-karty', clip: '10-wsparcie', mark: 'body', lead: 0.5, seconds: 3.8, rate: 1.35,
     camera: [{ t: 0, z: 1.02, x: 960, y: 480 }, { t: 2, z: 1.08, x: 960, y: 460 }, { t: 3.8, z: 1.03, x: 960, y: 500 }] },
   { id: 'wsparcie-pomoc', clip: '10-wsparcie', mark: 'body', lead: 7.1, seconds: 4, rate: 1.5,
     camera: [{ t: 0, z: 1.02, x: 960, y: 470 }, { t: 2, z: 1.08, x: 960, y: 450 }, { t: 4, z: 1.03, x: 960, y: 490 }] },
 
-  // ── Panel administracyjny ────────────────────────────────────────────
+  // Panel administracyjny
   { id: 'panel', clip: '11-panel', mark: 'body', lead: 2.6, seconds: 4.4, rate: 1.6,
     camera: [{ t: 0, z: 1.02, x: 960, y: 470 }, { t: 2.2, z: 1.09, x: 960, y: 450 }, { t: 4.4, z: 1.03, x: 960, y: 490 }] },
 
-  // ── Asystent: pytanie i odpowiedź ────────────────────────────────────
+  // Asystent: pytanie i odpowiedź
   { id: 'asystent-pytanie', clip: '12-asystent', mark: 'body', lead: 3.6, seconds: 5, rate: 1.6,
     camera: [{ t: 0, z: 1.05, x: 1500, y: 720 }, { t: 2, z: 1.55, x: 1520, y: 740 }, { t: 5, z: 1.5, x: 1520, y: 740 }] },
   { id: 'asystent-odpowiedz', clip: '12-asystent', mark: 'body', lead: 14.4, seconds: 5.4, rate: 1.7,
     camera: [{ t: 0, z: 1.05, x: 1500, y: 710 }, { t: 2.6, z: 1.55, x: 1520, y: 720 }, { t: 5.4, z: 1.5, x: 1520, y: 710 }] },
 
-  // ── Telefon: realne użycie ───────────────────────────────────────────
+  // Telefon: realne użycie
   { id: 'mobile-home', clip: '13-mobile-home', mark: 'body', lead: 1.4, seconds: 5, rate: 1.35, kind: 'mobile',
     title: 'Wejście i menu',
     caption: 'Nagłówek zwija się do jednego przycisku, a nawigacja otwiera się jako lista pod nim.' },
@@ -181,18 +181,22 @@ for (const scene of PLAN) {
   scenes.push({ ...scene, from, to, seconds: round((to - from) / (scene.rate ?? 1)) })
 }
 
-// Karta końcowa z adresem demo i kodem QR. Nie pochodzi z nagrania, więc ma własny
-// wymiar: pięć sekund na odczytanie kodu.
+// Plansze z adresem demo i kodem QR stoją na obu końcach filmu i nie pochodzą
+// z nagrania, więc mają własne tempo. Cztery sekundy na wejściu, pięć na końcu,
+// gdzie kod zostaje na ekranie najdłużej.
+const INTRO_SECONDS = 4
 const OUTRO_SECONDS = 5
+scenes.unshift({ id: 'intro', kind: 'intro', from: 0, to: INTRO_SECONDS, seconds: INTRO_SECONDS })
 scenes.push({ id: 'outro', kind: 'outro', from: 0, to: OUTRO_SECONDS, seconds: OUTRO_SECONDS })
 
 const render = (scene) => {
   const camera = scene.camera ?? [{ t: 0, z: 1, x: 960, y: 540 }]
-  const framed = scene.kind === 'mobile' || scene.kind === 'outro'
+  const framed = scene.kind != null && scene.kind !== 'screen'
   return [
     '  {',
     `    id: '${scene.id}',`,
     scene.kind === 'mobile' ? "    kind: 'mobile'," : null,
+    scene.kind === 'intro' ? "    kind: 'intro'," : null,
     scene.kind === 'outro' ? "    kind: 'outro'," : null,
     scene.clip ? `    clip: '${scene.clip}',` : null,
     `    from: ${scene.from},`,
@@ -222,15 +226,15 @@ const header = `export type CameraKey = {
 
 export type Scene = {
   id: string
-  /** Plik nagrania bez rozszerzenia, z katalogu public/clips. Nie ma go karta końcowa. */
+  /** Plik nagrania bez rozszerzenia, z katalogu public/clips. Karty z kodem QR nie mają nagrania. */
   clip?: string
   /** Początek i koniec wycinka w nagraniu, w sekundach. */
   from: number
   to: number
   /** Przyspieszenie nagrania. 1 = normalnie. */
   rate?: number
-  /** Kadr z telefonu pokazujemy w ramce, a karta końcowa nie ma nagrania. */
-  kind?: 'screen' | 'mobile' | 'outro'
+  /** Kadr z telefonu pokazujemy w ramce, a plansze z kodem QR nie mają nagrania. */
+  kind?: 'screen' | 'mobile' | 'intro' | 'outro'
   /** Tylko dla scen mobilnych: nagłówek i zdanie opisu. */
   title?: string
   caption?: string

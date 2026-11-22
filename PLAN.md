@@ -528,14 +528,15 @@ Brief, pkt 4.
 
 Zrobione 22.11. Prezentacja leży w `prezentacja/index.html`: dziesięć plansz w proporcji 16:9, jedna
 rodzina pisma i paleta serwisu, strzałki zmieniają planszę, a `Ctrl+P` zapisuje PDF. Ostatnia
-plansza i karta końcowa filmu niosą kod QR do `https://skrzydla-rodzica.vercel.app`.
+plansza niesie kod QR do `https://skrzydla-rodzica.vercel.app`, a film pokazuje ten sam kod dwa
+razy, na pierwszej i na ostatniej planszy.
 
 Film leży w `video/out/prezentacja.mp4`, poniżej trzech minut, 1920×1080, bez dźwięku. Powstaje ze
 skryptów w `video/scripts/`, montaż opisuje `video/src/edl.ts`, a szczegóły są w `video/README.md`.
 Ujęcia to nagrania działającej aplikacji: wejście i logowanie, wywiad, wynik, karta uprawnień,
 kreator wniosków i dokumentów, planowanie, urlop w trakcie, odwołanie, wsparcie, panel, asystent
 i widok telefonu. Listy wyboru otwierają się na ekranie, więc widać opcje, a nie tylko wybraną
-wartość. Film zamyka karta z adresem demo i kodem QR.
+wartość. Plansza z adresem demo i kodem QR otwiera film i go zamyka.
 
 Zrzuty ekranu leżą w `zrzuty/`. Powstają skryptem `video/scripts/shots.mjs` z tej samej działającej
 aplikacji, tylko bez kursora i nagrywania, więc odtwarzają się jedną komendą.
@@ -568,7 +569,7 @@ z tych katalogów nie trafił nigdy do historii repozytorium. Demo na telefonie 
 od wejścia do wyniku; dowodem jest ujęcie `15-mobile-karta` w filmie i zrzut `15-mobile-start`.
 
 Film i prezentacja niosą ten sam kod QR do `https://skrzydla-rodzica.vercel.app`, a kod odczytuje
-się z gotowego pliku MP4.
+się z gotowego pliku MP4. W filmie występuje na obu końcach, w prezentacji na ostatniej planszy.
 
 ## Krok 17. Karta uprawnień, kreator wniosków i dostępność
 

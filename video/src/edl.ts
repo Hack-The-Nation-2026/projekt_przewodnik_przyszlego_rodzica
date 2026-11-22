@@ -10,15 +10,15 @@ export type CameraKey = {
 
 export type Scene = {
   id: string
-  /** Plik nagrania bez rozszerzenia, z katalogu public/clips. Nie ma go karta końcowa. */
+  /** Plik nagrania bez rozszerzenia, z katalogu public/clips. Karty z kodem QR nie mają nagrania. */
   clip?: string
   /** Początek i koniec wycinka w nagraniu, w sekundach. */
   from: number
   to: number
   /** Przyspieszenie nagrania. 1 = normalnie. */
   rate?: number
-  /** Kadr z telefonu pokazujemy w ramce, a karta końcowa nie ma nagrania. */
-  kind?: 'screen' | 'mobile' | 'outro'
+  /** Kadr z telefonu pokazujemy w ramce, a plansze z kodem QR nie mają nagrania. */
+  kind?: 'screen' | 'mobile' | 'intro' | 'outro'
   /** Tylko dla scen mobilnych: nagłówek i zdanie opisu. */
   title?: string
   caption?: string
@@ -27,6 +27,13 @@ export type Scene = {
 
 /** Montaż: kolejność rozdziałów, wycinki z nagrań i ruch kamery. */
 export const scenes: Scene[] = [
+  {
+    id: 'intro',
+    kind: 'intro',
+    from: 0,
+    to: 4,
+    // 4s
+  },
   {
     id: 'home',
     clip: '01-main',
@@ -259,27 +266,27 @@ export const scenes: Scene[] = [
     id: 'sprawy-skan',
     clip: '04-sprawy',
     from: 7.9,
-    to: 19.1,
+    to: 17.5,
     rate: 1.6,
-    // 7s
+    // 6s
     camera: [
       { t: 0, z: 1.02, x: 960, y: 460 },
       { t: 2.2, z: 1.3, x: 1080, y: 650 },
       { t: 4.8, z: 1.3, x: 1080, y: 650 },
-      { t: 7, z: 1.04, x: 960, y: 520 },
+      { t: 6, z: 1.04, x: 960, y: 520 },
     ],
   },
   {
     id: 'sprawy-porownanie',
     clip: '05-sprawy-porownanie',
     from: 8.7,
-    to: 17.34,
+    to: 16.06,
     rate: 1.6,
-    // 5.4s
+    // 4.6s
     camera: [
       { t: 0, z: 1.02, x: 960, y: 480 },
       { t: 2.6, z: 1.08, x: 960, y: 460 },
-      { t: 5.4, z: 1.03, x: 960, y: 500 },
+      { t: 4.6, z: 1.03, x: 960, y: 500 },
     ],
   },
   {
@@ -300,14 +307,14 @@ export const scenes: Scene[] = [
     id: 'planowanie',
     clip: '07-planowanie',
     from: 7.6,
-    to: 20.2,
+    to: 18.4,
     rate: 1.8,
-    // 7s
+    // 6s
     camera: [
       { t: 0, z: 1.02, x: 960, y: 470 },
       { t: 3.2, z: 1.09, x: 960, y: 450 },
       { t: 5.2, z: 1.04, x: 960, y: 480 },
-      { t: 7, z: 1.03, x: 960, y: 500 },
+      { t: 6, z: 1.03, x: 960, y: 500 },
     ],
   },
   {
@@ -327,13 +334,13 @@ export const scenes: Scene[] = [
     id: 'urlop-postep',
     clip: '08-urlop',
     from: 20.8,
-    to: 29.8,
+    to: 28.72,
     rate: 1.8,
-    // 5s
+    // 4.4s
     camera: [
       { t: 0, z: 1.02, x: 960, y: 470 },
       { t: 2.6, z: 1.08, x: 960, y: 450 },
-      { t: 5, z: 1.03, x: 960, y: 490 },
+      { t: 4.4, z: 1.03, x: 960, y: 490 },
     ],
   },
   {
