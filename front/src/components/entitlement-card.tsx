@@ -12,6 +12,7 @@ import { usePlain } from '@/lib/plain-language'
 import { cn } from '@/lib/utils'
 import type { EntitlementCardData } from '@/lib/entitlement-card'
 import { useA11yStore } from '@/store/a11y-store'
+import { useAppStore } from '@/store/app-store'
 
 const legalBasis = [
   'ustawa z 25 czerwca 1999 r. o świadczeniach pieniężnych z ubezpieczenia społecznego w razie choroby i macierzyństwa',
@@ -272,7 +273,12 @@ export function EntitlementCard({
 export function KartaPage({ data }: { data: EntitlementCardData | null }) {
   const navigate = useNavigate()
   const sheet = useRef<HTMLDivElement>(null)
-  const [person, setPerson] = useState('')
+  const citizen = useAppStore((state) => state.citizen)
+  // Karta i tak jest podpisana, a dane z wejścia są już znane, więc wpisujemy je
+  // od razu. Kto wchodził ręcznie albo wcale, dopisze imię na karcie.
+  const [person, setPerson] = useState(() =>
+    citizen ? `${citizen.first_name} ${citizen.last_name}` : '',
+  )
   const readAloudEnabled = useA11yStore((state) => state.readAloud)
 
   if (!data) {
@@ -290,7 +296,7 @@ export function KartaPage({ data }: { data: EntitlementCardData | null }) {
   }
 
   return (
-    <PageContainer className="space-y-6 py-10">
+    <PageContainer className="print-page space-y-6 py-10">
       <div className="no-print space-y-4">
         <h1 className="font-display text-2xl font-semibold">Karta uprawnień</h1>
         <p className="max-w-2xl text-muted-foreground">
@@ -303,7 +309,11 @@ export function KartaPage({ data }: { data: EntitlementCardData | null }) {
             Drukuj albo zapisz jako PDF
           </Button>
           {readAloudEnabled && <ReadAloud targetRef={sheet} label="Przeczytaj kartę" />}
-          <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => navigate('/kalkulator', { state: { restore: true } })}
+          >
             <ArrowLeft aria-hidden="true" />
             Wróć do wyniku
           </Button>

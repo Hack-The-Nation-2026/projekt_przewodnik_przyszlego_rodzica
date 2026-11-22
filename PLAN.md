@@ -596,9 +596,11 @@ widoczne uzasadnienie.
 
 Zrobione 22.11. Oś czasu liczy `front/src/lib/week-timeline.ts` z okresów symulacji i z puli urlopu:
 pasma dla obojga rodziców, znaczniki „dziś”, porodu i terminów, a przy nieprzewidzianej dacie porodu
-plakietka „szacunkowe”. Warianty porównawcze stoją na wspólnej podziałce, bo taśmy o różnych skalach
-nie dałyby się zestawić wzrokiem. Na telefonie taśma obraca się w pion: ten sam plan czytany jako
-lista tygodni z datami i kwotami.
+plakietka „szacunkowe”. W kalkulatorze jest jeden plan, ten ustawiony suwakiem; porównanie wariantów
+zostało w trybie „jestem w trakcie urlopu”, gdzie pytanie „złożyć teraz czy poczekać” jest treścią
+ekranu, a nie ozdobą wyniku. Taśmy i tak stoją na wspólnej podziałce, bo różne skale nie dałyby się
+zestawić wzrokiem. Na telefonie taśma obraca się w pion: ten sam plan czytany jako lista tygodni
+z datami i kwotami.
 
 Panel „dlaczego tak” (`front/src/lib/why-panel.ts`) rozbija kwotę na podstawę wymiaru, stawkę,
 wymiar i kwotę dzienną, podaje regułę wymiaru zdaniem, dokłada kontrprzykłady z tej samej sytuacji
@@ -619,9 +621,10 @@ minięciu ekran pokazuje drugą drogę: wniosek o zmianę decyzji przy nowych do
 i opłaty mają znacznik „do potwierdzenia”, bo ich nie zgadujemy. Wejście jest dwa: link w nawigacji
 i pytanie „masz już decyzję odmowną?” pod wynikiem bez uprawnień.
 
-Słownik (`front/src/lib/glossary.ts`) trzyma czternaście pojęć w jednym miejscu i pokazuje je
-kropkowanym podkreśleniem przez ten sam mechanizm dymków co reszta serwisu. Definicja nie używa
-innych niezdefiniowanych pojęć i nie zawiera liczb. Cała lista stoi też na ekranie `/dokumenty`.
+Słownik (`front/src/lib/glossary.ts`) trzyma czternaście pojęć w jednym miejscu. Kropkowane słowa
+w tekstach otwierają definicję przez ten sam mechanizm dymków co reszta serwisu, a lista na
+`/dokumenty` pokazuje pojęcie i definicję obok siebie, więc nie potrzebuje najechania ani dymka.
+Definicja nie używa innych niezdefiniowanych pojęć i nie zawiera liczb.
 
 Moduły a) do j) z briefu zostają nietknięte; tryb planowania domyka zdanie o braku weryfikacji przed
 porodem, a ścieżka po decyzji odmownej obsługuje literę h) w najostrzejszej wersji: nie „uważaj,
@@ -650,6 +653,25 @@ włączone. Zdania z datą albo kwotą zostają jak są, bo skracanie ich ręczn
 
 Cele dotykowe podniesione do czterdziestu czterech pikseli (listy wyboru i przełączniki), a lista
 słownika pokazuje pełne nazwy pojęć z polskimi znakami, nie surowe klucze.
+
+### Poprawki wyglądu, karty i wyniku (22.11)
+
+Przejście po ekranach po audycie. Trzy kroki „Jak to działa” na stronie głównej dostały nowe zdjęcia
+(`front/public/krok-1.webp`, `krok-2.webp`), w tej samej ciepłej tonacji co zdjęcie na pierwszym
+ekranie. Licznik kroków wywiadu mówi czarną czcionką, a nad nim stoją osobne zielone klocki, po jednym
+na pytanie. Sekcja świadczeń tłumaczy przy przycisku, co robi kalkulator. Karta uprawnień drukuje się
+bez nagłówka i stopki przeglądarki (zerowy margines `@page`, odstęp dopiero na karcie) i bez dziur
+w marginesach. Słownik na `/dokumenty` pokazuje definicję obok pojęcia, więc pojęcia nie są już
+kropkowane ani najeżdżane.
+
+Przycisk „Wróć do wyniku” wraca do wyniku, a nie do pierwszego pytania.
+`front/src/lib/interview-session.ts` zapisuje ostatnie odpowiedzi na czas wizyty, a kalkulator
+odtwarza z nich wynik, gdy przychodzi z karty.
+
+Dane z wejścia są wreszcie użyte. Karta uprawnień podpisuje się imieniem i nazwiskiem z sesji
+(`front/src/components/entitlement-card.tsx`), więc kto wszedł przez mObywatel albo wpisał dane
+ręcznie, nie wpisuje ich drugi raz. Sesja zostaje w pamięci, więc podpis działa w obrębie wizyty,
+a po odświeżeniu strony wraca pole do uzupełnienia.
 
 ## Mapa wymagań na kroki
 

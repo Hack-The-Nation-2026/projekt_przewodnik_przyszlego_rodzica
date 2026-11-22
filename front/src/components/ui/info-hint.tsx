@@ -113,7 +113,7 @@ export function InfoHint({
         }}
         className={
           trigger
-            ? 'underline decoration-dotted underline-offset-2 hover:no-underline focus-visible:outline-none'
+            ? 'text-left underline decoration-dotted underline-offset-2 hover:no-underline focus-visible:outline-none'
             : 'relative flex size-6 shrink-0 items-center justify-center text-current opacity-70 transition-opacity before:absolute before:-inset-2.5 before:content-[""] hover:opacity-100 focus-visible:outline-none'
         }
       >

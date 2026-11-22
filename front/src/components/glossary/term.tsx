@@ -27,18 +27,17 @@ export function Term({ name, children, className }: {
 }
 
 /**
- * Cały słownik w jednym miejscu. Lista jest po to, żeby dało się ją przejrzeć
- * bez polowania na kropkowane słowa w tekście, i żeby definicje miały jedno
- * widoczne źródło.
+ * Cały słownik w jednym miejscu. Definicja stoi obok pojęcia, więc nie ma tu
+ * dymka ani najechania: kropkowany termin w tym samym miejscu, w którym widać
+ * jego wyjaśnienie, byłby tylko hałasem. Kropkowane pojęcia w tekstach nadal
+ * otwierają definicję.
  */
 export function GlossaryList() {
   return (
     <dl className="divide-y divide-border">
       {glossaryEntries.map(([key, entry]) => (
-        <div key={key} className="grid gap-1 py-3 sm:grid-cols-[minmax(0,14rem)_minmax(0,1fr)] sm:gap-6">
-          <dt className="font-medium">
-            <Term name={key}>{entry.term}</Term>
-          </dt>
+        <div key={key} className="grid gap-1 py-3 sm:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] sm:gap-6">
+          <dt className="font-medium text-navy">{entry.term}</dt>
           <dd className="text-sm text-muted-foreground">
             {entry.what} {entry.where}
           </dd>

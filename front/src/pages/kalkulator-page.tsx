@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
 import { Check, CircleAlert, CircleHelp, ClipboardList, FileText, FlaskConical, Minus, Pencil, Printer, X } from 'lucide-react'
 import { useForm, useWatch } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { BenefitWarnings } from '@/components/benefit-warnings'
 import { WhyPanelBody, WhyTrigger } from '@/components/why-panel'
@@ -33,6 +33,7 @@ import type { Assessment, BenefitCode, ParentalPlan, ParentalPool, SimulationRes
 import { asBoolean, interviewDefaults, interviewSchema, parseNumber } from '@/lib/interview-form'
 import type { InterviewValues } from '@/lib/interview-form'
 import { getInterviewSteps } from '@/lib/interview-steps'
+import { readInterviewSession, saveInterviewSession } from '@/lib/interview-session'
 import { cn } from '@/lib/utils'
 
 const BenefitDocuments = lazy(() => import('@/components/benefit-documents'))
@@ -328,6 +329,7 @@ export function KalkulatorPage() {
   const focusNextStep = useRef(false)
   const scrolledFor = useRef<InterviewValues | null>(null)
   const navigate = useNavigate()
+  const location = useLocation()
   const resultSectionRef = useRef<HTMLElement>(null)
   // Lektor pokazuje się tylko wtedy, gdy ktoś włączył go w panelu dostępności.
   const readAloudEnabled = useA11yStore((state) => state.readAloud)
@@ -397,9 +399,6 @@ export function KalkulatorPage() {
         settings: timelineSettings,
       }
     : null
-  const timelineShares = timelineInput && result?.pool && values.partnerEmployment !== 'unknown' && !workingOnLeave
-    ? [...new Set([0, sharedTotal])]
-    : []
   const workTimelineInput: TimelineInput | null = workResult && submitted && workResult.documentContext.eventDate
     ? {
         values: submitted,
@@ -413,25 +412,15 @@ export function KalkulatorPage() {
         settings: timelineSettings,
       }
     : null
+  // Skala jest wspólna dla taśmy podstawowej i wariantu z pracą w połowie
+  // wymiaru, żeby tygodnie w obu paskach wypadały w tych samych miejscach.
   const timelineScale = timelineInput
     ? withSharedScale([
         buildWeekTimeline(timelineInput),
-        ...timelineShares.map((share) => buildWeekTimeline({ ...timelineInput, secondShareDays: share })),
         ...(workTimelineInput ? [buildWeekTimeline(workTimelineInput)] : []),
       ])
     : []
   const timeline = timelineScale[0] ?? null
-  const timelineCompare = [
-    ...timelineShares.map((share, index) => ({
-      label: share === 0
-        ? 'Pierwszy rodzic bierze całość'
-        : `Drugi rodzic bierze ${Math.round(share / 7)} tygodni`,
-      data: timelineScale[index + 1],
-    })),
-    ...(workTimelineInput
-      ? [{ label: 'Łączenie urlopu z pracą w połowie wymiaru', data: timelineScale[timelineScale.length - 1] }]
-      : []),
-  ]
   const whyAssessment = whyBenefit
     ? resultCards.find((assessment) => assessment.benefit === whyBenefit) ?? null
     : null
@@ -495,8 +484,23 @@ export function KalkulatorPage() {
     setSent('')
     setSubmitted(data)
     setSecondShareDays(0)
+    saveInterviewSession(data)
     mutate({ values: data, plan: buildPlan(0, data, pool) })
   }
+
+  // Powrót z karty uprawnień odtwarza ostatni wynik, zamiast zaczynać wywiad od
+  // pierwszego pytania. Flaga przychodzi w stanie trasy, więc zwykłe wejście do
+  // kalkulatora dalej pokazuje formularz.
+  useEffect(() => {
+    const state = location.state as { restore?: boolean } | null
+    if (!state?.restore) return
+    const values = readInterviewSession()
+    if (!values) return
+    form.reset(values)
+    submitAnswers(values)
+    // Odtwarzamy raz, na wejściu; dalsze zmiany stanu trasy nic tu nie zmieniają.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Jedna dodatkowa symulacja na wysłanie wywiadu: wariant z pracą w połowie
   // wymiaru. Liczy się dopiero po wyniku, bo potrzebuje początku rodzicielskiego.
@@ -614,15 +618,26 @@ export function KalkulatorPage() {
           <form className="mt-8 space-y-5" noValidate onSubmit={advance} aria-labelledby="interview-step">
             <Card>
               <CardHeader>
-                <p className="text-sm font-medium text-primary" id="interview-progress">
+                <p className="text-sm font-medium text-navy" id="interview-progress">
                   Krok {stepIndex + 1} z {steps.length}
                 </p>
-                <progress
-                  className="mb-3 h-2 w-full overflow-hidden rounded-full accent-primary"
-                  value={stepIndex + 1}
-                  max={steps.length}
-                  aria-labelledby="interview-progress"
-                />
+                {/* Podział na osobne klocki pokazuje, ile kroków zostało, a nie
+                    tylko ile ich jest. Tekst nad paskiem niesie tę samą treść
+                    dla czytnika, więc klocki są ozdobą. */}
+                <ol
+                  className="mb-3 flex items-center gap-1.5"
+                  aria-hidden="true"
+                >
+                  {steps.map((item, index) => (
+                    <li
+                      key={item.id}
+                      className={cn(
+                        'h-2 flex-1 rounded-full',
+                        index <= stepIndex ? 'bg-primary' : 'bg-border',
+                      )}
+                    />
+                  ))}
+                </ol>
                 <h2
                   id="interview-step"
                   ref={stepHeading}
@@ -743,7 +758,7 @@ export function KalkulatorPage() {
           </div>
           {timeline && (
             <div className="mt-6 border-t border-border pt-6">
-              <WeekTimeline data={timeline} variants={timelineCompare} />
+              <WeekTimeline data={timeline} />
             </div>
           )}
           <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-3 border-t border-border pt-6">

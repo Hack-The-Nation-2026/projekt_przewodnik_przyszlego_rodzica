@@ -30,8 +30,8 @@ export function DokumentyPage() {
           Słownik pojęć
         </h2>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-          Trudne słowa z wniosków i decyzji, wyjaśnione po ludzku. Kropkowane pojęcia w całym
-          serwisie otwierają tę samą definicję.
+          Trudne słowa z wniosków i decyzji, wyjaśnione po ludzku. Definicja stoi obok pojęcia,
+          a kropkowane słowa w tekstach otwierają to samo wyjaśnienie.
         </p>
         <div className="mt-4">
           <GlossaryList />

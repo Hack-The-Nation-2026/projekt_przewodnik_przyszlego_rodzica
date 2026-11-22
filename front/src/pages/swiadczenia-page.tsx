@@ -87,10 +87,10 @@ export function SwiadczeniaPage() {
     <PageContainer className="space-y-8 py-12 sm:py-16">
       <PageHeading
         title="Świadczenia"
-        description="Wybierz swoją sytuację i zobacz, jakie świadczenia warto sprawdzić. Kalkulator pomoże Ci ocenić uprawnienia na podstawie Twoich odpowiedzi."
+        description="Wybierz swoją sytuację i zobacz, jakie świadczenia warto sprawdzić."
       />
 
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex flex-wrap gap-2" role="group" aria-label="Filtr według sytuacji">
           {(Object.keys(scenarios) as Scenario[]).map((key) => (
             <Button key={key} type="button" variant={scenario === key ? 'default' : 'outline'}
@@ -99,9 +99,15 @@ export function SwiadczeniaPage() {
             </Button>
           ))}
         </div>
-        <Link to="/kalkulator" className={buttonVariants()}>
-          <Calculator aria-hidden="true" /> Otwórz kalkulator
-        </Link>
+        <div className="flex max-w-sm flex-col items-start gap-2">
+          <Link to="/kalkulator" className={buttonVariants()}>
+            <Calculator aria-hidden="true" /> Otwórz kalkulator
+          </Link>
+          <p className="text-sm text-muted-foreground">
+            Kalkulator to krótki wywiad: pyta o pracę, ubezpieczenie i termin porodu, a potem liczy
+            kwoty, długość urlopu i terminy wniosków osobno dla mamy i taty.
+          </p>
+        </div>
       </div>
 
       <p className="sr-only" role="status">

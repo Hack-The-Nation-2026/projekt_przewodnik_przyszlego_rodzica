@@ -188,9 +188,14 @@
  * przeglądania strony, i zdejmujemy ozdoby, żeby wydruk był jednym dokumentem.
  */
 @media print {
+  /*
+   * Zerowy margines strony wypycha nagłówek i stopkę przeglądarki (tytuł
+   * dokumentu, adres i numer strony), bo nie mają gdzie się zmieścić. Odstęp
+   * od krawędzi robimy paddingiem na samej karcie, a nie marginesem `@page`.
+   */
   @page {
     size: A4;
-    margin: 14mm;
+    margin: 0;
   }
 
   /*
@@ -219,6 +224,15 @@
 
   .print-sheet {
     margin: 0;
+    padding: 14mm;
+  }
+
+  /*
+   * Strona karty nie trzyma szerokości z ekranu: kolumna `max-w-4xl` zwężyłaby
+   * kartę i przesunęła ją w bok, bo papier ma własną szerokość.
+   */
+  .print-page {
+    max-width: none;
     padding: 0;
   }
 
