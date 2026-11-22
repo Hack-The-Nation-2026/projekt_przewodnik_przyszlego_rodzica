@@ -19,40 +19,40 @@ import { useAppStore } from '@/store/app-store'
 import { useFeature } from '@/hooks/use-settings'
 
 type NavItem = { to: string; label: string; title?: string; end?: boolean }
+type GatedNavItem = NavItem & { feature?: 'zus_simulations' }
 
-// Bezpośrednie wejścia. Reszta serwisu siedzi w rozwijanym „Narzędzia", żeby pasek
-// nie urósł w długą listę, a każda strona i sekcja pozostała w zasięgu jednego kliknięcia.
-const NAV: NavItem[] = [
+// Pasek zostaje przy tym, co w nagłówku było od początku. Nie chowamy tych wejść
+// do menu tylko po to, żeby pasek był krótszy: użytkownik ma je w zasięgu jednego
+// kliknięcia, tak jak dotąd.
+const NAV: GatedNavItem[] = [
   { to: '/', label: 'Start', end: true },
   { to: '/swiadczenia', label: 'Świadczenia' },
   { to: '/kalkulator', label: 'Kalkulator' },
   { to: '/dokumenty', label: 'Dokumenty' },
-]
-
-// Sekcje, które istnieją tylko na stronie głównej: prowadzimy do nich kotwicą.
-const HOME_SECTIONS: NavItem[] = [
-  { to: '/#jak-to-dziala', label: 'Jak to działa' },
-  { to: '/#narzedzia', label: 'Z czego możesz skorzystać' },
-]
-
-const TOOLS: (NavItem & { feature?: 'zus_simulations' })[] = [
-  { to: '/urlop', label: 'Jestem w trakcie urlopu' },
-  { to: '/planowanie', label: 'Planujesz dziecko?' },
-  { to: '/wnioski', label: 'Kreator wniosku urlopowego' },
   { to: '/sprawy', label: 'Sprawy' },
-  { to: '/karta', label: 'Karta uprawnień' },
-  { to: '/zus', label: 'Symulacja ZUS', feature: 'zus_simulations' },
-]
-
-const NAV_TAIL: NavItem[] = [
+  { to: '/zus', label: 'ZUS', feature: 'zus_simulations' },
   { to: '/wsparcie', label: 'Wsparcie' },
   { to: '/odwolanie', label: 'Odwołanie', title: 'Ścieżka po decyzji odmownej' },
   { to: '/panel', label: 'Panel', title: 'Panel administracyjny' },
 ]
 
+// Menu „Więcej" zbiera tylko to, czego w pasku wcześniej nie było: ekrany narzędzi
+// oraz sekcje strony głównej, do których prowadzą kotwice.
+const MORE_TOOLS: NavItem[] = [
+  { to: '/urlop', label: 'Jestem w trakcie urlopu' },
+  { to: '/planowanie', label: 'Planujesz dziecko?' },
+  { to: '/wnioski', label: 'Kreator wniosku urlopowego' },
+  { to: '/karta', label: 'Karta uprawnień' },
+]
+
+const HOME_SECTIONS: NavItem[] = [
+  { to: '/#jak-to-dziala', label: 'Jak to działa' },
+  { to: '/#narzedzia', label: 'Z czego możesz skorzystać' },
+]
+
 function navLinkClass(isActive: boolean) {
   return cn(
-    'rounded-md px-2 py-2 text-sm font-medium whitespace-nowrap transition-colors',
+    'rounded-md px-1.5 py-2 text-sm font-medium whitespace-nowrap transition-colors',
     isActive
       ? 'bg-primary-foreground/10 text-primary-foreground'
       : 'text-primary-foreground/95 hover:bg-primary-foreground/10 hover:text-primary-foreground',
@@ -136,13 +136,12 @@ export function SiteHeader() {
   const citizen = useAppStore((state) => state.citizen)
   // Panel może wyłączyć ekran ZUS, wtedy link znika z obu nawigacji.
   const zusEnabled = useFeature('zus_simulations')
-  const tools = TOOLS.filter((item) => item.feature !== 'zus_simulations' || zusEnabled)
-  const toolsActive = tools.some((item) => item.to === location.pathname)
+  const nav = NAV.filter((item) => item.feature !== 'zus_simulations' || zusEnabled)
+  const moreActive = [...MORE_TOOLS, ...HOME_SECTIONS].some((item) => item.to === location.pathname)
   const mobileGroups: { title?: string; items: NavItem[] }[] = [
-    { items: NAV },
+    { items: nav },
+    { title: 'Narzędzia', items: MORE_TOOLS },
     { title: 'Na stronie głównej', items: HOME_SECTIONS },
-    { title: 'Narzędzia', items: tools },
-    { title: 'Więcej', items: NAV_TAIL },
   ]
 
   // Wychodzimy na stronę mObywatela i wracamy dokładnie tam, gdzie jesteśmy.
@@ -158,10 +157,10 @@ export function SiteHeader() {
           <Wordmark />
 
           <nav
-            className="hidden flex-1 items-center justify-center gap-0.5 xl:flex xl:px-1"
+            className="hidden flex-1 items-center justify-center xl:flex xl:px-1"
             aria-label="Nawigacja główna"
           >
-            {NAV.map((item) => (
+            {nav.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
@@ -176,41 +175,29 @@ export function SiteHeader() {
             <DropdownMenu>
               <DropdownMenuTrigger
                 className={cn(
-                  navLinkClass(toolsActive),
+                  navLinkClass(moreActive),
                   'inline-flex cursor-pointer items-center gap-1',
                 )}
               >
-                Narzędzia
+                Więcej
                 <ChevronDown aria-hidden="true" className="size-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-64">
+                <DropdownMenuLabel>Narzędzia</DropdownMenuLabel>
+                {MORE_TOOLS.map((item) => (
+                  <DropdownMenuItem key={item.to} asChild>
+                    <Link to={item.to}>{item.label}</Link>
+                  </DropdownMenuItem>
+                ))}
+                <DropdownMenuSeparator />
                 <DropdownMenuLabel>Na stronie głównej</DropdownMenuLabel>
                 {HOME_SECTIONS.map((item) => (
                   <DropdownMenuItem key={item.to} asChild>
                     <Link to={item.to}>{item.label}</Link>
                   </DropdownMenuItem>
                 ))}
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel>Narzędzia</DropdownMenuLabel>
-                {tools.map((item) => (
-                  <DropdownMenuItem key={item.to} asChild>
-                    <Link to={item.to}>{item.label}</Link>
-                  </DropdownMenuItem>
-                ))}
               </DropdownMenuContent>
             </DropdownMenu>
-
-            {NAV_TAIL.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.end}
-                title={item.title}
-                className={({ isActive }) => navLinkClass(isActive)}
-              >
-                {item.label}
-              </NavLink>
-            ))}
           </nav>
 
           <div className="ml-auto flex items-center gap-2">
@@ -222,10 +209,13 @@ export function SiteHeader() {
                 variant="mobywatelHeader"
                 size="sm"
                 className="hidden sm:inline-flex"
+                aria-label="Zaloguj przez mObywatel"
                 onClick={startMobywatelLogin}
               >
                 <EagleMark />
-                Zaloguj przez mObywatel
+                {/* Pełna fraza tylko tam, gdzie pasek ma na nią miejsce. */}
+                <span className="2xl:hidden">Zaloguj</span>
+                <span className="hidden 2xl:inline">Zaloguj przez mObywatel</span>
               </Button>
             )}
             <Button
