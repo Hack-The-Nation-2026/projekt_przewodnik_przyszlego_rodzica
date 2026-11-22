@@ -1,40 +1,101 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Calculator, ChevronDown, FileText, HeartHandshake, Sprout } from 'lucide-react'
-import { buttonVariants } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Button } from '@/components/ui/button'
+import {
+  ArrowRight,
+  Building2,
+  Calculator,
+  CalendarClock,
+  ChevronDown,
+  FileText,
+  FolderSearch,
+  HeartHandshake,
+  PenLine,
+  ShieldAlert,
+  Sprout,
+} from 'lucide-react'
+import { BenefitCard } from '@/components/benefit-card'
 import { Container } from '@/components/layout/container'
-import { useBenefits } from '@/hooks/use-benefits'
+import { buttonVariants } from '@/components/ui/button'
+import { useFeature } from '@/hooks/use-settings'
+import type { BenefitCode } from '@/lib/benefit-interview'
 import { cn } from '@/lib/utils'
 
 const STEPS = [
   {
     title: 'Opisz swoją sytuację',
     body: 'Odpowiadasz na kilka pytań o pracę, ubezpieczenie i przewidywany termin porodu.',
-    image: '/krok-wywiad.webp',
+    image: '/krok-1.webp',
   },
   {
     title: 'Zobacz, co ci przysługuje',
     body: 'Liczymy zasiłki, terminy i kwoty dla Twojego przypadku, także w sytuacjach nietypowych.',
-    image: '/krok-wyniki.webp',
+    image: '/krok-2.webp',
   },
   {
     title: 'Wiedz, co dalej',
     body: 'Dostajesz listę dokumentów i informację, gdzie je złożyć: u pracodawcy albo w ZUS.',
-    image: '/krok-dokumenty.webp',
+    image: '/krok-3.webp',
   },
 ]
 
-const ACTIONS = [
-  { to: '/kalkulator', icon: Calculator, title: 'Policz zasiłek', body: 'Terminy i kwoty dla obojga rodziców.' },
-  { to: '/dokumenty', icon: FileText, title: 'Zbierz dokumenty', body: 'Wnioski i zaświadczenia.' },
-  { to: '/planowanie', icon: Sprout, title: 'Planujesz dziecko?', body: 'Lista przygotowań, zanim pojawi się data porodu.' },
-  { to: '/wsparcie', icon: HeartHandshake, title: 'Znajdź wsparcie', body: 'Pomoc w trudnych sytuacjach.' },
+// Trzy świadczenia pokazane na stronie głównej. Pełny katalog stoi pod
+// przyciskiem na dole sekcji i na stronie świadczeń.
+const FEATURED: BenefitCode[] = ['macierzynski', 'rodzicielski', 'ojcowski']
+
+const TOOLS = [
+  {
+    to: '/kalkulator',
+    icon: Calculator,
+    title: 'Kalkulator zasiłków',
+    body: 'Policz, co przysługuje obojgu rodzicom: dni i kwoty, także w nietypowych sytuacjach.',
+  },
+  {
+    to: '/dokumenty',
+    icon: FileText,
+    title: 'Dokumenty i wnioski',
+    body: 'Sprawdź, który formularz wypełnić, co dołączyć i gdzie złożyć wniosek.',
+  },
+  {
+    to: '/urlop',
+    icon: CalendarClock,
+    title: 'Jestem w trakcie urlopu',
+    body: 'Policz, ile urlopu jeszcze zostało i co trzeba złożyć w najbliższych tygodniach.',
+  },
+  {
+    to: '/planowanie',
+    icon: Sprout,
+    title: 'Planujesz dziecko?',
+    body: 'Lista przygotowań i termin, do którego warto je zamknąć, zanim pojawi się data porodu.',
+  },
+  {
+    to: '/wnioski',
+    icon: PenLine,
+    title: 'Kreator wniosku urlopowego',
+    body: 'Ułóż pismo do pracodawcy z danych i dat z Twojego wywiadu.',
+  },
+  {
+    to: '/sprawy',
+    icon: FolderSearch,
+    title: 'Sprawy',
+    body: 'Wgraj przykładowy PDF z ZUS albo wybierz wniosek i zobacz, jak liczymy świadczenia.',
+  },
+  {
+    to: '/zus',
+    icon: Building2,
+    title: 'Symulacja ZUS',
+    body: 'Dane, które ZUS widzi na Twoim koncie, i wnioski, które można złożyć bez wizyty.',
+    feature: 'zus_simulations' as const,
+  },
+  {
+    to: '/odwolanie',
+    icon: ShieldAlert,
+    title: 'Dostałem decyzję odmowną',
+    body: 'Diagnoza sporu, termin na odwołanie i projekt pisma na konkretny powód odmowy.',
+  },
 ]
 
 export function HomePage() {
-  const { data, isPending, isError, refetch } = useBenefits()
+  const zusEnabled = useFeature('zus_simulations')
+  const tools = TOOLS.filter((tool) => !('feature' in tool) || zusEnabled)
 
   return (
     <>
@@ -100,39 +161,47 @@ export function HomePage() {
         className="py-14 sm:py-20"
       >
         <Container>
-          <div className="flex items-center justify-between gap-4">
-            <h2 id="jak-to-dziala-title" className="text-2xl font-semibold text-navy sm:text-3xl">
-              Jak to działa
-            </h2>
-            {/* Bocian z rodziną w gnieździe: znak firmowy wyjaśnia nazwę serwisu. */}
-            <img
-              src="/cover.png"
-              alt="Bocian rozkłada skrzydła nad rodziną siedzącą w gnieździe."
-              loading="lazy"
-              className="w-24 shrink-0 sm:w-36"
-            />
-          </div>
-          <ol role="list" className="mt-6 space-y-4 sm:space-y-6">
+          <h2 id="jak-to-dziala-title" className="text-2xl font-semibold text-navy sm:text-3xl">
+            Jak to działa
+          </h2>
+          <p className="mt-3 max-w-2xl text-muted-foreground">
+            Trzy kroki: opisz swoją sytuację, zobacz wyliczenia i dowiedz się, co złożyć.
+          </p>
+
+          {/* Pionowa oś czasu: numer kroku na linii, obok ilustracja i opis.
+              Linia rysuje się tylko między krokami, nigdy pod ostatnim. */}
+          <ol role="list" className="mt-8 sm:mt-10">
             {STEPS.map((step, index) => (
-              <li key={step.title} className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 sm:gap-6">
+              <li
+                key={step.title}
+                className="relative grid grid-cols-[auto_minmax(0,1fr)] gap-4 pb-10 last:pb-0 sm:gap-6 sm:pb-14"
+              >
+                {index < STEPS.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute top-11 bottom-0 left-5.5 w-px -translate-x-1/2 bg-border sm:top-14 sm:left-7"
+                  />
+                )}
                 <span
                   aria-hidden="true"
-                  className="mt-1 flex size-9 items-center justify-center self-start rounded-full bg-primary text-base font-semibold text-primary-foreground sm:mt-0 sm:size-12 sm:self-center sm:text-lg"
+                  className="relative z-10 flex size-11 shrink-0 items-center justify-center self-start rounded-full bg-primary text-base font-semibold text-primary-foreground ring-4 ring-background sm:size-14 sm:text-lg"
                 >
                   {index + 1}
                 </span>
-                <div className="flex min-w-0 flex-col gap-3 rounded-lg border border-border p-4 sm:flex-row sm:items-center sm:gap-6 sm:px-6">
+                <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-start sm:gap-8 lg:gap-12">
                   <img
                     src={step.image}
                     alt=""
-                    width={480}
-                    height={360}
+                    width={800}
+                    height={800}
                     loading="lazy"
                     decoding="async"
-                    className="h-auto w-24 shrink-0 sm:w-32 lg:w-36"
+                    className="h-auto w-32 shrink-0 rounded-lg sm:w-48 lg:w-72"
                   />
-                  <div className="min-w-0">
-                    <h3 className="text-lg font-semibold text-navy sm:text-xl">{step.title}</h3>
+                  <div className="min-w-0 max-w-2xl sm:pt-1">
+                    <h3 className="text-lg font-semibold text-navy sm:text-xl lg:text-2xl">
+                      {step.title}
+                    </h3>
                     <p className="mt-2 text-muted-foreground">{step.body}</p>
                   </div>
                 </div>
@@ -149,96 +218,95 @@ export function HomePage() {
         className="border-t border-border bg-secondary/40 py-14 sm:py-20"
       >
         <Container>
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 id="swiadczenia-title" className="text-2xl font-semibold text-navy sm:text-3xl">
-              Świadczenia
-            </h2>
-            <Link to="/swiadczenia" className={buttonVariants({ variant: 'outline' })}>
-              Wszystkie świadczenia
-              <ArrowRight />
-            </Link>
-          </div>
+          <h2 id="swiadczenia-title" className="text-2xl font-semibold text-navy sm:text-3xl">
+            Świadczenia
+          </h2>
           <p className="mt-3 max-w-2xl text-muted-foreground">
             Katalog obejmuje świadczenia związane z ciążą, porodem, adopcją i opieką nad dzieckiem.
           </p>
 
-          <div className="mt-6 grid gap-4 md:grid-cols-3 md:gap-6">
-            {isPending &&
-              Array.from({ length: 3 }).map((_, index) => (
-                <Card key={index}>
-                  <CardHeader>
-                    <Skeleton className="h-6 w-40" />
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    <Skeleton className="h-4 w-full" />
-                    <Skeleton className="h-4 w-4/5" />
-                  </CardContent>
-                </Card>
-              ))}
-
-            {isError && (
-              <Card className="md:col-span-3">
-                <CardHeader>
-                  <CardTitle>Nie udało się pobrać listy świadczeń</CardTitle>
-                  <CardDescription>Spróbuj ponownie za chwilę.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button variant="outline" onClick={() => refetch()}>
-                    Spróbuj ponownie
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-
-            {data?.map((benefit) => (
-              <Card key={benefit.code}>
-                <CardHeader>
-                  <CardTitle className="text-lg">{benefit.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>{benefit.description}</CardDescription>
-                </CardContent>
-              </Card>
+          <ul className="mt-6 grid gap-4 md:grid-cols-3 md:gap-6">
+            {FEATURED.map((code) => (
+              <li key={code}>
+                <BenefitCard code={code} />
+              </li>
             ))}
+          </ul>
+
+          <div className="mt-8 flex justify-center">
+            <Link
+              to="/swiadczenia"
+              className={cn(buttonVariants({ variant: 'ghost' }), 'text-primary')}
+            >
+              Zobacz wszystkie świadczenia
+              <ArrowRight aria-hidden="true" />
+            </Link>
           </div>
         </Container>
       </section>
 
-      <section data-scroll-section aria-labelledby="wsparcie-title" className="py-14 sm:py-20">
+      <section
+        data-scroll-section
+        id="narzedzia"
+        aria-labelledby="narzedzia-title"
+        className="py-14 sm:py-20"
+      >
         <Container>
-          <div className="grid gap-8 lg:grid-cols-[1fr_1.4fr] lg:items-center">
-            <h2 id="wsparcie-title" className="text-2xl font-semibold text-navy sm:text-3xl">
-              Dokumenty i wsparcie
-            </h2>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {ACTIONS.map((action) => (
-                <Link
-                  key={action.to}
-                  to={action.to}
-                  className={cn(
-                    'rounded-lg border border-border p-5 transition-colors',
-                    'hover:border-primary hover:bg-secondary/50',
-                  )}
-                >
-                  <action.icon className="size-6 text-primary" />
-                  <p className="mt-4 font-medium">{action.title}</p>
-                  <p className="mt-1 text-muted-foreground">{action.body}</p>
-                </Link>
-              ))}
-            </div>
-          </div>
+          <h2 id="narzedzia-title" className="text-2xl font-semibold text-navy sm:text-3xl">
+            Z czego możesz skorzystać
+          </h2>
+          <p className="mt-3 max-w-2xl text-muted-foreground">
+            Cały serwis w skrócie: policz zasiłek, przygotuj dokumenty, zaplanuj urlop i znajdź
+            wsparcie, kiedy jest trudno.
+          </p>
 
-          <div className="mt-10 max-w-3xl border-t border-border pt-8">
-            <h3 className="text-xl font-semibold text-navy sm:text-2xl">Wsparcie, gdy sytuacja jest trudna</h3>
-            <p className="mt-3 text-muted-foreground">
-              Urodzenie martwego dziecka, przedwczesny poród, ciężka choroba dziecka albo rodzica.
-              Zbieramy miejsca i organizacje, które pomagają w takich chwilach.
-            </p>
-            <Link to="/wsparcie" className={cn(buttonVariants(), 'mt-5')}>
+          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {tools.map((tool) => (
+              <li key={tool.to}>
+                <Link
+                  to={tool.to}
+                  className="group flex h-full flex-col gap-4 rounded-lg bg-neutral-100 p-5 transition-colors hover:bg-secondary"
+                >
+                  <span className="flex size-11 items-center justify-center rounded-md bg-background text-primary">
+                    <tool.icon className="size-5" aria-hidden="true" />
+                  </span>
+                  <span className="mt-auto flex flex-col">
+                    <span className="flex items-center gap-1.5 font-semibold text-navy">
+                      {tool.title}
+                      <ArrowRight
+                        aria-hidden="true"
+                        className="size-4 shrink-0 text-primary transition-transform group-hover:translate-x-0.5"
+                      />
+                    </span>
+                    <span className="mt-1 text-sm text-muted-foreground">{tool.body}</span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <Link
+            to="/wsparcie"
+            className="group mt-6 flex flex-col gap-4 rounded-lg bg-navy p-6 text-white transition-colors hover:bg-navy/90 sm:flex-row sm:items-center sm:justify-between sm:p-8"
+          >
+            <span className="flex max-w-2xl flex-col">
+              <span className="flex items-center gap-2 text-xl font-semibold sm:text-2xl">
+                <HeartHandshake className="size-6 shrink-0" aria-hidden="true" />
+                Wsparcie, gdy sytuacja jest trudna
+              </span>
+              <span className="mt-2 text-white/85">
+                Urodzenie martwego dziecka, przedwczesny poród, ciężka choroba dziecka albo rodzica.
+                Zbieramy miejsca i organizacje, które pomagają w takich chwilach.
+              </span>
+            </span>
+            <span className="inline-flex shrink-0 items-center gap-2 font-medium">
               Zobacz miejsca wsparcia
-              <ArrowRight />
-            </Link>
-          </div>
+              <ArrowRight
+                aria-hidden="true"
+                className="size-4 transition-transform group-hover:translate-x-0.5"
+              />
+            </span>
+          </Link>
         </Container>
       </section>
     </>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { ArrowRight, ArrowUpRight, Calculator, FileText } from 'lucide-react'
+import { ArrowUpRight, Calculator } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { BenefitCard } from '@/components/benefit-card'
 import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -109,30 +110,11 @@ export function SwiadczeniaPage() {
       <section className="space-y-4" aria-labelledby="calculator-benefits-title">
         <h2 id="calculator-benefits-title" className="text-xl font-semibold">Świadczenia w kalkulatorze</h2>
         <ul className="grid gap-4 sm:grid-cols-2">
-          {benefits.map((code) => {
-            const { name, what, sources } = benefitList[code]
-            return (
-              <li key={code}>
-                <Card className="flex h-full flex-col">
-                  <CardHeader className="gap-2 pb-4">
-                    <h3 className="text-lg font-semibold">{name}</h3>
-                    <p className="text-sm text-muted-foreground">{what}</p>
-                  </CardHeader>
-                  <CardContent className="mt-auto space-y-3">
-                    <ul className="space-y-1 text-sm">
-                      {sources.map(({ title, url }) => (
-                        <li key={title}><a href={url} className="text-primary underline underline-offset-2">{title}</a></li>
-                      ))}
-                    </ul>
-                    <Link to={`/dokumenty?swiadczenie=${code}${placement}`} className={buttonVariants({ variant: 'outline' })}
-                      aria-label={`Dokumenty i terminy – ${name}`}>
-                      <FileText aria-hidden="true" /> Dokumenty i terminy <ArrowRight aria-hidden="true" />
-                    </Link>
-                  </CardContent>
-                </Card>
-              </li>
-            )
-          })}
+          {benefits.map((code) => (
+            <li key={code}>
+              <BenefitCard code={code} placement={placement} />
+            </li>
+          ))}
         </ul>
       </section>
 
