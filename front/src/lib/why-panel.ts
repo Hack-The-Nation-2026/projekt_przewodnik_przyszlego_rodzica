@@ -122,7 +122,7 @@ function counterfactuals(input: WhyInput) {
 
   if (values.employment === 'contractor' || values.employment === 'self_employed') {
     list.push(
-      'Kwota nie może spaść poniżej minimalnej podstawy wymiaru, a przy umowie zlecenia i działalności ZUS podnosi wypłatę do wysokości świadczenia rodzicielskiego, jeśli wyliczenie wypada niżej.',
+      'Przy umowie zlecenia i działalności liczymy z podstawy, którą podasz. Gdy wyliczona kwota wypada niżej niż świadczenie rodzicielskie, ZUS podnosi wypłatę do jego wysokości.',
     )
   }
 
