@@ -79,11 +79,13 @@ export function HomePage() {
               id="start-title"
               className="text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl"
             >
-              Sprawdź, co ci przysługuje w ciąży i po urodzeniu dziecka
+              Sprawdź, co ci przysługuje
             </h1>
             <p className="mt-4 text-base text-primary-foreground/95 sm:text-lg">
-              Skrzydła Rodzica prowadzą przez zasiłek chorobowy, macierzyński i rodzicielski. Policz, kiedy
-              i ile dostaniesz, oraz zobacz, jakie dokumenty złożyć.
+              Skrzydła Rodzica prowadzą przez zasiłki i dokumenty związane z ciążą, porodem i opieką
+              nad dzieckiem, dla mamy i taty. Także wtedy, gdy poród przebiega inaczej niż zakładano,
+              czyli przy wcześniactwie, gdy dziecko wymaga leczenia, przy adopcji i w rodzinie
+              zastępczej.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link to="/wejscie" className={buttonVariants({ size: 'lg' })}>
