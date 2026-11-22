@@ -22,17 +22,17 @@ import { cn } from '@/lib/utils'
 const STEPS = [
   {
     title: 'Opisz swoją sytuację',
-    body: 'Odpowiadasz na kilka pytań o pracę, ubezpieczenie i przewidywany termin porodu.',
+    body: 'Odpowiadasz na kilka pytań o pracę, ubezpieczenie i przewidywany termin porodu. Nie musisz znać żadnego przepisu.',
     image: '/krok-1.webp',
   },
   {
     title: 'Zobacz, co ci przysługuje',
-    body: 'Liczymy zasiłki, terminy i kwoty dla Twojego przypadku, także w sytuacjach nietypowych.',
+    body: 'Liczymy zasiłki, terminy i kwoty dla Twojego przypadku, osobno dla mamy i taty. Także przy wcześniactwie, adopcji i umowie zlecenie.',
     image: '/krok-2.webp',
   },
   {
     title: 'Wiedz, co dalej',
-    body: 'Dostajesz listę dokumentów i informację, gdzie je złożyć: u pracodawcy albo w ZUS.',
+    body: 'Dostajesz listę dokumentów i wiesz, gdzie je złożyć: u pracodawcy albo w ZUS. Do tego terminy, których nie warto przegapić.',
     image: '/krok-3.webp',
   },
 ]
@@ -42,55 +42,14 @@ const STEPS = [
 const FEATURED: BenefitCode[] = ['macierzynski', 'rodzicielski', 'ojcowski']
 
 const TOOLS = [
-  {
-    to: '/kalkulator',
-    icon: Calculator,
-    title: 'Kalkulator zasiłków',
-    body: 'Policz, co przysługuje obojgu rodzicom: dni i kwoty, także w nietypowych sytuacjach.',
-  },
-  {
-    to: '/dokumenty',
-    icon: FileText,
-    title: 'Dokumenty i wnioski',
-    body: 'Sprawdź, który formularz wypełnić, co dołączyć i gdzie złożyć wniosek.',
-  },
-  {
-    to: '/urlop',
-    icon: CalendarClock,
-    title: 'Jestem w trakcie urlopu',
-    body: 'Policz, ile urlopu jeszcze zostało i co trzeba złożyć w najbliższych tygodniach.',
-  },
-  {
-    to: '/planowanie',
-    icon: Sprout,
-    title: 'Planujesz dziecko?',
-    body: 'Lista przygotowań i termin, do którego warto je zamknąć, zanim pojawi się data porodu.',
-  },
-  {
-    to: '/wnioski',
-    icon: PenLine,
-    title: 'Kreator wniosku urlopowego',
-    body: 'Ułóż pismo do pracodawcy z danych i dat z Twojego wywiadu.',
-  },
-  {
-    to: '/sprawy',
-    icon: FolderSearch,
-    title: 'Sprawy',
-    body: 'Wgraj przykładowy PDF z ZUS albo wybierz wniosek i zobacz, jak liczymy świadczenia.',
-  },
-  {
-    to: '/zus',
-    icon: Building2,
-    title: 'Symulacja ZUS',
-    body: 'Dane, które ZUS widzi na Twoim koncie, i wnioski, które można złożyć bez wizyty.',
-    feature: 'zus_simulations' as const,
-  },
-  {
-    to: '/odwolanie',
-    icon: ShieldAlert,
-    title: 'Dostałem decyzję odmowną',
-    body: 'Diagnoza sporu, termin na odwołanie i projekt pisma na konkretny powód odmowy.',
-  },
+  { to: '/kalkulator', icon: Calculator, title: 'Kalkulator zasiłków', body: 'Kwoty i terminy dla obojga rodziców.' },
+  { to: '/dokumenty', icon: FileText, title: 'Dokumenty i wnioski', body: 'Formularz, załączniki, miejsce złożenia.' },
+  { to: '/urlop', icon: CalendarClock, title: 'Jestem w trakcie urlopu', body: 'Ile urlopu zostało i co złożyć.' },
+  { to: '/planowanie', icon: Sprout, title: 'Planujesz dziecko?', body: 'Lista przygotowań przed ciążą.' },
+  { to: '/wnioski', icon: PenLine, title: 'Kreator wniosku urlopowego', body: 'Pismo do pracodawcy z Twoich danych.' },
+  { to: '/sprawy', icon: FolderSearch, title: 'Sprawy', body: 'Porównaj wniosek z decyzją ZUS.' },
+  { to: '/zus', icon: Building2, title: 'Symulacja ZUS', body: 'Twoje konto i wnioski bez wizyty.', feature: 'zus_simulations' as const },
+  { to: '/odwolanie', icon: ShieldAlert, title: 'Dostałem decyzję odmowną', body: 'Termin na odwołanie i projekt pisma.' },
 ]
 
 export function HomePage() {
@@ -161,53 +120,50 @@ export function HomePage() {
         className="py-14 sm:py-20"
       >
         <Container>
-          <h2 id="jak-to-dziala-title" className="text-2xl font-semibold text-navy sm:text-3xl">
-            Jak to działa
-          </h2>
-          <p className="mt-3 max-w-2xl text-muted-foreground">
-            Trzy kroki: opisz swoją sytuację, zobacz wyliczenia i dowiedz się, co złożyć.
-          </p>
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] lg:gap-16">
+            <h2 id="jak-to-dziala-title" className="text-2xl font-semibold text-navy sm:text-3xl">
+              Jak to działa
+            </h2>
 
-          {/* Pionowa oś czasu: numer kroku na linii, obok ilustracja i opis.
-              Linia rysuje się tylko między krokami, nigdy pod ostatnim. */}
-          <ol role="list" className="mt-8 sm:mt-10">
-            {STEPS.map((step, index) => (
-              <li
-                key={step.title}
-                className="relative grid grid-cols-[auto_minmax(0,1fr)] gap-4 pb-10 last:pb-0 sm:gap-6 sm:pb-14"
-              >
-                {index < STEPS.length - 1 && (
+            {/* Pionowa oś czasu: numer kroku na linii, obok mała ilustracja i opis.
+                Linia rysuje się tylko między krokami, nigdy pod ostatnim. */}
+            <ol role="list">
+              {STEPS.map((step, index) => (
+                <li
+                  key={step.title}
+                  className="relative grid grid-cols-[auto_minmax(0,1fr)] gap-4 pb-7 last:pb-0 sm:gap-5 sm:pb-9"
+                >
+                  {index < STEPS.length - 1 && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute top-10 bottom-0 left-5 w-0.5 -translate-x-1/2 bg-primary/30 sm:top-12 sm:left-6"
+                    />
+                  )}
                   <span
                     aria-hidden="true"
-                    className="absolute top-11 bottom-0 left-5.5 w-px -translate-x-1/2 bg-border sm:top-14 sm:left-7"
-                  />
-                )}
-                <span
-                  aria-hidden="true"
-                  className="relative z-10 flex size-11 shrink-0 items-center justify-center self-start rounded-full bg-primary text-base font-semibold text-primary-foreground ring-4 ring-background sm:size-14 sm:text-lg"
-                >
-                  {index + 1}
-                </span>
-                <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-start sm:gap-8 lg:gap-12">
-                  <img
-                    src={step.image}
-                    alt=""
-                    width={800}
-                    height={800}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-auto w-32 shrink-0 rounded-lg sm:w-48 lg:w-72"
-                  />
-                  <div className="min-w-0 max-w-2xl sm:pt-1">
-                    <h3 className="text-lg font-semibold text-navy sm:text-xl lg:text-2xl">
-                      {step.title}
-                    </h3>
-                    <p className="mt-2 text-muted-foreground">{step.body}</p>
+                    className="relative z-10 flex size-10 shrink-0 items-center justify-center self-start rounded-full bg-primary text-sm font-semibold text-primary-foreground ring-4 ring-background sm:size-12 sm:text-base"
+                  >
+                    {index + 1}
+                  </span>
+                  <div className="flex min-w-0 items-start gap-4 sm:gap-5">
+                    <img
+                      src={step.image}
+                      alt=""
+                      width={800}
+                      height={800}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-auto w-16 shrink-0 rounded sm:w-20 lg:w-24"
+                    />
+                    <div className="min-w-0 max-w-xl pt-0.5">
+                      <h3 className="text-base font-semibold text-navy sm:text-lg">{step.title}</h3>
+                      <p className="mt-1 text-sm text-muted-foreground sm:text-base">{step.body}</p>
+                    </div>
                   </div>
-                </div>
-              </li>
-            ))}
-          </ol>
+                </li>
+              ))}
+            </ol>
+          </div>
         </Container>
       </section>
 
@@ -222,13 +178,13 @@ export function HomePage() {
             Świadczenia
           </h2>
           <p className="mt-3 max-w-2xl text-muted-foreground">
-            Katalog obejmuje świadczenia związane z ciążą, porodem, adopcją i opieką nad dzieckiem.
+            Zasiłki związane z ciążą, porodem, adopcją i opieką nad dzieckiem.
           </p>
 
           <ul className="mt-6 grid gap-4 md:grid-cols-3 md:gap-6">
             {FEATURED.map((code) => (
               <li key={code}>
-                <BenefitCard code={code} />
+                <BenefitCard code={code} showSources={false} />
               </li>
             ))}
           </ul>
@@ -256,18 +212,17 @@ export function HomePage() {
             Z czego możesz skorzystać
           </h2>
           <p className="mt-3 max-w-2xl text-muted-foreground">
-            Cały serwis w skrócie: policz zasiłek, przygotuj dokumenty, zaplanuj urlop i znajdź
-            wsparcie, kiedy jest trudno.
+            Policz zasiłek, przygotuj dokumenty, zaplanuj urlop albo znajdź wsparcie.
           </p>
 
-          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {tools.map((tool) => (
               <li key={tool.to}>
                 <Link
                   to={tool.to}
-                  className="group flex h-full flex-col gap-4 rounded-lg bg-neutral-100 p-5 transition-colors hover:bg-secondary"
+                  className="group flex h-full flex-col gap-3 rounded-lg bg-neutral-100 p-4 transition-colors hover:bg-secondary"
                 >
-                  <span className="flex size-11 items-center justify-center rounded-md bg-background text-primary">
+                  <span className="flex size-10 items-center justify-center rounded-md bg-background text-primary">
                     <tool.icon className="size-5" aria-hidden="true" />
                   </span>
                   <span className="mt-auto flex flex-col">
@@ -287,16 +242,16 @@ export function HomePage() {
 
           <Link
             to="/wsparcie"
-            className="group mt-6 flex flex-col gap-4 rounded-lg bg-navy p-6 text-white transition-colors hover:bg-navy/90 sm:flex-row sm:items-center sm:justify-between sm:p-8"
+            className="group mt-5 flex flex-col gap-4 rounded-lg bg-navy p-6 text-white transition-colors hover:bg-navy/90 sm:flex-row sm:items-center sm:justify-between sm:p-7"
           >
             <span className="flex max-w-2xl flex-col">
-              <span className="flex items-center gap-2 text-xl font-semibold sm:text-2xl">
+              <span className="flex items-center gap-2 text-xl font-semibold">
                 <HeartHandshake className="size-6 shrink-0" aria-hidden="true" />
                 Wsparcie, gdy sytuacja jest trudna
               </span>
               <span className="mt-2 text-white/85">
                 Urodzenie martwego dziecka, przedwczesny poród, ciężka choroba dziecka albo rodzica.
-                Zbieramy miejsca i organizacje, które pomagają w takich chwilach.
+                Miejsca i organizacje, które pomagają.
               </span>
             </span>
             <span className="inline-flex shrink-0 items-center gap-2 font-medium">

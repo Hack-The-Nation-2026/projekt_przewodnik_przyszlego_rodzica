@@ -81,7 +81,7 @@ export function SwiadczeniaPage() {
   const filteredOtherBenefits = otherBenefits.filter((benefit) =>
     scenario === 'all' || benefit.scenarios.includes(scenario),
   )
-  const placement = scenario === 'adoption' || scenario === 'foster' ? `&sytuacja=${scenario}` : ''
+  const initialRole = scenario === 'adoption' || scenario === 'foster' ? scenario : undefined
 
   return (
     <PageContainer className="space-y-8 py-12 sm:py-16">
@@ -112,7 +112,7 @@ export function SwiadczeniaPage() {
         <ul className="grid gap-4 sm:grid-cols-2">
           {benefits.map((code) => (
             <li key={code}>
-              <BenefitCard code={code} placement={placement} />
+              <BenefitCard code={code} initialRole={initialRole} />
             </li>
           ))}
         </ul>
