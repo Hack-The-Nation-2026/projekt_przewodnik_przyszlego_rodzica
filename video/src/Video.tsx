@@ -1,6 +1,7 @@
-import { AbsoluteFill, Sequence, interpolate, useCurrentFrame, useVideoConfig } from 'remotion'
+import { AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame, useVideoConfig } from 'remotion'
 import { scenes, sceneDuration } from './edl'
 import { AppFont } from './AppFont'
+import { Captions } from './components/Captions'
 import { ScreenScene } from './components/ScreenScene'
 import { MobileScene } from './components/MobileScene'
 import { IntroScene } from './components/IntroScene'
@@ -48,6 +49,9 @@ export function Video() {
       {total > 0 && (
         <AbsoluteFill style={{ backgroundColor: '#000', opacity: fadeIn, pointerEvents: 'none' }} />
       )}
+      {/* Komentarz lektora i napisy: ścieżkę składa scripts/narracja.mjs. */}
+      <Audio src={staticFile('narracja.mp3')} />
+      <Captions />
     </AbsoluteFill>
   )
 }

@@ -534,12 +534,14 @@ okładce i na ostatniej planszy, a film pokazuje ten sam kod dwa razy, na pierws
 planszy. Obok HTML-a leży gotowy `prezentacja/Skrzydla-Rodzica-prezentacja.pdf`, dziesięć stron
 16:9, składany skryptem `prezentacja/do-pdf.mjs`.
 
-Film leży w `video/out/prezentacja.mp4`, poniżej trzech minut, 1920×1080, bez dźwięku. Powstaje ze
-skryptów w `video/scripts/`, montaż opisuje `video/src/edl.ts`, a szczegóły są w `video/README.md`.
-Ujęcia to nagrania działającej aplikacji: wejście i logowanie, wywiad, wynik, karta uprawnień,
-kreator wniosków i dokumentów, planowanie, urlop w trakcie, odwołanie, wsparcie, panel, asystent
-i widok telefonu. Listy wyboru otwierają się na ekranie, więc widać opcje, a nie tylko wybraną
-wartość. Plansza z adresem demo i kodem QR otwiera film i go zamyka.
+Film leży w `video/out/prezentacja.mp4`, poniżej trzech minut, 1920×1080, z komentarzem lektora
+i napisami. Powstaje ze skryptów w `video/scripts/`, montaż opisuje `video/src/edl.ts`, a szczegóły
+są w `video/README.md`. Ujęcia to nagrania działającej aplikacji: wejście i logowanie, wywiad,
+wynik, karta uprawnień, kreator wniosków i dokumentów, planowanie, urlop w trakcie, odwołanie,
+wsparcie, panel, asystent i widok telefonu. Listy wyboru otwierają się na ekranie, więc widać
+opcje, a nie tylko wybraną wartość. `video/scripts/narracja.mjs` kładzie każde zdanie lektora na
+początku sceny, którą opisuje, i zapisuje ten sam zestaw do `out/napisy.srt`. Plansza z adresem
+demo i kodem QR otwiera film i go zamyka.
 
 Zrzuty ekranu leżą w `zrzuty/`. Powstają skryptem `video/scripts/shots.mjs` z tej samej działającej
 aplikacji, tylko bez kursora i nagrywania, więc odtwarzają się jedną komendą. Pięć kadrów z tych

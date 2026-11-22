@@ -1,9 +1,9 @@
 # Prezentacja Skrzydła Rodzica
 
-Film na wyzwanie ZUS, 2 min 59 s, 1920×1080, 30 klatek na sekundę, bez dźwięku.
-Komentarz dogrywamy osobno.
+Film na wyzwanie ZUS, 2 min 59 s, 1920×1080, 30 klatek na sekundę, z komentarzem
+lektora i napisami.
 
-Gotowy plik leży w `out/prezentacja.mp4`.
+Gotowy plik leży w `out/prezentacja.mp4`, a napisy obok niego w `out/napisy.srt`.
 
 ## Jak to powstaje
 
@@ -71,6 +71,25 @@ formularz.
 node scripts/shots.mjs            # cała lista
 node scripts/shots.mjs zus panel  # wybrane ekrany, po fragmencie nazwy
 ```
+
+## Komentarz i napisy
+
+`scripts/narracja.mjs` zamienia nagranie lektora w ścieżkę dopasowaną do montażu.
+
+```bash
+node scripts/narracja.mjs                      # nagranie z ~/Documents/narracja.wav
+NARRACJA=/inna/sciezka.wav node scripts/narracja.mjs
+```
+
+Lektor czyta zdania jedno po drugim, bez przerw na montaż, więc skrypt kładzie
+każde zdanie na początku sceny, którą opisuje. Mowa zostaje w swoim tempie,
+a zmieniają się tylko pauzy między zdaniami. Nieudane podejście do akapitu
+o odwołaniu i zdanie "To się wytni", które lektor powiedział po nim, są
+pominięte w tabeli `ZDANIA`.
+
+Wynik to `public/narracja.mp3`, który wchodzi do filmu, i `src/napisy.ts`,
+z którego `src/components/Captions.tsx` rysuje napisy pod obrazem. Ten sam
+zestaw ląduje w `out/napisy.srt`.
 
 ## Render
 
