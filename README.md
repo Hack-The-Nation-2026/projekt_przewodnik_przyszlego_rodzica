@@ -16,7 +16,7 @@ a potem dostaje dokumenty, terminy i miejsce złożenia wniosku.
 - **Sprawy** (`/sprawy`): zestaw przykładowy ZUS rozpoznawany po odcisku wgranego PDF-a, dziesięć
   scenariuszy demonstracyjnych i własny wniosek w formacie JSON. Strona pokazuje weryfikację
   ubezpieczenia, wyliczenie i porównanie z oczekiwanym wynikiem.
-- **Symulacja ZUS** (`/zus`): ubezpieczenie, zadłużenie, e-ZLA, PUE/eZUS i wniosek o odpis aktu
+- **System ZUS** (`/zus`): ubezpieczenie, zadłużenie, e-ZLA, PUE/eZUS i wniosek o odpis aktu
   urodzenia. Wszystko lokalnie, bez połączenia z systemami ZUS.
 - **Wsparcie** (`/wsparcie`): organizacje i zasady dla sytuacji po stracie dziecka, przy wcześniaku,
   poronieniu i ciężkiej chorobie.

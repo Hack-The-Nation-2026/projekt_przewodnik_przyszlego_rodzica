@@ -17,7 +17,7 @@ const COLUMNS = [
       { to: '/wnioski', label: 'Kreator wniosku urlopowego' },
       { to: '/karta', label: 'Karta uprawnień' },
       { to: '/sprawy', label: 'Sprawy' },
-      { to: '/zus', label: 'Symulacja ZUS', feature: 'zus_simulations' as const },
+      { to: '/zus', label: 'System ZUS', feature: 'zus_simulations' as const },
       { to: '/wsparcie', label: 'Wsparcie' },
     ],
   },

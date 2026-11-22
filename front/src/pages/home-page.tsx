@@ -48,7 +48,7 @@ const TOOLS = [
   { to: '/planowanie', icon: Sprout, title: 'Planujesz dziecko?', body: 'Lista przygotowań przed ciążą.' },
   { to: '/wnioski', icon: PenLine, title: 'Kreator wniosku urlopowego', body: 'Pismo do pracodawcy z Twoich danych.' },
   { to: '/sprawy', icon: FolderSearch, title: 'Sprawy', body: 'Porównaj wniosek z decyzją ZUS.' },
-  { to: '/zus', icon: Building2, title: 'Symulacja ZUS', body: 'Twoje konto i wnioski bez wizyty.', feature: 'zus_simulations' as const },
+  { to: '/zus', icon: Building2, title: 'System ZUS', body: 'Twoje konto i wnioski bez wizyty.', feature: 'zus_simulations' as const },
   { to: '/odwolanie', icon: ShieldAlert, title: 'Dostałem decyzję odmowną', body: 'Termin na odwołanie i projekt pisma.' },
 ]
 

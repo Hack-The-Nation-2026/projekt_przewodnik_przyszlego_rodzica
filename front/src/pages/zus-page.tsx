@@ -43,7 +43,7 @@ function money(grosze: number) {
   return currency.format(grosze / 100)
 }
 
-/** Przełącznik dwóch wariantów symulacji, np. z ubezpieczeniem i bez. */
+/** Przełącznik dwóch wariantów konta, np. z ubezpieczeniem i bez. */
 function Toggle({
   label,
   options,
@@ -222,7 +222,7 @@ function InsuranceSection({
           </div>
         ) : (
           <p role="status" className="text-sm text-muted-foreground">
-            {loading ? 'Pobieramy dane z symulowanego ZUS…' : 'Nie udało się pobrać danych.'}
+            {loading ? 'Pobieramy dane z ZUS…' : 'Nie udało się pobrać danych.'}
           </p>
         )}
       </CardContent>
@@ -381,7 +381,7 @@ function PueSection({ insured }: { insured: boolean }) {
         )}
         {pue.isError && (
           <p role="alert" className="text-sm text-destructive">
-            Nie udało się połączyć z symulowanym PUE. Spróbuj ponownie.
+            Nie udało się połączyć z PUE. Spróbuj ponownie.
           </p>
         )}
       </CardContent>
@@ -492,7 +492,7 @@ function BirthCertificateSection() {
             </Button>
             {submit.isError && (
               <p role="alert" className="text-sm text-destructive">
-                Nie udało się złożyć wniosku w symulacji. Spróbuj ponownie.
+                Nie udało się złożyć wniosku. Spróbuj ponownie.
               </p>
             )}
           </form>
@@ -536,7 +536,7 @@ function LinksSection({ links }: { links: ZusLink[] | undefined }) {
   )
 }
 
-/** Ekran symulacji ZUS: ubezpieczenie, składki, e-ZLA, PUE i akta urodzenia. */
+/** System ZUS: ubezpieczenie, składki, e-ZLA, PUE i akta urodzenia. */
 export function ZusPage() {
   const zusEnabled = useFeature('zus_simulations')
   const [insured, setInsured] = useState(true)
@@ -573,15 +573,15 @@ export function ZusPage() {
     return (
       <PageContainer className="py-12 sm:py-16">
         <PageHeading
-          title="Symulacja ZUS"
+          title="System ZUS"
           description="Ta część serwisu jest teraz wyłączona."
-          crumb="Symulacja ZUS"
+          crumb="System ZUS"
         />
         <Card className="mt-6">
           <CardHeader>
-            <CardTitle>Symulacje ZUS są wyłączone</CardTitle>
+            <CardTitle>System ZUS jest wyłączony</CardTitle>
             <CardDescription>
-              Włącza się je w panelu administracyjnym, bez wdrożenia nowej wersji serwisu.
+              Włącza się go w panelu administracyjnym, bez wdrożenia nowej wersji serwisu.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -597,19 +597,10 @@ export function ZusPage() {
   return (
     <PageContainer className="py-12 sm:py-16">
       <PageHeading
-        title="Symulacja ZUS"
-        description="Dane, które ZUS widzi na Twoim koncie, i wnioski, które można złożyć bez wizyty w urzędzie. Wszystko jest udawane, ale kroki są prawdziwe."
-        crumb="Symulacja ZUS"
+        title="System ZUS"
+        description="Dane, które ZUS widzi na Twoim koncie, i wnioski, które można złożyć bez wizyty w urzędzie."
+        crumb="System ZUS"
       />
-
-      <div className="mt-6 flex items-start gap-3 rounded-lg border border-gold/60 bg-gold/10 p-4 text-sm">
-        <ShieldCheck className="mt-0.5 size-5 shrink-0 text-gold-foreground" aria-hidden="true" />
-        <p>
-          Symulacja. Nie łączymy się z systemami ZUS ani nie wysyłamy żadnych wniosków. Dane
-          powstają na serwerze tej aplikacji, a Ty możesz zmieniać warianty i patrzeć, co się
-          dzieje.
-        </p>
-      </div>
 
       <div className="mt-8 space-y-5">
         <InsuranceSection

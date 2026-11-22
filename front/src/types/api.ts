@@ -35,7 +35,7 @@ export interface DemoAccount {
   citizen: Citizen
 }
 
-/** Symulacja ZUS: stan ubezpieczenia i zadłużenia na wybrany dzień. */
+/** System ZUS: stan ubezpieczenia i zadłużenia na wybrany dzień. */
 export interface ZusInsurance {
   insured: boolean
   payer: string

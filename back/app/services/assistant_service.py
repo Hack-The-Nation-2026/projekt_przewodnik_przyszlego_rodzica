@@ -185,7 +185,7 @@ TOPICS: tuple[Topic, ...] = (
                 description="Wyliczenie zasiłku z twoich danych.",
             ),
             AssistantLink(
-                label="Symulacja ZUS",
+                label="System ZUS",
                 href="/zus",
                 kind="page",
                 description="Ubezpieczenie, składki i zaległości na wybrany dzień.",
@@ -321,7 +321,7 @@ TOPICS: tuple[Topic, ...] = (
                 description="Podstawa wymiaru i wyliczenie zasiłku.",
             ),
             AssistantLink(
-                label="Symulacja ZUS",
+                label="System ZUS",
                 href="/zus",
                 kind="page",
                 description="Dane z ubezpieczenia, w tym podstawa wymiaru.",
@@ -612,7 +612,7 @@ TOPICS: tuple[Topic, ...] = (
         ),
         links=(
             AssistantLink(
-                label="Symulacja ZUS",
+                label="System ZUS",
                 href="/zus",
                 kind="page",
                 description="Ubezpieczenie, składki i zaległości na wybrany dzień.",
@@ -767,7 +767,7 @@ TOPICS: tuple[Topic, ...] = (
         ),
         links=(
             AssistantLink(
-                label="Symulacja ZUS",
+                label="System ZUS",
                 href="/zus",
                 kind="page",
                 description="Zaległości i ich wpływ na ubezpieczenie.",
@@ -819,7 +819,7 @@ TOPICS: tuple[Topic, ...] = (
         ),
         links=(
             AssistantLink(
-                label="Symulacja ZUS",
+                label="System ZUS",
                 href="/zus",
                 kind="page",
                 description="Dane z ZUS, w tym wpływ zwolnienia na zasiłek.",

@@ -61,7 +61,7 @@ class FeatureFlag(BaseModel):
 DEFAULT_FEATURES: list[FeatureFlag] = [
     FeatureFlag(
         key="zus_simulations",
-        label="Symulacje ZUS",
+        label="System ZUS",
         description="Ekran z ubezpieczeniem, zadłużeniem, e-ZLA i PUE/eZUS.",
     ),
     FeatureFlag(

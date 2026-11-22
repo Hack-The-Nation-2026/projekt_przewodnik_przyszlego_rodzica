@@ -1,4 +1,4 @@
-"""Symulacje ZUS: dane o ubezpieczeniu, składki, e-ZLA, PUE i akta urodzenia."""
+"""System ZUS: dane o ubezpieczeniu, składki, e-ZLA, PUE i akta urodzenia."""
 
 from fastapi import APIRouter
 
