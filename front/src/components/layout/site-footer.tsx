@@ -27,6 +27,7 @@ const COLUMNS = [
       { to: '/panel', label: 'Panel administracyjny' },
       { to: 'https://www.zus.pl', label: 'zus.pl' },
       { to: 'https://www.gov.pl/web/rodzina/urlop-rodzicielski', label: 'gov.pl' },
+      { to: 'https://www.pip.gov.pl/dla-pracodawcow/porady-prawne/rodzicielstwo', label: 'pip.gov.pl' },
     ],
   },
 ]
