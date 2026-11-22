@@ -10,15 +10,15 @@ export type CameraKey = {
 
 export type Scene = {
   id: string
-  /** Plik nagrania bez rozszerzenia, z katalogu public/clips. */
-  clip: string
+  /** Plik nagrania bez rozszerzenia, z katalogu public/clips. Nie ma go karta końcowa. */
+  clip?: string
   /** Początek i koniec wycinka w nagraniu, w sekundach. */
   from: number
   to: number
   /** Przyspieszenie nagrania. 1 = normalnie. */
   rate?: number
-  /** Kadr z telefonu pokazujemy w ramce, obok krótkiego opisu. */
-  kind?: 'screen' | 'mobile'
+  /** Kadr z telefonu pokazujemy w ramce, a karta końcowa nie ma nagrania. */
+  kind?: 'screen' | 'mobile' | 'outro'
   /** Tylko dla scen mobilnych: nagłówek i zdanie opisu. */
   title?: string
   caption?: string
@@ -30,8 +30,8 @@ export const scenes: Scene[] = [
   {
     id: 'home',
     clip: '01-main',
-    from: 3,
-    to: 10.3,
+    from: 3.7,
+    to: 11,
     rate: 1.5,
     // 4.87s
     camera: [
@@ -43,10 +43,10 @@ export const scenes: Scene[] = [
   {
     id: 'wejscie',
     clip: '01-main',
-    from: 10.7,
-    to: 16,
+    from: 11.4,
+    to: 17.1,
     rate: 1.5,
-    // 3.53s
+    // 3.8s
     camera: [
       { t: 0, z: 1.02, x: 960, y: 540 },
       { t: 3.4, z: 1.07, x: 930, y: 560 },
@@ -55,10 +55,10 @@ export const scenes: Scene[] = [
   {
     id: 'mobywatel',
     clip: '01-main',
-    from: 19.3,
-    to: 24.7,
+    from: 20.4,
+    to: 26.6,
     rate: 1.45,
-    // 3.72s
+    // 4.28s
     camera: [
       { t: 0, z: 1.04, x: 960, y: 540 },
       { t: 2.6, z: 1.12, x: 960, y: 520 },
@@ -68,10 +68,10 @@ export const scenes: Scene[] = [
   {
     id: 'dane',
     clip: '01-main',
-    from: 28,
-    to: 35.3,
+    from: 29.9,
+    to: 38.9,
     rate: 1.6,
-    // 4.56s
+    // 5.63s
     camera: [
       { t: 0, z: 1.03, x: 960, y: 520 },
       { t: 2.4, z: 1.3, x: 1350, y: 300 },
@@ -82,8 +82,8 @@ export const scenes: Scene[] = [
   {
     id: 'wywiad-role',
     clip: '01-main',
-    from: 39.2,
-    to: 43.45,
+    from: 42.8,
+    to: 47.05,
     rate: 1.25,
     // 3.4s
     camera: [
@@ -96,8 +96,8 @@ export const scenes: Scene[] = [
   {
     id: 'wywiad-praca',
     clip: '01-main',
-    from: 62.7,
-    to: 66.95,
+    from: 69.9,
+    to: 74.15,
     rate: 1.25,
     // 3.4s
     camera: [
@@ -110,8 +110,8 @@ export const scenes: Scene[] = [
   {
     id: 'wywiad-rodzic',
     clip: '01-main',
-    from: 73.8,
-    to: 78.05,
+    from: 82.8,
+    to: 87.05,
     rate: 1.25,
     // 3.4s
     camera: [
@@ -124,10 +124,10 @@ export const scenes: Scene[] = [
   {
     id: 'wynik',
     clip: '01-main',
-    from: 101.7,
-    to: 108.4,
+    from: 114.4,
+    to: 121.8,
     rate: 1.4,
-    // 4.79s
+    // 5.29s
     camera: [
       { t: 0, z: 1, x: 960, y: 540 },
       { t: 2.4, z: 1.06, x: 960, y: 430 },
@@ -137,10 +137,10 @@ export const scenes: Scene[] = [
   {
     id: 'dlaczego',
     clip: '01-main',
-    from: 109.9,
-    to: 115.2,
+    from: 123.3,
+    to: 129.7,
     rate: 1.5,
-    // 3.53s
+    // 4.27s
     camera: [
       { t: 0, z: 1.02, x: 960, y: 540 },
       { t: 2, z: 1.08, x: 960, y: 500 },
@@ -150,10 +150,10 @@ export const scenes: Scene[] = [
   {
     id: 'podzial',
     clip: '01-main',
-    from: 117.3,
-    to: 124.2,
+    from: 131.8,
+    to: 140.2,
     rate: 1.25,
-    // 5.52s
+    // 6.72s
     camera: [
       { t: 0, z: 1.03, x: 960, y: 470 },
       { t: 2.4, z: 1.13, x: 960, y: 460 },
@@ -164,10 +164,10 @@ export const scenes: Scene[] = [
   {
     id: 'dokumenty-karta',
     clip: '01-main',
-    from: 127.2,
-    to: 135.7,
+    from: 143.2,
+    to: 152.9,
     rate: 1.5,
-    // 5.67s
+    // 6.47s
     camera: [
       { t: 0, z: 1, x: 960, y: 540 },
       { t: 1.8, z: 1.1, x: 960, y: 470 },
@@ -177,10 +177,10 @@ export const scenes: Scene[] = [
   {
     id: 'dostepnosc',
     clip: '01-main',
-    from: 139.3,
-    to: 146,
+    from: 156.5,
+    to: 164.3,
     rate: 1.6,
-    // 4.19s
+    // 4.88s
     camera: [
       { t: 0, z: 1.02, x: 960, y: 470 },
       { t: 1.5, z: 1.3, x: 1320, y: 380 },
@@ -191,10 +191,10 @@ export const scenes: Scene[] = [
   {
     id: 'karta',
     clip: '01-main',
-    from: 158.9,
-    to: 166.4,
+    from: 177.3,
+    to: 185,
     rate: 1.6,
-    // 4.69s
+    // 4.81s
     camera: [
       { t: 0, z: 1, x: 960, y: 540 },
       { t: 2.2, z: 1.05, x: 900, y: 470 },
@@ -205,8 +205,8 @@ export const scenes: Scene[] = [
   {
     id: 'wnioski-lista',
     clip: '02-wnioski',
-    from: 37.6,
-    to: 44.5,
+    from: 44.6,
+    to: 51.5,
     rate: 1.5,
     // 4.6s
     camera: [
@@ -218,8 +218,8 @@ export const scenes: Scene[] = [
   {
     id: 'wnioski-pismo',
     clip: '02-wnioski',
-    from: 45,
-    to: 53,
+    from: 52,
+    to: 60,
     rate: 1.6,
     // 5s
     camera: [
@@ -231,8 +231,8 @@ export const scenes: Scene[] = [
   {
     id: 'dokumenty-lista',
     clip: '03-dokumenty',
-    from: 6.2,
-    to: 13.4,
+    from: 6.5,
+    to: 13.7,
     rate: 1.5,
     // 4.8s
     camera: [
@@ -245,8 +245,8 @@ export const scenes: Scene[] = [
   {
     id: 'dokumenty-kroki',
     clip: '03-dokumenty',
-    from: 14.4,
-    to: 23.5,
+    from: 14.7,
+    to: 23.8,
     rate: 1.75,
     // 5.2s
     camera: [
@@ -258,8 +258,8 @@ export const scenes: Scene[] = [
   {
     id: 'sprawy-skan',
     clip: '04-sprawy',
-    from: 7,
-    to: 18.2,
+    from: 7.9,
+    to: 19.1,
     rate: 1.6,
     // 7s
     camera: [
@@ -272,8 +272,8 @@ export const scenes: Scene[] = [
   {
     id: 'sprawy-porownanie',
     clip: '05-sprawy-porownanie',
-    from: 8.2,
-    to: 16.84,
+    from: 8.7,
+    to: 17.34,
     rate: 1.6,
     // 5.4s
     camera: [
@@ -285,8 +285,8 @@ export const scenes: Scene[] = [
   {
     id: 'zus-odpis',
     clip: '06-zus',
-    from: 27.2,
-    to: 34.02,
+    from: 27.3,
+    to: 34.12,
     rate: 1.55,
     // 4.4s
     camera: [
@@ -299,8 +299,8 @@ export const scenes: Scene[] = [
   {
     id: 'planowanie',
     clip: '07-planowanie',
-    from: 6.7,
-    to: 19.3,
+    from: 7.6,
+    to: 20.2,
     rate: 1.8,
     // 7s
     camera: [
@@ -313,8 +313,8 @@ export const scenes: Scene[] = [
   {
     id: 'urlop-formularz',
     clip: '08-urlop',
-    from: 6.6,
-    to: 14.42,
+    from: 7.4,
+    to: 15.22,
     rate: 1.7,
     // 4.6s
     camera: [
@@ -326,8 +326,8 @@ export const scenes: Scene[] = [
   {
     id: 'urlop-postep',
     clip: '08-urlop',
-    from: 20,
-    to: 29,
+    from: 20.8,
+    to: 29.8,
     rate: 1.8,
     // 5s
     camera: [
@@ -339,8 +339,8 @@ export const scenes: Scene[] = [
   {
     id: 'odwolanie-decyzja',
     clip: '09-odwolanie',
-    from: 7,
-    to: 15.16,
+    from: 7.5,
+    to: 15.66,
     rate: 1.7,
     // 4.8s
     camera: [
@@ -352,8 +352,8 @@ export const scenes: Scene[] = [
   {
     id: 'odwolanie-zarzuty',
     clip: '09-odwolanie',
-    from: 19.2,
-    to: 28.56,
+    from: 19.7,
+    to: 29.06,
     rate: 1.8,
     // 5.2s
     camera: [
@@ -365,8 +365,8 @@ export const scenes: Scene[] = [
   {
     id: 'wsparcie-karty',
     clip: '10-wsparcie',
-    from: 4.5,
-    to: 9.63,
+    from: 5.3,
+    to: 10.43,
     rate: 1.35,
     // 3.8s
     camera: [
@@ -378,8 +378,8 @@ export const scenes: Scene[] = [
   {
     id: 'wsparcie-pomoc',
     clip: '10-wsparcie',
-    from: 11.1,
-    to: 17.1,
+    from: 11.9,
+    to: 17.9,
     rate: 1.5,
     // 4s
     camera: [
@@ -391,8 +391,8 @@ export const scenes: Scene[] = [
   {
     id: 'panel',
     clip: '11-panel',
-    from: 6.6,
-    to: 13.64,
+    from: 7.5,
+    to: 14.54,
     rate: 1.6,
     // 4.4s
     camera: [
@@ -404,8 +404,8 @@ export const scenes: Scene[] = [
   {
     id: 'asystent-pytanie',
     clip: '12-asystent',
-    from: 9.3,
-    to: 17.3,
+    from: 9.9,
+    to: 17.9,
     rate: 1.6,
     // 5s
     camera: [
@@ -417,8 +417,8 @@ export const scenes: Scene[] = [
   {
     id: 'asystent-odpowiedz',
     clip: '12-asystent',
-    from: 20.1,
-    to: 29.28,
+    from: 20.7,
+    to: 29.88,
     rate: 1.7,
     // 5.4s
     camera: [
@@ -431,8 +431,8 @@ export const scenes: Scene[] = [
     id: 'mobile-home',
     kind: 'mobile',
     clip: '13-mobile-home',
-    from: 4.6,
-    to: 11.35,
+    from: 5.4,
+    to: 12.15,
     rate: 1.35,
     title: "Wejście i menu",
     caption: "Nagłówek zwija się do jednego przycisku, a nawigacja otwiera się jako lista pod nim.",
@@ -442,8 +442,8 @@ export const scenes: Scene[] = [
     id: 'mobile-swiadczenia',
     kind: 'mobile',
     clip: '14-mobile-swiadczenia',
-    from: 4.5,
-    to: 11.25,
+    from: 5.1,
+    to: 11.85,
     rate: 1.35,
     title: "Katalog świadczeń",
     caption: "Filtry skracają listę, a każda karta świadczenia mieści się w jednej kolumnie.",
@@ -453,8 +453,8 @@ export const scenes: Scene[] = [
     id: 'mobile-dokumenty',
     kind: 'mobile',
     clip: '17-mobile-dokumenty',
-    from: 5.7,
-    to: 13.82,
+    from: 5.8,
+    to: 13.92,
     rate: 1.45,
     title: "Kreator dokumentów",
     caption: "Ta sama lista wyboru i te same kroki, tylko w jednej kolumnie.",
@@ -464,8 +464,8 @@ export const scenes: Scene[] = [
     id: 'mobile-karta',
     kind: 'mobile',
     clip: '15-mobile-karta',
-    from: 6.7,
-    to: 14.54,
+    from: 7.3,
+    to: 15.14,
     rate: 1.4,
     title: "Karta uprawnień",
     caption: "Strona z kwotami i terminami, gotowa do pokazania w kadrach albo w ZUS.",
@@ -475,11 +475,18 @@ export const scenes: Scene[] = [
     id: 'mobile-asystent',
     kind: 'mobile',
     clip: '16-mobile-asystent',
-    from: 3.9,
-    to: 10.4,
+    from: 4.3,
+    to: 10.8,
     rate: 1.3,
     title: "Asystent w kieszeni",
     caption: "Pytanie zadane kciukiem, a odpowiedź prowadzi wprost na właściwy ekran.",
+    // 5s
+  },
+  {
+    id: 'outro',
+    kind: 'outro',
+    from: 0,
+    to: 5,
     // 5s
   },
 ]

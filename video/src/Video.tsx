@@ -3,6 +3,7 @@ import { scenes, sceneDuration } from './edl'
 import { AppFont } from './AppFont'
 import { ScreenScene } from './components/ScreenScene'
 import { MobileScene } from './components/MobileScene'
+import { OutroScene } from './components/OutroScene'
 import { theme } from './theme'
 
 /**
@@ -34,6 +35,8 @@ export function Video() {
         <Sequence key={scene.id} from={from} durationInFrames={duration} name={scene.id}>
           {scene.kind === 'mobile' ? (
             <MobileScene scene={scene} durationInFrames={duration} />
+          ) : scene.kind === 'outro' ? (
+            <OutroScene />
           ) : (
             <ScreenScene scene={scene} />
           )}

@@ -181,20 +181,27 @@ for (const scene of PLAN) {
   scenes.push({ ...scene, from, to, seconds: round((to - from) / (scene.rate ?? 1)) })
 }
 
+// Karta końcowa z adresem demo i kodem QR. Nie pochodzi z nagrania, więc ma własny
+// wymiar: pięć sekund na odczytanie kodu.
+const OUTRO_SECONDS = 5
+scenes.push({ id: 'outro', kind: 'outro', from: 0, to: OUTRO_SECONDS, seconds: OUTRO_SECONDS })
+
 const render = (scene) => {
   const camera = scene.camera ?? [{ t: 0, z: 1, x: 960, y: 540 }]
+  const framed = scene.kind === 'mobile' || scene.kind === 'outro'
   return [
     '  {',
     `    id: '${scene.id}',`,
     scene.kind === 'mobile' ? "    kind: 'mobile'," : null,
-    `    clip: '${scene.clip}',`,
+    scene.kind === 'outro' ? "    kind: 'outro'," : null,
+    scene.clip ? `    clip: '${scene.clip}',` : null,
     `    from: ${scene.from},`,
     `    to: ${scene.to},`,
     scene.rate && scene.rate !== 1 ? `    rate: ${scene.rate},` : null,
     scene.title ? `    title: ${JSON.stringify(scene.title)},` : null,
     scene.caption ? `    caption: ${JSON.stringify(scene.caption)},` : null,
     `    // ${scene.seconds}s`,
-    scene.kind === 'mobile'
+    framed
       ? null
       : `    camera: [\n${camera.map((key) => `      { t: ${key.t}, z: ${key.z}, x: ${key.x}, y: ${key.y} },`).join('\n')}\n    ],`,
     '  },',
@@ -215,15 +222,15 @@ const header = `export type CameraKey = {
 
 export type Scene = {
   id: string
-  /** Plik nagrania bez rozszerzenia, z katalogu public/clips. */
-  clip: string
+  /** Plik nagrania bez rozszerzenia, z katalogu public/clips. Nie ma go karta końcowa. */
+  clip?: string
   /** Początek i koniec wycinka w nagraniu, w sekundach. */
   from: number
   to: number
   /** Przyspieszenie nagrania. 1 = normalnie. */
   rate?: number
-  /** Kadr z telefonu pokazujemy w ramce, obok krótkiego opisu. */
-  kind?: 'screen' | 'mobile'
+  /** Kadr z telefonu pokazujemy w ramce, a karta końcowa nie ma nagrania. */
+  kind?: 'screen' | 'mobile' | 'outro'
   /** Tylko dla scen mobilnych: nagłówek i zdanie opisu. */
   title?: string
   caption?: string
@@ -244,6 +251,7 @@ await writeFile('src/edl.ts', header + scenes.map(render).join('\n') + '\n' + fo
 
 const byClip = {}
 for (const scene of scenes) {
+  if (!scene.clip) continue
   byClip[scene.clip] = (byClip[scene.clip] ?? 0) + scene.seconds
 }
 const total = scenes.reduce((sum, scene) => sum + scene.seconds, 0)
