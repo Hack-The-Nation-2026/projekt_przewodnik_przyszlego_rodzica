@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skrzydła Rodzica — prezentacja</title>
+<style>
+  /* Prezentacja zbudowana jak dokument urzędowy: biała kartka, granatowy tekst,
+     zieleń ZUS na liniach i nagłówkach. Jedna rodzina pisma, IBM Plex Sans,
+     ta sama co w serwisie. */
+  @font-face {
+    font-family: "IBM Plex Sans";
+    src: url("assets/plex-latin.woff2") format("woff2");
+    font-weight: 100 700;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: "IBM Plex Sans";
+    src: url("assets/plex-latin-ext.woff2") format("woff2");
+    font-weight: 100 700;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+
+  :root {
+    --paper: #ffffff;
+    --ink: #1d2b3a;
+    --soft: #5b6a63;
+    --green: #007834;
+    --deep: #00582a;
+    --gold: #e8a33d;
+    --rule: #dfe4e1;
+    --tint: #f3f7f4;
+    --font: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: #e9edeb;
+    color: var(--ink);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .stage { width: 1280px; height: 720px; position: relative; }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    height: 720px;
+    background: var(--paper);
+    padding: 66px 84px 76px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Numer strony i stopka to jedyne stałe elementy każdej planszy. */
+  .page-foot {
+    position: absolute;
+    left: 84px;
+    right: 84px;
+    bottom: 30px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    color: var(--soft);
+  }
+
+  h1, h2, h3 { margin: 0; font-weight: 700; letter-spacing: -0.015em; }
+  h1 { font-size: 78px; line-height: 1.02; }
+  h2 { font-size: 46px; line-height: 1.08; }
+  h3 { font-size: 23px; letter-spacing: -0.005em; }
+  p { margin: 0; }
+
+  .title-rule {
+    width: 76px;
+    height: 5px;
+    background: var(--green);
+    margin: 26px 0 28px;
+  }
+  .lead { font-size: 27px; line-height: 1.4; color: var(--soft); max-width: 46ch; }
+  .body { font-size: 23px; line-height: 1.5; max-width: 62ch; }
+  .body + .body { margin-top: 16px; }
+  strong { font-weight: 600; color: var(--ink); }
+
+  /* Tabela faktów: etykieta i wartość rozdzielone linią, jak w decyzji. */
+  .facts { width: 100%; border-collapse: collapse; }
+  .facts td { padding: 15px 0; border-top: 1px solid var(--rule); font-size: 23px; vertical-align: baseline; }
+  .facts tr:first-child td { border-top: 0; }
+  .facts td:first-child { color: var(--soft); }
+  .facts td:last-child { text-align: right; font-weight: 600; white-space: nowrap; }
+
+  .steps { list-style: none; margin: 0; padding: 0; counter-reset: step; }
+  .steps li {
+    counter-increment: step;
+    position: relative;
+    padding: 20px 0 20px 66px;
+    border-top: 1px solid var(--rule);
+    font-size: 23px;
+    line-height: 1.45;
+  }
+  .steps li:first-child { border-top: 0; }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--tint);
+    color: var(--deep);
+    font-weight: 600;
+    font-size: 19px;
+    display: grid;
+    place-items: center;
+  }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 54px; align-items: start; }
+
+  .note {
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    font-size: 19px;
+    color: var(--soft);
+    max-width: 78ch;
+  }
+
+  /* Plansza tytułowa */
+  .cover { padding: 0; }
+  .cover .panel {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 470px;
+    overflow: hidden;
+  }
+  .cover .panel img { width: 100%; height: 100%; object-fit: cover; }
+  .cover .inner { position: relative; z-index: 1; padding: 84px 0 0 84px; width: 790px; }
+  .cover .mark { display: flex; align-items: center; gap: 16px; color: var(--green); }
+  .cover .mark svg { width: 52px; height: 52px; }
+  .cover .mark span { font-size: 26px; font-weight: 600; letter-spacing: -0.01em; }
+  .cover h1 { margin-top: 54px; font-size: 72px; }
+  .cover .lead { margin-top: 26px; }
+  .cover .where { position: absolute; left: 84px; bottom: 84px; font-size: 19px; color: var(--soft); }
+  .cover .where b { display: block; color: var(--green); font-size: 22px; font-weight: 600; margin-top: 4px; }
+
+  .qr-row { display: flex; align-items: center; gap: 44px; margin-top: 40px; }
+  .qr-box { background: var(--tint); padding: 22px; border-radius: 4px; }
+  .qr-box img { width: 250px; height: 250px; display: block; }
+  .qr-copy { font-size: 26px; }
+  .qr-copy b { display: block; font-size: 34px; color: var(--green); font-weight: 700; margin-bottom: 14px; }
+  .qr-copy span { display: block; color: var(--soft); font-size: 21px; line-height: 1.5; margin-top: 8px; }
+
+  /* Ekran */
+  @media screen {
+    body { display: grid; place-items: center; }
+    .stage { transform: scale(var(--scale, 1)); box-shadow: 0 24px 70px rgba(29, 43, 58, 0.22); }
+    .slide { opacity: 0; pointer-events: none; }
+    .slide.is-active { opacity: 1; pointer-events: auto; }
+    .hint {
+      position: fixed;
+      left: 50%;
+      bottom: 14px;
+      transform: translateX(-50%);
+      font-size: 13px;
+      color: #7c8a83;
+      letter-spacing: 0.02em;
+    }
+  }
+
+  /* Druk: jedna plansza na stronę, bez skalowania i cieni. */
+  @page { size: 338.7mm 190.5mm; margin: 0; }
+  @media print {
+    body { background: #fff; display: block; }
+    .stage { transform: none !important; box-shadow: none; width: auto; height: auto; }
+    /* Każda plansza musi zostać własnym układem odniesienia, inaczej zdjęcie
+       z okładki rozciąga się na cały dokument i wchodzi na pozostałe strony. */
+    .slide { position: relative; opacity: 1 !important; break-after: page; page-break-after: always; }
+    .slide:last-child { break-after: auto; page-break-after: auto; }
+    .hint { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+
+  <!-- 1. Tytuł -->
+  <section class="slide cover is-active">
+    <div class="panel"><img src="assets/hero.jpg" alt="Rodzice z niemowlakiem"></div>
+    <div class="inner">
+      <div class="mark">
+        <svg viewBox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="M92.438 28.97C75.263 47.722 60.826 69.69 49.593 94L167.5 204.656l-12.78 13.625L41.905 112.407c-9.19 24.257-15.377 50.455-18.156 77.844l116.156 58.72l-8.437 16.686L22.312 210.47c-.963 24.45.777 49.666 5.437 75.155l100.53 8.313l-1.53 18.625l-94.97-7.844c.743 3.09 1.515 6.185 2.345 9.28c4.43 16.51 9.94 32.34 16.375 47.438c8.757-1.615 17.808-3.274 27.813-5.157c26.754-5.033 53.093-10.06 53.093-10.06l3.5 18.342s-26.368 5.054-53.156 10.094c-8.012 1.508-15.797 2.97-23.188 4.344c8.65 17.507 18.62 33.887 29.657 49l60.843-34.28L158.22 410l-58.407 32.938c12.202 14.79 25.482 28.186 39.624 40l17.157-20.344c1.38-20.537 4.963-37.725 14.375-51.72c6.338-9.425 15.44-16.826 27.155-21.937C189.86 376.115 183.3 361.62 179 345.594c-14.526-54.15.58-108.49 36.406-138.094L92.436 28.97zm238.405-28.97L300.314 207.5c35.826 29.604 50.964 83.943 36.437 138.094c-4.26 15.877-10.768 30.237-18.938 42.97c12.345 5.384 21.554 13.502 27.5 23.655c7.81 13.333 10.495 29.117 11.407 47.467l19.592 23.25c14.14-11.813 27.423-25.208 39.625-40L357.5 410l9.188-16.28L427.53 428c11.04-15.117 21.006-31.49 29.658-49c-7.4-1.374-15.207-2.836-23.22-4.344c-26.787-5.04-53.156-10.094-53.156-10.094l3.5-18.343s26.372 5.027 53.125 10.06a8378 8378 0 0 0 27.813 5.19a357 357 0 0 0 16.375-47.47c.83-3.095 1.602-6.19 2.344-9.28L389 312.56l-1.53-18.625l100.53-8.31c4.66-25.49 6.37-50.705 5.406-75.156L384.25 265.655l-8.438-16.687L492 190.25c-2.783-27.4-8.956-53.61-18.156-77.875L361.03 218.28l-12.81-13.624L466.124 94c-11.236-24.31-25.668-46.277-42.844-65.03z"/></svg>
+        <span>Skrzydła Rodzica</span>
+      </div>
+      <h1>Zasiłkowy Przewodnik Przyszłego Rodzica</h1>
+      <p class="lead">Rodzic odpowiada na kilka pytań i widzi, co mu przysługuje, przez ile dni, w jakiej kwocie i gdzie złożyć wniosek.</p>
+    </div>
+    <div class="where">
+      HackNation 2026, wyzwanie ZUS
+      <b>skrzydla-rodzica.vercel.app</b>
+    </div>
+  </section>
+
+  <!-- 2. Problem -->
+  <section class="slide">
+    <h2>Rodzic poznaje swoje uprawnienia po porodzie</h2>
+    <div class="title-rule"></div>
+    <p class="body">ZUS nie ma danych o ciąży przed narodzinami dziecka, więc uprawnień nie da się sprawdzić wcześniej. Rodzic zbiera informacje z ustawy, Poradnika ZUS, formularzy i stron pracodawcy, a wniosek złożony w złym terminie albo bez załącznika wraca.</p>
+    <table class="facts" style="margin-top: 30px">
+      <tr><td>Niepewność</td><td>wymiar i kwotę rodzic poznaje dopiero z decyzji</td></tr>
+      <tr><td>Korespondencja</td><td>braki w dokumentach wydłużają postępowanie po obu stronach</td></tr>
+      <tr><td>Spory</td><td>część spraw trafia do odwołań z powodu braku informacji</td></tr>
+    </table>
+    <p class="note">Wyzwanie stawia wprost cel: rodzic ma wiedzieć wcześniej i składać kompletne wnioski.</p>
+  </section>
+
+  <!-- 3. Rozwiązanie -->
+  <section class="slide">
+    <h2>Jedna rozmowa zamiast kilku źródeł</h2>
+    <div class="title-rule"></div>
+    <p class="lead">Pod wywiadem siedzi silnik reguł i zestaw dokumentów, więc wynik nie zależy od tego, czy model językowy akurat dobrze zgadnie.</p>
+    <ol class="steps" style="margin-top: 26px">
+      <li><strong>Wywiad.</strong> Kilka pytań o datę porodu, zatrudnienie, podstawę wymiaru i drugiego rodzica.</li>
+      <li><strong>Wyliczenie.</strong> Wymiar w tygodniach, kwota i okres wypłaty dla każdego świadczenia, osobno dla obojga rodziców.</li>
+      <li><strong>Dokumenty.</strong> Formularz, załączniki, termin i miejsce złożenia, gotowe do wydruku albo do kalendarza.</li>
+    </ol>
+  </section>
+
+  <!-- 4. Silnik reguł -->
+  <section class="slide">
+    <h2>Kwoty liczy silnik reguł, nie model językowy</h2>
+    <div class="title-rule"></div>
+    <div class="split">
+      <div>
+        <p class="body">W pliku <strong>RULES.md</strong> leży 85 reguł, każda z odesłaniem do ustawy zasiłkowej albo Kodeksu pracy i do materiałów ZUS. Testy sprawdzają każdą z osobna, a reguły, których nie modelujemy, mają wypisany powód.</p>
+      </div>
+      <table class="facts">
+        <tr><td>Zasiłek macierzyński</td><td>100% podstawy</td></tr>
+        <tr><td>Urlop rodzicielski</td><td>70% podstawy</td></tr>
+        <tr><td>Wniosek w 21 dni po porodzie</td><td>81,5% za całość</td></tr>
+        <tr><td>Urlop macierzyński</td><td>20 do 37 tygodni</td></tr>
+        <tr><td>Urlop rodzicielski</td><td>41 albo 43 tygodnie</td></tr>
+        <tr><td>Urlop ojcowski</td><td>2 tygodnie</td></tr>
+      </table>
+    </div>
+    <p class="note">Podstawa wymiaru nie schodzi poniżej minimum z art. 45 ustawy zasiłkowej, a przy niepełnym etacie spada proporcjonalnie.</p>
+  </section>
+
+  <!-- 5. Oboje rodziców -->
+  <section class="slide">
+    <h2>Oboje rodziców w jednym wyliczeniu</h2>
+    <div class="title-rule"></div>
+    <div class="split">
+      <div>
+        <p class="body">Rodzicielski to wspólna pula <strong>41 albo 43 tygodni</strong>, z których po <strong>9 tygodni</strong> jest nieprzenoszalnych dla każdego z rodziców.</p>
+        <p class="body" style="margin-top: 16px">Wynik liczymy osobno dla matki i ojca, a podział urlopu ustawia się suwakiem na wspólnej puli.</p>
+      </div>
+      <div>
+        <p class="body">Łączenie urlopu rodzicielskiego z pracą wydłuża urlop proporcjonalnie do wymiaru pracy i zmniejsza zasiłek za czas pracy. Kalkulator pokazuje oba efekty naraz: dłuższy urlop i niższą kwotę za ten okres.</p>
+      </div>
+    </div>
+    <p class="note">Wariant z wnioskiem złożonym do 21 dni po porodzie liczymy jako 81,5% za całość, z wyjątkiem 9 tygodni drugiego rodzica, które zostają na 70%.</p>
+  </section>
+
+  <!-- 6. Adopcja i Za życiem -->
+  <section class="slide">
+    <h2>Przyjęcie dziecka i zaświadczenie „Za życiem”</h2>
+    <div class="title-rule"></div>
+    <p class="body">Adopcja i rodzina zastępcza niezawodowa mają własną ścieżkę: urlop na warunkach macierzyńskiego od 20 do 37 tygodni, ale nie krócej niż 9 tygodni, a rodzicielski 41 albo 43 tygodnie, przy starszym dziecku 38 tygodni.</p>
+    <p class="body">Zaświadczenie „Za życiem” podnosi rodzicielski do <strong>65 tygodni</strong> przy jednym dziecku i <strong>67</strong> przy więcej niż jednym.</p>
+    <p class="note">Uzupełniający urlop macierzyński liczymy także wtedy, gdy pobyt dziecka w szpitalu wypadł po przyjęciu na wychowanie, a nie tylko po porodzie.</p>
+  </section>
+
+  <!-- 7. Dokumenty -->
+  <section class="slide">
+    <h2>Dokumenty, terminy i miejsce złożenia</h2>
+    <div class="title-rule"></div>
+    <p class="body">Dla każdego świadczenia podajemy formularz, załączniki, termin i adresata: pracodawcę albo ZUS, zależnie od tego, kto wypłaca zasiłek.</p>
+    <table class="facts" style="margin-top: 26px">
+      <tr><td>Szkic wniosku</td><td>gotowy tekst do pobrania i wydruku</td></tr>
+      <tr><td>Terminy</td><td>plik .ics, który wchodzi do kalendarza</td></tr>
+      <tr><td>Karta uprawnień</td><td>jedna strona z kwotami i terminami, do pokazania w ZUS</td></tr>
+      <tr><td>Kreator wniosków</td><td>prowadzi przez pytania i składa gotowy dokument</td></tr>
+    </table>
+  </section>
+
+  <!-- 8. Sprawy i system ZUS -->
+  <section class="slide">
+    <h2>Sprawa z zestawu przykładowego ZUS</h2>
+    <div class="title-rule"></div>
+    <p class="body">Na stronie Sprawy wgrywasz jeden z <strong>87 przykładowych wniosków</strong>. Sprawę rozpoznajemy po odcisku pliku, a PDF zostaje na urządzeniu i nie idzie na serwer. Strona pokazuje weryfikację ubezpieczenia, wyliczenie i porównanie z decyzją zapisaną w materiale.</p>
+    <p class="body">Obok tego stoją symulacje: logowanie przez mObywatela, dane o ubezpieczeniu i możliwość wpisania własnych, stan zadłużenia ze składek, podgląd e-ZLA, konto PUE/eZUS i wniosek o odpis aktu urodzenia.</p>
+    <p class="note">Wszystkie 87 zestawów z materiałów rozpoznajemy po SHA-256; rozpoznanie działa też po nazwie pliku, gdy skan został zapisany ponownie.</p>
+  </section>
+
+  <!-- 9. AI i rozwiązania zewnętrzne -->
+  <section class="slide">
+    <h2>Co robi model językowy, a co silnik reguł</h2>
+    <div class="title-rule"></div>
+    <div class="split">
+      <div>
+        <h3>Model językowy</h3>
+        <p class="body" style="margin-top: 12px">Asystent nawigacyjny prowadzi rozmowę, rozpoznaje pytanie i wskazuje ekran. Bez klucza API odpowiada z katalogu tematów.</p>
+      </div>
+      <div>
+        <h3>Silnik reguł</h3>
+        <p class="body" style="margin-top: 12px">Kwoty, wymiary i terminy liczy wyłącznie silnik z RULES.md. Model ich nie liczy i nie wymyśla.</p>
+      </div>
+    </div>
+    <p class="note">Rozwiązania zewnętrzne wskazujemy w CREDITS.md: zdjęcia z Pexels, ikona Lorc z game-icons.net (CC BY 3.0), krój IBM Plex Sans (OFL), lucide-react i Radix UI.</p>
+  </section>
+
+  <!-- 10. Demo -->
+  <section class="slide">
+    <h2>Zobacz na żywo</h2>
+    <div class="title-rule"></div>
+    <div class="qr-row">
+      <div class="qr-box"><img src="assets/qr.png" alt="Kod QR do skrzydla-rodzica.vercel.app"></div>
+      <div class="qr-copy">
+        <b>skrzydla-rodzica.vercel.app</b>
+        Zeskanuj kod albo wpisz adres. Demo działa na telefonie i na komputerze.
+        <span>Kod źródłowy: github.com/Hack-The-Nation-2026/projekt_przewodnik_przyszlego_rodzica</span>
+      </div>
+    </div>
+    <p class="note">Film z przejściem przez serwis leży w repozytorium w katalogu video/out/.</p>
+  </section>
+
+</div>
+<div class="hint">← → zmienia planszę · Ctrl+P zapisuje PDF</div>
+<script>
+  const stage = document.getElementById('stage')
+  const slides = [...document.querySelectorAll('.slide')]
+  let index = 0
+
+  function fit() {
+    const scale = Math.min(window.innerWidth / 1300, (window.innerHeight - 40) / 740)
+    stage.style.setProperty('--scale', String(Math.max(0.2, scale)))
+  }
+
+  function show(next) {
+    index = (next + slides.length) % slides.length
+    slides.forEach((slide, i) => slide.classList.toggle('is-active', i === index))
+  }
+
+  window.addEventListener('resize', fit)
+  window.addEventListener('keydown', (event) => {
+    if (['ArrowRight', 'PageDown', ' '].includes(event.key)) { show(index + 1); event.preventDefault() }
+    if (['ArrowLeft', 'PageUp'].includes(event.key)) { show(index - 1); event.preventDefault() }
+    if (event.key === 'Home') show(0)
+    if (event.key === 'End') show(slides.length - 1)
+  })
+  stage.addEventListener('click', (event) => {
+    show(index + (event.clientX < window.innerWidth / 2 ? -1 : 1))
+  })
+
+  fit()
+  show(0)
+</script>
+</body>
+</html>
