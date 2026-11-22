@@ -5,6 +5,7 @@ import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { ChoiceSelect } from '@/components/ui/choice-select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Term } from '@/components/glossary/term'
@@ -76,44 +77,40 @@ export function OdwolaniePage() {
         </CardHeader>
         <CardContent className="grid gap-4 sm:grid-cols-2">
           <Field id="od-benefit" label="Jakiej sprawy dotyczy decyzja" hint="Wybierz świadczenie, którego dotyczy odmowa.">
-            <select
+            <ChoiceSelect
               id="od-benefit"
-              className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
               value={answers.benefit}
-              onChange={(event) => update({ benefit: event.target.value as BenefitCode })}
-            >
-              {(Object.keys(benefitList) as BenefitCode[]).map((code) => (
-                <option key={code} value={code}>{benefitList[code].name}</option>
-              ))}
-            </select>
+              onValueChange={(value) => update({ benefit: value as BenefitCode })}
+              choices={(Object.keys(benefitList) as BenefitCode[]).map(
+                (code) => [code, benefitList[code].name] as const,
+              )}
+            />
           </Field>
           <Field id="od-delivered" label="Data doręczenia decyzji" hint="Data z potwierdzenia odbioru albo z daty na kopercie, nie data wystawienia.">
             <Input id="od-delivered" type="date" value={answers.deliveredOn}
               onChange={(event) => update({ deliveredOn: event.target.value })} />
           </Field>
           <Field id="od-ground" label="Jaki powód podał ZUS" hint="Przepisz powód z uzasadnienia decyzji. Od niego zależą zarzuty i lista dokumentów.">
-            <select
+            <ChoiceSelect
               id="od-ground"
-              className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
               value={answers.ground}
-              onChange={(event) => update({ ground: event.target.value as DisputeGround })}
-            >
-              {(Object.keys(groundLabels) as DisputeGround[]).map((key) => (
-                <option key={key} value={key}>{groundLabels[key]}</option>
-              ))}
-            </select>
+              onValueChange={(value) => update({ ground: value as DisputeGround })}
+              choices={(Object.keys(groundLabels) as DisputeGround[]).map(
+                (key) => [key, groundLabels[key]] as const,
+              )}
+            />
           </Field>
           <Field id="od-documents" label="Czy masz komplet dokumentów, które wtedy składałeś" hint="Jeśli nie, lista dokumentów dostanie osobną sekcję z uzupełnieniem.">
-            <select
+            <ChoiceSelect
               id="od-documents"
-              className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
               value={answers.documents}
-              onChange={(event) => update({ documents: event.target.value as AppealAnswers['documents'] })}
-            >
-              <option value="unknown">Nie wiem</option>
-              <option value="yes">Tak, komplet</option>
-              <option value="no">Nie, brakuje dokumentów</option>
-            </select>
+              onValueChange={(value) => update({ documents: value as AppealAnswers['documents'] })}
+              choices={[
+                ['unknown', 'Nie wiem'],
+                ['yes', 'Tak, komplet'],
+                ['no', 'Nie, brakuje dokumentów'],
+              ]}
+            />
           </Field>
           <Field id="od-number" label="Numer decyzji" hint="Znajdziesz go w prawym górnym rogu decyzji. Możesz zostawić puste.">
             <Input id="od-number" value={answers.decisionNumber} maxLength={60}

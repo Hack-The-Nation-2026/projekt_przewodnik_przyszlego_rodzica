@@ -5,6 +5,7 @@ import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { ChoiceSelect } from '@/components/ui/choice-select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { downloadIcs } from '@/lib/calendar'
@@ -101,57 +102,57 @@ export function PlanowaniePage() {
         </CardHeader>
         <CardContent className="grid gap-4 sm:grid-cols-2">
           <Question id="pl-employment" label="Forma zatrudnienia" hint="To, co masz teraz, a nie to, co planujesz.">
-            <select
+            <ChoiceSelect
               id="pl-employment"
-              className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
               value={answers.employment}
-              onChange={(event) => update({ employment: event.target.value as PlanningAnswers['employment'] })}
-            >
-              <option value="unknown">Nie wiem</option>
-              <option value="employee">Umowa o pracę</option>
-              <option value="contractor">Umowa zlecenia</option>
-              <option value="self_employed">Działalność gospodarcza</option>
-              <option value="other">Inny tytuł ubezpieczenia</option>
-            </select>
+              onValueChange={(value) => update({ employment: value as PlanningAnswers['employment'] })}
+              choices={[
+                ['unknown', 'Nie wiem'],
+                ['employee', 'Umowa o pracę'],
+                ['contractor', 'Umowa zlecenia'],
+                ['self_employed', 'Działalność gospodarcza'],
+                ['other', 'Inny tytuł ubezpieczenia'],
+              ]}
+            />
           </Question>
           <Question id="pl-payer" label="Czy płatnik zgłasza Cię do ubezpieczenia chorobowego?" hint="Przy umowie zlecenia zdarza się, że zgłoszenia nie ma.">
-            <select
+            <ChoiceSelect
               id="pl-payer"
-              className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
               value={answers.payerReports}
-              onChange={(event) => update({ payerReports: event.target.value as PlanningAnswers['payerReports'] })}
-            >
-              <option value="unknown">Nie wiem</option>
-              <option value="yes">Tak, zgłasza</option>
-              <option value="no">Nie zgłasza</option>
-            </select>
+              onValueChange={(value) => update({ payerReports: value as PlanningAnswers['payerReports'] })}
+              choices={[
+                ['unknown', 'Nie wiem'],
+                ['yes', 'Tak, zgłasza'],
+                ['no', 'Nie zgłasza'],
+              ]}
+            />
           </Question>
           <Question id="pl-gaps" label="Przerwy w ubezpieczeniu w ostatnich dwóch latach" hint="Przerwa w ubezpieczeniu chorobowym skraca wymiar świadczeń.">
-            <select
+            <ChoiceSelect
               id="pl-gaps"
-              className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
               value={answers.insuranceGaps}
-              onChange={(event) => update({ insuranceGaps: event.target.value as PlanningAnswers['insuranceGaps'] })}
-            >
-              <option value="unknown">Nie wiem</option>
-              <option value="none">Żadnych przerw</option>
-              <option value="short">Krótka przerwa</option>
-              <option value="long">Dłuższa przerwa</option>
-            </select>
+              onValueChange={(value) => update({ insuranceGaps: value as PlanningAnswers['insuranceGaps'] })}
+              choices={[
+                ['unknown', 'Nie wiem'],
+                ['none', 'Żadnych przerw'],
+                ['short', 'Krótka przerwa'],
+                ['long', 'Dłuższa przerwa'],
+              ]}
+            />
           </Question>
           <Question id="pl-business" label="Działalność gospodarcza i zaległości" hint="Zaległości wobec ZUS mogą pozbawić prawa do świadczenia.">
-            <select
+            <ChoiceSelect
               id="pl-business"
-              className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
               value={answers.business}
-              onChange={(event) => update({ business: event.target.value as PlanningAnswers['business'] })}
-            >
-              <option value="none">Nie prowadzę działalności</option>
-              <option value="not_started">Dopiero zamierzam zacząć</option>
-              <option value="active">Prowadzę, bez zaległości</option>
-              <option value="active_arrears">Prowadzę, mam zaległości</option>
-              <option value="unknown">Nie wiem</option>
-            </select>
+              onValueChange={(value) => update({ business: value as PlanningAnswers['business'] })}
+              choices={[
+                ['none', 'Nie prowadzę działalności'],
+                ['not_started', 'Dopiero zamierzam zacząć'],
+                ['active', 'Prowadzę, bez zaległości'],
+                ['active_arrears', 'Prowadzę, mam zaległości'],
+                ['unknown', 'Nie wiem'],
+              ]}
+            />
           </Question>
           <Question id="pl-horizon" label="Za ile miesięcy planujesz dziecko" hint="Podaj przybliżenie, na przykład 12. To ustawia punkt kontrolny w kalendarzu, nie termin ustawowy.">
             <Input

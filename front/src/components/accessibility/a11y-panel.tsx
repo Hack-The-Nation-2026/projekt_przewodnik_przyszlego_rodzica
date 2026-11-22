@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Accessibility, BookOpen, Contrast, PersonStanding, RotateCcw, Type, Volume2, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { ChoiceSelect } from '@/components/ui/choice-select'
 import { Label } from '@/components/ui/label'
 import { TEXT_SCALE_LABELS } from '@/lib/accessibility'
 import type { TextScale } from '@/lib/accessibility'
@@ -148,18 +149,15 @@ export function A11yPanel() {
             </Row>
 
             <Row icon={Type} title="Rozmiar tekstu" description="Skaluje całą stronę, nie tylko akapity.">
-              <select
-                aria-label="Rozmiar tekstu"
-                className="h-9 rounded-md border border-input bg-background px-2 text-sm"
+              <ChoiceSelect
+                ariaLabel="Rozmiar tekstu"
+                className="h-9 w-44"
                 value={settings.textScale}
-                onChange={(event) => update({ textScale: event.target.value as TextScale })}
-              >
-                {(Object.keys(TEXT_SCALE_LABELS) as TextScale[]).map((scale) => (
-                  <option key={scale} value={scale}>
-                    {TEXT_SCALE_LABELS[scale]}
-                  </option>
-                ))}
-              </select>
+                onValueChange={(value) => update({ textScale: value as TextScale })}
+                choices={(Object.keys(TEXT_SCALE_LABELS) as TextScale[]).map(
+                  (scale) => [scale, TEXT_SCALE_LABELS[scale]] as const,
+                )}
+              />
             </Row>
           </div>
 

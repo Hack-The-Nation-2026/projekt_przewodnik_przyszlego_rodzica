@@ -7,6 +7,7 @@ import { PageHeading } from '@/components/layout/page-heading'
 import { WeekTimeline } from '@/components/week-timeline'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { ChoiceSelect } from '@/components/ui/choice-select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { api } from '@/lib/api'
@@ -151,34 +152,32 @@ export function UrlopPage() {
                 onChange={(event) => update({ leaveStart: event.target.value })} />
             </Field>
             <Field id="p-current" label="Który urlop jest brany teraz" hint="Macierzyński, uzupełniający czy rodzicielski.">
-              <select
+              <ChoiceSelect
                 id="p-current"
-                className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
                 value={answers.current}
-                onChange={(event) => update({ current: event.target.value as LeaveProgressAnswers['current'] })}
-              >
-                {(Object.keys(currentLabels) as LeaveProgressAnswers['current'][]).map((key) => (
-                  <option key={key} value={key}>{currentLabels[key]}</option>
-                ))}
-              </select>
+                onValueChange={(value) => update({ current: value as LeaveProgressAnswers['current'] })}
+                choices={(Object.keys(currentLabels) as LeaveProgressAnswers['current'][]).map(
+                  (key) => [key, currentLabels[key]] as const,
+                )}
+              />
             </Field>
             <Field id="p-basis" label="Podstawa wymiaru" hint="Kwota z zaświadczenia od pracodawcy, w złotych. Bez niej nie policzymy kwot.">
               <Input id="p-basis" inputMode="decimal" value={answers.basis}
                 onChange={(event) => update({ basis: event.target.value })} />
             </Field>
             <Field id="p-partner" label="Drugi rodzic" hint="Jeśli nie wiesz, zostaw „Nie wiem”. Wtedy nie policzymy jego tygodni.">
-              <select
+              <ChoiceSelect
                 id="p-partner"
-                className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
                 value={answers.partnerEmployment}
-                onChange={(event) => update({ partnerEmployment: event.target.value as LeaveProgressAnswers['partnerEmployment'] })}
-              >
-                <option value="unknown">Nie wiem</option>
-                <option value="employee">Umowa o pracę</option>
-                <option value="contractor">Umowa zlecenia</option>
-                <option value="self_employed">Działalność gospodarcza</option>
-                <option value="other">Inny tytuł ubezpieczenia</option>
-              </select>
+                onValueChange={(value) => update({ partnerEmployment: value as LeaveProgressAnswers['partnerEmployment'] })}
+                choices={[
+                  ['unknown', 'Nie wiem'],
+                  ['employee', 'Umowa o pracę'],
+                  ['contractor', 'Umowa zlecenia'],
+                  ['self_employed', 'Działalność gospodarcza'],
+                  ['other', 'Inny tytuł ubezpieczenia'],
+                ]}
+              />
             </Field>
             <Field id="p-partner-days" label="Ile dni urlopu drugi rodzic już wykorzystał" hint="Liczba dni od początku jego urlopu. Wpisz 0, jeśli jeszcze nic.">
               <Input id="p-partner-days" inputMode="numeric" value={answers.partnerDaysUsed}

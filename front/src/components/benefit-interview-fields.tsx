@@ -2,6 +2,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 import type { FieldPath } from 'react-hook-form'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
+import { ChoiceSelect } from '@/components/ui/choice-select'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { InfoHint } from '@/components/ui/info-hint'
 import { Input } from '@/components/ui/input'
@@ -11,7 +12,6 @@ import type { InterviewValues } from '@/lib/interview-form'
 type Choice = readonly [value: string, label: string]
 
 const answers = [['unknown', 'Nie wiem'], ['yes', 'Tak'], ['no', 'Nie']] as const
-const selectClass = 'h-10 w-full rounded-md border border-input bg-background px-3 text-base shadow-sm'
 const fieldsGrid = 'grid gap-5 sm:grid-cols-2'
 
 function Field({
@@ -44,9 +44,12 @@ function Field({
           </div>
           <FormControl>
             {choices ? (
-              <select {...field} value={String(field.value)} className={selectClass}>
-                {choices.map(([value, title]) => <option key={value} value={value}>{title}</option>)}
-              </select>
+              <ChoiceSelect
+                value={String(field.value)}
+                onValueChange={field.onChange}
+                choices={choices}
+                field={String(name)}
+              />
             ) : (
               <Input {...field} value={String(field.value)} type={type} inputMode={inputMode} />
             )}
