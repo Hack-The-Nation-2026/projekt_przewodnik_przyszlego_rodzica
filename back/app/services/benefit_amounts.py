@@ -8,6 +8,12 @@ from app.schemas.benefit_calculation import BenefitAssessment, Parent, PaymentPe
 
 DAY = timedelta(days=1)
 
+# L9: podstawa wymiaru zasiłku pracownika w pełnym wymiarze czasu pracy nie może być niższa
+# od minimalnego wynagrodzenia po odliczeniu 13,71%. Przy płacy minimalnej 4806 zł daje to
+# 4147,10 zł. To nasze wyliczenie, bo załącznik podaje tylko kwotę 4806 zł i stopę 13,71%
+# (RULES.md, wiersz L9).
+MINIMUM_MONTHLY_BASIS_GROSZE = 414_710
+
 
 def anniversary(day: date, years: int) -> date:
     year = day.year + years
@@ -22,6 +28,12 @@ def monthly_basis(person: Person) -> int | None:
     basis = person.monthly_basis_grosze
     if basis is None and person.fixed_monthly_gross_grosze is not None:
         basis = rounded_grosze(Decimal(person.fixed_monthly_gross_grosze) * Decimal("0.8629"))
+    if basis is not None and person.employment == "employee":
+        # L9: przy niepełnym wymiarze czasu pracy minimum spada proporcjonalnie.
+        floor = rounded_grosze(
+            Decimal(MINIMUM_MONTHLY_BASIS_GROSZE) * person.contractual_work_percent / Decimal(100)
+        )
+        basis = max(basis, floor)
     if basis is not None and person.post_insurance_basis_cap_grosze is not None:
         basis = min(basis, person.post_insurance_basis_cap_grosze)
     return basis

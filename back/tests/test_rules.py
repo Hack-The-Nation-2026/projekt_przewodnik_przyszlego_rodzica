@@ -963,13 +963,27 @@ def test_l6_fixed_gross_loses_13_71_percent() -> None:
 
 out("L7", "Uzupełnianie wynagrodzenia za niepełny miesiąc nie jest liczone.")
 out("L8", "Premie, nagrody i składniki roczne nie mają wejścia w formularzu.")
-out("L9", "Minimalna podstawa 4147,10 zł nie jest wymuszana.")
+
+
+@rule("L9")
+def test_l9_basis_never_drops_below_the_minimum() -> None:
+    full_time = maternal(first_parent=person(monthly_basis_grosze=200_000))
+    assert full_time.monthly_basis_grosze == 414_710
+    part_time = maternal(
+        first_parent=person(monthly_basis_grosze=200_000, contractual_work_percent=50)
+    )
+    assert part_time.monthly_basis_grosze == 207_355
+
+
 @rule("L10")
 def test_l10_cap_for_non_employees() -> None:
     assessment = maternal(
-        first_parent=person(post_insurance_basis_cap_grosze=203_213),
+        first_parent=person(
+            monthly_basis_grosze=2_500_000,
+            post_insurance_basis_cap_grosze=2_032_130,
+        )
     )
-    assert assessment.monthly_basis_grosze == 203_213
+    assert assessment.monthly_basis_grosze == 2_032_130
 
 
 out("L11", "Wspólne zasady podstawy działają przez jedno wejście dla wszystkich świadczeń.")

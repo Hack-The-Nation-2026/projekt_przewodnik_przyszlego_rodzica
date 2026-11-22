@@ -21,7 +21,7 @@ def family(claims, **changes):
         "family": {
             "event_date": BIRTH,
             "first_parent": EMPLOYEE,
-            "second_parent": {**EMPLOYEE, "monthly_basis_grosze": 300_000},
+            "second_parent": {**EMPLOYEE, "monthly_basis_grosze": 450_000},
             "claims": claims,
             **changes,
         }
@@ -69,7 +69,7 @@ def test_parental_pool_and_two_bases_with_averaged_maternity_rate():
     assert first.gross_grosze == 224 * 16_300
     assert (second.days, second.denied_days, second.status) == (63, 7, "partially_granted")
     assert second.periods[0].rate_percent == 70
-    assert second.gross_grosze == 63 * 7_000
+    assert second.gross_grosze == 63 * 10_500
     assert result.parental_pool.remaining_days_by_parent == {"first_parent": 0, "second_parent": 0}
 
 
