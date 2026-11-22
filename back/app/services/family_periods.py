@@ -203,13 +203,15 @@ def supplemental_days(plan: FamilyPlan, event: FamilyEvent) -> tuple[int, str]:
         window_days, first_offset, rule = 56, 5, "E3"
 
     counts = []
+    # Przy porodzie okno biegnie od dnia porodu, a przy przyjęciu dziecka od dnia
+    # przyjęcia, bo wlicza się tylko pobyt, który miał miejsce po przyjęciu
+    # (KP art. 183 § 3¹). Wcześniej liczyliśmy je od urodzenia, więc przy starszym
+    # dziecku całe okno wypadało w przeszłości i wychodziło 0 dni.
+    anchor = event.date
     for child in event.children:
-        birth = event.date if plan.event == "birth" else child.birth_date
-        if birth is None:
-            continue
-        start = max(event.date, birth + DAY * first_offset)
-        days = _hospital_days(child, start, birth + DAY * window_days)
-        if rule == "E3" and not any(day <= birth + DAY * 28 and day + DAY in days for day in days):
+        start = max(anchor, anchor + DAY * first_offset)
+        days = _hospital_days(child, start, anchor + DAY * window_days)
+        if rule == "E3" and not any(day <= anchor + DAY * 28 and day + DAY in days for day in days):
             continue
         counts.append(len(days))
 

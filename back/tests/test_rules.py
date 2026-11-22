@@ -525,11 +525,23 @@ def test_f7_parental_parts_are_limited() -> None:
     assert plan[("rodzicielski", "first_parent")].reason_code == "parental_parts_limit"
 
 
-out(
-    "F8",
-    "Okno hospitalizacji liczy się od urodzenia, więc pobyt po przyjęciu starszego dziecka "
-    "wypada poza nie i daje 0 dni. To luka w silniku, nie w teście.",
-)
+@rule("F8")
+def test_f8_supplement_counts_a_stay_after_placement() -> None:
+    plan = family_rows(
+        event="foster_care",
+        event_date="2026-04-10",
+        non_professional_foster_care=True,
+        pregnancy_weeks_at_birth=39,
+        children=[
+            {
+                "birth_date": "2025-11-01",
+                "birth_weight_g": 3200,
+                "hospital_stays": [{"start": "2026-04-15", "end": "2026-04-28"}],
+            }
+        ],
+        claims=[{"benefit": "macierzynski"}, {"benefit": "uzupelniajacy"}],
+    )
+    assert plan[("uzupelniajacy", "first_parent")].days == 14
 
 
 @rule("F9", "tylko start w 21 dni; termin 7 dni na złożenie wniosku nie jest sprawdzany")
