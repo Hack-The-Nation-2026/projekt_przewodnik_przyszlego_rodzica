@@ -69,6 +69,9 @@ def _birth_event(plan: FamilyPlan, birth: date, leave: LeaveSettings) -> FamilyE
         remaining_stop = start + DAY * _maternity_days(leave, len(survivors))
         stop = min(stop, max(last_change, remaining_stop))
 
+    # G6: urlopu udziela się najpóźniej do końca roku, w którym dziecko kończy 6 lat.
+    # Data jest krańcem wyłącznym, więc 1 stycznia roku, w którym dziecko kończy 7 lat,
+    # znaczy dzień po 31 grudnia tego roku. Dziecko z 2019 traci termin 1 stycznia 2026.
     parental_stop = date(birth.year + 7, 1, 1)
     if not survivors:
         parental_stop = max(deaths) + DAY * 7 if deaths else birth

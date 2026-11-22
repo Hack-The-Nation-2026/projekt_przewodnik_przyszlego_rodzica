@@ -620,17 +620,31 @@ def test_g5_taking_9_weeks_consumes_the_exclusive_part() -> None:
 
 @rule(
     "G6",
-    "termin to 1 stycznia roku, w którym dziecko kończy 7 lat, czyli o rok dłużej niż przepis",
+    "granicą jest 1 stycznia roku, w którym dziecko kończy 7 lat, ale jako kraniec wyłączny, "
+    "czyli dzień po końcu roku, w którym dziecko kończy 6 lat",
 )
 def test_g6_five_parts_and_the_age_deadline() -> None:
     too_many = parental(parental_parts_already_used=5, days=7)
     assert too_many[("rodzicielski", "first_parent")].reason_code == "parental_parts_limit"
+
+    # Dziecko z 2019-05-04 kończy 6 lat w 2025, więc urlop wolno udzielić najpóźniej
+    # na 31 grudnia 2025. Ostatni dzień przechodzi, dzień po nim już nie.
+    on_time = family_rows(
+        event_date="2019-05-04",
+        children=[{"birth_date": "2019-05-04"}],
+        claims=[
+            {"benefit": "macierzynski"},
+            {"benefit": "rodzicielski", "days": 1, "start": "2025-12-31"},
+        ],
+    )
+    assert on_time[("rodzicielski", "first_parent")].reason_code == "eligible"
+
     late = family_rows(
         event_date="2019-05-04",
         children=[{"birth_date": "2019-05-04"}],
         claims=[
             {"benefit": "macierzynski"},
-            {"benefit": "rodzicielski", "days": 7, "start": "2027-01-01"},
+            {"benefit": "rodzicielski", "days": 1, "start": "2026-01-01"},
         ],
     )
     assert late[("rodzicielski", "first_parent")].reason_code == "parental_pool_or_deadline"

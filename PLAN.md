@@ -53,7 +53,7 @@ ich kopiować ani rozpowszechniać.
 - [x] Krok 15. Materiały do oddania
 - [x] Krok 17. Karta uprawnień, kreator wniosków i dostępność
 - [x] Krok 18. Oś czasu, wyjaśnienia liczb i ścieżki po fakcie
-- [ ] Krok 16. Weryfikacja przed oddaniem
+- [x] Krok 16. Weryfikacja przed oddaniem
 
 ## Krok 0. Reguły zasiłków na papierze
 
@@ -410,7 +410,7 @@ Brief, pkt 4 oraz pkt 6.
 ### Stan testu na sprawach
 
 - Dziesięć spraw z zestawu: 10/10 zgodnych, kwoty i statusy co do grosza.
-- 362 testy backendu przechodzą, 32 są pominięte (18 reguł poza silnikiem, 14 porównań z
+- 371 testów backendu przechodzi, 30 jest pominiętych (16 reguł poza silnikiem, 14 porównań z
   lokalnym zestawem ZUS).
 - Rozpoznanie zestawu przykładowego: 87/87 spraw, 71 ma wynik odczytany z materiału (56
   przyznanych, 15 odmów), 16 nie ma zapisanego wyniku na żadnej czytelnej stronie. Wzory
@@ -425,17 +425,19 @@ Brief, pkt 4 oraz pkt 6.
 
 ### Luki, które ujawniła mapa reguł
 
-- F8: szpital po przyjęciu starszego dziecka daje 0 dni, bo okno liczy się od urodzenia.
 - C4: brak limitu 91 dni po ustaniu ubezpieczenia.
 - C1: silnik zna tylko niezdolność w ciąży (100%), wariantu 80% nie ma.
-- G6: termin urlopu rodzicielskiego to 1 stycznia roku, w którym dziecko kończy 7 lat, czyli
-  o rok dłużej niż przepis.
 - G9, G10: górne granice wydłużenia (82/86 i 130/134 tygodni) nie są pilnowane.
 - G7, H3, F9: terminy składania wniosków (21 i 7 dni) nie są sprawdzane.
 - F7: części urlopu przy przyjęciu dziecka liczą się wspólnym limitem pięciu, bez rozróżnienia.
-- Sekcja L: podstawa wymiaru przychodzi z formularza, więc L1, L2, L4, L5, L7, L8, L9, L13 są
-  poza silnikiem. Z sekcji L działa tylko przeliczenie stałego wynagrodzenia (13,71%) i limit
-  po ustaniu ubezpieczenia.
+- Sekcja L: podstawa wymiaru przychodzi z formularza, więc L1, L2, L4, L5, L7, L8, L11 i L13 są
+  poza silnikiem. Z sekcji L działa przeliczenie stałego wynagrodzenia (13,71%), limit po ustaniu
+  ubezpieczenia, a L9 pilnuje progu minimalnego wynagrodzenia.
+
+Dwie luki z tej listy zamknęły się w trakcie prac. F8 liczy szpital po przyjęciu starszego dziecka,
+a G6 ma test na granicy terminu: dziecko z 2019 dostaje urlop jeszcze na 31 grudnia 2025, a nie na
+1 stycznia 2026. Wpis o terminie „o rok dłużej niż przepis” był błędny, bo 1 stycznia roku, w którym
+dziecko kończy 7 lat, jest wyłącznym krańcem, czyli dniem po 31 grudnia roku, w którym kończy 6 lat.
 
 Krok zostaje nieodhaczony, bo kryterium mówi o sprawie z `PRZYKLADY/`.
 
@@ -554,6 +556,19 @@ Ostatnie przejście po wymaganiach, żeby nic nie wypadło.
 Gotowe, gdy cała lista jest odhaczona bez wyjątków.
 
 Brief, pkt 3, 4, 5, 6.
+
+Zrobione 22.11. Litery a do j z pkt 3 mają swoje kroki w tabeli „Mapa wymagań na kroki" niżej,
+a każda pozycja z listy symulacji ma ekran: logowanie przez mObywatela, dane o ubezpieczeniu
+i wpisanie własnych, zadłużenie ze składek, podgląd e-ZLA, konto PUE/eZUS, wniosek o odpis aktu
+urodzenia, kreator wniosków urlopowych, wsparcie i przekierowania do ZUS, MRPiPS i PIP.
+
+`back/`: 371 testów przechodzi, 30 pominiętych z wypisanym powodem. `front/`: `npm run build`
+i `npm run lint` czyste. `git status` nie łapie niczego z `OPIS/` ani `PRZYKLADY/`, a żaden plik
+z tych katalogów nie trafił nigdy do historii repozytorium. Demo na telefonie przechodzi ścieżkę
+od wejścia do wyniku; dowodem jest ujęcie `15-mobile-karta` w filmie i zrzut `15-mobile-start`.
+
+Film i prezentacja niosą ten sam kod QR do `https://skrzydla-rodzica.vercel.app`, a kod odczytuje
+się z gotowego pliku MP4.
 
 ## Krok 17. Karta uprawnień, kreator wniosków i dostępność
 
