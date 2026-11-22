@@ -60,6 +60,9 @@ export const PLAIN_TEXTS: Record<string, string> = {
     'Przejęcie urlopu wymaga zgody pracodawcy.',
   'Urlop uzupełniający wykorzystuje się bezpośrednio po macierzyńskim, więc spóźniony wniosek najczęściej go zamyka.':
     'Urlop uzupełniający jest zaraz po macierzyńskim, więc po terminie przepada.',
+  'Zgłoś zgon dziecka do 7 dni': 'Zgłoś zgon dziecka',
+  'Zgłoszenie po terminie nie odbiera zasiłku, ale opóźnia wypłatę. Złóż dokumenty i wyjaśnij, dlaczego zgłoszenie jest późniejsze.':
+    'Zgłoszenie po terminie opóźnia wypłatę, ale nie odbiera zasiłku.',
 }
 
 /**

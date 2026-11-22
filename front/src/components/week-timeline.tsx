@@ -257,8 +257,8 @@ export function WeekTimeline({
       {variants && variants.length > 0 && (
         <div className="space-y-4">
           <h4 className="font-display text-base font-semibold">Porównanie wariantów</h4>
-          {variants.map((variant) => (
-            <div key={variant.label} className="rounded-lg border border-border p-4">
+          {variants.map((variant, index) => (
+            <div key={`${index}-${variant.label}`} className="rounded-lg border border-border p-4">
               <p className="mb-3 text-sm font-medium">{variant.label}</p>
               <Band data={variant.data} />
               <p className="mt-3 text-xs text-muted-foreground">{variant.data.status}</p>

@@ -191,9 +191,11 @@ export function buildInterview(values: InterviewValues, plan: ParentalPlan = {})
           }
         : {}),
       pregnancy_weeks_at_birth: values.hospitalization === 'yes' ? parseNumber(values.pregnancyWeeks) : undefined,
-      children: activeChildren(values).map(({ birthDate, schoolDeferred, weight, stays }) => ({
+      children: activeChildren(values).map(({ birthDate, schoolDeferred, weight, stays, stillborn, deathDate }) => ({
         birth_date: placement ? birthDate : undefined,
         school_start_deferred: values.role === 'foster' && schoolDeferred,
+        stillborn: !placement && stillborn,
+        death_date: !placement && deathDate ? deathDate : undefined,
         birth_weight_g: values.hospitalization === 'yes' ? parseNumber(weight) : undefined,
         hospital_stays: values.hospitalization === 'yes' ? stays
           : values.hospitalization === 'no' ? [] : undefined,

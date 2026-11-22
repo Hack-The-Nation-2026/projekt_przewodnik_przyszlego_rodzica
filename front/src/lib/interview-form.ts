@@ -7,6 +7,8 @@ const child = z.object({
   schoolDeferred: z.boolean(),
   weight: z.string(),
   stays: z.array(hospitalStay),
+  stillborn: z.boolean(),
+  deathDate: z.string(),
 })
 
 const fields = z.object({
@@ -179,7 +181,7 @@ export type Answer = z.infer<typeof answer>
 
 export const interviewDefaults: InterviewValues = {
   role: 'mother', birthStage: 'expected', eventDate: '', childCount: '1',
-  children: Array.from({ length: 12 }, () => ({ birthDate: '', schoolDeferred: false, weight: '', stays: [] })),
+  children: Array.from({ length: 12 }, () => ({ birthDate: '', schoolDeferred: false, weight: '', stays: [], stillborn: false, deathDate: '' })),
   placementConfirmed: 'unknown', adoptiveFather: 'unknown', adoptionOrderDate: '',
   zaZyciem: false, hospitalization: 'unknown', pregnancyWeeks: '',
   employment: 'unknown', insured: 'unknown', arrears: 'unknown', basis: '',

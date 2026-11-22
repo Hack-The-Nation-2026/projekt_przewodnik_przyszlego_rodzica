@@ -128,6 +128,17 @@ function ChildFields({ index, values, multiple }: { index: number; values: Inter
           {values.role === 'foster' && <Check name={`children.${index}.schoolDeferred`} label="Odroczono obowiązek szkolny" />}
         </div>
       )}
+      {!isPlacement(values) && (
+        <div className={fieldsGrid}>
+          <Check name={`children.${index}.stillborn`} label="Dziecko urodziło się martwe" />
+          <Field
+            name={`children.${index}.deathDate`}
+            label="Data zgonu dziecka"
+            type="date"
+            hint="Wypełnij, jeśli dziecko zmarło po urodzeniu. Zasiłek macierzyński przysługuje wtedy jeszcze przez osiem tygodni."
+          />
+        </div>
+      )}
       {values.hospitalization === 'yes' && (
         <div className="space-y-4">
           <Field name={`children.${index}.weight`} label="Masa urodzeniowa w gramach" inputMode="numeric" hint="Podaj, jeśli ją znasz." />

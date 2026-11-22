@@ -48,7 +48,11 @@ export function getInterviewSteps(values: InterviewValues): InterviewStep[] {
     },
   ]
 
-  if (isPlacement(values) || values.hospitalization === 'yes') {
+  // Krok z danymi dzieci pokazujemy też rodzicowi po zwykłym porodzie, bo tu
+  // deklaruje się martwe urodzenie albo zgon dziecka, a bez tej odpowiedzi nie
+  // policzymy terminu 7 dni ani ośmiu tygodni zasiłku.
+  const isParent = values.role === 'mother' || values.role === 'father'
+  if (isPlacement(values) || isParent || values.hospitalization === 'yes') {
     steps.push({
       id: 'child-details', title: 'Dane dzieci',
       description: 'Uzupełnij dane dla każdego dziecka, którego dotyczy wywiad.',

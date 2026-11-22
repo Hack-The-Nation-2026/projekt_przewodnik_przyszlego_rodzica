@@ -84,6 +84,8 @@ const MISSED_NOTES: Record<string, string> = {
     'Przejęcie urlopu bez zachowania terminu wymaga zgody pracodawcy.',
   'Złóż wniosek o uzupełniający urlop macierzyński':
     'Urlop uzupełniający wykorzystuje się bezpośrednio po macierzyńskim, więc spóźniony wniosek najczęściej go zamyka.',
+  'Zgłoś zgon dziecka do 7 dni':
+    'Zgłoszenie po terminie nie odbiera zasiłku, ale opóźnia wypłatę. Złóż dokumenty i wyjaśnij, dlaczego zgłoszenie jest późniejsze.',
 }
 
 function money(grosze: number) {

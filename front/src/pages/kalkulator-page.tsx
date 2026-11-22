@@ -179,7 +179,7 @@ function buildPlan(
   pool: ParentalPool | null,
 ): ParentalPlan {
   const base: ParentalPlan = { averagedRate: true }
-  if (!pool || source.partnerEmployment === 'unknown') return base
+  if (!pool || pool.total_days <= 0 || source.partnerEmployment === 'unknown') return base
   if (source.workingOnLeave && source.employment === 'employee') return base
   const exclusive = pool.exclusive_days_per_parent
   const shared = Math.max(0, pool.total_days - exclusive * 2)
@@ -398,7 +398,7 @@ export function KalkulatorPage() {
       }
     : null
   const timelineShares = timelineInput && result?.pool && values.partnerEmployment !== 'unknown' && !workingOnLeave
-    ? [0, sharedTotal]
+    ? [...new Set([0, sharedTotal])]
     : []
   const workTimelineInput: TimelineInput | null = workResult && submitted && workResult.documentContext.eventDate
     ? {
@@ -499,9 +499,19 @@ export function KalkulatorPage() {
   }
 
   // Jedna dodatkowa symulacja na wysłanie wywiadu: wariant z pracą w połowie
-  // wymiaru. Liczy się dopiero po wyniku, a nie w trakcie wypełniania.
+  // wymiaru. Liczy się dopiero po wyniku, bo potrzebuje początku rodzicielskiego.
   useEffect(() => {
-    if (!submitted || submitted.employment !== 'employee' || submitted.workingOnLeave) {
+    if (!submitted || !result || submitted.employment !== 'employee' || submitted.workingOnLeave) {
+      setWorkResult(null)
+      return
+    }
+    const parentalStart = result.documentContext.periods.rodzicielski?.start
+    const parentalDays = result.documentContext.periods.rodzicielski
+      ? Math.round((Date.parse(result.documentContext.periods.rodzicielski.end + 'T00:00:00Z')
+        - Date.parse(result.documentContext.periods.rodzicielski.start + 'T00:00:00Z')) / 86_400_000) + 1
+      : undefined
+    const returnDate = submitted.returnDate || parentalStart
+    if (!returnDate) {
       setWorkResult(null)
       return
     }
@@ -511,12 +521,14 @@ export function KalkulatorPage() {
         workingOnLeave: true,
         workPercent: '50',
         contractedPercent: submitted.contractedPercent || '100',
+        returnDate,
+        parentalDays: submitted.parentalDays || (parentalDays ? String(parentalDays) : ''),
       },
       plan: buildPlan(0, submitted, pool),
     })
-    // Celowo tylko `submitted`: wariant liczymy raz na wysłanie wywiadu.
+    // Wariant przelicza się raz na wynik; suwaki podstawy nie zmieniają wymiaru pracy.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [submitted])
+  }, [submitted, result])
 
   async function advance(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()

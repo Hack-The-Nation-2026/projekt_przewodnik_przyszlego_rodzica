@@ -267,6 +267,19 @@ export function getCalendarEvents(
     )
   }
 
+  // Zgon dziecka: zgłoszenie do ZUS w ciągu 7 dni. Zasiłek macierzyński trwa
+  // jeszcze osiem tygodni od zgonu, więc termin jest realny, a nie teoretyczny.
+  if (benefit === 'macierzynski' && context.childDeaths?.length) {
+    const death = [...context.childDeaths].sort().at(-1) as string
+    const date = shiftDate(death, 7)
+    add(
+      date,
+      'Zgłoś zgon dziecka do 7 dni',
+      'Zgłoś zgon dziecka w ZUS w ciągu 7 dni. Zasiłek macierzyński przysługuje jeszcze przez osiem tygodni od zgonu.',
+      'Zgłoszenie zgonu dziecka złóż do ' + formatDocumentDate(date) + '.',
+    )
+  }
+
   if (options.employment === 'employee' && options.coverage !== 'ended') {
     if (benefit === 'macierzynski' && options.maternityCase === 'takeover' && context.takeoverDate) {
       const date = shiftDate(context.takeoverDate, -14)

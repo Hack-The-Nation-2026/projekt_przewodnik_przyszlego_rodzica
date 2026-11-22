@@ -1,4 +1,5 @@
 import type { Assessment, BenefitCode } from '@/lib/benefit-interview'
+import { activeChildren } from '@/lib/interview-form'
 import type { InterviewValues } from '@/lib/interview-form'
 
 export type DateRange = { start: string; end: string }
@@ -15,6 +16,8 @@ export interface DocumentContext {
   extendedToBirth: boolean
   zaZyciem: boolean
   workingOnLeave: boolean
+  /** Daty zgonu dzieci, jeśli sprawa ich dotyczy. Zgon uruchamia termin 7 dni i osiem tygodni zasiłku. */
+  childDeaths?: string[]
   periods: Partial<Record<BenefitCode, DateRange>>
 }
 
@@ -47,6 +50,19 @@ export function contextFromInterview(values: InterviewValues, assessments: Asses
     extendedToBirth: values.employmentEnded && values.employment === 'employee' && values.extendedToBirth,
     zaZyciem: values.zaZyciem,
     workingOnLeave: values.employment === 'employee' && values.workingOnLeave,
+    childDeaths: familyChildDeaths(values),
     periods,
   }
+}
+
+/**
+ * Daty zgonu dzieci. Dziecko martwo urodzone ma datę zgonu równą porodowi,
+ * więc jedna reguła obsługuje oba przypadki.
+ */
+function familyChildDeaths(values: InterviewValues): string[] | undefined {
+  if (values.role !== 'mother' && values.role !== 'father') return undefined
+  const deaths = activeChildren(values)
+    .map((child) => child.deathDate || (child.stillborn ? values.eventDate : ''))
+    .filter((date) => !!date)
+  return deaths.length ? deaths : undefined
 }
