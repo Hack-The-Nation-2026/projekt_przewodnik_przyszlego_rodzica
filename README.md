@@ -103,7 +103,7 @@ source .venv/bin/activate
 pip install -r requirements-dev.txt      # fastapi[standard] daje CLI do FastAPI Cloud
 fastapi cloud login                      # otwiera przeglądarkę, plan Hobby jest darmowy
 fastapi deploy                           # wejście app.main:app jest w pyproject.toml
-fastapi cloud env set ENVIRONMENT production
+fastapi cloud env set ENVIRONMENT prod     # zamyka endpoint z kontami demonstracyjnymi
 fastapi cloud env set ADMIN_SETTINGS_FILE /tmp/admin-settings.json
 # Asystent bez klucza działa na dopasowaniu słów, więc ta linia jest opcjonalna.
 fastapi cloud env set --secret ASSISTANT_API_KEY "sk-or-..."
