@@ -26,3 +26,7 @@ Thumbs.db
 
 # Parametry zapisane z panelu administracyjnego (runtime, nie kod).
 back/data/
+
+# Kopia prezentacji w katalogu głównym, do wgrania na platformę wydarzenia.
+# Wersja do trzymania w repozytorium leży w prezentacja/.
+/Skrzydla-Rodzica*.pdf
