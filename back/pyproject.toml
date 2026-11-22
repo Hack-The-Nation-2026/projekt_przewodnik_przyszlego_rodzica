@@ -16,7 +16,8 @@ dependencies = [
   "httpx>=0.27",
 ]
 
-# Aplikacja, nie biblioteka: uv nie instaluje projektu jako pakietu, tylko zależności.
+# Bez tego `uv sync` próbuje zbudować projekt jako pakiet, a katalog nie ma nazwy zgodnej
+# z nazwą projektu. FastAPI Cloud instaluje projekt po swojemu i to działa niezależnie.
 [tool.uv]
 package = false
 

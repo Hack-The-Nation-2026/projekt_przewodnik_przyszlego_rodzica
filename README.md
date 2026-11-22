@@ -100,27 +100,36 @@ wpuścić go przez CORS. Dlatego API idzie pierwsze, a `CORS_ORIGINS` ustawia si
 ```bash
 cd back
 source .venv/bin/activate
-pip install -r requirements-dev.txt      # fastapi[standard] daje CLI do FastAPI Cloud
-fastapi cloud login                      # otwiera przeglądarkę, plan Hobby jest darmowy
-fastapi deploy                           # wejście app.main:app jest w pyproject.toml
-fastapi cloud env set ENVIRONMENT prod     # zamyka endpoint z kontami demonstracyjnymi
-fastapi cloud env set ADMIN_SETTINGS_FILE /tmp/admin-settings.json
+pip install -r requirements-dev.txt        # fastapi[standard] daje CLI do FastAPI Cloud
+fastapi cloud login                        # otwiera przeglądarkę, plan Hobby jest darmowy
+# Bez --team-id CLI wypytuje o zespół i przerywa, gdy nie ma terminala.
+# Identyfikator wypisze `fastapi cloud teams list`.
+fastapi cloud apps create --name skrzydla-rodzica-api \
+  --team-id <id-zespolu> --link --path .
+fastapi deploy                             # wejście app.main:app jest w pyproject.toml
+fastapi cloud env set ENVIRONMENT prod --no-redeploy    # zamyka endpoint z kontami demo
+fastapi cloud env set ADMIN_SETTINGS_FILE /tmp/admin-settings.json --no-redeploy
 # Asystent bez klucza działa na dopasowaniu słów, więc ta linia jest opcjonalna.
 fastapi cloud env set --secret ASSISTANT_API_KEY "sk-or-..."
 
 cd ../front
 vercel login
+vercel project create skrzydla-rodzica
 vercel env add VITE_API_URL --environment production \
-  --value "https://twoja-aplikacja.fastapicloud.dev/api"
-vercel --prod
+  --value "https://skrzydla-rodzica-api.fastapicloud.dev/api" -p skrzydla-rodzica
+vercel deploy --prod --yes --project skrzydla-rodzica
 
 cd ../back
-fastapi cloud env set CORS_ORIGINS "https://twoj-front.vercel.app"
+# To samo wdraża API ponownie, już z adresem frontu na liście CORS.
+fastapi cloud env set CORS_ORIGINS "https://skrzydla-rodzica.vercel.app"
 ```
 
-Adres aplikacji wypisuje `fastapi deploy`, a adres frontu `vercel --prod`. Wstaw je w miejsce
-przykładów powyżej. `fastapi cloud env set` wdraża API ponownie, więc `CORS_ORIGINS` działa
-od razu.
+`fastapi cloud apps create` i `vercel project create` uruchamia się raz. Kolejne wdrożenia to
+`fastapi deploy` w `back/` i `vercel deploy --prod --project skrzydla-rodzica` w `front/`.
+
+Adres aplikacji wypisuje `fastapi deploy`, a adres frontu `vercel deploy`. Wstaw je w miejsce
+przykładów powyżej, jeśli wyjdą inne. Stan konta sprawdzisz przez `fastapi cloud whoami`,
+a logi z chmury przez `fastapi cloud logs`.
 
 Kilka rzeczy, które łatwo przeoczyć.
 
