@@ -652,7 +652,9 @@ if (TAKE === 'all' || TAKE === 'panel') {
     await reveal(page, page.getByRole('heading', { name: /Stopy procentowe/i }).first(), { at: 0.3 })
     await settle(page, 900)
 
-    // Zmiana stopy rodzicielskiego i zapis.
+    // Zmiana stopy rodzicielskiego i zapis. Pokazujemy wartość inną niż domyślna,
+    // żeby widać było przeliczenie, a na końcu przywracamy domyślne, bo inaczej
+    // panel zostawiłby w aplikacji stawkę, od której liczą się kwoty.
     const rate = page.locator('#rate-parental')
     if (await rate.count()) {
       await ensureVisible(page, rate)
@@ -661,7 +663,7 @@ if (TAKE === 'all' || TAKE === 'panel') {
       await rate.click()
       await page.keyboard.press('Control+a')
       await settle(page, 200)
-      for (const character of '50') {
+      for (const character of '75') {
         await page.keyboard.type(character)
         await settle(page, 180)
       }
@@ -690,6 +692,15 @@ if (TAKE === 'all' || TAKE === 'panel') {
       await settle(page, 800)
       await clickAt(page, save, { x: 0, y: 0 }, 2000)
       await settle(page, 1400)
+    }
+
+    // Przywracamy domyślne, żeby nagranie nie zostawiło w aplikacji zmienionej stopy.
+    const reset = page.getByRole('button', { name: /Przywróć domyślne/i }).first()
+    if (await reset.count()) {
+      await reset.scrollIntoViewIfNeeded()
+      await settle(page, 700)
+      await clickAt(page, reset, { x: 0, y: 0 }, 1800)
+      await settle(page, 1200)
     }
     await moveTo(page, 900, 520, { pause: 700 })
   })
