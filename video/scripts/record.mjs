@@ -85,7 +85,7 @@ async function quickInterview(page) {
   await select('sickness', /^Nie$/)
   await select('rehabilitation', /^Nie$/)
   await page.getByRole('button', { name: 'Sprawdź świadczenia' }).click()
-  await page.getByText('Wynik wywiadu').first().waitFor({ timeout: 20000 })
+  await page.getByText('Wynik sprawdzenia').first().waitFor({ timeout: 20000 })
   await settle(page, 800)
 }
 
@@ -155,7 +155,7 @@ async function interviewOnCamera(page) {
   await submit.scrollIntoViewIfNeeded()
   await settle(page, 300)
   await clickAt(page, submit, { x: 0, y: 0 }, 2600)
-  await page.getByText('Wynik wywiadu').first().waitFor({ timeout: 20000 })
+  await page.getByText('Wynik sprawdzenia').first().waitFor({ timeout: 20000 })
   await settle(page, 1400)
 }
 
@@ -223,7 +223,7 @@ if (TAKE === 'all' || TAKE === 'main') {
     // Wynik: nagłówek, karty świadczeń, ostrzeżenia.
     await scrollToTop(page, { settleMs: 900 })
     mark('wynik')
-    await reveal(page, page.getByRole('heading', { name: 'Wynik wywiadu' }), { at: 0.25 })
+    await reveal(page, page.getByRole('heading', { name: 'Wynik sprawdzenia' }), { at: 0.25 })
     await settle(page, 700)
     await scrollBy(page, 300, { settleMs: 1200 })
     await moveTo(page, 700, 520, { pause: 520 })
@@ -303,7 +303,7 @@ if (TAKE === 'all' || TAKE === 'main') {
 
     // Karta uprawnień: jedna strona do wydruku.
     mark('karta')
-    const card = page.getByRole('button', { name: /Zabierz ze sobą/i }).first()
+    const card = page.getByRole('button', { name: /Pobierz kartę uprawnień/i }).first()
     if (await card.count()) {
       await card.scrollIntoViewIfNeeded()
       await settle(page, 700)
@@ -408,18 +408,20 @@ if (TAKE === 'all' || TAKE === 'sprawy') {
   await take('04-sprawy', browser, { url: '/' }, async (page) => {
     await login(page, { route: '/sprawy' })
     mark('body')
-    await reveal(page, page.getByRole('heading', { name: /Zestaw przykładowy ZUS/i }).first(), { at: 0.3 })
+    await reveal(page, page.getByRole('heading', { name: 'Sprawy', exact: true }).first(), { at: 0.3 })
     await settle(page, 800)
 
-    // Lista rozwijana ze sprawami z zestawu ZUS.
-    await openSelect(page, page.locator('button[aria-label="Wybierz sprawę z zestawu przykładowego"]'), /ZUS-003/, { dwell: 1400 })
+    // Lista rozwijana z dokumentami z zestawu ZUS.
+    await openSelect(page, page.locator('#sample-list'), /Agnieszka Wa_05/, { dwell: 1400 })
     await settle(page, 1000)
 
-    // Uzupełnienie liczb, których skan nie podaje.
+    // Uzupełnienie liczb, których skan nie podaje. Podstawę czyścimy przed
+    // wpisaniem, bo pole startuje z wartością 6000 i bez tego dopisalibyśmy
+    // cyfry do niej, a kwota ponad limit API kończyła się błędem 422.
     const date = page.locator('#sample-event-date')
     if (await date.count()) {
       await typeDate(page, date, '2026-05-04')
-      await typeInto(page, page.locator('#sample-basis'), '7000')
+      await typeInto(page, page.locator('#sample-basis'), '7000', { clear: true })
       await openSelect(page, page.locator('#sample-employment'), /umowa o pracę/i, { dwell: 1100 })
       await settle(page, 600)
       await clickAt(page, page.getByRole('button', { name: /Sprawdź ubezpieczenie i policz/i }), { x: 0, y: 0 }, 2400)
@@ -436,14 +438,22 @@ if (TAKE === 'all' || TAKE === 'sprawy-porownanie') {
     await login(page, { route: '/sprawy' })
     await settle(page, 900)
     mark('body')
-    // Wybieramy sprawę z kart i schodzimy do porównania z decyzją ZUS.
-    const card = page.locator('li button[aria-pressed]').nth(2)
-    await reveal(page, card, { at: 0.55 })
-    await settle(page, 700)
-    await clickAt(page, card, { x: 60, y: 10 }, 1800)
-    await settle(page, 1400)
-    await scrollBy(page, 520, { settleMs: 1500 })
-    await settle(page, 800)
+
+    // Wybieramy dokument z zestawu, uzupełniamy liczby i schodzimy do porównania z decyzją.
+    await openSelect(page, page.locator('#sample-list'), /Alicja Cho_3/, { dwell: 1400 })
+    await settle(page, 900)
+    const date = page.locator('#sample-event-date')
+    if (await date.count()) {
+      await typeDate(page, date, '2026-05-04')
+      await typeInto(page, page.locator('#sample-basis'), '7000', { clear: true })
+      await openSelect(page, page.locator('#sample-employment'), /umowa o pracę/i, { dwell: 1100 })
+      await settle(page, 600)
+      await clickAt(page, page.getByRole('button', { name: /Sprawdź ubezpieczenie i policz/i }), { x: 0, y: 0 }, 2400)
+      await settle(page, 1500)
+    }
+
+    await reveal(page, page.getByRole('heading', { name: /Porównanie z decyzją/i }).first(), { at: 0.35 })
+    await settle(page, 900)
     await moveTo(page, 700, 520, { pause: 600 })
     await scrollBy(page, 460, { settleMs: 1500 })
     await settle(page, 800)
