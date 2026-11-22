@@ -32,7 +32,7 @@ function ScrollToTop() {
 // Jeden lekki ruch kółka przenosi z ekranu powitalnego do treści. Więcej niż tyle
 // pikseli w jednym geście to już świadome przewijanie, więc oddajemy je przeglądarce.
 const LIGHT_TICK_MAX_DELTA = 160
-// Drugi ruch kółka w tym czasie znaczy „kręcę dalej”, nie „stuknąłem raz”.
+// Drugi ruch kółka w tym czasie znaczy "kręcę dalej", a nie "stuknąłem raz".
 const GESTURE_CONFIRM_MS = 70
 // Płynny przejazd z hero trwa kilkaset milisekund. Przez ten czas kółko nie może
 // przerwać animacji w połowie.

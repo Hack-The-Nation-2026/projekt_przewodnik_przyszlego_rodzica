@@ -13,7 +13,7 @@ export interface TimelineBlock {
   label: string
   startDay: number
   days: number
-  /** Nieprzenoszalne tygodnie drugiego rodzica: serce całej historii. */
+  /** Nieprzenoszalne tygodnie drugiego rodzica, od nich zależy cały podział. */
   exclusiveDays: number
   rate: number | null
   gross: number | null
@@ -54,7 +54,7 @@ export interface WeekTimelineData {
   /** Tydzień porodu w układzie osi, żeby dało się narysować pionową linię. */
   birthDay: number
   todayDay: number
-  /** Jedno zdanie o tym, gdzie jesteśmy. Używa go też tryb „jestem w trakcie urlopu". */
+  /** Jedno zdanie o tym, gdzie jesteśmy. Używa go też tryb "jestem w trakcie urlopu". */
   status: string
 }
 

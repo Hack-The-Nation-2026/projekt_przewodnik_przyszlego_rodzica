@@ -161,7 +161,7 @@ async function interviewOnCamera(page) {
 
 const browser = await launch()
 
-/* ---------------------------------------------------------------- główne ujęcie */
+// główne ujęcie
 
 if (TAKE === 'all' || TAKE === 'main') {
   await take('01-main', browser, { url: '/' }, async (page) => {
@@ -323,7 +323,7 @@ if (TAKE === 'all' || TAKE === 'main') {
   })
 }
 
-/* ------------------------------------------------------------------ wnioski */
+// wnioski
 
 if (TAKE === 'all' || TAKE === 'wnioski') {
   await take('02-wnioski', browser, { url: '/' }, async (page) => {
@@ -362,7 +362,7 @@ if (TAKE === 'all' || TAKE === 'wnioski') {
   })
 }
 
-/* ---------------------------------------------------------------- dokumenty */
+// dokumenty
 
 if (TAKE === 'all' || TAKE === 'dokumenty') {
   await take('03-dokumenty', browser, { url: '/' }, async (page) => {
@@ -402,7 +402,7 @@ if (TAKE === 'all' || TAKE === 'dokumenty') {
   })
 }
 
-/* ------------------------------------------------------------------- sprawy */
+// sprawy
 
 if (TAKE === 'all' || TAKE === 'sprawy') {
   await take('04-sprawy', browser, { url: '/' }, async (page) => {
@@ -464,7 +464,7 @@ if (TAKE === 'all' || TAKE === 'sprawy-porownanie') {
   })
 }
 
-/* ---------------------------------------------------------------------- zus */
+// zus
 
 if (TAKE === 'all' || TAKE === 'zus') {
   await take('06-zus', browser, { url: '/' }, async (page) => {
@@ -526,7 +526,7 @@ if (TAKE === 'all' || TAKE === 'zus') {
   })
 }
 
-/* --------------------------------------------------------------- planowanie */
+// planowanie
 
 if (TAKE === 'all' || TAKE === 'planowanie') {
   await take('07-planowanie', browser, { url: '/' }, async (page) => {
@@ -561,7 +561,7 @@ if (TAKE === 'all' || TAKE === 'planowanie') {
   })
 }
 
-/* -------------------------------------------------------------------- urlop */
+// urlop
 
 if (TAKE === 'all' || TAKE === 'urlop') {
   await take('08-urlop', browser, { url: '/' }, async (page) => {
@@ -597,7 +597,7 @@ if (TAKE === 'all' || TAKE === 'urlop') {
   })
 }
 
-/* ----------------------------------------------------------------- odwolanie */
+// odwolanie
 
 if (TAKE === 'all' || TAKE === 'odwolanie') {
   await take('09-odwolanie', browser, { url: '/' }, async (page) => {
@@ -630,7 +630,7 @@ if (TAKE === 'all' || TAKE === 'odwolanie') {
   })
 }
 
-/* ------------------------------------------------------------------ wsparcie */
+// wsparcie
 
 if (TAKE === 'all' || TAKE === 'wsparcie') {
   await take('10-wsparcie', browser, { url: '/' }, async (page) => {
@@ -657,7 +657,7 @@ if (TAKE === 'all' || TAKE === 'wsparcie') {
   })
 }
 
-/* -------------------------------------------------------------------- panel */
+// panel
 
 if (TAKE === 'all' || TAKE === 'panel') {
   await take('11-panel', browser, { url: '/' }, async (page) => {
@@ -721,7 +721,7 @@ if (TAKE === 'all' || TAKE === 'panel') {
   })
 }
 
-/* ----------------------------------------------------------------- asystent */
+// asystent
 
 if (TAKE === 'all' || TAKE === 'asystent') {
   await take('12-asystent', browser, { url: '/' }, async (page) => {
@@ -765,7 +765,7 @@ if (TAKE === 'all' || TAKE === 'asystent') {
   })
 }
 
-/* ------------------------------------------------------------------- telefon */
+// telefon
 
 const MOBILE = { width: 400, height: 860, mobile: true }
 

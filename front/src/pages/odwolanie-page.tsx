@@ -43,9 +43,9 @@ function Field({ id, label, hint, children }: {
 }
 
 /**
- * Ścieżka po decyzji odmownej: pomaga w momencie, gdy jest już za późno na
- * wszystko poza reakcją. Nie ocenia szans i nie zastępuje porady prawnej —
- * daje diagnozę sporu, terminarz i projekt pisma na konkretny powód odmowy.
+ * Ścieżka po decyzji odmownej, na moment gdy jest już za późno na wszystko
+ * poza reakcją. Nie ocenia szans i nie zastępuje porady prawnej, daje
+ * diagnozę sporu, terminarz i projekt pisma na konkretny powód odmowy.
  */
 export function OdwolaniePage() {
   const [answers, setAnswers] = useState<AppealAnswers>(emptyAppeal)

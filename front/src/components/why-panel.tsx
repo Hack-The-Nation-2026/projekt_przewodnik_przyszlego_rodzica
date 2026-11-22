@@ -16,7 +16,7 @@ const TERM_OF_LABEL: Record<string, GlossaryKey> = {
 
 /**
  * Mały odnośnik przy kwocie i przy wymiarze. Jeden mechanizm, to samo pytanie
- * „skąd", na które dziś trzeba sobie odpowiadać samemu.
+ * "skąd", na które dziś trzeba sobie odpowiadać samemu.
  */
 export function WhyTrigger({ onClick, label, className }: {
   onClick: () => void
@@ -48,7 +48,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 /**
- * Panel „dlaczego tak": cztery sekcje przy kwocie, jedna droga wyjścia przy
+ * Panel "dlaczego tak", cztery sekcje przy kwocie, jedna droga wyjścia przy
  * braku uprawnień. Bez oceny szans i bez porady prawnej.
  */
 export function WhyPanelBody({ data }: { data: WhyPanelData }) {

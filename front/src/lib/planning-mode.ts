@@ -8,7 +8,7 @@ import { shiftDate } from '@/lib/benefit-documents'
  * uczciwie, a liczba podana rok wcześniej kończy się tym, że ktoś się na niej
  * oprze i straci pieniądze. Nie podajemy też okresów wyczekiwania z pamięci:
  * jeśli czegoś nie ma w materiałach od ZUS, pozycja dostaje znacznik
- * „do potwierdzenia w ZUS" i żadnej liczby.
+ * "do potwierdzenia w ZUS" i żadnej liczby.
  */
 export interface PlanningAnswers {
   employment: 'employee' | 'contractor' | 'self_employed' | 'other' | 'unknown'

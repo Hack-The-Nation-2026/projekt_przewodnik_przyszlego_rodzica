@@ -29,8 +29,8 @@ export function InfoHint({
   align?: 'start' | 'end'
   className?: string
   /**
-   * Treść wyzwalacza. Bez niej dymek otwiera ikona „i", a ze słowem —
-   * podkreślonym pojęciem ze słownika, które sam się tłumaczy.
+   * Treść wyzwalacza. Bez niej dymek otwiera ikona "i", a ze słowem otwiera go
+   * podkreślone pojęcie ze słownika, które tłumaczy się samo.
    */
   trigger?: ReactNode
   children: ReactNode

@@ -104,7 +104,7 @@ export function EntitlementCard({
   data: EntitlementCardData
   person?: string
   onPersonChange?: (value: string) => void
-  /** Na ekranie karty dokumenty można odhaczać; na wydruku są tylko znaczniki. */
+  /** Na ekranie karty dokumenty można odhaczać, na wydruku są tylko znaczniki. */
   interactive?: boolean
   className?: string
 }) {

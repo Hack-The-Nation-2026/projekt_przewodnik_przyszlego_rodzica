@@ -69,7 +69,7 @@ function PrepRow({ item }: { item: PrepItem }) {
 /**
  * Tryb planowania: dla ludzi, którzy dopiero myślą o dziecku i dziś nie
  * trafiliby do ZUS. Nie liczymy kwot ani tygodni, bo bez daty porodu nie da
- * się tego policzyć uczciwie — zamiast liczb jest lista przygotowań.
+ * się tego policzyć uczciwie, więc zamiast liczb jest lista przygotowań.
  */
 export function PlanowaniePage() {
   const [answers, setAnswers] = useState<PlanningAnswers>(emptyPlanning)

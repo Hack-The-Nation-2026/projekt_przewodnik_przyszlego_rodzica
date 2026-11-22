@@ -208,7 +208,7 @@ function Band({ data }: { data: WeekTimelineData }) {
 }
 
 /**
- * Oś czasu tygodni. Czterdzieści jeden tygodni to dla człowieka liczba; taśma
+ * Oś czasu tygodni. Czterdzieści jeden tygodni to dla człowieka liczba. Taśma
  * pokazuje, że to prawie rok życia i że część tego czasu należy do drugiego
  * rodzica, a niewykorzystana przepada.
  */

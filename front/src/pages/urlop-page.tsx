@@ -63,10 +63,10 @@ function Field({ id, label, hint, children }: {
 }
 
 /**
- * Tryb „jestem w trakcie urlopu": ile jeszcze zostało i co trzeba złożyć teraz.
+ * Tryb "jestem w trakcie urlopu", ile jeszcze zostało i co trzeba złożyć teraz.
  *
  * Bez tego serwis opowiada tylko o przyszłości i o przeszłości, a pytanie
- * „ile mi jeszcze zostało" ludzie zadają w środku, gdy terminy się zbliżają.
+ * "ile mi jeszcze zostało" ludzie zadają w środku, gdy terminy się zbliżają.
  */
 export function UrlopPage() {
   const stored = useMemo(() => readProgress(), [])
@@ -75,8 +75,8 @@ export function UrlopPage() {
 
   const simulation = useMutation({
     mutationFn: async (source: LeaveProgressAnswers) => {
-      // Po minięciu terminu na 81,5% wariant „teraz" liczy się tak samo jak
-      // „poczekam". Obiecywanie stawki, do której nie ma już prawa, byłoby
+      // Po minięciu terminu na 81,5% wariant "teraz" liczy się tak samo jak
+      // "poczekam". Obiecywanie stawki, do której nie ma już prawa, byłoby
       // najgorszym, co ten ekran mógłby zrobić.
       const closed = averagedWindow(source)?.open === false
       const now = await simulateProgress(source, !closed)

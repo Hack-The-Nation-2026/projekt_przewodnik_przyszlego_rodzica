@@ -5,7 +5,7 @@ import { PageBreadcrumbs } from '@/components/layout/page-breadcrumbs'
  * Nagłówek podstrony: ścieżka w jednej linii, a pod nią tytuł i jedno zdanie opisu.
  *
  * Przycisku powrotu tu nie ma. Podstrony z górnej nawigacji są zwykłymi miejscami,
- * a nie krokami, z których trzeba wyjść; „Wstecz” staje tylko w formularzach,
+ * a nie krokami, z których trzeba wyjść. "Wstecz" staje tylko w formularzach,
  * gdzie użytkownik naprawdę idzie krok po kroku.
  */
 export function PageHeading({

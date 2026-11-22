@@ -36,7 +36,7 @@ export function ScreenScene({ scene }: { scene: Scene }) {
     transformOrigin: '50% 50%',
   }
 
-  // Karta końcowa nie ma nagrania, więc ta scena zostaje pusta.
+  // Karty z kodem QR nie mają nagrania, więc ta scena zostaje pusta.
   if (!scene.clip) return <AbsoluteFill style={{ backgroundColor: theme.paper }} />
 
   return (

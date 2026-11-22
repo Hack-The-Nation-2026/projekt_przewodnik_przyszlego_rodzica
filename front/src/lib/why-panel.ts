@@ -24,7 +24,7 @@ export interface WhyPanelData {
   breakdown: WhyRow[]
   /** Skąd ten wymiar: reguła jednym zdaniem. */
   measureRule: string | null
-  /** Co by zmieniło wynik. Najciekawsza sekcja i najmniej oczywista. */
+  /** Co by zmieniło wynik, czyli czego brakuje do innego rozstrzygnięcia. */
   counterfactuals: string[]
   legal: { title: string; url: string }[]
   /** Dla braku uprawnień: który warunek nie został spełniony. */
@@ -79,8 +79,8 @@ function measureRule(benefit: BenefitCode, input: WhyInput) {
 }
 
 /**
- * Kontrprzykłady z tej samej sytuacji. To najciekawsza część panelu: pokazuje,
- * że wynik nie jest jedyny, ale też nie zmienia się bez powodu.
+ * Kontrprzykłady z tej samej sytuacji pokazują, że wynik nie jest jedyny, ale
+ * też nie zmienia się bez powodu.
  */
 function counterfactuals(input: WhyInput) {
   const { assessment, values, pool, averaged, flat, settings } = input
@@ -209,7 +209,7 @@ function blockedFromReason(reason: string) {
 }
 
 /**
- * Panel „dlaczego tak" dla jednej kwoty albo jednego wymiaru.
+ * Panel "dlaczego tak" dla jednej kwoty albo jednego wymiaru.
  *
  * Nie ocenia szans i nie udziela porady prawnej: pokazuje, z czego wynikła
  * liczba, jaką regułą jest wymiar, co by go zmieniło i na jakim przepisie

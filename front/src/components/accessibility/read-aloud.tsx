@@ -3,7 +3,7 @@ import type { RefObject } from 'react'
 import { CircleAlert, Pause, Volume2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
-/** Ten atrybut znaczy „ten fragment idzie do lektora", a nie „to ozdoba". */
+/** Ten atrybut znaczy "ten fragment idzie do lektora", a nie "to ozdoba". */
 export const READ_ATTR = 'data-read'
 
 /** Prosty język i lektor zostają pod kontrolą użytkownika, nie pod kontrolą przeglądarki. */

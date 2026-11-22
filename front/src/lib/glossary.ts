@@ -6,7 +6,7 @@
  * i tygodnie zmieniają się z przepisami, a liczba w dymku zestarzałaby się
  * po cichu. Gdy liczba jest potrzebna, dymek odsyła do wyniku.
  *
- * Jedno źródło tekstu dla całego serwisu, więc „podstawa wymiaru" nie ma
+ * Jedno źródło tekstu dla całego serwisu, więc "podstawa wymiaru" nie ma
  * trzech wersji na trzech ekranach.
  */
 export interface GlossaryEntry {

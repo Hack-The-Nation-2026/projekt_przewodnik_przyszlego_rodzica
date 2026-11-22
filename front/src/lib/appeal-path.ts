@@ -5,10 +5,10 @@ import { benefitList } from '@/lib/benefit-interview'
  * Ścieżka po decyzji odmownej.
  *
  * Dwie rzeczy trzymają ten moduł uczciwym. Nie ocenia szans: ani procentu, ani
- * „masz duże widoki", bo to pierwsza rzecz, której szuka juror z ZUS. I nie
+ * "masz duże widoki", bo to pierwsza rzecz, której szuka juror z ZUS. I nie
  * wymyśla terminów: pewny jest miesiąc na odwołanie od doręczenia decyzji,
  * a wszystko inne albo pochodzi z materiałów ZUS, albo ma znacznik
- * „do potwierdzenia".
+ * "do potwierdzenia".
  */
 export type DisputeGround =
   | 'brak_ubezpieczenia'

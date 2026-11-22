@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 import { useAppStore } from '@/store/app-store'
 import { useFeature } from '@/hooks/use-settings'
 
-// „Panel" w nagłówku jest krótkie, bo obok stoją jeszcze logotyp i przycisk
+// "Panel" w nagłówku jest krótkie, bo obok stoją jeszcze logotyp i przycisk
 // logowania. Pełną nazwę niesie podpowiedź i stopka.
 const NAV = [
   { to: '/', label: 'Start', end: true },

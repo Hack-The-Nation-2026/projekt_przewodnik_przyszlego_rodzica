@@ -45,7 +45,7 @@ export function Dialog({
     <dialog
       ref={ref}
       aria-labelledby={titleId}
-      // Escape zamyka element natywnie; przejmujemy zdarzenie, żeby stan Reacta
+      // Escape zamyka element natywnie, więc przejmujemy zdarzenie, żeby stan Reacta
       // dowiedział się o zamknięciu, a nie tylko sam element.
       onCancel={(event) => {
         event.preventDefault()

@@ -12,7 +12,7 @@ export interface A11ySettings {
   /** Wysoki kontrast zamiast trybu ciemnego: mocniejsze obramowania i ciemniejszy tekst pomocniczy. */
   contrast: boolean
   textScale: TextScale
-  /** Przełącznik pokazuje przycisk „Przeczytaj wynik" tam, gdzie ma sens. */
+  /** Przełącznik pokazuje przycisk "Przeczytaj wynik" tam, gdzie ma sens. */
   readAloud: boolean
   reduceMotion: boolean
 }
@@ -58,7 +58,7 @@ export function writeA11ySettings(settings: A11ySettings) {
   }
 }
 
-/** Te znaczniki czyta arkusz stylów; jeden zapis, jedno miejsce prawdy. */
+/** Te znaczniki czyta arkusz stylów, więc jest jeden zapis i jedno miejsce prawdy. */
 export function applyA11ySettings(settings: A11ySettings) {
   const root = document.documentElement
   root.dataset.contrast = settings.contrast ? 'high' : 'normal'

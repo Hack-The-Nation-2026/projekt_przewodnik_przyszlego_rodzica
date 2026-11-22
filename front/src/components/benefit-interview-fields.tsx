@@ -169,7 +169,7 @@ function ChildFields({ index, values, multiple }: { index: number; values: Inter
 /**
  * Pierwszy ekran decyduje o całej reszcie: od razu pytamy, na jakim etapie
  * jest sprawa. Trzecia odpowiedź prowadzi do trybu planowania, a czwarta do
- * trybu „jestem w trakcie urlopu”, bo te dwie sytuacje mają własne ekrany.
+ * trybu "jestem w trakcie urlopu", bo te dwie sytuacje mają własne ekrany.
  */
 export function RoleFields({ values }: { values: InterviewValues }) {
   const family = values.role === 'mother' || values.role === 'father'

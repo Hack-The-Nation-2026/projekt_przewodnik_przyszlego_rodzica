@@ -7,8 +7,8 @@ import type { GlossaryKey } from '@/lib/glossary'
  *
  * Klik albo tap rozwija definicję w miejscu, bez przechodzenia na inną stronę.
  * Na komputerze działa też najechanie, a z klawiatury dojście tabem, otwarcie
- * enterem i zamknięcie escape — wszystko w `InfoHint`, żeby nie było dwóch
- * mechanizmów dymków.
+ * enterem i zamknięcie escape. Wszystko obsługuje `InfoHint`, żeby nie było
+ * dwóch mechanizmów dymków.
  */
 export function Term({ name, children, className }: {
   name: GlossaryKey

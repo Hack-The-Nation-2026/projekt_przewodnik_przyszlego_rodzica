@@ -7,7 +7,7 @@ import { interviewDefaults } from '@/lib/interview-form'
 import type { InterviewValues } from '@/lib/interview-form'
 
 /**
- * Tryb „jestem w trakcie urlopu": odpowiedzi o teraźniejszość, nie o plan.
+ * Tryb "jestem w trakcie urlopu", odpowiedzi o teraźniejszość, nie o plan.
  *
  * Cała reszta serwisu opowiada, co będzie albo co było. Tu chodzi o to, ile
  * jeszcze zostało i co trzeba złożyć teraz. Stan zapisujemy w przeglądarce,

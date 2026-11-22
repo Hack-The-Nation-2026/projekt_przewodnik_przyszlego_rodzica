@@ -13,7 +13,7 @@ const BenefitDocuments = lazy(() => import('@/components/benefit-documents'))
  *
  * Stoi w dwóch miejscach: na stronie świadczeń i na stronie głównej. Katalog
  * pokazuje też podstawy prawne, strona główna je pomija, żeby nie przeciążać
- * pierwszego ekranu. „Dokumenty i terminy" otwiera się w oknie dialogowym,
+ * pierwszego ekranu. "Dokumenty i terminy" otwiera się w oknie dialogowym,
  * tak samo jak w karcie wyniku kalkulatora, więc użytkownik nie traci miejsca,
  * w którym był.
  */
