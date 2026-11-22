@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { benefitList } from '@/lib/benefit-interview'
-import { useRecognizeSample } from '@/hooks/use-samples'
+import { useRecognizeSample, useSample, useSamples } from '@/hooks/use-samples'
 import { useSimulateCase } from '@/hooks/use-cases'
 import { sha256Hex } from '@/lib/sha256'
 import { cn } from '@/lib/utils'
@@ -321,21 +321,30 @@ function RecognizedDocument({ sample, onResult }: { sample: ZusSample; onResult:
 export function SampleRecognition({ onResult }: { onResult: (result: CaseResult) => void }) {
   const recognize = useRecognizeSample()
   const input = useRef<HTMLInputElement>(null)
-  const [sample, setSample] = useState<ZusSample | null>(null)
+  const samples = useSamples()
+  const [uploaded, setUploaded] = useState<ZusSample | null>(null)
+  const [chosenId, setChosenId] = useState('')
   const [notice, setNotice] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const chosen = useSample(chosenId || null)
+  const sample = uploaded ?? chosen.data ?? null
+
+  function startOver() {
+    setUploaded(null)
+    setChosenId('')
+    setNotice(null)
+    setError(null)
+  }
 
   async function handleFile(file: File) {
-    setError(null)
-    setNotice(null)
-    setSample(null)
+    startOver()
     try {
       const digest = await sha256Hex(file)
       recognize.mutate(
         { sha256: digest, file_name: file.name },
         {
           onSuccess: (data) => {
-            if (data.sample) setSample(data.sample)
+            if (data.sample) setUploaded(data.sample)
             else setNotice(data.hint)
           },
           onError: () => setError('Nie udało się sprawdzić pliku. Sprawdź, czy backend działa.'),
@@ -344,6 +353,11 @@ export function SampleRecognition({ onResult }: { onResult: (result: CaseResult)
     } catch (digestError) {
       setError(digestError instanceof Error ? digestError.message : 'Nie udało się policzyć odcisku pliku.')
     }
+  }
+
+  function choose(id: string) {
+    startOver()
+    setChosenId(id)
   }
 
   return (
@@ -364,7 +378,15 @@ export function SampleRecognition({ onResult }: { onResult: (result: CaseResult)
           {sample && (
             <div className="flex flex-wrap items-center gap-2">
               <OutcomeBadge outcome={sample.outcome} />
-              <Button type="button" variant="ghost" size="sm" onClick={() => input.current?.click()}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  startOver()
+                  input.current?.click()
+                }}
+              >
                 Wgraj inny dokument
               </Button>
             </div>
@@ -373,10 +395,32 @@ export function SampleRecognition({ onResult }: { onResult: (result: CaseResult)
       </CardHeader>
       <CardContent className="space-y-5">
         {!sample && (
-          <Button type="button" onClick={() => input.current?.click()} disabled={recognize.isPending}>
-            <FileUp className="size-4" aria-hidden />
-            {recognize.isPending ? 'Rozpoznaję…' : 'Wgraj PDF'}
-          </Button>
+          <>
+            <Button type="button" onClick={() => input.current?.click()} disabled={recognize.isPending}>
+              <FileUp className="size-4" aria-hidden />
+              {recognize.isPending ? 'Rozpoznaję…' : 'Wgraj PDF'}
+            </Button>
+            <div className="space-y-1.5">
+              <Label htmlFor="sample-list">Nie masz pliku pod ręką? Wybierz dokument z listy</Label>
+              <Select value={chosenId} onValueChange={choose} disabled={chosen.isFetching}>
+                <SelectTrigger id="sample-list">
+                  <SelectValue
+                    placeholder={samples.isPending ? 'Wczytujemy listę…' : 'Wybierz dokument'}
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  {(samples.data ?? []).map((row) => (
+                    <SelectItem key={row.id} value={row.id}>
+                      {row.file_name.replace(/\.pdf$/i, '')}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                Lista dokumentów, które serwis już rozpoznał. Wybór działa tak samo jak wgranie pliku.
+              </p>
+            </div>
+          </>
         )}
         <input
           ref={input}
