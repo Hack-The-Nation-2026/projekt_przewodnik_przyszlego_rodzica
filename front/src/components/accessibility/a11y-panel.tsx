@@ -43,6 +43,8 @@ function Toggle({ id, checked, onChange, label }: {
       onClick={() => onChange(!checked)}
       className={cn(
         'relative inline-flex h-6 w-11 shrink-0 items-center rounded-full border transition-colors',
+        // Niewidzialne pole 44 px wokół przełącznika: wygląd zostaje mały, ale palec trafia.
+        'before:absolute before:top-1/2 before:left-1/2 before:h-11 before:w-11 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[""]',
         checked ? 'border-primary bg-primary' : 'border-input bg-muted',
       )}
     >
@@ -151,7 +153,7 @@ export function A11yPanel() {
             <Row icon={Type} title="Rozmiar tekstu" description="Skaluje całą stronę, nie tylko akapity.">
               <ChoiceSelect
                 ariaLabel="Rozmiar tekstu"
-                className="h-9 w-44"
+                className="w-44"
                 value={settings.textScale}
                 onValueChange={(value) => update({ textScale: value as TextScale })}
                 choices={(Object.keys(TEXT_SCALE_LABELS) as TextScale[]).map(

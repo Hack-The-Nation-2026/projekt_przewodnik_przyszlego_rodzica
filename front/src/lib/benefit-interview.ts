@@ -61,6 +61,8 @@ export interface Assessment {
   denied_days?: number
   base_days_used?: number | null
   gross_grosze?: number | null
+  /** Kwota podniesienia do wysokości świadczenia rodzicielskiego, jeśli ta podstawa dała mniej. */
+  net_top_up_grosze?: number | null
   periods?: { kind: string; start: string; end: string; days: number; rate_percent?: number }[]
 }
 export interface ParentalPool {

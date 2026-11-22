@@ -28,7 +28,8 @@ export function ChoiceSelect({
 }) {
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger id={id} aria-label={ariaLabel} data-field={field ?? id} className={cn('h-10 text-sm', className)}>
+      {/* h-11 = 44 px: cel dotykowy poniżej tej wysokości jest za mały na telefonie. */}
+      <SelectTrigger id={id} aria-label={ariaLabel} data-field={field ?? id} className={cn('h-11 text-sm', className)}>
         <SelectValue />
       </SelectTrigger>
       <SelectContent>

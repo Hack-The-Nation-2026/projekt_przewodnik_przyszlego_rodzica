@@ -37,7 +37,7 @@ export function GlossaryList() {
       {glossaryEntries.map(([key, entry]) => (
         <div key={key} className="grid gap-1 py-3 sm:grid-cols-[minmax(0,14rem)_minmax(0,1fr)] sm:gap-6">
           <dt className="font-medium">
-            <Term name={key}>{key.replaceAll('_', ' ')}</Term>
+            <Term name={key}>{entry.term}</Term>
           </dt>
           <dd className="text-sm text-muted-foreground">
             {entry.what} {entry.where}

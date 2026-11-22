@@ -118,9 +118,20 @@ function optionsOf(context: DocumentContext, payerSize: PayerSize): DocumentOpti
 function basisNote(values: InterviewValues, assessment: Assessment) {
   const rate = assessment.periods?.find((period) => period.rate_percent)?.rate_percent
   const basis = parseNumber(values.basis)
-  if (basis === undefined) return rate ? `${rate}% podstawy wymiaru` : null
-  const formatted = money(Math.round(basis * 100))
-  return rate ? `${formatted} × ${rate}% podstawy wymiaru` : `podstawa wymiaru ${formatted}`
+  const topUp = assessment.net_top_up_grosze
+  const parts: string[] = []
+  if (basis !== undefined) {
+    const formatted = money(Math.round(basis * 100))
+    parts.push(rate ? `${formatted} × ${rate}% podstawy wymiaru` : `podstawa wymiaru ${formatted}`)
+  } else if (rate) {
+    parts.push(`${rate}% podstawy wymiaru`)
+  }
+  // Gdy wyliczenie wypadło poniżej świadczenia rodzicielskiego, ZUS podnosi kwotę.
+  // Bez tego zdania karta pokazałaby kwotę niezgodną z tym, co zrobił płatnik.
+  if (topUp && topUp > 0) {
+    parts.push(`podniesione do kwoty świadczenia rodzicielskiego (różnica ${money(topUp)})`)
+  }
+  return parts.length ? parts.join(', ') : null
 }
 
 /**
