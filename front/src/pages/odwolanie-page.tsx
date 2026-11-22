@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, CircleAlert, Download, Gavel, Printer, Scale, Timer } from 'lucide-react'
+import { ArrowRight, Download, Gavel, Printer, Scale, Timer } from 'lucide-react'
 import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -131,11 +131,16 @@ export function OdwolaniePage() {
         </CardContent>
       </Card>
 
-      <Card className={cn(deadline.missed ? 'border-destructive/40 bg-destructive/5' : 'border-primary/40 bg-secondary/40')}>
+      <Card className="no-print">
         <CardHeader className="gap-1">
           <CardTitle className="flex items-center gap-2 text-lg">
             <Timer className="size-5" aria-hidden="true" />
             Terminarz
+            {deadline.missed && (
+              <span className="rounded-full bg-destructive px-2.5 py-1 text-xs font-medium text-destructive-foreground">
+                termin minął
+              </span>
+            )}
           </CardTitle>
           <CardDescription className="text-base text-foreground">
             {!deadline.date
@@ -151,9 +156,9 @@ export function OdwolaniePage() {
             decyzji. Termin liczy się od doręczenia, nie od wystawienia.
           </p>
           {deadline.alternative && <p className="font-medium">{deadline.alternative}</p>}
-          <p className="text-muted-foreground">
-            Opłaty, zwolnienie z kosztów i przebieg sprawy w sądzie zależą od sądu — potwierdź je w ZUS
-            albo w sądzie, zamiast opierać się na naszym opisie. Bezpłatna pomoc prawna:{' '}
+          <p>
+            Jeśli opłata od odwołania jest dla Ciebie za wysoka, razem z pismem możesz poprosić sąd
+            o zwolnienie z kosztów. Bezpłatna pomoc prawna:{' '}
             <a href={legalHelp} target="_blank" rel="noreferrer" className="font-medium text-primary underline decoration-dotted underline-offset-2">
               gov.pl
             </a>
@@ -162,13 +167,13 @@ export function OdwolaniePage() {
         </CardContent>
       </Card>
 
-      <section className="space-y-3" aria-labelledby="diagnoza-title">
+      <section className="no-print space-y-3" aria-labelledby="diagnoza-title">
         <h2 id="diagnoza-title" className="font-display text-xl font-semibold">Diagnoza sporu</h2>
         <p className="text-sm text-muted-foreground">
           Odpowiedź ZUS sprowadzamy do jednego miejsca sporu. Przy każdym piszemy, co ZUS musiałby
           zobaczyć, żeby zmienić zdanie.
         </p>
-        <div className="rounded-lg border border-border p-4">
+        <Card className="p-4">
           <p className="font-medium">{groundLabels[answers.ground]}</p>
           <dl className="mt-2 space-y-2 text-sm">
             <div className="flex gap-1.5">
@@ -180,19 +185,19 @@ export function OdwolaniePage() {
               <dd>{ground.whatZusNeeds}</dd>
             </div>
           </dl>
-        </div>
+        </Card>
       </section>
 
-      <section className="space-y-3" aria-labelledby="dokumenty-title">
+      <section className="no-print space-y-3" aria-labelledby="dokumenty-title">
         <h2 id="dokumenty-title" className="font-display text-xl font-semibold">Lista dokumentów</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           {documents.map((group) => (
-            <div key={group.title} className="rounded-lg border border-border p-4">
+            <Card key={group.title} className="p-4">
               <p className="font-medium">{group.title}</p>
               <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
                 {group.items.map((item) => <li key={item}>{item}</li>)}
               </ul>
-            </div>
+            </Card>
           ))}
         </div>
       </section>
@@ -201,19 +206,14 @@ export function OdwolaniePage() {
         <div className="no-print space-y-4">
           <h2 className="font-display text-xl font-semibold">Co dalej</h2>
           {nextSteps.map((step) => (
-            <div key={step.title} className="rounded-lg border border-border p-4">
+            <Card key={step.title} className="p-4">
               <p className="flex items-center gap-2 font-medium">
                 <Scale className="size-4 shrink-0 text-primary" aria-hidden="true" />
                 {step.title}
               </p>
               <p className="mt-1 text-sm text-muted-foreground">{step.body}</p>
-            </div>
+            </Card>
           ))}
-          <p className="flex items-start gap-2 rounded-md border border-border p-3 text-sm text-muted-foreground">
-            <CircleAlert className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-            Ten moduł nie ocenia szans. Nie znajdziesz tu ani procentu, ani „masz duże widoki”, bo
-            nikt nie policzy tego uczciwie za Ciebie. To projekt pisma i informacja o procedurze.
-          </p>
           <div className="flex flex-wrap gap-3">
             <Button type="button" onClick={() => downloadText('odwolanie-od-decyzji', letter)}>
               <Download aria-hidden="true" />
@@ -250,8 +250,9 @@ export function OdwolaniePage() {
 
       <p className="no-print flex items-start gap-2 text-sm text-muted-foreground">
         <ArrowRight className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-        Moduł wykracza poza litery a) do j) z briefu. Uzasadniamy go literą h): ryzyka utraty prawa
-        pokazujemy jako coś, co da się jeszcze naprawić, a nie jako ostrzeżenie przed porodem.
+        Odwołanie nie wymaga wzoru urzędowego: wystarczy pismo, które wskazuje decyzję, powód sporu
+        i dokumenty na jego poparcie. Terminy i wnioski dopasowaliśmy do powodu odmowy, który
+        wskazałeś.
       </p>
     </PageContainer>
   )

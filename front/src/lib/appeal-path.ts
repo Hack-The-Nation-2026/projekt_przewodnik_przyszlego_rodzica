@@ -184,10 +184,10 @@ export function appealDocuments(answers: AppealAnswers): AppealDocumentGroup[] {
     })
   }
   groups.push({
-    title: 'Do potwierdzenia w ZUS',
+    title: 'O co zadbać przed wysłaniem',
     items: [
-      'opłata od odwołania i ewentualne zwolnienie z kosztów — ustal z ZUS',
-      'sposób doręczenia i liczba odpisów pisma — ustal z ZUS',
+      'własny egzemplarz odwołania z potwierdzeniem nadania albo z datą złożenia w ZUS',
+      'wniosek o zwolnienie z kosztów, jeśli opłata od odwołania jest za wysoka',
     ],
   })
   return groups
@@ -252,7 +252,7 @@ export const nextSteps = [
   },
   {
     title: 'ZUS przekazuje sprawę do sądu okręgowego',
-    body: 'Sąd rozpatruje odwołanie; to droga, która trwa dłużej. Terminy i przebieg sprawy zależą od sądu, więc tych liczb nie zgadujemy — potwierdź je w ZUS albo w sądzie.',
+    body: 'Sąd rozpatruje odwołanie i wydaje wyrok. To droga dłuższa niż ponowne rozpatrzenie sprawy w ZUS, a o terminach i przebiegu informuje sąd.',
   },
 ]
 
