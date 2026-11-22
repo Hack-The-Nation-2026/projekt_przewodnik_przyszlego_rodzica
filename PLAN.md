@@ -622,6 +622,28 @@ możesz stracić prawo”, a „straciłeś i da się to jeszcze naprawić”.
 
 Brief, pkt 3 oraz pkt 4.
 
+### Domknięcie luk po audycie (22.11)
+
+Po przejściu modułów punkt po punkcie z opisem dopisaliśmy to, co zostało na potem. Lista dokumentów
+na karcie ma teraz znaczniki ☑/☐: użytkownik odhacza to, co już ma, stan zostaje w przeglądarce,
+a wydruk pokazuje te same znaczniki (`front/src/lib/card-documents.ts`). Oś czasu dosłała trzeci
+wariant — łączenie urlopu z pracą w połowie wymiaru, liczony osobną symulacją — a przy przewidywanej
+dacie porodu podpisy dat pokazują widełki. Kreator wniosku sprawdza trzeci warunek: czy wniosek nie
+odbiera drugiemu rodzicowi jego nieprzenoszalnych tygodni. Panel „dlaczego tak” dostał dopisek
+o podniesieniu kwoty do świadczenia rodzicielskiego, a karta pokazuje różnicę, gdy płatnik ją wypłaca.
+
+Doszły dwa zdarzenia, których wcześniej nie było. Urodzenie martwe i zgon dziecka mają własne pytanie
+w kroku „Dane dzieci” (krok pokazuje się teraz także matce i ojcu, nie tylko przy adopcji i pobycie
+w szpitalu), a z daty zgonu liczą się dwa terminy: zgłoszenie do ZUS w ciągu siedmiu dni i osiem
+tygodni zasiłku macierzyńskiego. Model danych przyjmuje `stillborn` i `death_date` bez zmiany backendu.
+
+Prosty język przestał być samym przełącznikiem. `front/src/lib/plain-language.ts` trzyma gotowe
+krótsze zdania dla trzech ekranów — wynik, ryzyka, terminy — i podmienia je, gdy ustawienie jest
+włączone. Zdania z datą albo kwotą zostają jak są, bo skracanie ich ręcznie nie ma sensu.
+
+Cele dotykowe podniesione do czterdziestu czterech pikseli (listy wyboru i przełączniki), a lista
+słownika pokazuje pełne nazwy pojęć z polskimi znakami, nie surowe klucze.
+
 ## Mapa wymagań na kroki
 
 | Wymaganie | Krok |
