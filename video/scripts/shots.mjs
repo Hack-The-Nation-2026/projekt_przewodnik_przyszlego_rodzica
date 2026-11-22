@@ -147,12 +147,11 @@ async function main() {
       reducedMotion: 'no-preference',
     })
     const page = await context.newPage()
-    // Ta sama zasłona co w nagraniu: panel deweloperski kalkulatora i nakładka
-    // devtoolsów nie mają wchodzić w kadr zrzutu.
+    // Ta sama zasłona co w nagraniu: nakładka devtoolsów nie ma wchodzić w kadr zrzutu.
     await page.addInitScript(() => {
       const style = document.createElement('style')
       style.textContent =
-        '.border-fuchsia-600, .tsqd-parent-container, [data-tanstack-query-devtools] { display: none !important; }'
+        '.tsqd-parent-container, [data-tanstack-query-devtools] { display: none !important; }'
       const install = () => document.head && document.head.appendChild(style)
       if (document.head) install()
       else document.addEventListener('DOMContentLoaded', install, { once: true })

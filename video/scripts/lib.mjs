@@ -20,8 +20,8 @@ export const OUT = path.resolve('public/clips')
 const BOOT_SCRIPT = () => {
   const style = document.createElement('style')
   style.textContent = `
-    /* Panel deweloperski kalkulatora i nakładka devtoolsów nie mają wchodzić w kadr. */
-    .border-fuchsia-600, .tsqd-parent-container, [data-tanstack-query-devtools] { display: none !important; }
+    /* Nakładka devtoolsów nie ma wchodzić w kadr. */
+    .tsqd-parent-container, [data-tanstack-query-devtools] { display: none !important; }
   `
   const installStyle = () => {
     if (document.head && !document.head.querySelector('#demo-hide')) {

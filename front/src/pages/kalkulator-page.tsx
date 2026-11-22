@@ -1,7 +1,7 @@
 import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
-import { Check, CircleAlert, CircleHelp, ClipboardList, FileText, FlaskConical, Minus, Pencil, Printer, X } from 'lucide-react'
+import { Check, CircleAlert, CircleHelp, ClipboardList, FileText, Minus, Pencil, Printer, X } from 'lucide-react'
 import { useForm, useWatch } from 'react-hook-form'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -39,23 +39,6 @@ const BenefitDocuments = lazy(() => import('@/components/benefit-documents'))
 
 const currency = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN', useGrouping: 'always' })
 const date = new Intl.DateTimeFormat('pl-PL', { dateStyle: 'medium', timeZone: 'UTC' })
-
-/** Przykładowe odpowiedzi dla przycisku deweloperskiego. */
-const demoAnswers: InterviewValues = {
-  ...interviewDefaults,
-  birthStage: 'born',
-  eventDate: '2026-09-01',
-  childCount: '1',
-  hospitalization: 'no',
-  employment: 'employee',
-  insured: 'yes',
-  basis: '8000',
-  partnerEmployment: 'employee',
-  partnerInsured: 'yes',
-  partnerBasis: '6000',
-  sickness: 'no',
-  rehabilitation: 'no',
-}
 
 const benefitStatuses = {
   granted: { label: 'Przysługuje', icon: Check, color: 'border-primary bg-primary text-primary-foreground' },
@@ -495,7 +478,7 @@ export function KalkulatorPage() {
     if (!values) return
     form.reset(values)
     submitAnswers(values)
-    // Odtwarzamy raz, na wejściu; dalsze zmiany stanu trasy nic tu nie zmieniają.
+    // Odtwarzamy raz, na wejściu, bo dalsze zmiany stanu trasy nic tu nie zmieniają.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -527,7 +510,7 @@ export function KalkulatorPage() {
       },
       plan: buildPlan(0, submitted, pool),
     })
-    // Wariant przelicza się raz na wynik; suwaki podstawy nie zmieniają wymiaru pracy.
+    // Wariant przelicza się raz na wynik, bo suwaki podstawy nie zmieniają wymiaru pracy.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submitted, result])
 
@@ -589,26 +572,6 @@ export function KalkulatorPage() {
         description="Odpowiedz na pytania i sprawdź, jakie świadczenia mogą Ci przysługiwać, przez ile dni i w jakiej kwocie."
         crumb="Kalkulator"
       />
-
-      {import.meta.env.DEV && !result && (
-        <div className="mt-8 rounded-lg border-2 border-dashed border-fuchsia-600 bg-fuchsia-50 p-3">
-          <Button
-            type="button"
-            size="lg"
-            className="w-full bg-fuchsia-600 text-white hover:bg-fuchsia-700"
-            onClick={() => {
-              form.reset(demoAnswers)
-              submitAnswers(demoAnswers)
-            }}
-          >
-            <FlaskConical aria-hidden="true" />
-            DEV: wypełnij przykład i pokaż wynik
-          </Button>
-          <p className="mt-2 text-center text-xs font-semibold tracking-wide text-fuchsia-700 uppercase">
-            Tylko w trybie deweloperskim, przed oddaniem usuń
-          </p>
-        </div>
-      )}
 
       {!result && (
         <Form {...form}>
