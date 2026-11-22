@@ -527,11 +527,12 @@ Gotowe, gdy wszystkie pięć pozycji istnieje i linki działają.
 Brief, pkt 4.
 
 Zrobione 22.11. Prezentacja leży w `prezentacja/index.html`: dziesięć plansz w proporcji 16:9, jedna
-rodzina pisma i paleta serwisu, strzałki zmieniają planszę, a `Ctrl+P` zapisuje PDF. Kod QR do
-`https://skrzydla-rodzica.vercel.app` jest na okładce i na ostatniej planszy, a film pokazuje ten
-sam kod dwa razy, na pierwszej i na ostatniej planszy. Obok HTML-a leży gotowy
-`prezentacja/Skrzydla-Rodzica-prezentacja.pdf`, dziesięć stron 16:9, składany skryptem
-`prezentacja/do-pdf.mjs`.
+rodzina pisma i paleta serwisu, strzałki zmieniają planszę, a `Ctrl+P` zapisuje PDF. Każda plansza
+niesie jeden zrzut ekranu, w ramce przeglądarki albo w ramce telefonu, więc prezentacja broni się
+także wtedy, gdy juror czyta sam plik. Kod QR do `https://skrzydla-rodzica.vercel.app` jest na
+okładce i na ostatniej planszy, a film pokazuje ten sam kod dwa razy, na pierwszej i na ostatniej
+planszy. Obok HTML-a leży gotowy `prezentacja/Skrzydla-Rodzica-prezentacja.pdf`, dziesięć stron
+16:9, składany skryptem `prezentacja/do-pdf.mjs`.
 
 Film leży w `video/out/prezentacja.mp4`, poniżej trzech minut, 1920×1080, bez dźwięku. Powstaje ze
 skryptów w `video/scripts/`, montaż opisuje `video/src/edl.ts`, a szczegóły są w `video/README.md`.

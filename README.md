@@ -162,8 +162,9 @@ Kilka rzeczy, które łatwo przeoczyć.
 ## Materiały do oddania
 
 - `prezentacja/index.html` to prezentacja na maksymalnie 10 slajdów. Otwiera się w przeglądarce,
-  strzałki zmieniają planszę, a `Ctrl+P` zapisuje PDF w proporcji 16:9. Kod QR do demo jest na
-  okładce i na ostatniej planszy.
+  strzałki zmieniają planszę, a `Ctrl+P` zapisuje PDF w proporcji 16:9. Każda plansza niesie zrzut
+  ekranu w ramce przeglądarki albo telefonu, bo jury może czytać sam plik, bez pokazu na żywo.
+  Kod QR do demo jest na okładce i na ostatniej planszy.
 - `prezentacja/Skrzydla-Rodzica-prezentacja.pdf` to ta sama prezentacja jako gotowy plik, dziesięć
   stron 16:9. Powstaje komendą `node do-pdf.mjs` z katalogu `prezentacja/`, więc nie trzeba jej
   drukować ręcznie.
