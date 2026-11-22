@@ -37,6 +37,19 @@ cd front && npm run build && npm run lint
 The user starts the dev servers themselves. Don't leave one running in the background unless asked,
 and stop anything you started before you finish.
 
+## Deployment
+
+The front runs on Vercel and the API on FastAPI Cloud. Neither deploys itself from a push, so a
+change that should be live has to be released by hand:
+
+```bash
+cd back  && fastapi deploy
+cd front && vercel deploy --prod --project skrzydla-rodzica
+```
+
+Addresses and the rest of the setup are in the "Wdrożenie" section of `README.md`. `VITE_API_URL`
+is baked in at build time, so changing the API address means rebuilding the front.
+
 ## Git
 
 Commit and push your own work. A change that is finished and verified should not sit uncommitted.
