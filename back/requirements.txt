@@ -1,5 +1,9 @@
 # Zależności produkcyjne backendu.
-fastapi>=0.115
+#
+# FastAPI Cloud czyta ten sam zestaw z `pyproject.toml`. Ten plik zostaje dla
+# instalacji pipem (i dla `requirements-dev.txt`). Zmieniając jedną listę,
+# zmień drugą, żeby wdrożenie i maszyna lokalna nie rozjechały się po cichu.
+fastapi[standard]>=0.115
 uvicorn[standard]>=0.32
 pydantic>=2.9
 pydantic-settings>=2.5

@@ -89,6 +89,51 @@ cd back && ./.venv/bin/python -m pytest -q
 cd front && npm run build && npm run lint
 ```
 
+## Wdrożenie
+
+Front stoi na Vercel, API na FastAPI Cloud. Adres API trafia do frontu w czasie budowania
+(`VITE_API_URL`), więc po każdej zmianie adresu backendu front trzeba przebudować.
+
+Kolejność jest wymuszona. Adres API jest potrzebny, żeby zbudować front, a adres frontu, żeby
+wpuścić go przez CORS. Dlatego API idzie pierwsze, a `CORS_ORIGINS` ustawia się na końcu.
+
+```bash
+cd back
+source .venv/bin/activate
+pip install -r requirements-dev.txt      # fastapi[standard] daje CLI do FastAPI Cloud
+fastapi cloud login                      # otwiera przeglądarkę, plan Hobby jest darmowy
+fastapi deploy                           # wejście app.main:app jest w pyproject.toml
+fastapi cloud env set ENVIRONMENT production
+fastapi cloud env set ADMIN_SETTINGS_FILE /tmp/admin-settings.json
+# Asystent bez klucza działa na dopasowaniu słów, więc ta linia jest opcjonalna.
+fastapi cloud env set --secret ASSISTANT_API_KEY "sk-or-..."
+
+cd ../front
+vercel login
+vercel env add VITE_API_URL --environment production \
+  --value "https://twoja-aplikacja.fastapicloud.dev/api"
+vercel --prod
+
+cd ../back
+fastapi cloud env set CORS_ORIGINS "https://twoj-front.vercel.app"
+```
+
+Adres aplikacji wypisuje `fastapi deploy`, a adres frontu `vercel --prod`. Wstaw je w miejsce
+przykładów powyżej. `fastapi cloud env set` wdraża API ponownie, więc `CORS_ORIGINS` działa
+od razu.
+
+Kilka rzeczy, które łatwo przeoczyć.
+
+- `fastapi deploy` uruchamiamy z `back/`, więc do chmury jedzie samo `back/`. Katalogi `OPIS/`
+  i `PRZYKLADY/` oraz `back/.env` zostają lokalnie, bo CLI respektuje `.gitignore`.
+- Bez `ADMIN_SETTINGS_FILE` zapis z panelu administracyjnego kończy się błędem, bo katalog z kodem
+  w chmurze może być tylko do odczytu. Plik w `/tmp` jest ulotny, więc po restarcie instancji
+  wracają wartości domyślne z kodu.
+- `front/vercel.json` przepisuje każdą trasę na `/index.html`, żeby odświeżenie na `/karta` albo
+  `/urlop` nie kończyło się błędem 404.
+- CORS obejmuje tylko produkcyjną domenę frontu. Podglądy z `vercel` bez `--prod` mają własne
+  adresy i zostaną zablokowane, dopóki nie dopisze się ich do `CORS_ORIGINS`.
+
 ## Struktura
 
 ```
