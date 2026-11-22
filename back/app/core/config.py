@@ -1,4 +1,5 @@
 # Konfiguracja czytana ze zmiennych środowiskowych i pliku .env.
+import re
 from functools import lru_cache
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -18,7 +19,27 @@ class Settings(BaseSettings):
 
     @property
     def cors_origin_list(self) -> list[str]:
-        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+        return [
+            origin.strip()
+            for origin in self.cors_origins.split(",")
+            if origin.strip() and "*" not in origin
+        ]
+
+    @property
+    def cors_origin_regex(self) -> str | None:
+        """Wpisy z gwiazdką, na przykład `https://projekt*.vercel.app`.
+
+        Adresy podglądu zmieniają się przy każdym wdrożeniu, więc nie da się ich
+        wpisać z góry. Starlette przyjmuje osobny wzorzec obok listy dokładnych
+        adresów, a gwiazdka nie przechodzi na kolejną kropkę, żeby wzorzec nie
+        obejmował cudzych subdomen.
+        """
+        patterns = [
+            re.escape(origin.strip()).replace(r"\*", "[^.]+")
+            for origin in self.cors_origins.split(",")
+            if "*" in origin
+        ]
+        return "|".join(patterns) if patterns else None
 
     # Asystent nawigacyjny. Bez klucza działa tryb demo z katalogu tematów, więc cała
     # aplikacja działa offline. Z kluczem model tylko układa zdanie i wybiera temat,
