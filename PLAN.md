@@ -327,6 +327,9 @@ i tygodnie do opisów, a wyłączona funkcja chowa link do symulacji ZUS, kartę
 sekcję ostrzeżeń. Testy w `back/tests/test_admin_settings.py` pilnują walidacji, zapisu, resetu,
 uszkodzonego pliku i wpływu parametrów na wynik.
 
+Wejście na `/panel` prowadzi przez logowanie: bez sesji zamiast formularza stoi wezwanie do
+mObywatela, a po zalogowaniu wraca na panel. W produkcji doszłaby jeszcze rola administratora.
+
 Brief, pkt 3, ostatni akapit.
 
 ## Krok 12. Wygląd i responsywność
@@ -381,7 +384,9 @@ Brief, pkt 4 oraz pkt 6.
   rozpowszechniać skanów ZUS, więc dane są wymyślone.
 - Strona `/sprawy` ma jedno wgranie dokumentu, PDF z ZUS albo z PUE. Rozpoznanie idzie po
   odcisku pliku i nic o sobie nie melduje, a po trafieniu na wierzchu widać tytuł pisma, nazwę
-  pliku, plakietkę z wynikiem i wzory formularzy. Niżej, pod kreską, krótki formularz przyjmuje
+  pliku, plakietkę z wynikiem i wzory formularzy. Obok wgrania stoi lista rozpoznanych dokumentów,
+  bo brief w pkt 6 mówi „uploadu/wyboru wybranych wniosków”: wybór z listy daje ten sam ekran i tę
+  samą drogę liczenia, a nie wymaga pliku pod ręką. Niżej, pod kreską, krótki formularz przyjmuje
   datę i podstawę wymiaru, których skan nie podaje, i wtedy kalkulator liczy świadczenie główne
   oraz porównuje status z rozpoznaną sprawą. Wynik to jedna sekcja cięta kreskami, nie stos kart:
   weryfikacja ubezpieczenia, porównanie z decyzją, wyliczenie. Gdy w dokumencie nie ma decyzji,
