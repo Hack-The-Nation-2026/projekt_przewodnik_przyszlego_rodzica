@@ -267,6 +267,16 @@ export function buildLeaveApplications(leaveCase: LeaveCase): LeaveApplication[]
             message: `Twoje ${exclusive} dni urlopu jest nieprzenoszalne. Nie można wnieść o mniej, bo reszta przepadnie i nie przejdzie na drugiego rodzica.`,
           })
         }
+        // Trzecie sprawdzenie: czy wniosek nie odbiera drugiemu rodzicowi jego
+        // nieprzenoszalnych tygodni. Tego nikt dziś nie pilnuje, a spór z tego
+        // powodu kończy się korektą wniosku u pracodawcy.
+        const partnerExclusive = pool?.exclusive_days_per_parent ?? exclusive
+        if (pool && days > pool.total_days - partnerExclusive) {
+          result.push({
+            ok: false,
+            message: `Cała pula urlopu rodzicielskiego to ${pool.total_days} dni, a ${partnerExclusive} dni drugiego rodzica jest nieprzenoszalne. Wniosek na ${days} dni odbiera mu jego tygodnie, więc potrzebna jest jego zgoda i osobny wniosek.`,
+          })
+        }
         return result
       },
       letter: (decisions) => {
