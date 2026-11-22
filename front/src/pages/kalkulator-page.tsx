@@ -27,7 +27,6 @@ import { buildWeekTimeline, withSharedScale } from '@/lib/week-timeline'
 import type { TimelineInput } from '@/lib/week-timeline'
 import { WeekTimeline } from '@/components/week-timeline'
 import { saveLeaveCase } from '@/lib/leave-applications'
-import { usePlain } from '@/lib/plain-language'
 import { benefitList, buildInterview } from '@/lib/benefit-interview'
 import type { Assessment, BenefitCode, ParentalPlan, ParentalPool, SimulationResponse } from '@/lib/benefit-interview'
 import { asBoolean, interviewDefaults, interviewSchema, parseNumber } from '@/lib/interview-form'
@@ -87,7 +86,7 @@ const statusExplanations = {
   partially_granted: 'Część okresu się należy, resztę pomijamy. Szczegóły są w opisie karty.',
   denied: 'Przy tych odpowiedziach świadczenie się nie należy.',
   missing_data: 'Brakuje odpowiedzi, żeby to policzyć. Wróć do formularza i uzupełnij dane.',
-  not_applicable: 'Ten wariant wywiadu nie obejmuje tego świadczenia.',
+  not_applicable: 'Ten wariant nie obejmuje tego świadczenia.',
 } satisfies Record<Assessment['status'], string>
 
 async function simulate({ values, plan }: { values: InterviewValues; plan: ParentalPlan }) {
@@ -211,7 +210,6 @@ function BenefitCard({ assessment, onShowDocuments, onWhy }: {
   const deniedDays = assessment.denied_days ?? 0
   const showDays = !!assessment.days || (!!deniedDays && assessment.status === 'partially_granted')
   const showAmount = assessment.gross_grosze != null || active
-  const plain = usePlain()
   return (
     <Card className="flex flex-col md:row-span-3 md:grid md:grid-rows-subgrid">
       {/* Karta zajmuje trzy wiersze siatki: treść, podstawę prawną i przycisk.
@@ -225,7 +223,7 @@ function BenefitCard({ assessment, onShowDocuments, onWhy }: {
         <StatusIcon className="size-3.5 shrink-0" aria-hidden="true" />
         {label}
         <InfoHint label={label} align="end" className="ml-auto">
-          {plain(statusExplanations[assessment.status])}
+          {statusExplanations[assessment.status]}
         </InfoHint>
       </div>
       <CardHeader className="gap-1.5 p-4 pb-2.5">
@@ -333,7 +331,6 @@ export function KalkulatorPage() {
   const resultSectionRef = useRef<HTMLElement>(null)
   // Lektor pokazuje się tylko wtedy, gdy ktoś włączył go w panelu dostępności.
   const readAloudEnabled = useA11yStore((state) => state.readAloud)
-  const plain = usePlain()
   const [stepId, setStepId] = useState('role')
   const [sent, setSent] = useState('')
   const [submitted, setSubmitted] = useState<InterviewValues | null>(null)
@@ -488,7 +485,7 @@ export function KalkulatorPage() {
     mutate({ values: data, plan: buildPlan(0, data, pool) })
   }
 
-  // Powrót z karty uprawnień odtwarza ostatni wynik, zamiast zaczynać wywiad od
+  // Powrót z karty uprawnień odtwarza ostatni wynik, zamiast zaczynać formularz od
   // pierwszego pytania. Flaga przychodzi w stanie trasy, więc zwykłe wejście do
   // kalkulatora dalej pokazuje formularz.
   useEffect(() => {
@@ -502,7 +499,7 @@ export function KalkulatorPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Jedna dodatkowa symulacja na wysłanie wywiadu: wariant z pracą w połowie
+  // Jedna dodatkowa symulacja na wysłanie formularza: wariant z pracą w połowie
   // wymiaru. Liczy się dopiero po wyniku, bo potrzebuje początku rodzicielskiego.
   useEffect(() => {
     if (!submitted || !result || submitted.employment !== 'employee' || submitted.workingOnLeave) {
@@ -537,7 +534,7 @@ export function KalkulatorPage() {
   async function advance(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     // Dwie odpowiedzi z pierwszego ekranu mają własne tryby, więc nie walidujemy
-    // formularza: wywiad o ciąży nie ma tam czego szukać.
+    // formularza: pytania o ciążę nie mają tam czego szukać.
     if (values.birthStage === 'planning') {
       navigate('/planowanie')
       return
@@ -564,7 +561,7 @@ export function KalkulatorPage() {
     }
   }, [stepId, simulation.isSuccess])
 
-  // Przewijamy do wyniku raz na wysłanie wywiadu, nie po każdym ruchu suwaka.
+  // Przewijamy do wyniku raz na wysłanie formularza, nie po każdym ruchu suwaka.
   useEffect(() => {
     if (!result || !submitted || scrolledFor.current === submitted) return
     scrolledFor.current = submitted
@@ -684,12 +681,12 @@ export function KalkulatorPage() {
               ref={resultHeading}
               tabIndex={-1}
             >
-              Wynik wywiadu
+              Wynik sprawdzenia
             </h2>
             <p className="mt-2 text-sm text-muted-foreground" data-read>
-              {plain(result.expected
-                ? 'Wstępna symulacja z przewidywaną datą porodu, na podstawie ostatnio wysłanych odpowiedzi.'
-                : 'Symulacja na podstawie ostatnio wysłanych odpowiedzi.')}
+              {result.expected
+                ? 'Wstępne wyliczenie na podstawie przewidywanej daty porodu i ostatnio podanych odpowiedzi.'
+                : 'Wyliczenie na podstawie ostatnio podanych odpowiedzi.'}
             </p>
             {readAloudEnabled && <ReadAloud targetRef={resultSectionRef} className="mt-4" />}
             {result.separatePaternity && (
@@ -764,15 +761,15 @@ export function KalkulatorPage() {
           <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-3 border-t border-border pt-6">
             <Button type="button" size="lg" className="font-semibold" onClick={openCard}>
               <Printer aria-hidden="true" />
-              Zabierz ze sobą
+              Pobierz kartę uprawnień
             </Button>
             <Button type="button" size="lg" variant="outline" className="font-semibold" onClick={openApplications}>
               <FileText aria-hidden="true" />
               Przygotuj wniosek urlopowy
             </Button>
             <p className="max-w-xl text-sm text-muted-foreground">
-              Karta uprawnień na jedną stronę: co przysługuje, ile, na jak długo i do kiedy złożyć
-              wniosek. Do wydruku albo pokazania kadrom na telefonie.
+              Karta uprawnień na jednej stronie: co przysługuje, w jakiej wysokości, na jak długo
+              i do kiedy złożyć wniosek.
             </p>
           </div>
           <Dialog

@@ -100,7 +100,7 @@ function DateHints({ benefit, options, context }: { benefit: BenefitCode; option
   if (!events.length) return null
   return (
     <div className="space-y-1 rounded-md bg-secondary p-3">
-      <p className="font-semibold">{context.forecast ? 'Daty orientacyjne z wywiadu' : 'Daty według okresów z symulacji'}</p>
+      <p className="font-semibold">{context.forecast ? 'Daty orientacyjne z formularza' : 'Daty według okresów z symulacji'}</p>
       <ul className="list-disc space-y-1 pl-5">{events.map((event) => <li key={event.hint}>{event.hint}</li>)}</ul>
       <p className="text-muted-foreground">To przesunięcia kalendarzowe bez korekt za dni wolne. Przy zmianie okresu przelicz termin.</p>
     </div>

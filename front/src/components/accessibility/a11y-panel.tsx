@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Accessibility, BookOpen, Contrast, PersonStanding, RotateCcw, Type, Volume2, Zap } from 'lucide-react'
+import { Accessibility, Contrast, PersonStanding, RotateCcw, Type, Volume2, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ChoiceSelect } from '@/components/ui/choice-select'
 import { Label } from '@/components/ui/label'
@@ -74,7 +74,13 @@ export function A11yPanel() {
   useEffect(() => {
     if (!panelOpen) return
     const onDown = (event: PointerEvent) => {
-      if (!anchor.current?.contains(event.target as Node)) setPanelOpen(false)
+      const target = event.target
+      if (!(target instanceof Node)) return
+      if (anchor.current?.contains(target)) return
+      // Lista wyboru Radix trafia do portalu poza panelem, więc kliknięcie
+      // w opcję zamykałoby panel, zanim lista zdążyłaby oddać wybór.
+      if (target instanceof Element && target.closest('[data-radix-popper-content-wrapper]')) return
+      setPanelOpen(false)
     }
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setPanelOpen(false)
@@ -138,15 +144,6 @@ export function A11yPanel() {
                 label="Czytanie na głos"
                 checked={settings.readAloud}
                 onChange={(value) => update({ readAloud: value })}
-              />
-            </Row>
-
-            <Row icon={BookOpen} title="Prosty język" description="Krótsze zdania na trzech ekranach: wynik, ryzyka, terminy.">
-              <Toggle
-                id="a11y-plain"
-                label="Prosty język"
-                checked={settings.plainLanguage}
-                onChange={(value) => update({ plainLanguage: value })}
               />
             </Row>
 

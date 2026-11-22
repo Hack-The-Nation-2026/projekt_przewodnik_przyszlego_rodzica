@@ -3,7 +3,7 @@
  *
  * Trzymamy je w localStorage, bo mają przetrwać odświeżenie i powrót na stronę
  * następnego dnia. To nie są dane o sprawie, tylko o tym, jak ktoś chce czytać:
- * kontrast, rozmiar tekstu, prosty język i tak dalej.
+ * kontrast, rozmiar tekstu, czytanie na głos i ograniczenie animacji.
  */
 
 export type TextScale = 'normal' | 'large' | 'largest'
@@ -14,7 +14,6 @@ export interface A11ySettings {
   textScale: TextScale
   /** Przełącznik pokazuje przycisk „Przeczytaj wynik" tam, gdzie ma sens. */
   readAloud: boolean
-  plainLanguage: boolean
   reduceMotion: boolean
 }
 
@@ -22,7 +21,6 @@ export const defaultA11ySettings: A11ySettings = {
   contrast: false,
   textScale: 'normal',
   readAloud: false,
-  plainLanguage: false,
   reduceMotion: false,
 }
 
@@ -44,7 +42,6 @@ export function readA11ySettings(): A11ySettings {
       contrast: parsed.contrast === true,
       textScale: parsed.textScale === 'large' || parsed.textScale === 'largest' ? parsed.textScale : 'normal',
       readAloud: parsed.readAloud === true,
-      plainLanguage: parsed.plainLanguage === true,
       reduceMotion: parsed.reduceMotion === true,
     }
   } catch {
@@ -66,15 +63,5 @@ export function applyA11ySettings(settings: A11ySettings) {
   const root = document.documentElement
   root.dataset.contrast = settings.contrast ? 'high' : 'normal'
   root.dataset.text = settings.textScale
-  root.dataset.plain = settings.plainLanguage ? 'on' : 'off'
   root.dataset.motion = settings.reduceMotion ? 'reduced' : 'full'
-}
-
-/**
- * Prosty język: krótkie wersje zdań napisane obok dłuższych, nie streszczenia
- * maszynowe. `plain` zwraca krótką wersję tylko wtedy, gdy przełącznik jest
- * włączony, więc teksty zostają w jednym miejscu.
- */
-export function plain(settings: A11ySettings, full: string, simple: string) {
-  return settings.plainLanguage ? simple : full
 }

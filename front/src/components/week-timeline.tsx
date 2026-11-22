@@ -268,8 +268,8 @@ export function WeekTimeline({
       )}
 
       <p className="text-xs text-muted-foreground">
-        Urlop drugiego rodzica układamy po Twoim, bo tak wygląda typowy plan. Kolejność i części
-        wynikają z wniosków, które złożycie, więc taśma pokazuje wymiar, a nie decyzję za Was.
+        Wymiar urlopów wynika z przepisów. Kolejność i podział między rodzicami zależą od
+        wniosków, które złożycie.
       </p>
     </section>
   )

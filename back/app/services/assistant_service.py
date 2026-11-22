@@ -151,7 +151,7 @@ TOPICS: tuple[Topic, ...] = (
         question="Mam bliźniaki, czy dostanę więcej?",
         answer=(
             "Przy bliźniakach wymiar urlopu i wyliczenie są większe, bo liczy się każde dziecko. "
-            "Wybierz liczbę dzieci w wywiadzie, a kalkulator pokaże wymiar i wyliczenie."
+            "Wybierz liczbę dzieci w formularzu, a kalkulator pokaże wymiar i wyliczenie."
         ),
         links=(
             AssistantLink(
@@ -341,7 +341,7 @@ TOPICS: tuple[Topic, ...] = (
         answer=(
             "Gdy dziecko urodzi się przed terminem, do urlopu macierzyńskiego dochodzi "
             "uzupełniający urlop macierzyński. Jego wymiar zależy od pobytu dziecka w szpitalu: "
-            "wpisz pobyty w wywiadzie, a zasady i przykłady są na ekranie wsparcia."
+            "wpisz pobyty w formularzu, a zasady i przykłady są na ekranie wsparcia."
         ),
         links=(
             AssistantLink(
@@ -439,7 +439,7 @@ TOPICS: tuple[Topic, ...] = (
         ),
         links=(
             AssistantLink(
-                label="Kalkulator i wywiad",
+                label="Kalkulator i formularz",
                 href="/kalkulator",
                 kind="page",
                 description="Pytania o sytuację i sprawdzenie uprawnień.",
@@ -640,7 +640,7 @@ TOPICS: tuple[Topic, ...] = (
         question="Jak to wygląda, gdy korzystają oboje rodzice?",
         answer=(
             "Kalkulator liczy oboje rodziców w jednym przebiegu i pokazuje, kto ile dostanie. "
-            "Podział urlopu ustawisz w wywiadzie, a wynik zobaczysz obok siebie."
+            "Podział urlopu ustawisz w formularzu, a wynik zobaczysz obok siebie."
         ),
         links=(
             AssistantLink(
@@ -698,7 +698,7 @@ TOPICS: tuple[Topic, ...] = (
         id="adopcja",
         question="Jesteśmy rodzicami adopcyjnymi albo zastępczymi",
         answer=(
-            "Serwis obsługuje też adopcję i rodzinę zastępczą. Wybierz tę drogę w wywiadzie, "
+            "Serwis obsługuje też adopcję i rodzinę zastępczą. Wybierz tę drogę w formularzu, "
             "a kalkulator i lista dokumentów dostosują się do waszej sytuacji."
         ),
         links=(

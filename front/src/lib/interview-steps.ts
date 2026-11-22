@@ -55,7 +55,7 @@ export function getInterviewSteps(values: InterviewValues): InterviewStep[] {
   if (isPlacement(values) || isParent || values.hospitalization === 'yes') {
     steps.push({
       id: 'child-details', title: 'Dane dzieci',
-      description: 'Uzupełnij dane dla każdego dziecka, którego dotyczy wywiad.',
+      description: 'Uzupełnij dane dla każdego dziecka, którego dotyczy formularz.',
       fields: ['children', 'pregnancyWeeks'],
       Fields: ChildDetails,
     })

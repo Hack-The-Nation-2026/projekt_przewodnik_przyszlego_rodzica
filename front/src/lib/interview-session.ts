@@ -1,10 +1,10 @@
 import type { InterviewValues } from '@/lib/interview-form'
 
 /**
- * Ostatnie odpowiedzi z wywiadu, zapisane na czas wizyty.
+ * Ostatnie odpowiedzi z formularza, zapisane na czas wizyty.
  *
  * Karta uprawnień żyje na osobnej trasie, a kalkulator trzyma wynik tylko
- * w pamięci. Bez tego zapisu powrót z karty zaczynałby wywiad od pierwszego
+ * w pamięci. Bez tego zapisu powrót z karty zaczynałby formularz od pierwszego
  * pytania, mimo że wynik już był policzony. Dane zostają w przeglądarce, tak
  * samo jak odpowiedzi w formularzu.
  */

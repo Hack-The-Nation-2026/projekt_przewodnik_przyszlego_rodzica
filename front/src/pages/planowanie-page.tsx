@@ -168,9 +168,9 @@ export function PlanowaniePage() {
       </Card>
 
       <div className="print-sheet">
-        <article className="space-y-4 rounded-lg border border-neutral-300 bg-white p-6 text-navy">
-          <header className="border-b-2 border-primary pb-3">
-            <p className="text-[11px] font-semibold tracking-wide text-primary uppercase">Skrzydła Rodzica</p>
+        <article className="space-y-5 rounded-xl border border-border bg-card p-6 text-foreground shadow-sm">
+          <header className="space-y-1 border-b-2 border-primary pb-4">
+            <p className="text-xs font-semibold tracking-wide text-primary uppercase">Skrzydła Rodzica</p>
             <h2 className="font-display text-xl font-semibold">Lista przygotowań przed ciążą</h2>
             <p className="text-sm text-muted-foreground">
               Bez daty porodu nie podajemy kwot ani tygodni. Pozycje wynikają z Twoich odpowiedzi, a nie
@@ -190,7 +190,7 @@ export function PlanowaniePage() {
             <p className="text-sm">Odpowiedz na pytania powyżej, żeby zobaczyć listę.</p>
           )}
 
-          <footer className="border-t border-neutral-300 pt-3 text-[11px] text-muted-foreground">
+          <footer className="border-t border-border pt-3 text-[11px] text-muted-foreground">
             Lista przygotowań to informacja o procedurze, a nie porada prawna ani decyzja ZUS. Pozycje
             oznaczone jako „do potwierdzenia w ZUS” trzeba sprawdzić w ZUS, bo zależą od tytułu
             ubezpieczenia. Dane nie opuściły przeglądarki.
@@ -201,7 +201,7 @@ export function PlanowaniePage() {
       <div className="no-print flex flex-wrap items-center gap-3">
         <Button type="button" onClick={() => window.print()}>
           <Printer aria-hidden="true" />
-          Zabierz ze sobą
+          Drukuj albo zapisz jako PDF
         </Button>
         <Button type="button" variant="outline" onClick={exportCalendar} disabled={!answers.horizonMonths}>
           <CalendarPlus aria-hidden="true" />
@@ -214,7 +214,7 @@ export function PlanowaniePage() {
 
       <p className="no-print flex items-start gap-2 text-sm text-muted-foreground">
         <Info className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-        Gdy pojawi się data porodu, wróć i zrób wywiad: wtedy ten sam serwis policzy kwoty, wymiary
+        Gdy pojawi się data porodu, wróć i wypełnij formularz: wtedy ten sam serwis policzy kwoty, wymiary
         i terminy. Ta lista jest od tego, żeby trafić do tego momentu z zamkniętymi przygotowaniami.
       </p>
       <p className="no-print flex items-start gap-2 text-sm text-muted-foreground">

@@ -11,7 +11,7 @@ import type { InterviewValues } from '@/lib/interview-form'
  *
  * Cała reszta serwisu opowiada, co będzie albo co było. Tu chodzi o to, ile
  * jeszcze zostało i co trzeba złożyć teraz. Stan zapisujemy w przeglądarce,
- * żeby przy kolejnej wizycie nie przechodzić wywiadu od zera.
+ * żeby przy kolejnej wizycie nie przechodzić formularza od zera.
  */
 export interface LeaveProgressAnswers {
   /** Data porodu, którą zna użytkownik. */

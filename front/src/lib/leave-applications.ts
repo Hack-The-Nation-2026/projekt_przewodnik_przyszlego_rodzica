@@ -9,7 +9,7 @@ import { parseNumber } from '@/lib/interview-form'
 
 /**
  * Wnioski urlopowe piszemy sami, bo ZUS nie publikuje ich wzorów: to pisma do
- * pracodawcy, nie formularze urzędowe. Bierzemy wynik wywiadu, a użytkownik
+ * pracodawcy, nie formularze urzędowe. Bierzemy wynik sprawdzenia, a użytkownik
  * decyduje tylko o tym, czego nie da się wyczytać z odpowiedzi.
  */
 export interface LeaveCase {
@@ -25,7 +25,7 @@ export interface LeaveDecision {
   hint: string
   type: 'text' | 'date' | 'number'
   required?: boolean
-  /** Wartość podpowiedziana z wywiadu, jeśli da się ją wyliczyć. */
+  /** Wartość podpowiedziana z formularza, jeśli da się ją wyliczyć. */
   prefill?: string
 }
 
@@ -140,7 +140,7 @@ function personalDecisions(): LeaveDecision[] {
 
 /**
  * Lista wniosków wynikających z sytuacji, a nie katalog wszystkich możliwych.
- * Pismo powstaje z wyniku wywiadu, więc nic tu nie jest zgadywane.
+ * Pismo powstaje z wyniku sprawdzenia, więc nic tu nie jest zgadywane.
  */
 export function buildLeaveApplications(leaveCase: LeaveCase): LeaveApplication[] {
   const { values, context, pool } = leaveCase

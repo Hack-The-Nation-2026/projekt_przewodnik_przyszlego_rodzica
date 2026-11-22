@@ -508,7 +508,7 @@ function LinksSection({ links }: { links: ZusLink[] | undefined }) {
     <Card>
       <CardHeader>
         <CardTitle>Przekierowania</CardTitle>
-        <CardDescription>Oficjalne miejsca, w których załatwisz sprawę naprawdę.</CardDescription>
+        <CardDescription>Oficjalne strony, na których załatwisz sprawę.</CardDescription>
       </CardHeader>
       <CardContent>
         <ul className="space-y-3">

@@ -192,7 +192,7 @@ export function buildWeekTimeline(input: TimelineInput): WeekTimelineData {
   )
   if (supplementary) ownBlocks.push(supplementary)
 
-  // Rodzicielski wywiadu może zaczynać się po macierzyńskim albo po uzupełniającym.
+  // Rodzicielski z formularza może zaczynać się po macierzyńskim albo po uzupełniającym.
   const parentalRange = range('rodzicielski')
   if (parentalRange && pool) {
     const ownDays = exclusiveDays + (sharedTotal - secondShare)
@@ -268,7 +268,7 @@ export function buildWeekTimeline(input: TimelineInput): WeekTimelineData {
   const totalDays = latestDay + LEADING_DAYS + 14
 
   const markers: TimelineMarker[] = [
-    { day: 0, date: eventDate, label: 'Poród', detail: context.forecast ? 'Przewidywana data porodu.' : 'Data porodu z wywiadu.', kind: 'birth', missed: false },
+    { day: 0, date: eventDate, label: 'Poród', detail: context.forecast ? 'Przewidywana data porodu.' : 'Data porodu z formularza.', kind: 'birth', missed: false },
   ]
   const todayDay = daysBetween(eventDate, today)
   if (todayDay >= -LEADING_DAYS && todayDay <= totalDays - LEADING_DAYS) {

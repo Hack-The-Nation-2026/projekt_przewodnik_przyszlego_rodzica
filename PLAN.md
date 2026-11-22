@@ -545,13 +545,13 @@ ustawienia, bez których część ludzi w ogóle nie skorzysta z serwisu.
   terminami i adresatem każdego wniosku.
 - Kreator wniosku urlopowego: lista wniosków wynikających z sytuacji, pismo gotowe do podpisu,
   sprawdzenie przed wysłaniem i karta jako druga strona tego samego wydruku.
-- Panel dostępności: wysoki kontrast, trzy rozmiary tekstu, czytanie na głos, prosty język
+- Panel dostępności: wysoki kontrast, trzy rozmiary tekstu, czytanie na głos
   i ograniczenie animacji.
 
 Gotowe, gdy kartę i wniosek da się wydrukować na jednej stronie A4, a ustawienia dostępności
 działają i pamiętają się w przeglądarce.
 
-Zrobione 22.11. Przycisk „Zabierz ze sobą" pod listą świadczeń prowadzi na `/karta`. Karta
+Zrobione 22.11. Przycisk „Pobierz kartę uprawnień" pod listą świadczeń prowadzi na `/karta`. Karta
 powstaje w `front/src/lib/entitlement-card.ts` z odpowiedzi, ocen i okresów symulacji, jedzie na
 trasę przez `sessionStorage`, więc nic nie zostaje na serwerze, i mówi wprost, czy liczy się
 z przewidywanej daty porodu, czy z danych po porodzie. Kwota miesięczna jest przeliczona z sumy
@@ -560,7 +560,7 @@ i liczby dni, z dopiskiem, że to przybliżenie, bo inaczej karta obiecywałaby 
 Ekran `/wnioski` bierze ten sam stan sprawy i pokazuje tylko wnioski, które wynikają z odpowiedzi:
 macierzyński, rodzicielski, ojcowski, uzupełniający, przejęcie urlopu przez ojca i łączenie urlopu
 z pracą. Przy każdym jest jedno zdanie o tym, co załatwia, kiedy go złożyć i co się stanie po
-terminie. Użytkownik uzupełnia tylko to, czego nie ma w wywiadzie: imię, adres i pracodawcę.
+terminie. Użytkownik uzupełnia tylko to, czego nie ma w formularzu: imię, adres i pracodawcę.
 Sprawdzenie przed wysłaniem porównuje datę z okresem z symulacji, liczbę dni z policzonym wymiarem
 i pilnuje, żeby nie zabrać drugiemu rodzicowi jego nieprzenoszalnych tygodni. Pismo wygląda jak
 pismo: miejscowość i data, adresat, treść, załączniki i miejsce na podpis. Po pobraniu serwis
@@ -611,7 +611,8 @@ Tryb planowania pyta o teraźniejszość i składa listę przygotowań podzielon
 ciążą” i „w ciąży”. Nie liczy kwot ani tygodni, a pozycje, których nie potwierdzają materiały ZUS,
 dostają znacznik „do potwierdzenia w ZUS” bez liczby. Tryb „jestem w trakcie urlopu” daje status
 jednym zdaniem, najbliższe decyzje z datami i symulację „jeśli złożę teraz” obok „jeśli poczekam”.
-Stan trybu urlopu zapisuje się w przeglądarce, więc kolejna wizyta pokazuje status bez wywiadu.
+Stan trybu urlopu zapisuje się w przeglądarce, więc kolejna wizyta pokazuje status bez ponownego
+wypełniania formularza.
 Gdy termin na 81,5% minął, oba warianty liczą się po realnych stawkach, a nie po tej, do której nie
 ma już prawa.
 
@@ -647,18 +648,18 @@ w kroku „Dane dzieci” (krok pokazuje się teraz także matce i ojcu, nie tyl
 w szpitalu), a z daty zgonu liczą się dwa terminy: zgłoszenie do ZUS w ciągu siedmiu dni i osiem
 tygodni zasiłku macierzyńskiego. Model danych przyjmuje `stillborn` i `death_date` bez zmiany backendu.
 
-Prosty język przestał być samym przełącznikiem. `front/src/lib/plain-language.ts` trzyma gotowe
-krótsze zdania dla trzech ekranów — wynik, ryzyka, terminy — i podmienia je, gdy ustawienie jest
-włączone. Zdania z datą albo kwotą zostają jak są, bo skracanie ich ręcznie nie ma sensu.
+Prosty język zniknął z panelu dostępności. Trzymanie dwóch wersji każdego zdania nie broniło się
+w praktyce: krótsza wersja i tak była pisana ręcznie, więc rozjeżdżała się z resztą treści. Zostały
+kontrast, rozmiar tekstu, czytanie na głos i ograniczenie animacji.
 
-Cele dotykowe podniesione do czterdziestu czterech pikseli (listy wyboru i przełączniki), a lista
+Cel dotykowy podniesiony do czterdziestu czterech pikseli (listy wyboru i przełączniki), a lista
 słownika pokazuje pełne nazwy pojęć z polskimi znakami, nie surowe klucze.
 
 ### Poprawki wyglądu, karty i wyniku (22.11)
 
 Przejście po ekranach po audycie. Trzy kroki „Jak to działa” na stronie głównej dostały nowe zdjęcia
 (`front/public/krok-1.webp`, `krok-2.webp`), w tej samej ciepłej tonacji co zdjęcie na pierwszym
-ekranie. Licznik kroków wywiadu mówi czarną czcionką, a nad nim stoją osobne zielone klocki, po jednym
+ekranie. Licznik kroków formularza mówi czarną czcionką, a nad nim stoją osobne zielone klocki, po jednym
 na pytanie. Sekcja świadczeń tłumaczy przy przycisku, co robi kalkulator. Karta uprawnień drukuje się
 bez nagłówka i stopki przeglądarki (zerowy margines `@page`, odstęp dopiero na karcie) i bez dziur
 w marginesach. Słownik na `/dokumenty` pokazuje definicję obok pojęcia, więc pojęcia nie są już
@@ -672,6 +673,20 @@ Dane z wejścia są wreszcie użyte. Karta uprawnień podpisuje się imieniem i 
 (`front/src/components/entitlement-card.tsx`), więc kto wszedł przez mObywatel albo wpisał dane
 ręcznie, nie wpisuje ich drugi raz. Sesja zostaje w pamięci, więc podpis działa w obrębie wizyty,
 a po odświeżeniu strony wraca pole do uzupełnienia.
+
+### Druga tura poprawek języka i interfejsu (22.11)
+
+Słowo „wywiad" zniknęło z całego serwisu, w interfejsie i w odpowiedziach asystenta: formularz to
+formularz, a wynik to „Wynik sprawdzenia". Ton tekstów poszedł w stronę urzędową — bez „mamy i taty",
+bez „zabierz ze sobą", bez zdań, które tłumaczą, jak ma wyglądać typowy plan. `front/src/pages/
+swiadczenia-page.tsx` dostał pasek zakładek jako filtr sytuacji, a przycisk „Otwórz kalkulator" stanął
+nad nim. Zakładki są własne (`front/src/components/ui/tabs.tsx`, role `tablist`/`tab`/`tabpanel`
+i obsługa strzałek), bo `@radix-ui/react-tabs` nie ma w projekcie.
+
+Panel dostępności przestał zamykać się przy kliknięciu w listę rozmiaru tekstu: opcje Radixa renderują
+się w portalu poza panelem, więc zamknięcie na `pointerdown` ucinało wybór, zanim zdążył dojść.
+Karta uprawnień i pozostałe wydruki stoją teraz na tych samych tokenach co reszta serwisu (`border-border`,
+`bg-card`, `rounded-xl`), a lista dokumentów ma zwykły, zielony kwadrat zamiast znaku ☐ z klawiatury.
 
 ## Mapa wymagań na kroki
 
@@ -707,7 +722,7 @@ a po odświeżeniu strony wraca pole do uzupełnienia.
 | Upload przykładowych wniosków | 13 |
 | Karta uprawnień i terminy w jednym dokumencie | 17 |
 | Kreator wniosków urlopowych | 17 |
-| Dostępność: kontrast, rozmiar tekstu, lektor, prosty język | 17 |
+| Dostępność: kontrast, rozmiar tekstu, lektor | 17 |
 | Oś czasu tygodni i porównanie wariantów | 18 |
 | Wyjaśnienie każdej liczby: „dlaczego tak” | 18 |
 | Tryb planowania przed ciążą | 18 |

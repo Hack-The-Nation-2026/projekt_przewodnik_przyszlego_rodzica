@@ -93,7 +93,7 @@ export function WnioskiPage() {
       <PageContainer className="space-y-6 py-12">
         <h1 className="font-display text-2xl font-semibold">Kreator wniosku urlopowego</h1>
         <p className="max-w-2xl text-muted-foreground">
-          Wnioski powstają z wyniku wywiadu: dane osobowe i daty przychodzą z kalkulatora, więc najpierw
+          Wnioski powstają z wyniku sprawdzenia: dane osobowe i daty przychodzą z kalkulatora, więc najpierw
           policz świadczenia.
         </p>
         <Link to="/kalkulator" className={buttonVariants()}>
@@ -153,7 +153,7 @@ export function WnioskiPage() {
       <div className="no-print">
         <PageHeading
           title="Kreator wniosku urlopowego"
-          description="Wnioski o urlopy to pisma do pracodawcy, bo ZUS ich nie publikuje. Powstają z Twoich odpowiedzi: dane i daty z wywiadu, decyzje tylko te, które należą do Ciebie."
+          description="Wnioski o urlopy to pisma do pracodawcy, bo ZUS ich nie publikuje. Powstają z Twoich odpowiedzi: dane i daty z formularza, decyzje tylko te, które należą do Ciebie."
         />
       </div>
 
@@ -199,7 +199,7 @@ export function WnioskiPage() {
             </Card>
 
             <div className="space-y-4">
-              <h3 className="font-display text-lg font-semibold">Uzupełnij tylko to, czego nie ma w wywiadzie</h3>
+              <h3 className="font-display text-lg font-semibold">Uzupełnij tylko to, czego nie ma w formularzu</h3>
               <div className="grid gap-4 sm:grid-cols-2">
                 {selected.decisions.map((decision) => (
                   <div key={decision.id} className={cn('min-w-0 space-y-1.5', decision.type === 'text' && decision.id === 'address' && 'sm:col-span-2')}>
@@ -297,7 +297,7 @@ export function WnioskiPage() {
           <div className="min-w-0 space-y-3">
             <h3 className="no-print font-display text-lg font-semibold">Podgląd pisma</h3>
             <div className="print-sheet" ref={letterRef}>
-              <article className="rounded-lg border border-neutral-300 bg-white p-6 text-navy">
+              <article className="rounded-xl border border-border bg-card p-6 text-foreground shadow-sm">
                 <pre className="font-sans text-sm leading-relaxed whitespace-pre-wrap">{letterText}</pre>
               </article>
               {includeCard && card && (

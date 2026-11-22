@@ -322,7 +322,7 @@ export function UrlopPage() {
           )}
 
           <div className="flex flex-wrap items-center gap-3 border-t pt-6">
-            <Link to="/karta" className={buttonVariants({ variant: 'outline' })}>Zabierz kartę uprawnień</Link>
+            <Link to="/karta" className={buttonVariants({ variant: 'outline' })}>Otwórz kartę uprawnień</Link>
             <Link to="/wnioski" className={buttonVariants({ variant: 'outline' })}>Przygotuj wniosek urlopowy</Link>
             <Link to="/odwolanie" className={buttonVariants({ variant: 'ghost' })}>Dostałem decyzję odmowną</Link>
           </div>

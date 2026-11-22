@@ -27,7 +27,7 @@ const STEPS = [
   },
   {
     title: 'Zobacz, co ci przysługuje',
-    body: 'Liczymy zasiłki, terminy i kwoty dla Twojego przypadku, osobno dla mamy i taty. Także przy wcześniactwie, adopcji i umowie zlecenie.',
+    body: 'Liczymy zasiłki, terminy i kwoty dla Twojego przypadku, odrębnie dla matki i ojca. Także przy wcześniactwie, adopcji i umowie zlecenie.',
     image: '/krok-2.webp',
   },
   {
@@ -83,7 +83,7 @@ export function HomePage() {
             </h1>
             <p className="mt-4 text-base text-primary-foreground/95 sm:text-lg">
               Skrzydła Rodzica prowadzą przez zasiłki i dokumenty związane z ciążą, porodem i opieką
-              nad dzieckiem, dla mamy i taty. Także wtedy, gdy poród przebiega inaczej niż zakładano,
+              nad dzieckiem, dla matki i ojca. Także wtedy, gdy poród przebiega inaczej niż zakładano,
               czyli przy wcześniactwie, gdy dziecko wymaga leczenia, przy adopcji i w rodzinie
               zastępczej.
             </p>

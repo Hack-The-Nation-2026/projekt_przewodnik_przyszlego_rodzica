@@ -29,7 +29,6 @@ export const useA11yStore = create<A11yState>((set, get) => ({
       contrast: get().contrast,
       textScale: get().textScale,
       readAloud: get().readAloud,
-      plainLanguage: get().plainLanguage,
       reduceMotion: get().reduceMotion,
       ...patch,
     }

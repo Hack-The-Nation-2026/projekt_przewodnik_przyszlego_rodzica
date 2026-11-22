@@ -82,7 +82,7 @@ export interface ParentalPlan {
   averagedRate?: boolean
   /** Dni urlopu rodzicielskiego obojga rodziców, gdy dzielicie wspólną pulę. */
   parentalDays?: Partial<Record<Parent, number>>
-  /** Dane rodzica, którym nie jest osoba wypełniająca wywiad. */
+  /** Dane rodzica, którym nie jest osoba wypełniająca formularz. */
   partner?: PartnerInput
 }
 
@@ -245,7 +245,7 @@ export function buildInterview(values: InterviewValues, plan: ParentalPlan = {})
   function missingHealth(benefit: BenefitCode, assessed: boolean, declined: boolean, description: string) {
     if (!assessed) {
       add(benefit, !mother || declined ? 'not_applicable' : 'missing_data', !mother
-        ? 'Ta część wywiadu dotyczy osoby, która była lub jest w ciąży.'
+        ? 'Ta część formularza dotyczy osoby, która była lub jest w ciąży.'
         : description)
     }
   }

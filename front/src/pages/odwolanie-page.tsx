@@ -233,7 +233,7 @@ export function OdwolaniePage() {
         <div className="min-w-0 space-y-3">
           <h2 className="no-print font-display text-xl font-semibold">Projekt odwołania</h2>
           <div className="print-sheet">
-            <article className="rounded-lg border border-neutral-300 bg-white p-6 text-navy">
+            <article className="rounded-xl border border-border bg-card p-6 text-foreground shadow-sm">
               <pre className="font-sans text-sm leading-relaxed whitespace-pre-wrap">{letter}</pre>
             </article>
           </div>

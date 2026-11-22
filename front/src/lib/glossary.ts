@@ -42,7 +42,7 @@ export const glossary = {
   swiadczeniobiorca: {
     term: 'Świadczeniobiorca',
     what: 'Osoba, której wypłacane jest świadczenie. Zwykle ta sama, co ubezpieczony.',
-    where: 'W pismach to słowo oznacza po prostu Ciebie.',
+    where: 'W pismach to słowo oznacza Ciebie.',
   },
   wynagrodzenie_chorobowe: {
     term: 'Wynagrodzenie chorobowe',
@@ -92,7 +92,7 @@ export const glossary = {
   swiadczenie_rehabilitacyjne: {
     term: 'Świadczenie rehabilitacyjne',
     what: 'Świadczenie po wyczerpaniu zasiłku chorobowego, gdy zdrowie nie pozwala wrócić do pracy.',
-    where: 'Liczymy je tylko wtedy, gdy w wywiadzie wskażesz dalszą niezdolność do pracy.',
+    where: 'Liczymy je tylko wtedy, gdy w formularzu wskażesz dalszą niezdolność do pracy.',
   },
 } as const satisfies Record<string, GlossaryEntry>
 

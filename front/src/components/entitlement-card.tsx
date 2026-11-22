@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, CalendarClock, CircleAlert, FileText, Printer, User } from 'lucide-react'
+import { ArrowLeft, CalendarClock, Check, CircleAlert, FileText, Printer, User } from 'lucide-react'
 import { PageContainer } from '@/components/layout/page-container'
 import { ReadAloud } from '@/components/accessibility/read-aloud'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { formatDocumentDate } from '@/lib/benefit-documents'
 import { readCardDocuments, saveCardDocuments, toggleCardDocument } from '@/lib/card-documents'
-import { usePlain } from '@/lib/plain-language'
 import { cn } from '@/lib/utils'
 import type { EntitlementCardData } from '@/lib/entitlement-card'
 import { useA11yStore } from '@/store/a11y-store'
@@ -23,15 +22,30 @@ const legalBasis = [
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0">
-      <dt className="text-[11px] tracking-wide text-muted-foreground uppercase">{label}</dt>
+      <dt className="text-xs font-medium text-muted-foreground">{label}</dt>
       <dd className="text-sm font-medium break-words" data-read>{value}</dd>
     </div>
   )
 }
 
+/** Kwadrat jak w reszcie serwisu: obramowanie z tokenu, a nie znak ☐ z klawiatury. */
+function DocumentMark({ has }: { has: boolean }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={cn(
+        'mt-0.5 flex size-4 shrink-0 items-center justify-center rounded border transition-colors',
+        has ? 'border-primary bg-primary text-primary-foreground' : 'border-input bg-background',
+      )}
+    >
+      {has && <Check className="size-3" strokeWidth={3} />}
+    </span>
+  )
+}
+
 function BenefitRow({ benefit }: { benefit: EntitlementCardData['benefits'][number] }) {
   return (
-    <li className="break-inside-avoid border-t border-neutral-300 py-2.5 first:border-t-0 first:pt-0" data-read>
+    <li className="break-inside-avoid border-t border-border py-2.5 first:border-t-0 first:pt-0" data-read>
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <p className="font-semibold">{benefit.name}</p>
         <p className="tabular-nums">
@@ -77,7 +91,7 @@ function BenefitRow({ benefit }: { benefit: EntitlementCardData['benefits'][numb
 }
 
 /**
- * Karta uprawnień do wydruku: jedna strona, którą zabiera się do kadr albo do ZUS.
+ * Karta uprawnień do wydruku: jedna strona z podsumowaniem uprawnień i terminów.
  * Nie jest decyzją ani wnioskiem, więc nagłówek mówi wprost, skąd pochodzą dane.
  */
 export function EntitlementCard({
@@ -95,7 +109,6 @@ export function EntitlementCard({
   className?: string
 }) {
   const [have, setHave] = useState<string[]>(() => readCardDocuments())
-  const plain = usePlain()
 
   function toggle(document: string) {
     const next = toggleCardDocument(have, document)
@@ -104,23 +117,23 @@ export function EntitlementCard({
   }
 
   return (
-    <article className={cn('space-y-4 rounded-lg border border-neutral-300 bg-white p-6 text-navy', className)}>
-      <header className="space-y-2 border-b-2 border-primary pb-3">
+    <article className={cn('space-y-5 rounded-xl border border-border bg-card p-6 text-foreground shadow-sm', className)}>
+      <header className="space-y-3 border-b-2 border-primary pb-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <p className="text-[11px] font-semibold tracking-wide text-primary uppercase">Skrzydła Rodzica</p>
+            <p className="text-xs font-semibold tracking-wide text-primary uppercase">Skrzydła Rodzica</p>
             <h1 className="font-display text-xl font-semibold">Karta uprawnień</h1>
             <p className="text-sm text-muted-foreground">
               {data.role} · karta z {formatDocumentDate(data.generatedAt)}
             </p>
           </div>
-          <p className="max-w-xs rounded-md bg-secondary p-2 text-xs font-medium" data-read>
+          <p className="max-w-xs rounded-lg bg-secondary p-3 text-xs font-medium" data-read>
             {data.orientationNote}
           </p>
         </div>
         <div className="grid gap-1 sm:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
           <div>
-            <Label htmlFor="card-person" className="text-[11px] tracking-wide text-muted-foreground uppercase">
+            <Label htmlFor="card-person" className="text-xs font-medium text-muted-foreground">
               Imię lub inicjały (opcjonalnie)
             </Label>
             {onPersonChange ? (
@@ -138,7 +151,7 @@ export function EntitlementCard({
           </div>
           {data.total && (
             <div className="sm:text-right">
-              <p className="text-[11px] tracking-wide text-muted-foreground uppercase">
+              <p className="text-xs font-medium text-muted-foreground">
                 Suma świadczeń z karty
               </p>
               <p className="font-display text-lg font-semibold tabular-nums">{data.total}</p>
@@ -191,11 +204,11 @@ export function EntitlementCard({
                 )}
               >
                 <span className="font-medium tabular-nums">{formatDocumentDate(deadline.date)}</span>
-                <span className="text-sm">{plain(deadline.label)}</span>
+                <span className="text-sm">{deadline.label}</span>
                 <span className="w-full text-xs text-muted-foreground">{deadline.detail}</span>
                 {deadline.missed && (
                   <span className="w-full text-xs font-medium text-red-800">
-                    Termin minął. {plain(deadline.missedNote ?? 'Sprawdź z płatnikiem, czy wniosek jeszcze przejdzie.')}
+                    Termin minął. {deadline.missedNote ?? 'Sprawdź z płatnikiem, czy wniosek jeszcze przejdzie.'}
                   </span>
                 )}
               </li>
@@ -203,7 +216,7 @@ export function EntitlementCard({
           </ul>
         ) : (
           <p className="text-sm text-muted-foreground">
-            {plain('Do tych świadczeń nie ma terminu, który dałoby się wyliczyć z podanych dat.')}
+            Do tych świadczeń nie ma terminu, który dałoby się wyliczyć z podanych dat.
           </p>
         )}
       </section>
@@ -214,20 +227,17 @@ export function EntitlementCard({
           <>
             <p className="text-xs text-muted-foreground">
               {have.length
-                ? `W teczce masz już ${Math.min(have.length, data.documents.length)} z ${data.documents.length}. `
+                ? `Masz już ${Math.min(have.length, data.documents.length)} z ${data.documents.length} dokumentów. `
                 : ''}
               {interactive
-                ? 'Odhacz to, co już masz — znaczniki zostają w tej przeglądarce i widać je na wydruku.'
-                : 'Znacznik ☑ przy dokumencie, który już masz.'}
+                ? 'Odhacz dokumenty, które już masz. Zaznaczenia zapisują się w tej przeglądarce i pojawiają się na wydruku.'
+                : 'Zaznaczony kwadrat oznacza dokument, który już masz.'}
             </p>
-            <ul className="space-y-1 text-sm">
+            <ul className="space-y-0.5">
               {data.documents.map((document) => {
                 const has = have.includes(document)
-                const mark = (
-                  <>
-                    <span aria-hidden="true" className="tabular-nums">{has ? '☑' : '☐'}</span>
-                    <span className={cn(has && 'text-muted-foreground')}>{document}</span>
-                  </>
+                const text = (
+                  <span className={cn('text-sm', has && 'text-muted-foreground')}>{document}</span>
                 )
                 return (
                   <li key={document} data-read>
@@ -237,13 +247,17 @@ export function EntitlementCard({
                         role="checkbox"
                         aria-checked={has}
                         onClick={() => toggle(document)}
-                        className="flex w-full items-start gap-2 rounded text-left hover:bg-secondary/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                        className="flex w-full items-start gap-2.5 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-secondary/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                       >
-                        {mark}
+                        <DocumentMark has={has} />
+                        {text}
                         <span className="sr-only">{has ? 'Mam ten dokument' : 'Nie mam tego dokumentu'}</span>
                       </button>
                     ) : (
-                      <span className="flex items-start gap-2">{mark}</span>
+                      <span className="flex items-start gap-2.5 px-2 py-1.5">
+                        <DocumentMark has={has} />
+                        {text}
+                      </span>
                     )}
                   </li>
                 )
@@ -255,7 +269,7 @@ export function EntitlementCard({
         )}
       </section>
 
-      <footer className="space-y-1 border-t border-neutral-300 pt-3 text-[11px] text-muted-foreground">
+      <footer className="space-y-1 border-t border-border pt-3 text-[11px] text-muted-foreground">
         <p>
           <span className="font-medium">Podstawa prawna: </span>
           {legalBasis.join('; ')}.
@@ -286,7 +300,7 @@ export function KartaPage({ data }: { data: EntitlementCardData | null }) {
       <PageContainer className="space-y-6 py-12">
         <h1 className="font-display text-2xl font-semibold">Karta uprawnień</h1>
         <p className="text-muted-foreground">
-          Karta powstaje z wyniku wywiadu, więc najpierw policz świadczenia w kalkulatorze.
+          Karta powstaje z wyniku sprawdzenia, więc najpierw policz świadczenia w kalkulatorze.
         </p>
         <Link to="/kalkulator" className={buttonVariants()}>
           Przejdź do kalkulatora
@@ -300,8 +314,8 @@ export function KartaPage({ data }: { data: EntitlementCardData | null }) {
       <div className="no-print space-y-4">
         <h1 className="font-display text-2xl font-semibold">Karta uprawnień</h1>
         <p className="max-w-2xl text-muted-foreground">
-          Jedna strona dla kadr albo ZUS: co przysługuje, ile, na jak długo i do kiedy złożyć wniosek.
-          Wydrukuj ją albo pokaż na telefonie.
+          Karta uprawnień na jednej stronie: co przysługuje, w jakiej wysokości, na jak długo
+          i do kiedy złożyć wniosek.
         </p>
         <div className="flex flex-wrap items-center gap-3">
           <Button type="button" onClick={() => window.print()}>
