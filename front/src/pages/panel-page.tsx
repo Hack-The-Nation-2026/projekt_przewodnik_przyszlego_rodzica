@@ -1,9 +1,10 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { Check, Loader2, RotateCcw, Trash2 } from 'lucide-react'
 import { PageContainer } from '@/components/layout/page-container'
 import { PageHeading } from '@/components/layout/page-heading'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { InfoHint } from '@/components/ui/info-hint'
 import { Input } from '@/components/ui/input'
@@ -11,6 +12,7 @@ import { Label } from '@/components/ui/label'
 import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { useResetSettings, useSaveSettings, useSettings } from '@/hooks/use-settings'
+import { useAppStore } from '@/store/app-store'
 import type { AppSettings } from '@/types/api'
 
 const currency = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' })
@@ -136,6 +138,7 @@ export function PanelPage() {
   const { data, isPending, isError, refetch } = useSettings()
   const save = useSaveSettings()
   const reset = useResetSettings()
+  const citizen = useAppStore((state) => state.citizen)
   const [draft, setDraft] = useState<AppSettings | null>(null)
   const [loaded, setLoaded] = useState<AppSettings | null>(null)
   const [newFeature, setNewFeature] = useState({ key: '', label: '' })
@@ -153,6 +156,35 @@ export function PanelPage() {
     queryFn: () => previewResult(),
     enabled: Boolean(data),
   })
+
+  /* Zmiana parametrów to czynność administratora, więc panel stoi za wejściem. */
+  if (!citizen) {
+    return (
+      <PageContainer className="py-12 sm:py-16">
+        <PageHeading
+          title="Panel administracyjny"
+          description="Parametry kalkulatora i funkcje serwisu."
+        />
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle>Zaloguj się, żeby zmieniać parametry</CardTitle>
+            <CardDescription>
+              Panel działa po zalogowaniu. W tym demo wystarczy wejście przez mObywatel; w produkcji
+              doszłaby rola administratora.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-wrap gap-3">
+            <Link to="/mobywatel?returnTo=/panel" className={buttonVariants()}>
+              Zaloguj przez mObywatel
+            </Link>
+            <Link to="/wejscie" className={buttonVariants({ variant: 'outline' })}>
+              Inne sposoby wejścia
+            </Link>
+          </CardContent>
+        </Card>
+      </PageContainer>
+    )
+  }
 
   if (isPending || !draft) {
     return (
@@ -268,7 +300,8 @@ export function PanelPage() {
       </div>
 
       <p className="mt-4 max-w-2xl text-sm text-muted-foreground">
-        Panel demonstracyjny: w produkcji wymagałby logowania i roli administratora.
+        Zmiany działają od razu na wynik, bez wdrożenia nowej wersji. W produkcji zapis wymagałby
+        roli administratora.
       </p>
 
       <div className="mt-8 space-y-6">
