@@ -170,6 +170,9 @@ Kilka rzeczy, które łatwo przeoczyć.
   drukować ręcznie.
 - `video/out/prezentacja.mp4` to film do 3 minut, nagrany z działającej aplikacji. Szczegóły
   i sposób odtworzenia opisuje `video/README.md`.
+- `prezentacja/assets/okladka.png` to okładka zgłoszenia, 800 na 600 pikseli, czyli proporcja 4:3.
+  Jedna kartka mówi, o co chodzi w projekcie: nazwa, obietnica, zdjęcie rodziny i ekran wyniku
+  z kalkulatora. Powstaje komendą `node do-okladki.mjs` z katalogu `prezentacja/`.
 - `zrzuty/` zbiera zrzuty ekranu najważniejszych stron.
 
 ## Struktura
