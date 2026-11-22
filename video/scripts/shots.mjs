@@ -155,6 +155,12 @@ async function main() {
       const install = () => document.head && document.head.appendChild(style)
       if (document.head) install()
       else document.addEventListener('DOMContentLoaded', install, { once: true })
+      // Zaproszenie do asystenta zasłania róg kadru, a te same zrzuty idą do prezentacji.
+      try {
+        sessionStorage.setItem('asystent-zaproszenie', '1')
+      } catch {
+        /* brak dostępu do sessionStorage */
+      }
     })
     if (spec.gated) await login(page, spec.route)
     else {
