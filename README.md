@@ -120,17 +120,27 @@ vercel env add VITE_API_URL --environment production \
 vercel deploy --prod --yes --project skrzydla-rodzica
 
 cd ../back
-# To samo wdraża API ponownie, już z adresem frontu na liście CORS.
-fastapi cloud env set CORS_ORIGINS "https://skrzydla-rodzica.vercel.app"
+# To samo wdraża API ponownie, już z adresem frontu na liście CORS. Gwiazdka obejmuje
+# adresy podglądu, które zmieniają się przy każdym wdrożeniu.
+fastapi cloud env set CORS_ORIGINS \
+  "https://skrzydla-rodzica.vercel.app,https://skrzydla-rodzica*.vercel.app"
 ```
 
-`fastapi cloud apps create` i `vercel project create` uruchamia się raz. Kolejne wdrożenia to
-`fastapi deploy` w `back/` i `vercel deploy --prod --project skrzydla-rodzica` w `front/`.
+`fastapi cloud apps create` i `vercel project create` uruchamia się raz. Kolejne wdrożenia robią się
+same z pusha na `main`.
 
-API wdraża się samo. Push na `main` uruchamia `.github/workflows/deploy.yml`, który robi to samo,
-co `fastapi deploy` w `back/`. Identyfikator aplikacji i token wdrożeniowy siedzą w sekretach
-repozytorium jako `FASTAPI_CLOUD_APP_ID` i `FASTAPI_CLOUD_TOKEN`, a ustawia je
-`fastapi cloud setup-ci`. Front na razie wypuszczamy ręcznie.
+`back/` wdraża `.github/workflows/deploy.yml`, który robi to samo, co `fastapi deploy`. Identyfikator
+aplikacji i token wdrożeniowy siedzą w sekretach repozytorium jako `FASTAPI_CLOUD_APP_ID`
+i `FASTAPI_CLOUD_TOKEN`, a ustawia je `fastapi cloud setup-ci`.
+
+`front/` wdraża `.github/workflows/deploy-front.yml`, który rusza, gdy push dotknie `front/`.
+Potrzebuje sekretów `VERCEL_TOKEN`, `VERCEL_ORG_ID` i `VERCEL_PROJECT_ID`. Vercel nie obsługuje tu
+swojej integracji z GitHubem, bo prywatne repozytorium w organizacji wymaga płatnego planu, a konto
+jest na Hobby. Token ma zakres zespołu `kvbc's projects` i nie wygasa. Po jego unieważnieniu trzeba
+podmienić sekret `VERCEL_TOKEN`, inaczej front przestanie się wdrażać.
+
+Ręcznie, gdy zajdzie potrzeba, robią to samo `fastapi deploy` w `back/`
+i `vercel deploy --prod --project skrzydla-rodzica` w `front/`.
 
 Adres aplikacji wypisuje `fastapi deploy`, a adres frontu `vercel deploy`. Wstaw je w miejsce
 przykładów powyżej, jeśli wyjdą inne. Stan konta sprawdzisz przez `fastapi cloud whoami`,
@@ -145,8 +155,9 @@ Kilka rzeczy, które łatwo przeoczyć.
   wracają wartości domyślne z kodu.
 - `front/vercel.json` przepisuje każdą trasę na `/index.html`, żeby odświeżenie na `/karta` albo
   `/urlop` nie kończyło się błędem 404.
-- CORS obejmuje tylko produkcyjną domenę frontu. Podglądy z `vercel` bez `--prod` mają własne
-  adresy i zostaną zablokowane, dopóki nie dopisze się ich do `CORS_ORIGINS`.
+- CORS obejmuje produkcyjną domenę frontu oraz wpisy z gwiazdką, na przykład
+  `https://skrzydla-rodzica*.vercel.app`. Bez gwiazdki każdy podgląd ma inny adres i zostałby
+  zablokowany.
 
 ## Struktura
 

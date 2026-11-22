@@ -3,6 +3,9 @@ name: Deploy API to FastAPI Cloud
 on:
   push:
     branches: [main]
+    paths:
+      - "back/**"
+      - ".github/workflows/deploy.yml"
 
 jobs:
   deploy:

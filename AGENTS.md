@@ -39,18 +39,27 @@ and stop anything you started before you finish.
 
 ## Deployment
 
-The API deploys itself. A push to `main` runs `.github/workflows/deploy.yml`, which deploys `back/`
-to FastAPI Cloud with the repository secrets `FASTAPI_CLOUD_TOKEN` and `FASTAPI_CLOUD_APP_ID`.
-The front on Vercel is released by hand:
+Both halves deploy themselves on a push to `main`.
+
+- `.github/workflows/deploy.yml` deploys `back/` to FastAPI Cloud with the repository secrets
+  `FASTAPI_CLOUD_TOKEN` and `FASTAPI_CLOUD_APP_ID`.
+- `.github/workflows/deploy-front.yml` deploys `front/` to Vercel with `VERCEL_TOKEN`,
+  `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID`, and runs when a push touches `front/`.
+
+Vercel does not deploy the front through its own Git integration. It refuses a private repository
+owned by an organization on the Hobby plan, so the work happens in a workflow. The `VERCEL_TOKEN` is
+scoped to the `kvbc's projects` team and has no expiry. Replace the secret if the token is revoked,
+or the front stops deploying.
+
+A deployment by hand does the same thing.
 
 ```bash
+cd back  && fastapi deploy
 cd front && vercel deploy --prod --yes --project skrzydla-rodzica
 ```
 
-Do not use the workflow for the front: it lives in `front/`, so the Vercel project needs its root
-directory set to that folder rather than the repository root. Addresses and the rest of the setup
-are in the "Wdrożenie" section of `README.md`. `VITE_API_URL` is baked in at build time, so changing
-the API address means rebuilding the front.
+Addresses and the rest of the setup are in the "Wdrożenie" section of `README.md`. `VITE_API_URL` is
+baked in at build time, so changing the API address means rebuilding the front.
 
 ## Git
 
