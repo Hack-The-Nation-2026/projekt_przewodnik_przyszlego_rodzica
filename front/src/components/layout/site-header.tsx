@@ -40,7 +40,7 @@ function Wordmark() {
           Skrzydła Rodzica
         </span>
         <span className="mt-0.5 hidden truncate text-[11px] leading-none text-primary-foreground/95 sm:block">
-          co ci przysługuje i jak to załatwić
+          zasiłki, terminy i dokumenty
         </span>
       </span>
     </Link>

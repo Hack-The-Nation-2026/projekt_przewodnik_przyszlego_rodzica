@@ -49,8 +49,8 @@ export function SiteFooter() {
             <p className="font-display text-lg font-semibold">Skrzydła Rodzica</p>
           </div>
           <p className="mt-3 max-w-sm text-sm text-primary-foreground/95">
-            Zasiłki, terminy i dokumenty związane z ciążą i urodzeniem dziecka w jednym miejscu.
-            Liczymy na podstawie ustawy zasiłkowej i Kodeksu pracy.
+            Zasiłki, terminy i dokumenty związane z ciążą, porodem i opieką nad dzieckiem w jednym
+            miejscu. Liczymy na podstawie ustawy zasiłkowej i Kodeksu pracy.
           </p>
         </div>
 
