@@ -515,6 +515,13 @@ Gotowe, gdy wszystkie pięć pozycji istnieje i linki działają.
 
 Brief, pkt 4.
 
+Zrobione: film leży w `video/out/prezentacja.mp4`, 2 min 47 s, 1920×1080, bez dźwięku.
+Powstaje ze skryptów w `video/scripts/`, montaż opisuje `video/src/edl.ts`, a szczegóły są
+w `video/README.md`. Ujęcia to nagrania działającej aplikacji: wejście i logowanie, wywiad,
+wynik, karta uprawnień, kreator wniosków i dokumentów, planowanie, urlop w trakcie, odwołanie,
+wsparcie, panel, asystent i widok telefonu. Listy wyboru otwierają się na ekranie, więc widać
+opcje, a nie tylko wybraną wartość.
+
 ## Krok 16. Weryfikacja przed oddaniem
 
 Ostatnie przejście po wymaganiach, żeby nic nie wypadło.

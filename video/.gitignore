@@ -1,5 +1,6 @@
 node_modules/
 
-# Nagrania źródłowe i klatki kontrolne: odtwarzalne skryptami z scripts/.
+# Nagrania źródłowe, znaczniki i klatki kontrolne: odtwarzalne skryptami z scripts/.
 public/clips/
+out/marks-*.json
 out/check/

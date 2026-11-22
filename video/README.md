@@ -1,35 +1,75 @@
 # Prezentacja Skrzydła Rodzica
 
-Film na wyzwanie ZUS: 2 min 43 s, 1920×1080, 30 klatek na sekundę, bez dźwięku —
-komentarz dogrywamy osobno.
+Film na wyzwanie ZUS, 2 min 47 s, 1920×1080, 30 klatek na sekundę, bez dźwięku.
+Komentarz dogrywamy osobno.
 
-Gotowy plik: `out/prezentacja.mp4`.
+Gotowy plik leży w `out/prezentacja.mp4`.
 
 ## Jak to powstaje
 
-Film to prawdziwe nagrania z działającej aplikacji, nie makiety. Trzy kroki:
+Film składa się z prawdziwych nagrań działającej aplikacji. Całość powstaje
+w trzech krokach.
 
-1. `scripts/record*.mjs` uruchamia Chrome przez Playwrighta, wstrzykuje kursor
-   i przewija serwis, zapisując każdy rozdział jako osobny plik w `public/clips/`.
-2. `src/edl.ts` opisuje montaż: które fragmenty nagrania wchodzą do filmu,
-   jak szybko i gdzie w tym czasie patrzy kamera.
-3. `src/` to projekt Remotiona, który składa nagrania w jedną całość
-   i dokłada etykiety rozdziałów, planszę mobilną i napisy końcowe.
+1. `scripts/record.mjs` uruchamia Chrome przez Playwrighta, wstrzykuje kursor
+   i przechodzi przez serwis, zapisując każdy rozdział jako osobny plik w
+   `public/clips/`. Chrome nagrywa WebM, więc każdy plik od razu przechodzi
+   przez ffmpeg na H.264, który render dekoduje lżej. Przy okazji powstaje
+   tabela znaczników (`out/marks-*.json`) z czasami zdarzeń, takich jak
+   otwarcie listy albo wynik.
+2. `scripts/plan.mjs` czyta te znaczniki i opisuje montaż, czyli które fragmenty
+   nagrań wchodzą do filmu, jak szybko i gdzie w tym czasie patrzy kamera.
+   Wynik zapisuje do `src/edl.ts`.
+3. `src/` to projekt Remotiona, który składa nagrania w jedną całość, dokłada
+   ruch kamery, plansze telefonu z opisem i wyciemnienie na początku.
 
-## Uruchomienie
+## Nagrania
+
+`record.mjs` przyjmuje nazwę rozdziału albo `all`.
+
+```bash
+node scripts/record.mjs all       # wszystko po kolei
+node scripts/record.mjs sprawy    # tylko rozdział ze sprawami
+node scripts/record.mjs 12-asystent
+```
+
+Rozdziały to `01-main` (wejście, logowanie, wywiad, wynik i karta), `02-wnioski`,
+`03-dokumenty`, `04-sprawy`, `05-sprawy-porownanie`, `06-zus`, `07-planowanie`,
+`08-urlop`, `09-odwolanie`, `10-wsparcie`, `11-panel` i `12-asystent`. Na końcu
+idzie pięć ujęć z telefonu, `13-mobile-home`, `14-mobile-swiadczenia`,
+`15-mobile-karta`, `16-mobile-asystent` i `17-mobile-dokumenty`.
+
+Nagrania desktopowe wymagają serwera deweloperskiego. Domyślnie nagrywamy
+z `:5173`. Gdy w serwisie trwa praca nad kodem, lepiej nagrać z zamrożonej
+kopii na porcie, który backend ma na liście CORS (na przykład `4173`), żeby
+ujęcia nie zmieniały się w połowie:
+
+```bash
+DEMO_BASE=http://localhost:4173 node scripts/record.mjs all
+```
+
+## Pomiar i spis ekranów
+
+`scripts/measure.mjs` otwiera listy i panele w prawdziwej aplikacji i wypisuje
+ich współrzędne. Z tych liczb korzysta kamera w `plan.mjs`, żeby zbliżenie
+objęło treść, a nie tło.
+
+`scripts/inventory.mjs` przechodzi po wszystkich ekranach i zapisuje, co na nich
+jest, czyli przyciski, pola i listy. Wynik ląduje w `out/check/inventory.json`
+i pomaga pisać nagrania.
+
+## Render
 
 ```bash
 npm install
-node scripts/record.mjs all        # nagrania desktopowe (wymaga serwera na :5173)
-node scripts/record-mobile.mjs     # nagranie widoku telefonu
+node scripts/record.mjs all
+node scripts/plan.mjs
 npx remotion render src/index.ts SkrzydlaRodzica out/prezentacja.mp4 --codec h264 --crf 20
 ```
 
-Nagrania i klatki kontrolne nie trafiają do repozytorium — odtwarzają się
+Podgląd na żywo uruchamia `npx remotion studio src/index.ts`.
+
+Krój pisma jest wpięty z `public/fonts/` (IBM Plex Sans, zakres łaciński
+i rozszerzony), więc render nie sięga do sieci.
+
+Nagrania i klatki kontrolne nie trafiają do repozytorium. Odtwarzają się
 skryptami z `scripts/`.
-
-## Podgląd
-
-```bash
-npx remotion studio src/index.ts
-```
