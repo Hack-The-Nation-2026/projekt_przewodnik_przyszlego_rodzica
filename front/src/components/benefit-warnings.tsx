@@ -2,6 +2,7 @@ import { TriangleAlert } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import type { Assessment } from '@/lib/benefit-interview'
 import type { InterviewValues } from '@/lib/interview-form'
+import { usePlain } from '@/lib/plain-language'
 
 const parentGuide = 'https://bip.zus.pl/documents/10182/167567/1184_26%2BPoradnik%2Bdla%2Brodzic%C3%B3w.pdf/9378de60-151e-9b9f-ba65-abdf41d9f5b4'
 const maternityGuide = 'https://www.zus.pl/swiadczenia/zasilki/zasilek-macierzynski/prawo-do-zasilku-i-okres-przyslugiwania/za-okres-urlopu-macierzynskiego-albo-urlopu-na-warunkach-urlopu-macierzynskiego'
@@ -67,14 +68,15 @@ export function BenefitWarnings({ values, maternityStatus, onEditEmployment }: {
 }) {
   const warnings = getWarnings(values, maternityStatus)
   const needsInsurance = values.role === 'mother' && values.insured === 'unknown' && maternityStatus === 'missing_data'
+  const plain = usePlain()
   if (!warnings.length && !needsInsurance) return null
 
   return (
     <section className="mt-6 space-y-3 border-t border-border pt-6" aria-labelledby="benefit-warnings">
-      <h3 id="benefit-warnings" className="text-xl font-semibold">Co może zmienić wypłatę</h3>
+      <h3 id="benefit-warnings" className="text-xl font-semibold">{plain('Co może zmienić wypłatę')}</h3>
       {needsInsurance && (
         <div className="space-y-3 rounded-lg border border-input bg-secondary p-4 text-sm">
-          <p>Potwierdź ubezpieczenie chorobowe w dniu porodu, aby kalkulator mógł ocenić prawo do zasiłku.</p>
+          <p>{plain('Potwierdź ubezpieczenie chorobowe w dniu porodu, aby kalkulator mógł ocenić prawo do zasiłku.')}</p>
           <Button className="h-auto min-h-10 whitespace-normal" type="button" variant="outline" onClick={onEditEmployment}>
             Uzupełnij dane o zatrudnieniu
           </Button>
@@ -87,8 +89,8 @@ export function BenefitWarnings({ values, maternityStatus, onEditEmployment }: {
               <TriangleAlert className="mt-0.5 size-5 shrink-0 text-amber-800" aria-hidden="true" />
               <div className="space-y-2 text-sm">
                 <h4 className="text-base font-semibold">{title}</h4>
-                <p>{message}</p>
-                <p><strong>Wpływ na wypłatę</strong> {effect}</p>
+                <p>{plain(message)}</p>
+                <p><strong>Wpływ na wypłatę</strong> {plain(effect)}</p>
                 <a className="inline-block font-medium underline underline-offset-2" href={source} target="_blank" rel="noreferrer">
                   {sourceTitle}
                 </a>

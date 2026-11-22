@@ -7,6 +7,8 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { formatDocumentDate } from '@/lib/benefit-documents'
+import { readCardDocuments, saveCardDocuments, toggleCardDocument } from '@/lib/card-documents'
+import { usePlain } from '@/lib/plain-language'
 import { cn } from '@/lib/utils'
 import type { EntitlementCardData } from '@/lib/entitlement-card'
 import { useA11yStore } from '@/store/a11y-store'
@@ -81,13 +83,25 @@ export function EntitlementCard({
   data,
   person,
   onPersonChange,
+  interactive = false,
   className,
 }: {
   data: EntitlementCardData
   person?: string
   onPersonChange?: (value: string) => void
+  /** Na ekranie karty dokumenty można odhaczać; na wydruku są tylko znaczniki. */
+  interactive?: boolean
   className?: string
 }) {
+  const [have, setHave] = useState<string[]>(() => readCardDocuments())
+  const plain = usePlain()
+
+  function toggle(document: string) {
+    const next = toggleCardDocument(have, document)
+    setHave(next)
+    saveCardDocuments(next)
+  }
+
   return (
     <article className={cn('space-y-4 rounded-lg border border-neutral-300 bg-white p-6 text-navy', className)}>
       <header className="space-y-2 border-b-2 border-primary pb-3">
@@ -176,11 +190,11 @@ export function EntitlementCard({
                 )}
               >
                 <span className="font-medium tabular-nums">{formatDocumentDate(deadline.date)}</span>
-                <span className="text-sm">{deadline.label}</span>
+                <span className="text-sm">{plain(deadline.label)}</span>
                 <span className="w-full text-xs text-muted-foreground">{deadline.detail}</span>
                 {deadline.missed && (
                   <span className="w-full text-xs font-medium text-red-800">
-                    Termin minął. {deadline.missedNote ?? 'Sprawdź z płatnikiem, czy wniosek jeszcze przejdzie.'}
+                    Termin minął. {plain(deadline.missedNote ?? 'Sprawdź z płatnikiem, czy wniosek jeszcze przejdzie.')}
                   </span>
                 )}
               </li>
@@ -188,7 +202,7 @@ export function EntitlementCard({
           </ul>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Do tych świadczeń nie ma terminu, który dałoby się wyliczyć z podanych dat.
+            {plain('Do tych świadczeń nie ma terminu, który dałoby się wyliczyć z podanych dat.')}
           </p>
         )}
       </section>
@@ -196,11 +210,45 @@ export function EntitlementCard({
       <section className="space-y-2">
         <h2 className="font-display text-base font-semibold">Co jeszcze załatwić</h2>
         {data.documents.length ? (
-          <ul className="list-disc space-y-1 pl-5 text-sm">
-            {data.documents.map((document) => (
-              <li key={document} data-read>{document}</li>
-            ))}
-          </ul>
+          <>
+            <p className="text-xs text-muted-foreground">
+              {have.length
+                ? `W teczce masz już ${Math.min(have.length, data.documents.length)} z ${data.documents.length}. `
+                : ''}
+              {interactive
+                ? 'Odhacz to, co już masz — znaczniki zostają w tej przeglądarce i widać je na wydruku.'
+                : 'Znacznik ☑ przy dokumencie, który już masz.'}
+            </p>
+            <ul className="space-y-1 text-sm">
+              {data.documents.map((document) => {
+                const has = have.includes(document)
+                const mark = (
+                  <>
+                    <span aria-hidden="true" className="tabular-nums">{has ? '☑' : '☐'}</span>
+                    <span className={cn(has && 'text-muted-foreground')}>{document}</span>
+                  </>
+                )
+                return (
+                  <li key={document} data-read>
+                    {interactive ? (
+                      <button
+                        type="button"
+                        role="checkbox"
+                        aria-checked={has}
+                        onClick={() => toggle(document)}
+                        className="flex w-full items-start gap-2 rounded text-left hover:bg-secondary/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                      >
+                        {mark}
+                        <span className="sr-only">{has ? 'Mam ten dokument' : 'Nie mam tego dokumentu'}</span>
+                      </button>
+                    ) : (
+                      <span className="flex items-start gap-2">{mark}</span>
+                    )}
+                  </li>
+                )
+              })}
+            </ul>
+          </>
         ) : (
           <p className="text-sm text-muted-foreground">Komplet dokumentów jest opisany przy wniosku.</p>
         )}
@@ -277,7 +325,7 @@ export function KartaPage({ data }: { data: EntitlementCardData | null }) {
       </div>
 
       <div ref={sheet} className="print-sheet">
-        <EntitlementCard data={data} person={person} onPersonChange={setPerson} />
+        <EntitlementCard data={data} person={person} onPersonChange={setPerson} interactive />
       </div>
 
       <p className="no-print flex items-start gap-2 text-sm text-muted-foreground">

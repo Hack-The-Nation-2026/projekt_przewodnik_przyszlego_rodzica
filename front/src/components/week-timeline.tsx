@@ -1,12 +1,24 @@
 import { CalendarClock, CircleAlert } from 'lucide-react'
 import { InfoHint } from '@/components/ui/info-hint'
 import { Term } from '@/components/glossary/term'
-import { formatDocumentDate } from '@/lib/benefit-documents'
+import { formatDocumentDate, shiftDate } from '@/lib/benefit-documents'
 import { blockColor } from '@/lib/week-timeline'
 import type { TimelineBlock, WeekTimelineData } from '@/lib/week-timeline'
 import { cn } from '@/lib/utils'
 
 const currency = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN', useGrouping: 'always' })
+const shortDate = new Intl.DateTimeFormat('pl-PL', { day: 'numeric', month: 'numeric', timeZone: 'UTC' })
+
+/**
+ * Podpis daty nad taśmą. Przy przewidywanej dacie porodu pokazujemy widełki,
+ * bo pojedyncza data wyglądałaby na pewną, a nią nie jest.
+ */
+function dateTick(date: string, forecast: boolean) {
+  if (!forecast) return formatDocumentDate(date).replace(/\s\d{4}$/, '')
+  const from = shortDate.format(new Date(shiftDate(date, -14) + 'T00:00:00Z'))
+  const to = shortDate.format(new Date(shiftDate(date, 14) + 'T00:00:00Z'))
+  return `≈${from}–${to}`
+}
 
 function blockTitle(block: TimelineBlock, data: WeekTimelineData) {
   const start = formatDocumentDate(new Date(Date.parse(data.origin + 'T00:00:00Z') + block.startDay * 86_400_000).toISOString().slice(0, 10))
@@ -139,7 +151,7 @@ function Band({ data }: { data: WeekTimelineData }) {
               style={{ left: `${pct(week.startDay, data)}%` }}
               className="absolute -translate-x-1/2 text-[10px] whitespace-nowrap text-muted-foreground"
             >
-              {formatDocumentDate(week.date).replace(/\s\d{4}$/, '')}
+              {dateTick(week.date, data.forecast)}
             </span>
           ))}
         </div>

@@ -27,6 +27,7 @@ import { buildWeekTimeline, withSharedScale } from '@/lib/week-timeline'
 import type { TimelineInput } from '@/lib/week-timeline'
 import { WeekTimeline } from '@/components/week-timeline'
 import { saveLeaveCase } from '@/lib/leave-applications'
+import { usePlain } from '@/lib/plain-language'
 import { benefitList, buildInterview } from '@/lib/benefit-interview'
 import type { Assessment, BenefitCode, ParentalPlan, ParentalPool, SimulationResponse } from '@/lib/benefit-interview'
 import { asBoolean, interviewDefaults, interviewSchema, parseNumber } from '@/lib/interview-form'
@@ -209,6 +210,7 @@ function BenefitCard({ assessment, onShowDocuments, onWhy }: {
   const deniedDays = assessment.denied_days ?? 0
   const showDays = !!assessment.days || (!!deniedDays && assessment.status === 'partially_granted')
   const showAmount = assessment.gross_grosze != null || active
+  const plain = usePlain()
   return (
     <Card className="flex flex-col md:row-span-3 md:grid md:grid-rows-subgrid">
       {/* Karta zajmuje trzy wiersze siatki: treść, podstawę prawną i przycisk.
@@ -222,7 +224,7 @@ function BenefitCard({ assessment, onShowDocuments, onWhy }: {
         <StatusIcon className="size-3.5 shrink-0" aria-hidden="true" />
         {label}
         <InfoHint label={label} align="end" className="ml-auto">
-          {statusExplanations[assessment.status]}
+          {plain(statusExplanations[assessment.status])}
         </InfoHint>
       </div>
       <CardHeader className="gap-1.5 p-4 pb-2.5">
@@ -329,6 +331,7 @@ export function KalkulatorPage() {
   const resultSectionRef = useRef<HTMLElement>(null)
   // Lektor pokazuje się tylko wtedy, gdy ktoś włączył go w panelu dostępności.
   const readAloudEnabled = useA11yStore((state) => state.readAloud)
+  const plain = usePlain()
   const [stepId, setStepId] = useState('role')
   const [sent, setSent] = useState('')
   const [submitted, setSubmitted] = useState<InterviewValues | null>(null)
@@ -346,6 +349,10 @@ export function KalkulatorPage() {
   const [result, setResult] = useState<SimulationResult | null>(null)
   const simulation = useMutation({ mutationFn: simulate, onSuccess: setResult })
   const { mutate } = simulation
+  // Wariant łączenia urlopu z pracą liczy się osobną symulacją, bo wydłuża okres
+  // i zmienia kwotę. Bez niej porównanie osi czasu byłoby połowiczne.
+  const [workResult, setWorkResult] = useState<SimulationResult | null>(null)
+  const workSimulation = useMutation({ mutationFn: simulate, onSuccess: setWorkResult })
   // Panel administracyjny może wyłączyć kartę podziału urlopu i sekcję ostrzeżeń.
   const { data: settings } = useSettings()
   const parentalPlanEnabled = useFeature('parental_plan')
@@ -362,11 +369,21 @@ export function KalkulatorPage() {
         })
         .sort((a, b) => benefitStatusOrder[a.status] - benefitStatusOrder[b.status])
     : []
+  const workCards = workResult
+    ? (Object.keys(benefitList) as BenefitCode[])
+        .map<Assessment>((benefit) => workResult.assessments.get(benefit) ?? {
+          benefit, status: 'missing_data', reason: 'Dla tego świadczenia brakuje wyniku symulacji.',
+        })
+        .sort((a, b) => benefitStatusOrder[a.status] - benefitStatusOrder[b.status])
+    : []
   const pool = result?.pool ?? null
   const sharedTotal = pool ? Math.max(0, pool.total_days - 2 * pool.exclusive_days_per_parent) : 0
   const secondShare = Math.min(secondShareDays, sharedTotal)
   const workingOnLeave = !!values.workingOnLeave && values.employment === 'employee'
   const respondent = values.role === 'father' ? 'second_parent' : 'first_parent'
+  const timelineSettings = settings
+    ? { exclusive_weeks: settings.leave.exclusive_weeks, parental_weeks_single: settings.leave.parental_weeks_single }
+    : undefined
   const timelineInput: TimelineInput | null = submitted && result && result.documentContext.eventDate
     ? {
         values: submitted,
@@ -377,27 +394,44 @@ export function KalkulatorPage() {
         secondShareDays: secondShare,
         averagedGross: result.averaged.gross || null,
         flatGross: result.flat.gross || null,
-        settings: settings
-          ? { exclusive_weeks: settings.leave.exclusive_weeks, parental_weeks_single: settings.leave.parental_weeks_single }
-          : undefined,
+        settings: timelineSettings,
       }
     : null
   const timelineShares = timelineInput && result?.pool && values.partnerEmployment !== 'unknown' && !workingOnLeave
     ? [0, sharedTotal]
     : []
+  const workTimelineInput: TimelineInput | null = workResult && submitted && workResult.documentContext.eventDate
+    ? {
+        values: submitted,
+        context: workResult.documentContext,
+        assessments: workCards,
+        pool: workResult.pool,
+        respondent,
+        secondShareDays: 0,
+        averagedGross: workResult.averaged.gross || null,
+        flatGross: workResult.flat.gross || null,
+        settings: timelineSettings,
+      }
+    : null
   const timelineScale = timelineInput
     ? withSharedScale([
         buildWeekTimeline(timelineInput),
         ...timelineShares.map((share) => buildWeekTimeline({ ...timelineInput, secondShareDays: share })),
+        ...(workTimelineInput ? [buildWeekTimeline(workTimelineInput)] : []),
       ])
     : []
   const timeline = timelineScale[0] ?? null
-  const timelineCompare = timelineShares.map((share, index) => ({
-    label: share === 0
-      ? 'Pierwszy rodzic bierze całość'
-      : `Drugi rodzic bierze ${Math.round(share / 7)} tygodni`,
-    data: timelineScale[index + 1],
-  }))
+  const timelineCompare = [
+    ...timelineShares.map((share, index) => ({
+      label: share === 0
+        ? 'Pierwszy rodzic bierze całość'
+        : `Drugi rodzic bierze ${Math.round(share / 7)} tygodni`,
+      data: timelineScale[index + 1],
+    })),
+    ...(workTimelineInput
+      ? [{ label: 'Łączenie urlopu z pracą w połowie wymiaru', data: timelineScale[timelineScale.length - 1] }]
+      : []),
+  ]
   const whyAssessment = whyBenefit
     ? resultCards.find((assessment) => assessment.benefit === whyBenefit) ?? null
     : null
@@ -463,6 +497,26 @@ export function KalkulatorPage() {
     setSecondShareDays(0)
     mutate({ values: data, plan: buildPlan(0, data, pool) })
   }
+
+  // Jedna dodatkowa symulacja na wysłanie wywiadu: wariant z pracą w połowie
+  // wymiaru. Liczy się dopiero po wyniku, a nie w trakcie wypełniania.
+  useEffect(() => {
+    if (!submitted || submitted.employment !== 'employee' || submitted.workingOnLeave) {
+      setWorkResult(null)
+      return
+    }
+    workSimulation.mutate({
+      values: {
+        ...submitted,
+        workingOnLeave: true,
+        workPercent: '50',
+        contractedPercent: submitted.contractedPercent || '100',
+      },
+      plan: buildPlan(0, submitted, pool),
+    })
+    // Celowo tylko `submitted`: wariant liczymy raz na wysłanie wywiadu.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [submitted])
 
   async function advance(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -606,9 +660,9 @@ export function KalkulatorPage() {
               Wynik wywiadu
             </h2>
             <p className="mt-2 text-sm text-muted-foreground" data-read>
-              {result.expected
+              {plain(result.expected
                 ? 'Wstępna symulacja z przewidywaną datą porodu, na podstawie ostatnio wysłanych odpowiedzi.'
-                : 'Symulacja na podstawie ostatnio wysłanych odpowiedzi.'}
+                : 'Symulacja na podstawie ostatnio wysłanych odpowiedzi.')}
             </p>
             {readAloudEnabled && <ReadAloud targetRef={resultSectionRef} className="mt-4" />}
             {result.separatePaternity && (
