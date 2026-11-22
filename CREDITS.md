@@ -16,13 +16,14 @@ które wnoszą grafikę.
 
 ### Polecenie do wygenerowania ilustracji
 
-Trzy kroki powstawały z jednym opisem stylu, z inną sceną na końcu.
+Styl: dwukolorowy sitodruk w duchu polskiej szkoły plakatu — płaskie plamy, sylwetki, ziarno
+papieru. Każde polecenie miało ten sam opis stylu i inną scenę.
 
-> Flat vector editorial illustration, square 1:1, for a Polish family-benefits website. [scena]. Limited flat palette only: deep forest green #007834, warm amber gold #e8a33d, dark ink navy #1d2b3a for even outlines, soft cream #FBF3E4 background. Simple geometric shapes, thick consistent outlines, no gradients, no shading, no texture, no text or letters, centered composition with generous margins, clean and friendly public-service style.
+> Two-colour screenprint illustration in the style of mid-century Polish poster art. [scena]. Composed entirely of solid flat shapes and simple silhouettes, no hairline outline strokes. Exactly two inks: deep forest green #007834 and warm amber #e8a33d printed on warm cream #F5EEDD uncoated paper, with visible coarse paper grain and slight ink misregistration. No gradients, no shading, no highlights, no decorative dots, arcs, sparkles, leaves or background pattern. Square 1:1, subject fills the frame. No text, no letters, no signature, no border.
 
-- `krok-1.webp` — A pregnant woman sits at a small desk in front of an open laptop, one hand on her chin thinking, two rounded speech bubbles with question marks floating above her.
-- `krok-2.webp` — A young couple stands close together reading a printed sheet that shows a simple bar chart and a large check mark; the woman points at the chart while the man holds the page.
-- `krok-3.webp` — Two hands slide completed paper forms with check boxes into an open amber document folder; one arm wears a dark green sleeve with a white cuff.
+- `krok-1.webp` — A pregnant woman sits in profile at a small desk typing on a laptop; two bold question-mark shapes float beside her head.
+- `krok-2.webp` — Two people stand side by side looking down at a single sheet of paper held in their hands; the sheet carries a simple three-bar chart.
+- `krok-3.webp` — Two hands slide a single sheet of paper into an open document folder.
 
 Wcześniejszy zestaw — `cover.png` oraz `krok-wywiad.webp`, `krok-wyniki.webp` i `krok-dokumenty.webp` — został zastąpiony tymi plikami i usunięty z repozytorium.
 
