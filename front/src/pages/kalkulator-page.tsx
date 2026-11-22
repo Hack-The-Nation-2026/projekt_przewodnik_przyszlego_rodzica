@@ -7,6 +7,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { BenefitWarnings } from '@/components/benefit-warnings'
 import { WhyPanelBody, WhyTrigger } from '@/components/why-panel'
+import { ReadAloud } from '@/components/accessibility/read-aloud'
+import { useA11yStore } from '@/store/a11y-store'
 import { useFeature, useSettings } from '@/hooks/use-settings'
 import { ParentalPlanCard } from '@/components/parental-plan'
 import type { RateVariant } from '@/components/parental-plan'
@@ -224,11 +226,11 @@ function BenefitCard({ assessment, onShowDocuments, onWhy }: {
         </InfoHint>
       </div>
       <CardHeader className="gap-1.5 p-4 pb-2.5">
-        <div className="flex items-start gap-1.5">
+        <div className="flex items-start gap-1.5" data-read>
           <CardTitle className="text-base">{name}</CardTitle>
           <InfoHint label={name}>{what}</InfoHint>
         </div>
-        <CardDescription>{assessment.reason}</CardDescription>
+        <CardDescription data-read>{assessment.reason}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-2.5 px-4 pb-2 pt-0">
         {(showDays || showAmount) && (
@@ -241,8 +243,8 @@ function BenefitCard({ assessment, onShowDocuments, onWhy }: {
                     Liczba dni, za które świadczenie należy się przy Twoich odpowiedziach.
                   </InfoHint>
                 </dt>
-                <dd className="mt-0.5 text-sm font-medium">
-                  {assessment.days ? (assessment.days === 1 ? '1 dzień' : `${assessment.days} dni`) : '—'}
+                <dd className="mt-0.5 text-sm font-medium" data-read>
+                  {assessment.days ? (assessment.days === 1 ? '1 dzień' : `${assessment.days} dni`) : 'nie wiadomo'}
                 </dd>
                 <dd className="mt-1">
                   <WhyTrigger label="dlaczego tak" onClick={() => onWhy(assessment.benefit)} />
@@ -262,9 +264,9 @@ function BenefitCard({ assessment, onShowDocuments, onWhy }: {
                     Suma za cały okres, przed podatkiem i składką zdrowotną.
                   </InfoHint>
                 </dt>
-                <dd className="mt-0.5 text-sm font-medium">
+                <dd className="mt-0.5 text-sm font-medium" data-read>
                   {assessment.gross_grosze == null
-                    ? 'Brakuje danych do wyliczenia'
+                    ? 'Brakuje danych do wyliczenia kwoty'
                     : currency.format(assessment.gross_grosze / 100)}
                 </dd>
                 <dd className="mt-1">
@@ -324,6 +326,9 @@ export function KalkulatorPage() {
   const focusNextStep = useRef(false)
   const scrolledFor = useRef<InterviewValues | null>(null)
   const navigate = useNavigate()
+  const resultSectionRef = useRef<HTMLElement>(null)
+  // Lektor pokazuje się tylko wtedy, gdy ktoś włączył go w panelu dostępności.
+  const readAloudEnabled = useA11yStore((state) => state.readAloud)
   const [stepId, setStepId] = useState('role')
   const [sent, setSent] = useState('')
   const [submitted, setSubmitted] = useState<InterviewValues | null>(null)
@@ -590,7 +595,7 @@ export function KalkulatorPage() {
       )}
 
       {result && (
-        <section className="mt-12" aria-labelledby="benefit-result">
+        <section ref={resultSectionRef} className="mt-12" aria-labelledby="benefit-result">
           <div>
             <h2
               className="scroll-mt-24 text-3xl font-semibold focus:outline-none"
@@ -600,11 +605,12 @@ export function KalkulatorPage() {
             >
               Wynik wywiadu
             </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-2 text-sm text-muted-foreground" data-read>
               {result.expected
                 ? 'Wstępna symulacja z przewidywaną datą porodu, na podstawie ostatnio wysłanych odpowiedzi.'
                 : 'Symulacja na podstawie ostatnio wysłanych odpowiedzi.'}
             </p>
+            {readAloudEnabled && <ReadAloud targetRef={resultSectionRef} className="mt-4" />}
             {result.separatePaternity && (
               <p className="mt-1 text-sm text-muted-foreground">
                 Ojcowski jest liczony jako osobny wariant. Przy wyborze terminów uwzględnij pozostałe urlopy.

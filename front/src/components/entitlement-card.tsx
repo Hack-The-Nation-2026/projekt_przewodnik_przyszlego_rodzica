@@ -2,12 +2,14 @@ import { useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ArrowLeft, CalendarClock, CircleAlert, FileText, Printer, User } from 'lucide-react'
 import { PageContainer } from '@/components/layout/page-container'
+import { ReadAloud } from '@/components/accessibility/read-aloud'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { formatDocumentDate } from '@/lib/benefit-documents'
 import { cn } from '@/lib/utils'
 import type { EntitlementCardData } from '@/lib/entitlement-card'
+import { useA11yStore } from '@/store/a11y-store'
 
 const legalBasis = [
   'ustawa z 25 czerwca 1999 r. o świadczeniach pieniężnych z ubezpieczenia społecznego w razie choroby i macierzyństwa',
@@ -19,14 +21,14 @@ function Field({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0">
       <dt className="text-[11px] tracking-wide text-muted-foreground uppercase">{label}</dt>
-      <dd className="text-sm font-medium break-words">{value}</dd>
+      <dd className="text-sm font-medium break-words" data-read>{value}</dd>
     </div>
   )
 }
 
 function BenefitRow({ benefit }: { benefit: EntitlementCardData['benefits'][number] }) {
   return (
-    <li className="break-inside-avoid border-t border-neutral-300 py-2.5 first:border-t-0 first:pt-0">
+    <li className="break-inside-avoid border-t border-neutral-300 py-2.5 first:border-t-0 first:pt-0" data-read>
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <p className="font-semibold">{benefit.name}</p>
         <p className="tabular-nums">
@@ -97,7 +99,7 @@ export function EntitlementCard({
               {data.role} · karta z {formatDocumentDate(data.generatedAt)}
             </p>
           </div>
-          <p className="max-w-xs rounded-md bg-secondary p-2 text-xs font-medium">
+          <p className="max-w-xs rounded-md bg-secondary p-2 text-xs font-medium" data-read>
             {data.orientationNote}
           </p>
         </div>
@@ -167,6 +169,7 @@ export function EntitlementCard({
             {data.deadlines.map((deadline) => (
               <li
                 key={`${deadline.date}-${deadline.label}`}
+                data-read
                 className={cn(
                   'flex flex-wrap items-baseline gap-x-3 gap-y-1 break-inside-avoid border-l-2 pl-3',
                   deadline.missed ? 'border-red-500' : 'border-primary',
@@ -195,7 +198,7 @@ export function EntitlementCard({
         {data.documents.length ? (
           <ul className="list-disc space-y-1 pl-5 text-sm">
             {data.documents.map((document) => (
-              <li key={document}>{document}</li>
+              <li key={document} data-read>{document}</li>
             ))}
           </ul>
         ) : (
@@ -222,6 +225,7 @@ export function KartaPage({ data }: { data: EntitlementCardData | null }) {
   const navigate = useNavigate()
   const sheet = useRef<HTMLDivElement>(null)
   const [person, setPerson] = useState('')
+  const readAloudEnabled = useA11yStore((state) => state.readAloud)
 
   if (!data) {
     return (
@@ -245,11 +249,12 @@ export function KartaPage({ data }: { data: EntitlementCardData | null }) {
           Jedna strona dla kadr albo ZUS: co przysługuje, ile, na jak długo i do kiedy złożyć wniosek.
           Wydrukuj ją albo pokaż na telefonie.
         </p>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <Button type="button" onClick={() => window.print()}>
             <Printer aria-hidden="true" />
             Drukuj albo zapisz jako PDF
           </Button>
+          {readAloudEnabled && <ReadAloud targetRef={sheet} label="Przeczytaj kartę" />}
           <Button type="button" variant="outline" onClick={() => navigate(-1)}>
             <ArrowLeft aria-hidden="true" />
             Wróć do wyniku

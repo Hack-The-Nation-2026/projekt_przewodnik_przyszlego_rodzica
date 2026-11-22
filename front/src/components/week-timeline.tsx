@@ -208,7 +208,7 @@ export function WeekTimeline({
             </span>
           )}
         </div>
-        <p className="text-sm text-muted-foreground">{data.status}</p>
+        <p className="text-sm text-muted-foreground" data-read>{data.status}</p>
       </div>
 
       <div className="rounded-lg border border-border p-4">
