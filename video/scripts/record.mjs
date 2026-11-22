@@ -481,7 +481,11 @@ if (TAKE === 'all' || TAKE === 'zus') {
       await clickAt(page, off, { x: 0, y: 0 }, 1600)
       await clickAt(page, on, { x: 0, y: 0 }, 1500)
     }
-    await typeInto(page, page.locator('#zus-basis'), '7000')
+    // Podstawa i dzień, na który liczymy stan. Oba pola czyścimy przed wpisaniem,
+    // bo startują z wartością (8000 i dziś) i bez tego dopisalibyśmy cyfry do niej.
+    await typeInto(page, page.locator('#zus-basis'), '7000', { clear: true })
+    await typeDate(page, page.locator('#zus-as-of'), '2026-05-04')
+    await settle(page, 700)
 
     const owed = page.getByRole('button', { name: 'Jest zaległość', exact: true }).first()
     const clear = page.getByRole('button', { name: 'Brak zaległości', exact: true }).first()
