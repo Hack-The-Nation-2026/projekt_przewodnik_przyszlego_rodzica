@@ -127,7 +127,7 @@ function MethodChooser() {
 
   return (
     <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
-      <Card className="flex flex-col">
+      <Card className="flex min-w-0 flex-col">
         <CardHeader>
           <div className="flex flex-wrap items-center gap-2">
             <CardTitle>Zaloguj przez mObywatel</CardTitle>
@@ -149,7 +149,7 @@ function MethodChooser() {
         </CardContent>
       </Card>
 
-      <Card className="flex flex-col">
+      <Card className="flex min-w-0 flex-col">
         <CardHeader>
           <CardTitle>Wpisz dane ręcznie</CardTitle>
           <CardDescription>

@@ -298,7 +298,7 @@ export function WnioskiPage() {
             <h3 className="no-print font-display text-lg font-semibold">Podgląd pisma</h3>
             <div className="print-sheet" ref={letterRef}>
               <article className="rounded-xl border border-border bg-card p-6 text-foreground shadow-sm">
-                <pre className="font-sans text-sm leading-relaxed whitespace-pre-wrap">{letterText}</pre>
+                <pre className="font-sans text-sm leading-relaxed whitespace-pre-wrap break-words">{letterText}</pre>
               </article>
               {includeCard && card && (
                 <div className="mt-6 break-before-page">

@@ -109,7 +109,13 @@ export function A11yPanel() {
       {panelOpen && (
         <section
           aria-label="Ustawienia dostępności"
-          className="absolute right-0 z-50 mt-2 w-[min(22rem,calc(100vw-2rem))] rounded-xl border border-border bg-background p-4 text-foreground shadow-2xl"
+          className={cn(
+            'z-50 rounded-xl border border-border bg-background p-4 text-foreground shadow-2xl',
+            // Na telefonie panel jest szerszy niż odstęp od przycisku do krawędzi okna,
+            // więc opiera się o okno i przewija w środku, zamiast wyjechać za ekran.
+            'fixed inset-x-3 top-[4.5rem] max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain',
+            'sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-2 sm:max-h-none sm:w-[22rem] sm:overflow-visible',
+          )}
         >
           <div className="mb-1 flex items-center gap-2">
             <PersonStanding className="size-4 text-primary" aria-hidden="true" />
@@ -160,7 +166,7 @@ export function A11yPanel() {
             </Row>
           </div>
 
-          <div className="mt-3 flex items-center justify-between gap-2 border-t border-border pt-3">
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3">
             <Label className="text-xs text-muted-foreground">
               Ustawienia zostają tylko na tym urządzeniu.
             </Label>

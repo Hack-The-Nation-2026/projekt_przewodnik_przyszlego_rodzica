@@ -503,7 +503,9 @@ export function PanelPage() {
       </div>
 
       <div className="sticky bottom-0 z-10 mt-6 border-t bg-background/95 py-3 backdrop-blur">
-        <div className="flex flex-wrap items-center gap-3">
+        {/* Przycisk asystenta wisi w prawym dolnym rogu, więc na telefonie zostawiamy
+            dla niego miejsce, żeby nie zasłaniał "Przywróć domyślne". */}
+        <div className="flex flex-wrap items-center gap-3 pr-28 sm:pr-0">
           <Button
             className="font-semibold"
             disabled={!dirty || !valid || save.isPending}

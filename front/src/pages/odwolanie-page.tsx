@@ -176,13 +176,13 @@ export function OdwolaniePage() {
         <Card className="p-4">
           <p className="font-medium">{groundLabels[answers.ground]}</p>
           <dl className="mt-2 space-y-2 text-sm">
-            <div className="flex gap-1.5">
+            <div className="flex flex-col gap-0.5 sm:flex-row sm:gap-1.5">
               <dt className="shrink-0 text-muted-foreground">Czego ZUS nie widzi:</dt>
-              <dd>{ground.whatZusMisses}</dd>
+              <dd className="min-w-0">{ground.whatZusMisses}</dd>
             </div>
-            <div className="flex gap-1.5">
+            <div className="flex flex-col gap-0.5 sm:flex-row sm:gap-1.5">
               <dt className="shrink-0 text-muted-foreground">Co ZUS musiałby zobaczyć:</dt>
-              <dd>{ground.whatZusNeeds}</dd>
+              <dd className="min-w-0">{ground.whatZusNeeds}</dd>
             </div>
           </dl>
         </Card>
@@ -223,7 +223,10 @@ export function OdwolaniePage() {
               <Printer aria-hidden="true" />
               Wydrukuj
             </Button>
-            <Link to="/kalkulator" className={cn(buttonVariants({ variant: 'ghost' }))}>
+            <Link
+              to="/kalkulator"
+              className={cn(buttonVariants({ variant: 'ghost' }), 'h-auto whitespace-normal text-center')}
+            >
               <Gavel aria-hidden="true" />
               Sprawdź wyliczenie jeszcze raz
             </Link>
@@ -234,7 +237,7 @@ export function OdwolaniePage() {
           <h2 className="no-print font-display text-xl font-semibold">Projekt odwołania</h2>
           <div className="print-sheet">
             <article className="rounded-xl border border-border bg-card p-6 text-foreground shadow-sm">
-              <pre className="font-sans text-sm leading-relaxed whitespace-pre-wrap">{letter}</pre>
+              <pre className="font-sans text-sm leading-relaxed whitespace-pre-wrap break-words">{letter}</pre>
             </article>
           </div>
           <p className="no-print text-sm text-muted-foreground">

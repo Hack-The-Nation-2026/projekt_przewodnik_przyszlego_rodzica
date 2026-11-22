@@ -42,13 +42,13 @@ function PrepRow({ item }: { item: PrepItem }) {
         )}
       </p>
       <dl className="mt-2 space-y-1.5 text-sm">
-        <div className="flex gap-1.5">
+        <div className="flex flex-col gap-0.5 sm:flex-row sm:gap-1.5">
           <dt className="shrink-0 text-muted-foreground">Dlaczego to ma znaczenie:</dt>
-          <dd>{item.why}</dd>
+          <dd className="min-w-0">{item.why}</dd>
         </div>
-        <div className="flex gap-1.5">
+        <div className="flex flex-col gap-0.5 sm:flex-row sm:gap-1.5">
           <dt className="shrink-0 text-muted-foreground">Jeśli nic nie zrobisz:</dt>
-          <dd>{item.ifNothing}</dd>
+          <dd className="min-w-0">{item.ifNothing}</dd>
         </div>
       </dl>
       {item.action && (
@@ -207,7 +207,10 @@ export function PlanowaniePage() {
           <CalendarPlus aria-hidden="true" />
           Dodaj termin do kalendarza
         </Button>
-        <Link to="/kalkulator" className={cn(buttonVariants({ variant: 'outline' }))}>
+        <Link
+          to="/kalkulator"
+          className={cn(buttonVariants({ variant: 'outline' }), 'h-auto whitespace-normal text-center')}
+        >
           Mam już datę porodu — policz świadczenia
         </Link>
       </div>

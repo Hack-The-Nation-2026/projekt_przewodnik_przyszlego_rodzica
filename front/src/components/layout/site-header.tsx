@@ -31,7 +31,7 @@ function LogoMark({ className }: { className?: string }) {
 
 function Wordmark() {
   return (
-    <Link to="/" className="-my-1 flex shrink-0 items-center gap-2.5 py-1" aria-label="Strona główna">
+    <Link to="/" className="-my-1 flex min-w-0 items-center gap-2.5 py-1" aria-label="Strona główna">
       <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-primary-foreground text-primary">
         <LogoMark />
       </span>
@@ -81,7 +81,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 shrink-0" data-print-hide>
       <div className="border-b border-primary-foreground/15 bg-primary text-primary-foreground shadow-sm [--ring:var(--primary-foreground)]">
-        <Container className="flex h-16 items-center gap-3 lg:gap-6">
+        <Container className="flex h-16 items-center gap-2 lg:gap-6">
           <Wordmark />
 
           <nav
@@ -110,7 +110,9 @@ export function SiteHeader() {
             ))}
           </nav>
 
-          <div className="ml-auto flex items-center gap-2">
+          {/* Prawa strona nie kurczy się nigdy, bo przy największym tekście przyciski
+              musiałyby zniknąć. Zapas bierze się z nazwy serwisu, która się skraca. */}
+          <div className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2">
             <A11yPanel />
             {citizen ? (
               <ProfileMenu />
