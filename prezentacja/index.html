@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Skrzydła Rodzica — prezentacja</title>
+<title>Skrzydła Rodzica, prezentacja</title>
 <style>
   /* Prezentacja zbudowana jak dokument urzędowy: biała kartka, granatowy tekst,
      zieleń ZUS na liniach i nagłówkach. Jedna rodzina pisma, IBM Plex Sans,
@@ -61,20 +61,6 @@
     overflow: hidden;
   }
 
-  /* Numer strony i stopka to jedyne stałe elementy każdej planszy. */
-  .page-foot {
-    position: absolute;
-    left: 84px;
-    right: 84px;
-    bottom: 30px;
-    padding-top: 12px;
-    border-top: 1px solid var(--rule);
-    display: flex;
-    justify-content: space-between;
-    font-size: 15px;
-    color: var(--soft);
-  }
-
   h1, h2, h3 { margin: 0; font-weight: 700; letter-spacing: -0.015em; }
   h1 { font-size: 78px; line-height: 1.02; }
   h2 { font-size: 46px; line-height: 1.08; }
@@ -98,6 +84,11 @@
   .facts tr:first-child td { border-top: 0; }
   .facts td:first-child { color: var(--soft); }
   .facts td:last-child { text-align: right; font-weight: 600; white-space: nowrap; }
+
+  /* Wariant do wąskiej kolumny obok zrzutu: etykieta w jednej linii, mniejszy oddech. */
+  .facts.flat td { padding: 13px 0; font-size: 22px; }
+  .facts.flat td:first-child { white-space: nowrap; }
+  .facts.flat td:last-child { font-size: 22px; }
 
   .steps { list-style: none; margin: 0; padding: 0; counter-reset: step; }
   .steps li {
@@ -127,6 +118,16 @@
 
   .split { display: grid; grid-template-columns: 1fr 1fr; gap: 54px; align-items: start; }
 
+  /* Tekst obok zrzutu ekranu. Kolumna obrazu ma stałą szerokość, żeby kadry
+     z różnych ekranów trzymały ten sam rozmiar na kolejnych planszach. */
+  .with-screen { display: grid; grid-template-columns: 1fr 480px; gap: 54px; align-items: start; }
+  .with-screen.narrow { grid-template-columns: 1fr 372px; }
+  .with-screen.phone { grid-template-columns: 1fr 210px; }
+
+  .screen { margin: 0; }
+  .screen img { display: block; width: 100%; border: 1px solid var(--rule); }
+  .screen figcaption { margin-top: 14px; font-size: 17px; line-height: 1.42; color: var(--soft); }
+
   .note {
     margin-top: auto;
     padding-top: 18px;
@@ -145,16 +146,20 @@
     overflow: hidden;
   }
   .cover .panel img { width: 100%; height: 100%; object-fit: cover; }
-  .cover .inner { position: relative; z-index: 1; padding: 84px 0 0 84px; width: 790px; }
+  .cover .inner { position: relative; z-index: 1; padding: 76px 0 0 84px; width: 780px; }
   .cover .mark { display: flex; align-items: center; gap: 16px; color: var(--green); }
   .cover .mark svg { width: 52px; height: 52px; }
   .cover .mark span { font-size: 26px; font-weight: 600; letter-spacing: -0.01em; }
-  .cover h1 { margin-top: 54px; font-size: 72px; }
-  .cover .lead { margin-top: 26px; }
-  .cover .where { position: absolute; left: 84px; bottom: 84px; font-size: 19px; color: var(--soft); }
-  .cover .where b { display: block; color: var(--green); font-size: 22px; font-weight: 600; margin-top: 4px; }
+  .cover h1 { margin-top: 44px; font-size: 66px; }
+  .cover .lead { margin-top: 24px; max-width: 42ch; }
+  .cover .cover-qr { display: flex; align-items: center; gap: 30px; margin-top: 34px; }
+  .cover .qr-box { padding: 14px; }
+  .cover .qr-box img { width: 148px; height: 148px; }
+  .cover .cover-qr b { display: block; font-size: 27px; font-weight: 700; color: var(--green); }
+  .cover .cover-qr p { font-size: 21px; line-height: 1.45; color: var(--soft); margin-top: 8px; max-width: 40ch; }
+  .cover .where { display: block; margin-top: 14px; font-size: 19px; color: var(--soft); }
 
-  .qr-row { display: flex; align-items: center; gap: 44px; margin-top: 40px; }
+  .qr-row { display: flex; align-items: center; gap: 44px; margin-top: 34px; }
   .qr-box { background: var(--tint); padding: 22px; border-radius: 4px; }
   .qr-box img { width: 250px; height: 250px; display: block; }
   .qr-copy { font-size: 26px; }
@@ -194,7 +199,7 @@
 <body>
 <div class="stage" id="stage">
 
-  <!-- 1. Tytuł -->
+  <!-- 1. Tytuł i kod do demo -->
   <section class="slide cover is-active">
     <div class="panel"><img src="assets/hero.jpg" alt="Rodzice z niemowlakiem"></div>
     <div class="inner">
@@ -204,10 +209,14 @@
       </div>
       <h1>Zasiłkowy Przewodnik Przyszłego Rodzica</h1>
       <p class="lead">Rodzic odpowiada na kilka pytań i widzi, co mu przysługuje, przez ile dni, w jakiej kwocie i gdzie złożyć wniosek.</p>
-    </div>
-    <div class="where">
-      HackNation 2026, wyzwanie ZUS
-      <b>skrzydla-rodzica.vercel.app</b>
+      <div class="cover-qr">
+        <div class="qr-box"><img src="assets/qr.png" alt="Kod QR do skrzydla-rodzica.vercel.app"></div>
+        <div>
+          <b>skrzydla-rodzica.vercel.app</b>
+          <p>Zeskanuj kod i otwórz demo w trakcie prezentacji. Serwis działa na telefonie i na komputerze.</p>
+        </div>
+      </div>
+      <p class="where">HackNation 2026, wyzwanie ZUS</p>
     </div>
   </section>
 
@@ -221,19 +230,27 @@
       <tr><td>Korespondencja</td><td>braki w dokumentach wydłużają postępowanie po obu stronach</td></tr>
       <tr><td>Spory</td><td>część spraw trafia do odwołań z powodu braku informacji</td></tr>
     </table>
-    <p class="note">Wyzwanie stawia wprost cel: rodzic ma wiedzieć wcześniej i składać kompletne wnioski.</p>
+    <p class="note">Wyzwanie ZUS stawia ten sam cel. Rodzic ma wiedzieć wcześniej i składać kompletne wnioski. Odmowę też trzeba umieć odczytać, więc serwis prowadzi przez odwołanie, zarzuty i terminy.</p>
   </section>
 
   <!-- 3. Rozwiązanie -->
   <section class="slide">
     <h2>Jedna rozmowa zamiast kilku źródeł</h2>
     <div class="title-rule"></div>
-    <p class="lead">Pod wywiadem siedzi silnik reguł i zestaw dokumentów, więc wynik nie zależy od tego, czy model językowy akurat dobrze zgadnie.</p>
-    <ol class="steps" style="margin-top: 26px">
-      <li><strong>Wywiad.</strong> Kilka pytań o datę porodu, zatrudnienie, podstawę wymiaru i drugiego rodzica.</li>
-      <li><strong>Wyliczenie.</strong> Wymiar w tygodniach, kwota i okres wypłaty dla każdego świadczenia, osobno dla obojga rodziców.</li>
-      <li><strong>Dokumenty.</strong> Formularz, załączniki, termin i miejsce złożenia, gotowe do wydruku albo do kalendarza.</li>
-    </ol>
+    <div class="with-screen">
+      <div>
+        <p class="body">Pod wywiadem siedzi silnik reguł i zestaw dokumentów, więc wynik nie zależy od tego, czy model językowy akurat dobrze zgadnie.</p>
+        <ol class="steps" style="margin-top: 24px">
+          <li><strong>Wywiad.</strong> Kilka pytań o datę porodu, zatrudnienie i drugiego rodzica.</li>
+          <li><strong>Wyliczenie.</strong> Wymiar w tygodniach, kwota i okres wypłaty, osobno dla obojga rodziców.</li>
+          <li><strong>Dokumenty.</strong> Formularz, załączniki, termin i miejsce złożenia.</li>
+        </ol>
+      </div>
+      <figure class="screen">
+        <img src="assets/ekran-wynik.png" alt="Wynik sprawdzenia w kalkulatorze z podziałem urlopu rodzicielskiego">
+        <figcaption>Wynik sprawdzenia z kwotą obu świadczeń, wspólną pulą tygodni i suwakiem do jej podziału.</figcaption>
+      </figure>
+    </div>
   </section>
 
   <!-- 4. Silnik reguł -->
@@ -260,24 +277,29 @@
   <section class="slide">
     <h2>Oboje rodziców w jednym wyliczeniu</h2>
     <div class="title-rule"></div>
-    <div class="split">
+    <div class="with-screen">
       <div>
         <p class="body">Rodzicielski to wspólna pula <strong>41 albo 43 tygodni</strong>, z których po <strong>9 tygodni</strong> jest nieprzenoszalnych dla każdego z rodziców.</p>
-        <p class="body" style="margin-top: 16px">Wynik liczymy osobno dla matki i ojca, a podział urlopu ustawia się suwakiem na wspólnej puli.</p>
+        <p class="body">Łączenie urlopu rodzicielskiego z pracą wydłuża urlop proporcjonalnie do wymiaru pracy i zmniejsza zasiłek za czas pracy. Kalkulator pokazuje oba efekty naraz, czyli dłuższy urlop i niższą kwotę za ten okres.</p>
       </div>
-      <div>
-        <p class="body">Łączenie urlopu rodzicielskiego z pracą wydłuża urlop proporcjonalnie do wymiaru pracy i zmniejsza zasiłek za czas pracy. Kalkulator pokazuje oba efekty naraz: dłuższy urlop i niższą kwotę za ten okres.</p>
-      </div>
+      <figure class="screen">
+        <img src="assets/ekran-podzial.png" alt="Suwak podziału urlopu rodzicielskiego między rodziców">
+        <figcaption>Suwak dzieli wspólną pulę, a każde z rodziców zachowuje swoje 9 tygodni.</figcaption>
+      </figure>
     </div>
     <p class="note">Wariant z wnioskiem złożonym do 21 dni po porodzie liczymy jako 81,5% za całość, z wyjątkiem 9 tygodni drugiego rodzica, które zostają na 70%.</p>
   </section>
 
   <!-- 6. Adopcja i Za życiem -->
   <section class="slide">
-    <h2>Przyjęcie dziecka i zaświadczenie „Za życiem”</h2>
+    <h2>Przyjęcie dziecka i zaświadczenie "Za życiem"</h2>
     <div class="title-rule"></div>
-    <p class="body">Adopcja i rodzina zastępcza niezawodowa mają własną ścieżkę: urlop na warunkach macierzyńskiego od 20 do 37 tygodni, ale nie krócej niż 9 tygodni, a rodzicielski 41 albo 43 tygodnie, przy starszym dziecku 38 tygodni.</p>
-    <p class="body">Zaświadczenie „Za życiem” podnosi rodzicielski do <strong>65 tygodni</strong> przy jednym dziecku i <strong>67</strong> przy więcej niż jednym.</p>
+    <p class="body">Adopcja i rodzina zastępcza niezawodowa mają własną ścieżkę. Urlop na warunkach macierzyńskiego trwa od 20 do 37 tygodni, ale nie krócej niż 9 tygodni, a rodzicielski 41 albo 43 tygodnie.</p>
+    <table class="facts flat" style="margin-top: 24px">
+      <tr><td>Zaświadczenie "Za życiem", jedno dziecko</td><td>65 tygodni</td></tr>
+      <tr><td>Zaświadczenie "Za życiem", więcej niż jedno</td><td>67 tygodni</td></tr>
+      <tr><td>Dziecko starsze, na przykład przy przysposobieniu</td><td>38 tygodni</td></tr>
+    </table>
     <p class="note">Uzupełniający urlop macierzyński liczymy także wtedy, gdy pobyt dziecka w szpitalu wypadł po przyjęciu na wychowanie, a nie tylko po porodzie.</p>
   </section>
 
@@ -285,58 +307,85 @@
   <section class="slide">
     <h2>Dokumenty, terminy i miejsce złożenia</h2>
     <div class="title-rule"></div>
-    <p class="body">Dla każdego świadczenia podajemy formularz, załączniki, termin i adresata: pracodawcę albo ZUS, zależnie od tego, kto wypłaca zasiłek.</p>
-    <table class="facts" style="margin-top: 26px">
-      <tr><td>Szkic wniosku</td><td>gotowy tekst do pobrania i wydruku</td></tr>
-      <tr><td>Terminy</td><td>plik .ics, który wchodzi do kalendarza</td></tr>
-      <tr><td>Karta uprawnień</td><td>jedna strona z kwotami i terminami, do pokazania w ZUS</td></tr>
-      <tr><td>Kreator wniosków</td><td>prowadzi przez pytania i składa gotowy dokument</td></tr>
-    </table>
+    <div class="with-screen">
+      <div>
+        <p class="body">Dla każdego świadczenia podajemy formularz, załączniki, termin i adresata, czyli pracodawcę albo ZUS, zależnie od tego, kto wypłaca zasiłek.</p>
+        <table class="facts flat" style="margin-top: 24px">
+          <tr><td>Szkic wniosku</td><td>gotowy tekst do wydruku</td></tr>
+          <tr><td>Terminy</td><td>plik .ics do kalendarza</td></tr>
+          <tr><td>Karta uprawnień</td><td>jedna strona z kwotami</td></tr>
+          <tr><td>Kreator wniosków</td><td>prowadzi przez pytania</td></tr>
+        </table>
+      </div>
+      <figure class="screen">
+        <img src="assets/ekran-karta.png" alt="Karta uprawnień z kwotami, wymiarami i terminami">
+        <figcaption>Karta uprawnień z wyniku sprawdzenia, do wydruku i do pokazania w ZUS.</figcaption>
+      </figure>
+    </div>
+    <p class="note">Trudne pojęcia z pism i decyzji mają własny słownik, więc wynik da się przeczytać bez sięgania do ustawy.</p>
   </section>
 
   <!-- 8. Sprawy i system ZUS -->
   <section class="slide">
     <h2>Sprawa z zestawu przykładowego ZUS</h2>
     <div class="title-rule"></div>
-    <p class="body">Na stronie Sprawy wgrywasz jeden z <strong>87 przykładowych wniosków</strong>. Sprawę rozpoznajemy po odcisku pliku, a PDF zostaje na urządzeniu i nie idzie na serwer. Strona pokazuje weryfikację ubezpieczenia, wyliczenie i porównanie z decyzją zapisaną w materiale.</p>
-    <p class="body">Obok tego stoją symulacje: logowanie przez mObywatela, dane o ubezpieczeniu i możliwość wpisania własnych, stan zadłużenia ze składek, podgląd e-ZLA, konto PUE/eZUS i wniosek o odpis aktu urodzenia.</p>
-    <p class="note">Wszystkie 87 zestawów z materiałów rozpoznajemy po SHA-256; rozpoznanie działa też po nazwie pliku, gdy skan został zapisany ponownie.</p>
+    <div class="with-screen">
+      <div>
+        <p class="body">Na stronie Sprawy wgrywasz jeden z <strong>87 przykładowych wniosków</strong>. Sprawę rozpoznajemy po odcisku pliku, a PDF zostaje na urządzeniu. Strona pokazuje weryfikację ubezpieczenia, wyliczenie i porównanie z decyzją zapisaną w materiale.</p>
+        <p class="body">Obok tego stoją symulacje systemu ZUS, czyli logowanie przez mObywatela, ubezpieczenie i zadłużenie ze składek, e-ZLA, PUE/eZUS, odpis aktu urodzenia i ekran odwołania.</p>
+        <p class="body">Panel dostępności daje wysoki kontrast, trzy rozmiary tekstu, czytanie na głos i ograniczenie animacji.</p>
+      </div>
+      <figure class="screen">
+        <img src="assets/ekran-sprawa.png" alt="Rozpoznany wniosek z zestawu ZUS na stronie Sprawy">
+        <figcaption>Rozpoznany wniosek i dane, których dokument nie podaje, a bez nich nie ma wyliczenia.</figcaption>
+      </figure>
+    </div>
+    <p class="note">Rozpoznajemy je po SHA-256, a po ponownym zapisie także po nazwie pliku.</p>
   </section>
 
   <!-- 9. AI i rozwiązania zewnętrzne -->
   <section class="slide">
     <h2>Co robi model językowy, a co silnik reguł</h2>
     <div class="title-rule"></div>
-    <div class="split">
+    <div class="with-screen narrow">
       <div>
         <h3>Model językowy</h3>
-        <p class="body" style="margin-top: 12px">Asystent nawigacyjny prowadzi rozmowę, rozpoznaje pytanie i wskazuje ekran. Bez klucza API odpowiada z katalogu tematów.</p>
+        <p class="body" style="margin-top: 12px">Asystent nawigacyjny rozpoznaje pytanie i wskazuje ekran. Model wybiera tylko temat z katalogu, a zdanie, linki i następne pytania są już przygotowane, więc nie ma tu czego wymyślać.</p>
+        <h3 style="margin-top: 26px">Silnik reguł</h3>
+        <p class="body" style="margin-top: 12px">Kwoty, wymiary i terminy liczy wyłącznie silnik z <strong>RULES.md</strong>. Model ich nie liczy ani nie wymyśla. Bez klucza API asystent działa z tego samego katalogu.</p>
       </div>
-      <div>
-        <h3>Silnik reguł</h3>
-        <p class="body" style="margin-top: 12px">Kwoty, wymiary i terminy liczy wyłącznie silnik z RULES.md. Model ich nie liczy i nie wymyśla.</p>
-      </div>
+      <figure class="screen">
+        <img src="assets/ekran-asystent.png" alt="Asystent z podpowiedziami pytań i wpisanym pytaniem">
+        <figcaption>Asystent wskazuje ekran, a kwoty liczy kalkulator.</figcaption>
+      </figure>
     </div>
-    <p class="note">Rozwiązania zewnętrzne wskazujemy w CREDITS.md: zdjęcia z Pexels, ikona Lorc z game-icons.net (CC BY 3.0), krój IBM Plex Sans (OFL), lucide-react i Radix UI.</p>
+    <p class="note">Rozwiązania zewnętrzne wskazujemy w CREDITS.md, między innymi zdjęcia z Pexels, ikonę Lorca z game-icons.net (CC BY 3.0), krój IBM Plex Sans (OFL), lucide-react i Radix UI.</p>
   </section>
 
   <!-- 10. Demo -->
   <section class="slide">
     <h2>Zobacz na żywo</h2>
     <div class="title-rule"></div>
-    <div class="qr-row">
-      <div class="qr-box"><img src="assets/qr.png" alt="Kod QR do skrzydla-rodzica.vercel.app"></div>
-      <div class="qr-copy">
-        <b>skrzydla-rodzica.vercel.app</b>
-        Zeskanuj kod albo wpisz adres. Demo działa na telefonie i na komputerze.
-        <span>Kod źródłowy: github.com/Hack-The-Nation-2026/projekt_przewodnik_przyszlego_rodzica</span>
+    <div class="with-screen phone">
+      <div>
+        <div class="qr-row" style="margin-top: 0">
+          <div class="qr-box"><img src="assets/qr.png" alt="Kod QR do skrzydla-rodzica.vercel.app"></div>
+          <div class="qr-copy">
+            <b>skrzydla-rodzica.vercel.app</b>
+            Zeskanuj kod albo wpisz adres. Demo działa na telefonie i na komputerze.
+            <span>Kod źródłowy znajdziesz na github.com/Hack-The-Nation-2026/projekt_przewodnik_przyszlego_rodzica</span>
+          </div>
+        </div>
       </div>
+      <figure class="screen">
+        <img src="assets/ekran-telefon.png" alt="Strona serwisu na telefonie">
+      </figure>
     </div>
     <p class="note">Film z przejściem przez serwis leży w repozytorium w katalogu video/out/.</p>
   </section>
 
 </div>
-<div class="hint">← → zmienia planszę · Ctrl+P zapisuje PDF</div>
+<div class="hint">← → zmieniają planszę, Ctrl+P zapisuje PDF</div>
 <script>
   const stage = document.getElementById('stage')
   const slides = [...document.querySelectorAll('.slide')]

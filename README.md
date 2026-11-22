@@ -162,7 +162,8 @@ Kilka rzeczy, które łatwo przeoczyć.
 ## Materiały do oddania
 
 - `prezentacja/index.html` to prezentacja na maksymalnie 10 slajdów. Otwiera się w przeglądarce,
-  strzałki zmieniają planszę, a `Ctrl+P` zapisuje PDF w proporcji 16:9.
+  strzałki zmieniają planszę, a `Ctrl+P` zapisuje PDF w proporcji 16:9. Kod QR do demo jest na
+  okładce i na ostatniej planszy.
 - `video/out/prezentacja.mp4` to film do 3 minut, nagrany z działającej aplikacji. Szczegóły
   i sposób odtworzenia opisuje `video/README.md`.
 - `zrzuty/` zbiera zrzuty ekranu najważniejszych stron.

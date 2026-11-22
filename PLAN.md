@@ -527,9 +527,9 @@ Gotowe, gdy wszystkie pięć pozycji istnieje i linki działają.
 Brief, pkt 4.
 
 Zrobione 22.11. Prezentacja leży w `prezentacja/index.html`: dziesięć plansz w proporcji 16:9, jedna
-rodzina pisma i paleta serwisu, strzałki zmieniają planszę, a `Ctrl+P` zapisuje PDF. Ostatnia
-plansza niesie kod QR do `https://skrzydla-rodzica.vercel.app`, a film pokazuje ten sam kod dwa
-razy, na pierwszej i na ostatniej planszy.
+rodzina pisma i paleta serwisu, strzałki zmieniają planszę, a `Ctrl+P` zapisuje PDF. Kod QR do
+`https://skrzydla-rodzica.vercel.app` jest na okładce i na ostatniej planszy, a film pokazuje ten
+sam kod dwa razy, na pierwszej i na ostatniej planszy.
 
 Film leży w `video/out/prezentacja.mp4`, poniżej trzech minut, 1920×1080, bez dźwięku. Powstaje ze
 skryptów w `video/scripts/`, montaż opisuje `video/src/edl.ts`, a szczegóły są w `video/README.md`.
@@ -539,7 +539,8 @@ i widok telefonu. Listy wyboru otwierają się na ekranie, więc widać opcje, a
 wartość. Plansza z adresem demo i kodem QR otwiera film i go zamyka.
 
 Zrzuty ekranu leżą w `zrzuty/`. Powstają skryptem `video/scripts/shots.mjs` z tej samej działającej
-aplikacji, tylko bez kursora i nagrywania, więc odtwarzają się jedną komendą.
+aplikacji, tylko bez kursora i nagrywania, więc odtwarzają się jedną komendą. Pięć kadrów z tych
+zrzutów, przyciętych do jednego elementu, wchodzi do plansz prezentacji.
 
 Opis i tytuł projektu to `README.md`, a rozwiązania zewnętrzne zbiera `CREDITS.md` i dziewiąta
 plansza prezentacji.
@@ -569,7 +570,8 @@ z tych katalogów nie trafił nigdy do historii repozytorium. Demo na telefonie 
 od wejścia do wyniku; dowodem jest ujęcie `15-mobile-karta` w filmie i zrzut `15-mobile-start`.
 
 Film i prezentacja niosą ten sam kod QR do `https://skrzydla-rodzica.vercel.app`, a kod odczytuje
-się z gotowego pliku MP4. W filmie występuje na obu końcach, w prezentacji na ostatniej planszy.
+się z gotowego pliku MP4. W filmie występuje na obu końcach, w prezentacji na okładce i na ostatniej
+planszy.
 
 ## Krok 17. Karta uprawnień, kreator wniosków i dostępność
 
