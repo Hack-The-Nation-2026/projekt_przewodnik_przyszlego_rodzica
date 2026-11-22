@@ -1,6 +1,6 @@
 # Prezentacja Skrzydła Rodzica
 
-Film na wyzwanie ZUS, 2 min 47 s, 1920×1080, 30 klatek na sekundę, bez dźwięku.
+Film na wyzwanie ZUS, 2 min 58 s, 1920×1080, 30 klatek na sekundę, bez dźwięku.
 Komentarz dogrywamy osobno.
 
 Gotowy plik leży w `out/prezentacja.mp4`.
@@ -20,7 +20,9 @@ w trzech krokach.
    nagrań wchodzą do filmu, jak szybko i gdzie w tym czasie patrzy kamera.
    Wynik zapisuje do `src/edl.ts`.
 3. `src/` to projekt Remotiona, który składa nagrania w jedną całość, dokłada
-   ruch kamery, plansze telefonu z opisem i wyciemnienie na początku.
+   ruch kamery, plansze telefonu z opisem i wyciemnienie na początku. Na końcu
+   stoi karta z adresem demo i kodem QR (`src/components/OutroScene.tsx`), więc
+   film da się obejrzeć bez przepisywania adresu ze slajdu.
 
 ## Nagrania
 
@@ -57,6 +59,18 @@ objęło treść, a nie tło.
 jest, czyli przyciski, pola i listy. Wynik ląduje w `out/check/inventory.json`
 i pomaga pisać nagrania.
 
+## Zrzuty ekranu
+
+`scripts/shots.mjs` robi zrzuty najważniejszych stron do `zrzuty/` w katalogu
+głównym repozytorium. Loguje się na każdym ekranie osobno, bo sesja żyje tylko
+w pamięci, i prowadzi wywiad tam, gdzie zrzut ma pokazać wynik, a nie pusty
+formularz.
+
+```bash
+node scripts/shots.mjs            # cała lista
+node scripts/shots.mjs zus panel  # wybrane ekrany, po fragmencie nazwy
+```
+
 ## Render
 
 ```bash
@@ -70,6 +84,9 @@ Podgląd na żywo uruchamia `npx remotion studio src/index.ts`.
 
 Krój pisma jest wpięty z `public/fonts/` (IBM Plex Sans, zakres łaciński
 i rozszerzony), więc render nie sięga do sieci.
+
+Kod QR (`public/qr-vercel.png`) prowadzi na `https://skrzydla-rodzica.vercel.app`
+i jest zapisany w repozytorium, żeby render nie zależał od żadnej usługi zewnętrznej.
 
 Nagrania i klatki kontrolne nie trafiają do repozytorium. Odtwarzają się
 skryptami z `scripts/`.

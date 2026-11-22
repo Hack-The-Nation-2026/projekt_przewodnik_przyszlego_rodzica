@@ -50,7 +50,7 @@ ich kopiować ani rozpowszechniać.
 - [x] Krok 12. Wygląd i responsywność
 - [ ] Krok 13. Testy na sprawach i upload wniosków
 - [x] Krok 14. Asystent z AI
-- [ ] Krok 15. Materiały do oddania
+- [x] Krok 15. Materiały do oddania
 - [x] Krok 17. Karta uprawnień, kreator wniosków i dostępność
 - [x] Krok 18. Oś czasu, wyjaśnienia liczb i ścieżki po fakcie
 - [ ] Krok 16. Weryfikacja przed oddaniem
@@ -524,12 +524,22 @@ Gotowe, gdy wszystkie pięć pozycji istnieje i linki działają.
 
 Brief, pkt 4.
 
-Zrobione: film leży w `video/out/prezentacja.mp4`, 2 min 47 s, 1920×1080, bez dźwięku.
-Powstaje ze skryptów w `video/scripts/`, montaż opisuje `video/src/edl.ts`, a szczegóły są
-w `video/README.md`. Ujęcia to nagrania działającej aplikacji: wejście i logowanie, wywiad,
-wynik, karta uprawnień, kreator wniosków i dokumentów, planowanie, urlop w trakcie, odwołanie,
-wsparcie, panel, asystent i widok telefonu. Listy wyboru otwierają się na ekranie, więc widać
-opcje, a nie tylko wybraną wartość.
+Zrobione 22.11. Prezentacja leży w `prezentacja/index.html`: dziesięć plansz w proporcji 16:9, jedna
+rodzina pisma i paleta serwisu, strzałki zmieniają planszę, a `Ctrl+P` zapisuje PDF. Ostatnia
+plansza i karta końcowa filmu niosą kod QR do `https://skrzydla-rodzica.vercel.app`.
+
+Film leży w `video/out/prezentacja.mp4`, poniżej trzech minut, 1920×1080, bez dźwięku. Powstaje ze
+skryptów w `video/scripts/`, montaż opisuje `video/src/edl.ts`, a szczegóły są w `video/README.md`.
+Ujęcia to nagrania działającej aplikacji: wejście i logowanie, wywiad, wynik, karta uprawnień,
+kreator wniosków i dokumentów, planowanie, urlop w trakcie, odwołanie, wsparcie, panel, asystent
+i widok telefonu. Listy wyboru otwierają się na ekranie, więc widać opcje, a nie tylko wybraną
+wartość. Film zamyka karta z adresem demo i kodem QR.
+
+Zrzuty ekranu leżą w `zrzuty/`. Powstają skryptem `video/scripts/shots.mjs` z tej samej działającej
+aplikacji, tylko bez kursora i nagrywania, więc odtwarzają się jedną komendą.
+
+Opis i tytuł projektu to `README.md`, a rozwiązania zewnętrzne zbiera `CREDITS.md` i dziewiąta
+plansza prezentacji.
 
 ## Krok 16. Weryfikacja przed oddaniem
 

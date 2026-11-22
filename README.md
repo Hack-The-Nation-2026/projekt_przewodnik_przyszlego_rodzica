@@ -13,9 +13,9 @@ a potem dostaje dokumenty, terminy i miejsce złożenia wniosku.
   każdego rodzica i osobny wynik dla obojga.
 - **Dokumenty i wnioski** (`/dokumenty`): formularz, załączniki, termin i miejsce złożenia dla
   każdego świadczenia. Do tego szkic wniosku do pobrania i plik `.ics` z terminami do kalendarza.
-- **Sprawy** (`/sprawy`): zestaw przykładowy ZUS rozpoznawany po odcisku wgranego PDF-a, dziesięć
-  scenariuszy demonstracyjnych i własny wniosek w formacie JSON. Strona pokazuje weryfikację
-  ubezpieczenia, wyliczenie i porównanie z oczekiwanym wynikiem.
+- **Sprawy** (`/sprawy`): wgranie dokumentu z ZUS albo wybór z listy rozpoznanych dokumentów.
+  Sprawę rozpoznajemy po odcisku pliku, więc PDF zostaje na urządzeniu, a strona pokazuje
+  weryfikację ubezpieczenia, wyliczenie i porównanie z decyzją zapisaną w materiale.
 - **System ZUS** (`/zus`): ubezpieczenie, zadłużenie, e-ZLA, PUE/eZUS i wniosek o odpis aktu
   urodzenia. Wszystko lokalnie, bez połączenia z systemami ZUS.
 - **Wsparcie** (`/wsparcie`): organizacje i zasady dla sytuacji po stracie dziecka, przy wcześniaku,
@@ -34,20 +34,20 @@ aplikacja działa offline. Do modelu nie trafiają dane osobowe ani materiały Z
 
 ## Dane demonstracyjne
 
-Regulamin zadania nie pozwala publikować dokumentów ZUS, więc sprawy w `/sprawy` są odtworzone
-na wymyślonych danych, a oczekiwany wynik każdej z nich jest zapisany w
-`back/app/data/demo-cases.json`. To pokazuje spięcie strony z kalkulatorem, a nie odwzorowanie
-prawdziwych decyzji. Poprawność reguł pilnuje `back/tests/test_rules.py`.
+Regulamin zadania nie pozwala publikować dokumentów ZUS, więc w repozytorium nie ma ani jednego
+skanu z `PRZYKLADY/`. Dziesięć spraw w `back/app/data/demo-cases.json` to wymyślone scenariusze,
+na których testy porównują kalkulator z oczekiwanym wynikiem. Poprawność samych reguł pilnuje
+`back/tests/test_rules.py`.
 
 ## Zestaw przykładowy ZUS
 
-Obok spraw demonstracyjnych `/sprawy` rozpoznaje wszystkie 87 zestawów z `PRZYKLADY/`. Przeglądarka
-liczy SHA-256 wybranego pliku, wysyła sam odcisk, a backend szuka go w `back/app/data/zus-samples.json`.
-PDF nie opuszcza urządzenia, więc skan z danymi o zdrowiu nie trafia do serwera ani do modelu
-językowego. Gdy plik został zapisany ponownie i odcisk się zmienił, rozpoznanie schodzi na nazwę
-pliku i mówi o tym wprost. Dla rozpoznanej sprawy strona pokazuje opis stanu faktycznego, wzory
-formularzy z zestawu i wynik zapisany w materiale. Kwoty i daty, których skan nie podaje albo
-które są zamazane, wpisuje się w krótkim formularzu i wtedy kalkulator liczy świadczenie główne.
+`/sprawy` rozpoznaje wszystkie 87 zestawów z `PRZYKLADY/`. Przeglądarka liczy SHA-256 wybranego
+pliku, wysyła sam odcisk, a backend szuka go w `back/app/data/zus-samples.json`. PDF nie opuszcza
+urządzenia, więc skan z danymi o zdrowiu nie trafia do serwera ani do modelu językowego. Gdy plik
+został zapisany ponownie i odcisk się zmienił, rozpoznanie schodzi na nazwę pliku i mówi o tym
+wprost. Dla rozpoznanej sprawy strona pokazuje opis stanu faktycznego, wzory formularzy z zestawu
+i wynik zapisany w materiale. Kwoty i daty, których skan nie podaje albo które są zamazane, wpisuje
+się w krótkim formularzu i wtedy kalkulator liczy świadczenie główne.
 
 Dane do rozpoznania powstają skryptem `back/scripts/build_zus_samples.py`, który czyta skany
 z `PRZYKLADY/` i zapisuje tylko metadane: odcisk pliku, wzory formularzy, rodzaj świadczeń i wynik
@@ -159,12 +159,23 @@ Kilka rzeczy, które łatwo przeoczyć.
   `https://skrzydla-rodzica*.vercel.app`. Bez gwiazdki każdy podgląd ma inny adres i zostałby
   zablokowany.
 
+## Materiały do oddania
+
+- `prezentacja/index.html` to prezentacja na maksymalnie 10 slajdów. Otwiera się w przeglądarce,
+  strzałki zmieniają planszę, a `Ctrl+P` zapisuje PDF w proporcji 16:9.
+- `video/out/prezentacja.mp4` to film do 3 minut, nagrany z działającej aplikacji. Szczegóły
+  i sposób odtworzenia opisuje `video/README.md`.
+- `zrzuty/` zbiera zrzuty ekranu najważniejszych stron.
+
 ## Struktura
 
 ```
 zadanie-rodzice/
 ├── back/        # FastAPI i silnik reguł
 ├── front/       # React, Vite, Tailwind
+├── video/       # film z nagrań aplikacji (Remotion)
+├── prezentacja/ # prezentacja na 10 slajdów
+├── zrzuty/      # zrzuty ekranu stron
 ├── RULES.md     # reguły zasiłków z odesłaniem do przepisów
 ├── PLAN.md      # kroki realizacji i stan prac
 └── OPIS/        # materiały ZUS (lokalnie, poza repozytorium)
